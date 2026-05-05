@@ -1710,6 +1710,152 @@ flowchart TD
 
 ---
 
+## 🧠 2.2. Tipos de Modelos de IA para Agentes e Como Escolher
+
+### 🎯 Princípio arquitetural
+
+Um agente corporativo raramente depende de um único modelo. Na prática, a arquitetura mais robusta combina um modelo principal de raciocínio com modelos especializados para percepção, grounding, busca semântica, previsão ou decisão. A escolha correta reduz custo, melhora latência e aumenta previsibilidade operacional.
+
+Em termos de arquitetura alvo, a regra mais útil é esta:
+
+- **Work IQ** consome a experiência pronta para o usuário.
+- **Foundry IQ** escolhe, orquestra e combina os modelos conforme a tarefa.
+- **Fabric IQ** fornece o contexto semântico e os dados governados que alimentam esses modelos.
+
+Isso evita um erro comum: tentar resolver toda necessidade com um único LLM generalista. Em cenários corporativos, o melhor desenho normalmente é **compor capacidades**, e não superdimensionar um único modelo.
+
+### 📚 Tipos de modelos e cenário ideal de uso
+
+| Tipo de modelo | Papel no agente | Quando usar | Exemplo de cenário corporativo | Observação arquitetural |
+|---|---|---|---|---|
+| **LLMs** | Entender linguagem natural, resumir, responder, gerar texto e apoiar raciocínio geral | Quando o problema é predominantemente textual e exige interpretação, síntese ou geração | Agente que responde perguntas sobre políticas internas, gera sumários executivos ou redige respostas para analistas | É o ponto de partida mais comum para agentes de conhecimento |
+| **Vision Models** | Extrair e interpretar conteúdo visual | Quando o agente precisa ler documentos escaneados, imagens, telas, etiquetas, fotos ou frames de video | Agente que interpreta notas fiscais, fotos de inspeção, OCR de contratos ou imagens de estoque | Deve ser usado quando a imagem e a fonte primária de verdade, e não apenas um anexo eventual |
+| **Speech Models** | Converter fala em texto, texto em fala e traduzir audio | Quando a interação e por voz ou quando o insumo principal e audio | Agente de call center que transcreve chamadas, resume atendimentos e responde com voz sintetizada | Fundamental para canais de voz em tempo real e automação de atendimento |
+| **Multimodal Models** | Raciocinar sobre mais de uma modalidade na mesma tarefa | Quando o agente precisa combinar texto, imagem e, em alguns casos, audio no mesmo fluxo decisorio | Agente que recebe foto de equipamento + relato textual e produz diagnostico orientado | Evita pipelines fragmentados quando o entendimento depende da combinacao entre modalidades |
+| **Embedding Models** | Transformar conteudo em vetores para busca por similaridade | Quando o agente precisa fazer RAG, memoria semantica, deduplicacao, clustering ou descoberta de conteudo relevante | Agente que busca politicas, contratos e procedimentos similares antes de responder | Normalmente nao conversa com o usuario; sustenta grounding, memoria e recuperacao |
+| **Recommender Models** | Ranquear a melhor proxima acao, conteudo, produto ou decisao | Quando o problema principal e personalizacao e ranking, nao geracao de texto | Agente comercial que decide qual oferta, campanha ou proxima acao sugerir para cada cliente | Muito util quando ha historico de interacoes, preferencias e sinais de comportamento |
+| **Time-Series Forecasting Models** | Prever valores futuros ao longo do tempo | Quando a pergunta principal e "o que deve acontecer depois" em demanda, receita, consumo, risco ou capacidade | Agente de supply chain que projeta demanda, estoque e ruptura nas proximas semanas | Deve ser escolhido quando o tempo e a sequencia historica sao a variavel central |
+| **Tabular Models** | Classificar, regressar ou pontuar com base em colunas estruturadas | Quando o problema e decidir com base em registros estruturados e variaveis explicitas | Agente de risco que pontua fraude, inadimplencia, churn ou propensao de compra | Ideal para decisao operacional repetitiva, auditavel e baseada em features estruturadas |
+| **Agent Models** | Executar raciocinio multi-etapas, usar tools, estruturar saida e operar com maior autonomia | Quando o agente precisa planejar, chamar ferramentas, usar contexto longo e completar tarefas em varias etapas | Agente que consulta Fabric, chama APIs, compara respostas e produz uma acao final auditavel | Na pratica, e uma categoria operacional de modelos otimizados para comportamento agentico |
+| **Robotics Models** | Perceber ambiente fisico e orientar ou executar acoes em sensores e atuadores | Quando o agente controla maquinas, dispositivos, robos ou fluxos ciberfisicos | Agente em operacao industrial que orienta inspeção robotizada ou executa acoes supervisionadas no chao de fabrica | Exige guard rails mais rigidos, limites fisicos, telemetria em tempo real e HITL em pontos criticos |
+
+### 🧭 Leitura executiva para escolha
+
+- Se o agente **fala, escreve, resume, interpreta instrucoes e responde perguntas**, comece com **LLM**.
+- Se ele precisa **planejar, usar ferramentas, chamar APIs e operar em varias etapas**, prefira **Agent Model**.
+- Se o valor depende de **grounding, memoria e busca semantica**, adicione **Embedding Model**.
+- Se a entrada principal for **imagem**, use **Vision Model**; se precisar combinar imagem com texto no mesmo raciocinio, use **Multimodal Model**.
+- Se a entrada ou saida principal for **voz**, use **Speech Model**.
+- Se a tarefa for **ranking personalizado**, use **Recommender Model**.
+- Se a tarefa for **previsao temporal**, use **Time-Series Forecasting Model**.
+- Se a tarefa for **score, classificacao ou regressao com dados estruturados**, use **Tabular Model**.
+- Se houver **acao no mundo fisico**, a categoria correta passa a ser **Robotics Model**, com controles mais duros.
+
+### 🌳 Diagrama de decisão para escolha do modelo
+
+```mermaid
+flowchart TD
+    A["🧩 Qual e o problema principal que o agente precisa resolver?"]
+
+    A --> B{"O agente atua no mundo fisico?"}
+    B -->|Sim| R["🤖 Robotics Model<br/>Sensores, atuadores, tempo real<br/>+ safety hard limits + HITL"]
+    B -->|Nao| C{"A decisao principal e previsao ou ranking?"}
+
+    C -->|Ranking personalizado / next best action| REC["🎯 Recommender Model"]
+    C -->|Prever demanda, receita, carga, risco futuro| TS["📈 Time-Series Forecasting Model"]
+    C -->|Classificar ou estimar score por registro estruturado| TAB["📊 Tabular Model"]
+    C -->|Nao| D{"Qual e a modalidade dominante?"}
+
+    D -->|Audio / voz| S["🎙️ Speech Model"]
+    D -->|Imagem / documento / video| E{"Precisa apenas extrair ou tambem raciocinar entre modalidades?"}
+    D -->|Texto / linguagem natural| F{"Precisa grounding por similaridade?"}
+
+    E -->|Extrair, detectar, OCR, inspecionar| V["👁️ Vision Model"]
+    E -->|Combinar imagem + texto + contexto| M["🧠 Multimodal Model"]
+
+    F -->|Sim| EMB["🧷 Embedding Model<br/>Busca vetorial, memoria, RAG"]
+    F -->|Nao| G{"Precisa tool calling, planejamento e varias etapas?"}
+
+    G -->|Sim| AG["🛠️ Agent Model"]
+    G -->|Nao| L["💬 LLM"]
+
+    EMB -.-> AG
+    EMB -.-> L
+
+    style A fill:#2E4053,stroke:#1C2833,color:#fff,stroke-width:2px
+    style B fill:#C0392B,stroke:#922B21,color:#fff,stroke-width:2px
+    style C fill:#8E44AD,stroke:#5B2C6F,color:#fff,stroke-width:2px
+    style D fill:#2980B9,stroke:#1F618D,color:#fff,stroke-width:2px
+    style E fill:#16A085,stroke:#117864,color:#fff,stroke-width:2px
+    style F fill:#2471A3,stroke:#1B4F72,color:#fff,stroke-width:2px
+    style G fill:#7D6608,stroke:#7E5109,color:#fff,stroke-width:2px
+    style R fill:#E74C3C,stroke:#A93226,color:#fff,stroke-width:2px
+    style REC fill:#F39C12,stroke:#AF601A,color:#fff,stroke-width:2px
+    style TS fill:#27AE60,stroke:#1E8449,color:#fff,stroke-width:2px
+    style TAB fill:#52BE80,stroke:#239B56,color:#fff,stroke-width:2px
+    style S fill:#5DADE2,stroke:#21618C,color:#fff,stroke-width:2px
+    style V fill:#48C9B0,stroke:#138D75,color:#fff,stroke-width:2px
+    style M fill:#17A589,stroke:#0E6655,color:#fff,stroke-width:2px
+    style EMB fill:#7FB3D5,stroke:#2E86C1,color:#fff,stroke-width:2px
+    style AG fill:#F4D03F,stroke:#B7950B,color:#333,stroke-width:2px
+    style L fill:#85C1E9,stroke:#2E86C1,color:#333,stroke-width:2px
+```
+
+### 🏢 Padrões de composição mais comuns em arquitetura corporativa
+
+Na maior parte dos casos corporativos, os arranjos mais eficazes nao sao de um modelo isolado, mas de **combinacoes recorrentes**:
+
+- **Agent Model + Embeddings + Fabric IQ**: padrao mais comum para agentes de conhecimento com RAG e dados governados.
+- **LLM + Speech**: assistentes de voz, atendimento, copilots de call center e sumarizacao de reunioes.
+- **Multimodal + Vision + Embeddings**: inspeção documental, engenharia, operacoes de campo, OCR e entendimento de imagens com grounding.
+- **Agent Model + Tabular Model**: agentes que explicam uma decisao operacional baseada em score preditivo.
+- **Agent Model + Time-Series Forecasting Model**: agentes que nao apenas explicam o passado, mas recomendam acoes sobre o futuro.
+- **Agent Model + Recommender Model**: agentes de vendas, marketing e servico que sugerem a melhor proxima acao em vez de apenas responder perguntas.
+
+### ⚖️ Trade-offs de arquitetura
+
+| Escolha | Vantagem principal | Risco principal |
+|---|---|---|
+| Usar apenas LLM | Rapidez de implantacao | Custo mais alto e pior precisao em tarefas especializadas |
+| Adicionar embeddings | Melhor grounding e recuperacao | Requer pipeline de indexacao e governanca vetorial |
+| Adicionar modelos especializados | Melhor acuracia por tarefa | Mais integracoes, observabilidade e operacao |
+| Usar agent models mais autonomos | Maior capacidade de agir e orquestrar | Mais cuidado com guard rails, loops, custo e confiabilidade |
+| Levar IA para voz, visao ou robotica | Mais proximidade com operacao real | Maior superficie de risco, latencia e dependencia do ambiente |
+
+### ✅ Recomendacao pratica
+
+Para a maior parte dos programas corporativos de adocao, a sequencia recomendada e:
+
+1. Comecar com **LLM ou Agent Model** para a camada de raciocinio.
+2. Adicionar **Embedding Model** para grounding e memoria.
+3. Introduzir **Vision**, **Speech** ou **Multimodal** apenas quando a modalidade fizer parte do processo de negocio.
+4. Incorporar **Tabular**, **Forecasting** e **Recommender Models** quando o agente precisar decidir com base em previsao, score ou ranking.
+5. Tratar **Robotics Models** como uma frente separada de maior rigor operacional, com seguranca funcional, telemetria e aprovacoes humanas.
+
+### 🔗 Referências oficiais usadas nesta seção
+
+- Microsoft Learn: Azure OpenAI and Foundry models catalog, incluindo capacidades de LLMs, modelos multimodais, embeddings e audio.
+- Microsoft Learn: Azure Speech overview, para speech-to-text, text-to-speech, traducao e voz em tempo real.
+- Microsoft Learn: Azure Vision overview, para OCR, analise de imagem e interpretacao visual.
+- Microsoft Learn: Azure Machine Learning AutoML e forecasting methods, para modelos tabulares, regressao, classificacao e series temporais.
+- Microsoft Learn: Microsoft Foundry Agent Service overview, para definicao oficial de agente, tools, tipos de agentes e runtime.
+- Anthropic Docs: Claude Models Overview, para comparacao entre familias de modelos, trade-offs entre inteligencia, latencia e uso agentico.
+- Microsoft Recommenders Project, para padroes e algoritmos de sistemas de recomendacao em ambiente produtivo.
+
+### 📎 Referências oficiais diretas
+
+- [Azure OpenAI and Foundry models](https://learn.microsoft.com/en-us/azure/foundry/foundry-models/concepts/models-sold-directly-by-azure)
+- [AI agent orchestration patterns](https://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/ai-agent-design-patterns)
+- [What is Microsoft Foundry Agent Service?](https://learn.microsoft.com/en-us/azure/foundry/agents/overview)
+- [What is Azure Speech?](https://learn.microsoft.com/en-us/azure/ai-services/speech-service/overview)
+- [What is Azure Vision in Foundry Tools?](https://learn.microsoft.com/en-us/azure/ai-services/computer-vision/overview)
+- [What is automated machine learning (AutoML)?](https://learn.microsoft.com/en-us/azure/machine-learning/concept-automated-ml?view=azureml-api-2)
+- [Overview of forecasting methods in AutoML](https://learn.microsoft.com/en-us/azure/machine-learning/concept-automl-forecasting-methods?view=azureml-api-2)
+- [Anthropic Claude Models Overview](https://platform.claude.com/docs/en/docs/about-claude/models/overview)
+- [Microsoft Recommenders Project](https://github.com/recommenders-team/recommenders)
+
+---
+
 ## ⏱️ 3. Estratégia de Adoção (Curto e Médio Prazo)
 
 A estratégia de adoção de agentes de IA segue um modelo **interno de 5 fases evolutivas**, alinhado ao framework oficial da Microsoft para agentes de IA (**Plan, Govern and secure, Build, Manage**), com foco em construir capacidades organizacionais, não apenas tecnológicas. Este modelo reconhece que o sucesso depende de pessoas, processos e dados tanto quanto de tecnologia.
