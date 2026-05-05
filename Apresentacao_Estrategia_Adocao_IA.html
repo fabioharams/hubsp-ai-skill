@@ -1,0 +1,1473 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Estratégia de Adoção de Agentes de IA — Microsoft IQ + Fabric + Foundry</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', sans-serif; background: #1a1a2e; color: #eee; overflow: hidden; }
+  
+  .slideshow { width: 100vw; height: 100vh; position: relative; }
+  
+  .slide {
+    display: none; width: 100%; height: 100%;
+    padding: 50px 70px; position: absolute; top: 0; left: 0;
+    overflow-y: auto;
+    animation: fadeIn 0.5s ease;
+  }
+  .slide.active { display: flex; flex-direction: column; justify-content: flex-start; }
+  
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  
+  /* Themes */
+  .theme-intro    { background: linear-gradient(135deg, #0f0c29, #302b63, #24243e); }
+  .theme-blue     { background: linear-gradient(135deg, #0d1b2a, #1b3a5c, #1a2a3a); }
+  .theme-purple   { background: linear-gradient(135deg, #1a0536, #3d1a6e, #2a1a4e); }
+  .theme-green    { background: linear-gradient(135deg, #0a2e1a, #1a5c2e, #0d3a1a); }
+  .theme-orange   { background: linear-gradient(135deg, #2e1a0a, #5c3a1a, #3a2a0d); }
+  .theme-dark     { background: linear-gradient(135deg, #1a1a1a, #2d2d2d, #1a1a2e); }
+  .theme-red      { background: linear-gradient(135deg, #2e0a0a, #5c1a1a, #3a0d0d); }
+  
+  /* Typography */
+  .section-tag {
+    display: inline-block; padding: 4px 14px; border-radius: 20px;
+    font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .tag-blue   { background: rgba(74,144,226,0.3); color: #74b9ff; border: 1px solid rgba(74,144,226,0.5); }
+  .tag-purple { background: rgba(123,104,238,0.3); color: #b39dfc; border: 1px solid rgba(123,104,238,0.5); }
+  .tag-green  { background: rgba(80,200,120,0.3); color: #74f2a0; border: 1px solid rgba(80,200,120,0.5); }
+  .tag-orange { background: rgba(255,152,0,0.3); color: #ffcc80; border: 1px solid rgba(255,152,0,0.5); }
+  .tag-red    { background: rgba(255,107,107,0.3); color: #ff9999; border: 1px solid rgba(255,107,107,0.5); }
+  
+  h1 { font-size: 48px; font-weight: 800; line-height: 1.15; margin-bottom: 16px; }
+  h2 { font-size: 36px; font-weight: 700; line-height: 1.2; margin-bottom: 14px; }
+  h3 { font-size: 26px; font-weight: 700; margin-bottom: 12px; color: #ddd; }
+  h4 { font-size: 20px; font-weight: 600; margin-bottom: 10px; color: #ccc; }
+  
+  .subtitle { font-size: 20px; color: #aaa; max-width: 750px; line-height: 1.5; margin-bottom: 30px; }
+  .body-text { font-size: 17px; color: #ccc; line-height: 1.7; margin-bottom: 16px; max-width: 900px; }
+  .highlight { color: #74b9ff; font-weight: 600; }
+  .highlight-green { color: #74f2a0; font-weight: 600; }
+  .highlight-orange { color: #ffcc80; font-weight: 600; }
+  .highlight-purple { color: #b39dfc; font-weight: 600; }
+  
+  /* Quote */
+  .quote {
+    border-left: 4px solid #74b9ff; padding: 16px 24px;
+    background: rgba(74,144,226,0.1); border-radius: 0 8px 8px 0;
+    font-size: 20px; font-style: italic; color: #cce5ff; margin: 20px 0;
+    max-width: 900px;
+  }
+  
+  /* Cards */
+  .cards { display: flex; gap: 20px; flex-wrap: wrap; margin: 20px 0; }
+  .card {
+    flex: 1; min-width: 200px; padding: 22px 24px;
+    border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);
+  }
+  .card-blue   { background: rgba(74,144,226,0.15); border-color: rgba(74,144,226,0.4); }
+  .card-purple { background: rgba(123,104,238,0.15); border-color: rgba(123,104,238,0.4); }
+  .card-green  { background: rgba(80,200,120,0.15); border-color: rgba(80,200,120,0.4); }
+  .card-red    { background: rgba(255,107,107,0.15); border-color: rgba(255,107,107,0.4); }
+  .card-orange { background: rgba(255,152,0,0.15); border-color: rgba(255,152,0,0.4); }
+  .card-yellow { background: rgba(255,217,61,0.15); border-color: rgba(255,217,61,0.4); }
+  
+  .card h4 { font-size: 18px; margin-bottom: 8px; }
+  .card p  { font-size: 15px; color: #ccc; line-height: 1.5; }
+  
+  /* Table */
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 15px; }
+  thead th { background: rgba(255,255,255,0.12); padding: 11px 16px; text-align: left; font-weight: 700; color: #fff; }
+  tbody td { padding: 10px 16px; border-bottom: 1px solid rgba(255,255,255,0.07); color: #ccc; }
+  tbody tr:hover td { background: rgba(255,255,255,0.05); }
+  
+  /* List */
+  .list { list-style: none; margin: 12px 0; }
+  .list li { padding: 6px 0; font-size: 16px; color: #ccc; display: flex; align-items: flex-start; gap: 10px; }
+  .list li::before { content: '→'; color: #74b9ff; font-weight: 700; flex-shrink: 0; }
+  .list.check li::before { content: '✓'; color: #74f2a0; }
+  .list.cross li::before { content: '✗'; color: #ff9999; }
+  .list.bullet li::before { content: '•'; color: #b39dfc; }
+  
+  /* Layers */
+  .layer-stack { display: flex; flex-direction: column; gap: 8px; margin: 20px 0; max-width: 800px; }
+  .layer-item {
+    padding: 16px 24px; border-radius: 10px; border-left: 5px solid;
+    display: flex; align-items: center; gap: 16px;
+  }
+  .layer-icon { font-size: 26px; flex-shrink: 0; }
+  .layer-title { font-size: 17px; font-weight: 700; margin-bottom: 3px; }
+  .layer-desc  { font-size: 14px; color: #bbb; }
+  
+  /* Timeline */
+  .timeline { display: flex; gap: 10px; margin: 20px 0; flex-wrap: wrap; }
+  .phase {
+    flex: 1; min-width: 140px; padding: 18px 16px; border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.15); text-align: center;
+    position: relative;
+  }
+  .phase::after {
+    content: '→'; position: absolute; right: -18px; top: 50%;
+    transform: translateY(-50%); color: #666; font-size: 20px;
+    display: none;
+  }
+  .phase:not(:last-child)::after { display: block; }
+  .phase-num { font-size: 26px; font-weight: 800; margin-bottom: 4px; }
+  .phase-label { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+  .phase-period { font-size: 12px; color: #888; }
+  
+  /* Flow diagram */
+  .flow { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin: 16px 0; }
+  .flow-node {
+    padding: 10px 18px; border-radius: 8px; font-size: 14px; font-weight: 600;
+    text-align: center; border: 1px solid rgba(255,255,255,0.2);
+  }
+  .flow-arrow { color: #666; font-size: 20px; }
+
+  .flowchart-stage {
+    display: flex; align-items: stretch; gap: 12px; flex-wrap: wrap;
+    margin: 18px 0 24px;
+  }
+  .flowchart-box {
+    flex: 1; min-width: 140px; padding: 16px 14px;
+    border-radius: 12px; border: 1px solid rgba(255,255,255,0.18);
+    text-align: center; position: relative;
+  }
+  .flowchart-box h4 { font-size: 16px; margin-bottom: 6px; color: #fff; }
+  .flowchart-box p { font-size: 13px; line-height: 1.45; color: #d3d8e2; }
+  .flowchart-arrow {
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px; color: #7f8ea3; min-width: 24px;
+  }
+  .flowchart-side-rail {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+    margin: 8px 0 18px; max-width: 820px;
+  }
+  .flowchart-rail {
+    padding: 14px 16px; border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.16);
+  }
+  .flowchart-rail h4 { font-size: 16px; margin-bottom: 6px; }
+  .flowchart-rail p { font-size: 13px; color: #c8ced9; line-height: 1.5; }
+
+  @keyframes flowchartReveal {
+    from {
+      opacity: 0;
+      transform: translateY(14px) scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  .slide.active .flowchart-stage > *,
+  .slide.active .flowchart-side-rail > * {
+    opacity: 0;
+    animation: flowchartReveal 0.55s ease forwards;
+  }
+
+  .slide.active .flowchart-stage > *:nth-child(1) { animation-delay: 0.05s; }
+  .slide.active .flowchart-stage > *:nth-child(2) { animation-delay: 0.14s; }
+  .slide.active .flowchart-stage > *:nth-child(3) { animation-delay: 0.23s; }
+  .slide.active .flowchart-stage > *:nth-child(4) { animation-delay: 0.32s; }
+  .slide.active .flowchart-stage > *:nth-child(5) { animation-delay: 0.41s; }
+  .slide.active .flowchart-stage > *:nth-child(6) { animation-delay: 0.50s; }
+  .slide.active .flowchart-stage > *:nth-child(7) { animation-delay: 0.59s; }
+  .slide.active .flowchart-stage > *:nth-child(8) { animation-delay: 0.68s; }
+  .slide.active .flowchart-stage > *:nth-child(9) { animation-delay: 0.77s; }
+  .slide.active .flowchart-stage > *:nth-child(10) { animation-delay: 0.86s; }
+  .slide.active .flowchart-stage > *:nth-child(11) { animation-delay: 0.95s; }
+
+  .slide.active .flowchart-side-rail > *:nth-child(1) { animation-delay: 1.02s; }
+  .slide.active .flowchart-side-rail > *:nth-child(2) { animation-delay: 1.12s; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .slide.active .flowchart-stage > *,
+    .slide.active .flowchart-side-rail > * {
+      opacity: 1;
+      animation: none;
+      transform: none;
+    }
+  }
+  
+  /* Comparison */
+  .comparison { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin: 20px 0; }
+  .comp-side { padding: 24px; border-radius: 12px; }
+  .comp-a { background: rgba(255,152,0,0.12); border: 1px solid rgba(255,152,0,0.4); }
+  .comp-b { background: rgba(74,144,226,0.12); border: 1px solid rgba(74,144,226,0.4); }
+  
+  /* Code block */
+  .code {
+    background: rgba(15,25,45,0.85); border: 2px solid rgba(116,185,255,0.3);
+    border-radius: 10px; padding: 20px 24px; font-family: 'Courier New', 'Courier', monospace;
+    font-size: 14px; color: #d4e8ff; line-height: 1.8; margin: 16px 0;
+    overflow-x: auto; box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    white-space: pre; word-wrap: break-word;
+  }
+  .code strong { color: #74f2a0; font-weight: 700; }
+  .code em { color: #ffcc80; font-style: normal; }
+  
+  /* Badge pill */
+  .badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 12px; font-weight: 700; margin: 2px; }
+  .badge-blue   { background: rgba(74,144,226,0.35); color: #9ecfff; }
+  .badge-green  { background: rgba(80,200,120,0.35); color: #9ef5c0; }
+  .badge-red    { background: rgba(255,107,107,0.35); color: #ffb3b3; }
+  .badge-orange { background: rgba(255,152,0,0.35); color: #ffd399; }
+  .badge-purple { background: rgba(123,104,238,0.35); color: #c9baff; }
+  
+  /* Big number */
+  .big-stat { font-size: 64px; font-weight: 800; line-height: 1; margin-bottom: 6px; }
+  .stats-row { display: flex; gap: 40px; flex-wrap: wrap; margin: 24px 0; }
+  .stat-item { text-align: center; }
+  .stat-label { font-size: 14px; color: #888; margin-top: 4px; }
+  
+  /* Navigation */
+  .nav {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+    display: flex; align-items: center; gap: 12px; z-index: 1000;
+    background: rgba(0,0,0,0.7); border: 1px solid rgba(255,255,255,0.15);
+    padding: 10px 20px; border-radius: 40px; backdrop-filter: blur(10px);
+  }
+  .nav button {
+    background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+    color: #fff; padding: 8px 20px; border-radius: 20px; cursor: pointer;
+    font-size: 14px; font-weight: 600; transition: all 0.2s;
+  }
+  .nav button:hover { background: rgba(255,255,255,0.2); }
+  .nav button:disabled { opacity: 0.3; cursor: default; }
+  .slide-counter { color: #aaa; font-size: 13px; min-width: 70px; text-align: center; }
+  
+  /* Progress */
+  .progress-bar {
+    position: fixed; top: 0; left: 0; height: 3px;
+    background: linear-gradient(90deg, #74b9ff, #b39dfc, #74f2a0);
+    transition: width 0.4s ease; z-index: 1001;
+  }
+  
+  /* Divider */
+  .divider { height: 2px; background: rgba(255,255,255,0.08); margin: 20px 0; border-radius: 2px; }
+  
+  /* Section title slide */
+  .section-title-slide {
+    justify-content: center; align-items: center; text-align: center;
+  }
+  .section-title-slide h2 { font-size: 56px; }
+  .section-title-slide .subtitle { font-size: 22px; text-align: center; margin: 0 auto; }
+  
+  /* Two column */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+  
+  /* Highlight box */
+  .highlight-box {
+    padding: 20px 26px; border-radius: 12px; margin: 16px 0;
+    border: 1px solid rgba(255,255,255,0.2); max-width: 960px;
+  }
+  .hbox-blue   { background: rgba(74,144,226,0.12); border-color: rgba(74,144,226,0.4); }
+  .hbox-green  { background: rgba(80,200,120,0.12); border-color: rgba(80,200,120,0.4); }
+  .hbox-orange { background: rgba(255,152,0,0.12); border-color: rgba(255,152,0,0.4); }
+  .hbox-red    { background: rgba(255,107,107,0.12); border-color: rgba(255,107,107,0.4); }
+  .hbox-purple { background: rgba(123,104,238,0.12); border-color: rgba(123,104,238,0.4); }
+  
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 2px; }
+
+  /* Agenda item */
+  .agenda-item {
+    display: flex; align-items: center; gap: 20px;
+    padding: 14px 20px; border-radius: 10px; margin: 8px 0;
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+  }
+  .agenda-num { font-size: 28px; font-weight: 800; min-width: 40px; }
+  .agenda-content h4 { font-size: 17px; margin-bottom: 2px; }
+  .agenda-content p  { font-size: 13px; color: #888; }
+  
+  /* Steps */
+  .steps { display: flex; flex-direction: column; gap: 14px; margin: 16px 0; }
+  .step  { display: flex; gap: 16px; align-items: flex-start; }
+  .step-num { background: rgba(74,144,226,0.4); border: 2px solid #74b9ff; color: #fff; border-radius: 50%; min-width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 16px; flex-shrink: 0; margin-top: 2px; }
+  .step-body h4 { font-size: 17px; margin-bottom: 4px; }
+  .step-body p  { font-size: 15px; color: #bbb; line-height: 1.5; }
+  
+  /* Medallion */
+  .medallion { display: flex; gap: 16px; align-items: stretch; margin: 16px 0; flex-wrap: wrap; }
+  .medal-card { flex: 1; min-width: 160px; padding: 20px; border-radius: 12px; text-align: center; }
+  .medal-bronze { background: rgba(139,111,71,0.3); border: 2px solid #8B6F47; }
+  .medal-silver { background: rgba(192,192,192,0.2); border: 2px solid #C0C0C0; }
+  .medal-gold   { background: rgba(255,215,0,0.2); border: 2px solid #FFD700; }
+  .medal-title  { font-size: 20px; font-weight: 800; margin-bottom: 6px; }
+  .medal-sub    { font-size: 13px; color: #bbb; margin-bottom: 10px; }
+  .medal-items  { font-size: 13px; color: #ddd; line-height: 1.6; }
+  
+  /* Risk table */
+  .risk-row-high td:first-child { color: #ff7675; font-weight: 700; }
+  .risk-row-med  td:first-child { color: #fdcb6e; font-weight: 700; }
+  .risk-row-low  td:first-child { color: #74f2a0; font-weight: 700; }
+  
+  /* Product Icons */
+  .product-icon { display: inline-block; margin-right: 8px; vertical-align: middle; flex-shrink: 0; }
+  .card h4 { display: flex; align-items: center; gap: 8px; }
+  .product-logo { height: 24px; width: auto; }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<div class="slideshow" id="slideshow">
+
+<!-- ================================================================ SLIDE 1 - CAPA -->
+<div class="slide theme-intro active">
+  <div style="flex:1;display:flex;flex-direction:column;justify-content:center;">
+    <div class="section-tag tag-blue">Workshop — Mais de 4 horas</div>
+    <h1 style="font-size:52px;background:linear-gradient(135deg,#74b9ff,#b39dfc,#74f2a0);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;">
+      Estratégia Corporativa de<br/>Adoção de Agentes de IA
+    </h1>
+    <p class="subtitle">Microsoft IQ + Fabric + Foundry — Arquitetura, Governança e Roadmap de Adoção</p>
+    <div class="cards" style="max-width:900px;margin-top:24px;">
+      <div class="card card-blue"><h4><svg class="product-icon" width="20" height="20" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z" fill="#74b9ff"/></svg>Work IQ</h4><p>Camada de experiência e produtividade do usuário final</p></div>
+      <div class="card card-purple"><h4><svg class="product-icon" width="20" height="20" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z" fill="#b39dfc"/></svg>Foundry IQ</h4><p>Camada de agentes, orquestração e reasoning avançado</p></div>
+      <div class="card card-green"><h4><svg class="product-icon" width="20" height="20" viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" fill="#74f2a0" opacity="0.8"/><rect x="13" y="3" width="8" height="8" fill="#74f2a0" opacity="0.8"/><rect x="3" y="13" width="8" height="8" fill="#74f2a0" opacity="0.8"/><rect x="13" y="13" width="8" height="8" fill="#74f2a0" opacity="0.8"/></svg>Fabric IQ</h4><p>Camada de dados governados, semântica e inteligência</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================ SLIDE 2 - AGENDA -->
+<div class="slide theme-dark">
+  <div class="section-tag tag-blue">Agenda</div>
+  <h2>O que vamos cobrir hoje</h2>
+  <p class="subtitle">Jornada completa — do contexto executivo à implementação técnica</p>
+  <div style="columns:2;gap:24px;margin-top:16px;">
+    <div class="agenda-item"><span class="agenda-num" style="color:#74b9ff;">1</span><div class="agenda-content"><h4>Visão Executiva & Princípios</h4><p>Por que IA escala apenas com governança</p></div></div>
+    <div class="agenda-item"><span class="agenda-num" style="color:#b39dfc;">2</span><div class="agenda-content"><h4>Arquitetura de Referência</h4><p>As 4 camadas + Guard Rails + Evaluators</p></div></div>
+    <div class="agenda-item"><span class="agenda-num" style="color:#74f2a0;">3</span><div class="agenda-content"><h4>Microsoft Fabric Deep Dive</h4><p>OneLake, Delta Lake, Medallion Architecture</p></div></div>
+    <div class="agenda-item"><span class="agenda-num" style="color:#ffcc80;">4</span><div class="agenda-content"><h4>Governança: Purview + Entra ID</h4><p>Identidade de agentes, labels, RLS, auditoria</p></div></div>
+    <div class="agenda-item"><span class="agenda-num" style="color:#ff9999;">5</span><div class="agenda-content"><h4>Estratégia de Adoção (5 Fases)</h4><p>Do PoC à escala organizacional completa</p></div></div>
+    <div class="agenda-item"><span class="agenda-num" style="color:#74b9ff;">6</span><div class="agenda-content"><h4>Ferramentas: M365, Studio, Foundry</h4><p>Quando usar cada ferramenta</p></div></div>
+    <div class="agenda-item"><span class="agenda-num" style="color:#b39dfc;">7</span><div class="agenda-content"><h4>Cenários A vs B</h4><p>Self-service x dados tratados — modelo híbrido</p></div></div>
+    <div class="agenda-item"><span class="agenda-num" style="color:#74f2a0;">8</span><div class="agenda-content"><h4>KPIs, Riscos e Próximos Passos</h4><p>Como medir sucesso e mitigar riscos</p></div></div>
+  </div>
+</div>
+
+<!-- ================================================================ SLIDE 3 - SEÇÃO 1 -->
+<div class="slide theme-blue section-title-slide">
+  <div class="section-tag tag-blue">Seção 1 de 8</div>
+  <h2>Visão Executiva<br/>& Princípio Central</h2>
+  <p class="subtitle">Por que adotar IA de forma estruturada — não pontual</p>
+</div>
+
+<!-- ================================================================ SLIDE 4 - O PROBLEMA -->
+<div class="slide theme-blue">
+  <div class="section-tag tag-blue">O Problema</div>
+  <h2>O que acontece sem arquitetura</h2>
+  <div class="two-col" style="margin-top:20px;">
+    <div>
+      <h4 style="color:#ff9999;margin-bottom:12px;">❌ Sem arquitetura corporativa</h4>
+      <ul class="list cross">
+        <li>Cada agente acessa fontes diferentes</li>
+        <li>Regras de negócio aplicadas de forma inconsistente</li>
+        <li>Respostas com níveis distintos de qualidade</li>
+        <li>Sem rastreabilidade ou auditoria</li>
+        <li>Segurança e conformidade como reflexo tardio</li>
+        <li>Duplicação de integrações e retrabalho</li>
+        <li>Shadow AI prolifera sem controle</li>
+      </ul>
+    </div>
+    <div>
+      <h4 style="color:#74f2a0;margin-bottom:12px;">✅ Com arquitetura corporativa</h4>
+      <ul class="list check">
+        <li>Fonte única de verdade para todos os agentes</li>
+        <li>Menos retrabalho e duplicação de integrações</li>
+        <li>Rastreabilidade completa de ações</li>
+        <li>Segurança e conformidade desde o dia 1</li>
+        <li>Escala sem perder controle</li>
+        <li>Usuário continua nas interfaces conhecidas</li>
+        <li>Qualidade medida continuamente</li>
+      </ul>
+    </div>
+  </div>
+  <div class="quote" style="margin-top:24px;">
+    "IA escala valor apenas quando decisões automatizadas são <strong>confiáveis, governadas e mensuráveis</strong>"
+  </div>
+</div>
+
+<!-- ================================================================ SLIDE 5 - DEFINIÇÃO DE ARQT CORP -->
+<div class="slide theme-blue">
+  <div class="section-tag tag-blue">Conceito-chave</div>
+  <h2>O que é Arquitetura Corporativa de IA?</h2>
+  <p class="body-text">Desenho <strong>integrado</strong> de processos, dados, identidade, segurança, governança e experiências de usuário para que agentes operem de forma previsível, escalável e alinhada às políticas da organização.</p>
+  <div class="cards" style="margin-top:20px;">
+    <div class="card card-blue"><h4><svg class="product-icon" width="20" height="20" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="#74b9ff" stroke-width="1.5"/><path d="M12 7v5m0 0l3-2m-3 2l-3-2" stroke="#74b9ff" stroke-width="1.5" stroke-linecap="round"/></svg>Microsoft 365 Copilot</h4><p>Experiência do usuário e grounding com dados do Microsoft Graph</p></div>
+    <div class="card card-purple"><h4><svg class="product-icon" width="20" height="20" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="3" fill="none" stroke="#b39dfc" stroke-width="1.5"/><circle cx="12" cy="12" r="4" fill="none" stroke="#b39dfc" stroke-width="1.5"/></svg>Foundry + Copilot Studio</h4><p>Agentes, orquestração, avaliações e lógica de negócio</p></div>
+    <div class="card card-green"><h4><svg class="product-icon" width="20" height="20" viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" fill="#74f2a0" opacity="0.8"/><rect x="13" y="3" width="8" height="8" fill="#74f2a0" opacity="0.8"/><rect x="3" y="13" width="8" height="8" fill="#74f2a0" opacity="0.8"/><rect x="13" y="13" width="8" height="8" fill="#74f2a0" opacity="0.8"/></svg>Microsoft Fabric</h4><p>OneLake, lakehouses, warehouses e modelos semânticos</p></div>
+    <div class="card card-red"><h4><svg class="product-icon" width="20" height="20" viewBox="0 0 24 24"><path d="M12 2l10 6v10l-10 6-10-6V8z" fill="none" stroke="#ff9999" stroke-width="1.5"/><circle cx="12" cy="12" r="3" fill="#ff9999"/></svg>Purview + Entra ID</h4><p>Classificação, proteção, identidade e controle de acesso</p></div>
+  </div>
+</div>
+
+<!-- ================================================================ SLIDE 6 - EXEMPLOS PRÁTICOS -->
+<div class="slide theme-blue">
+  <div class="section-tag tag-blue">Exemplos Práticos</div>
+  <h2>IA na prática corporativa</h2>
+  <div class="steps" style="margin-top:20px;">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body"><h4>Atendimento Executivo</h4><p>Diretor pergunta no M365 Copilot por que a margem caiu. O Copilot encaminha para um agente de domínio, que consulta dados financeiros governados no Fabric via modelo semântico e devolve uma resposta coerente com as permissões do usuário.</p></div>
+    </div>
+    <div class="step">
+      <div class="step-num" style="background:rgba(123,104,238,0.4);border-color:#b39dfc;">2</div>
+      <div class="step-body"><h4>Agente de Operações</h4><p>Agente no Copilot Studio recebe pedido para investigar aumento de incidentes. Consulta métricas no Fabric, aplica regras de negócio do domínio e usa guard rails para bloquear ações fora do escopo. Resultado: análise auditável alinhada às políticas.</p></div>
+    </div>
+    <div class="step">
+      <div class="step-num" style="background:rgba(80,200,120,0.4);border-color:#74f2a0;">3</div>
+      <div class="step-body"><h4>Governança em Escala</h4><p>RH, Finanças e Operações publicam agentes distintos. Mesmo com finalidades diferentes, todos seguem o mesmo padrão de identidade, acesso, classificação, observabilidade e avaliação. Diversidade de agentes, base comum de controle.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================ SLIDE 7 - SEÇÃO 2 -->
+<div class="slide theme-purple section-title-slide">
+  <div class="section-tag tag-purple">Seção 2 de 8</div>
+  <h2>Arquitetura de Referência</h2>
+  <p class="subtitle">As 4 camadas, Guard Rails e Evaluators — como tudo se conecta</p>
+</div>
+
+<!-- ================================================================ SLIDE 8 - AS 4 CAMADAS -->
+<div class="slide theme-purple">
+  <div class="section-tag tag-purple">Arquitetura</div>
+  <h2>As 4 Camadas Fundamentais</h2>
+  <div class="layer-stack" style="margin-top:20px;">
+    <div class="layer-item" style="background:rgba(74,144,226,0.15);border-left-color:#74b9ff;">
+      <div class="layer-icon">💼</div>
+      <div><div class="layer-title" style="color:#74b9ff;">Work IQ — User Layer</div><div class="layer-desc">Microsoft 365 Copilot embarcado em Teams, Word, Outlook, Excel. IA invisível para o usuário. Grounding com Microsoft Graph.</div></div>
+    </div>
+    <div class="layer-item" style="background:rgba(123,104,238,0.15);border-left-color:#b39dfc;">
+      <div class="layer-icon">🤖</div>
+      <div><div class="layer-title" style="color:#b39dfc;">Foundry IQ — Agents Layer</div><div class="layer-desc">Reasoning encadeado, multi-agent systems (A2A), tool calls controlados, lógica de negócio. Hospedado no Microsoft Foundry e Copilot Studio.</div></div>
+    </div>
+    <div class="layer-item" style="background:rgba(80,200,120,0.15);border-left-color:#74f2a0;">
+      <div class="layer-icon">📊</div>
+      <div><div class="layer-title" style="color:#74f2a0;">Fabric IQ — Data Intelligence</div><div class="layer-desc">Semântica e contexto. Modelos semânticos definem métricas uma única vez. Ontologia corporativa. "Margem" significa a mesma coisa para todos os agentes.</div></div>
+    </div>
+    <div class="layer-item" style="background:rgba(255,107,107,0.15);border-left-color:#ff9999;">
+      <div class="layer-icon">🗄️</div>
+      <div><div class="layer-title" style="color:#ff9999;">Microsoft Fabric — Data Platform</div><div class="layer-desc">OneLake (repositório único), Spark/SQL (transformação), SQL Analytics Endpoint (servir), Purview (governar). Bronze→Silver→Gold.</div></div>
+    </div>
+  </div>
+  <div class="cards" style="margin-top:16px;">
+    <div class="card card-orange" style="flex:0 0 auto;width:auto;"><h4>🛡️ Guard Rails</h4><p>Controle transversal em todas as camadas</p></div>
+    <div class="card card-green" style="flex:0 0 auto;width:auto;"><h4>✅ Evaluators</h4><p>Medição contínua de qualidade e conformidade</p></div>
+  </div>
+</div>
+
+<!-- ================================================================ SLIDE 9 - GUARD RAILS -->
+<div class="slide theme-purple">
+  <div class="section-tag tag-purple">Guard Rails</div>
+  <h2>Controle de Segurança Transversal</h2>
+  <p class="body-text">Guard Rails são controles que <strong>permeiam todas as operações</strong> de agentes — não são um módulo separado, são uma camada de proteção presente em cada interação.</p>
+  <div class="cards" style="margin-top:20px;">
+    <div class="card card-red"><h4><svg class="product-icon" width="20" height="20" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z" fill="#ff9999"/></svg>Prompt Shields</h4><p>Detecta e bloqueia prompt injection — ataques que tentam manipular o comportamento do agente via instruções maliciosas</p></div>
+    <div class="card card-orange"><h4><svg class="product-icon" width="20" height="20" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" fill="#ffcc80"/></svg>Content Safety</h4><p>Filtra categorias de risco: violência, NSFW, discurso de ódio. Validação automática de entradas e saídas</p></div>
+    <div class="card card-yellow"><h4><svg class="product-icon" width="20" height="20" viewBox="0 0 24 24"><path d="M12 2l10 6v10l-10 6-10-6V8z" fill="none" stroke="#ffcc80" stroke-width="1.5"/><circle cx="12" cy="12" r="3" fill="#ffcc80"/></svg>Purview Labels</h4><p>Controla qual agente acessa qual dado baseado em classificação de sensibilidade — Public, Internal, Confidential, Highly Confidential</p></div>
+    <div class="card card-purple"><h4><svg class="product-icon" width="20" height="20" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="#b39dfc" stroke-width="1.5"/><circle cx="9" cy="9.5" r="1.5" fill="#b39dfc"/><circle cx="15" cy="9.5" r="1.5" fill="#b39dfc"/><path d="M9 15c1.5 1 3 1.5 3 1.5s1.5-.5 3-1.5" stroke="#b39dfc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>PII Detection</h4><p>Remove informações pessoais identificáveis antes de retornar respostas, prevenindo vazamentos inadvertidos</p></div>
+    <div class="card card-blue"><h4><svg class="product-icon" width="20" height="20" viewBox="0 0 24 24"><path d="M4 3h16c1.1 0 2 .9 2 2v14c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V5c0-1.1.9-2 2-2zm0 16h16V5H4v14zm2-8h12v2H6v-2z" fill="#74b9ff"/></svg>Audit Logs</h4><p>Toda ação de agente é registrada para conformidade. Logs enviados ao Purview para auditoria completa e trilha de evidências</p></div>
+  </div>
+</div>
+
+<!-- ================================================================ SLIDE 10 - EVALUATORS -->
+<div class="slide theme-purple">
+  <div class="section-tag tag-purple">Evaluators</div>
+  <h2>Medição Contínua de Qualidade</h2>
+  <p class="body-text">Evaluators validam se os agentes estão operando corretamente — não apenas se respondem, mas se respondem <strong>com qualidade e segurança</strong>.</p>
+  <table style="margin-top:20px;">
+    <thead><tr><th>Dimensão</th><th>O que mede</th><th>Exemplo de métrica</th><th>Ação se falhar</th></tr></thead>
+    <tbody>
+      <tr><td><span class="badge badge-blue">Groundedness</span></td><td>Resposta baseada em dados reais?</td><td>>95% = OK</td><td>Reject + log</td></tr>
+      <tr><td><span class="badge badge-green">Task Adherence</span></td><td>Agente fez o que foi pedido?</td><td>>90% = OK</td><td>Feedback loop</td></tr>
+      <tr><td><span class="badge badge-orange">Toxicity</span></td><td>Conteúdo prejudicial presente?</td><td>0 = OK</td><td>Bloqueia resposta</td></tr>
+      <tr><td><span class="badge badge-red">Segurança</span></td><td>Dados sensíveis expostos?</td><td>0 = OK</td><td>Bloqueia + alerta</td></tr>
+      <tr><td><span class="badge badge-purple">Drift</span></td><td>Performance degradou?</td><td>Δ &lt;5% = OK</td><td>Alerta + retraining</td></tr>
+    </tbody>
+  </table>
+  <div class="highlight-box hbox-green" style="margin-top:20px;">
+    <h4 style="color:#74f2a0;margin-bottom:8px;">Exemplo real</h4>
+    <p class="body-text" style="margin:0;">Avaliador valida resposta sobre margem: groundedness = 95%, task adherence = 98%, sem vazamento de dados → <strong style="color:#74f2a0;">aprovada e entregue ao usuário</strong>.</p>
+  </div>
+</div>
+
+<!-- ================================================================ SLIDE 11 - FLUXO COMPLETO -->
+<div class="slide theme-purple">
+  <div class="section-tag tag-purple">Fluxo End-to-End</div>
+  <h2>Como as camadas trabalham juntas</h2>
+  <div class="flowchart-stage">
+    <div class="flowchart-box" style="background:rgba(74,144,226,0.18);border-color:rgba(74,144,226,0.45);">
+      <h4>👤 Usuário</h4>
+      <p>Pede um insight em linguagem natural no Teams, Word ou Outlook.</p>
+    </div>
+    <div class="flowchart-arrow">→</div>
+    <div class="flowchart-box" style="background:rgba(74,144,226,0.18);border-color:rgba(74,144,226,0.45);">
+      <h4>💼 Work IQ</h4>
+      <p>Captura contexto do usuário e encaminha a solicitação.</p>
+    </div>
+    <div class="flowchart-arrow">→</div>
+    <div class="flowchart-box" style="background:rgba(123,104,238,0.18);border-color:rgba(123,104,238,0.45);">
+      <h4><svg class="product-icon" width="18" height="18" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z" fill="#b39dfc"/></svg>Foundry IQ</h4>
+      <p>Planeja tool calls, aplica lógica e orquestra o raciocínio.</p>
+    </div>
+    <div class="flowchart-arrow">→</div>
+    <div class="flowchart-box" style="background:rgba(80,200,120,0.18);border-color:rgba(80,200,120,0.45);">
+      <h4><svg class="product-icon" width="18" height="18" viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" fill="#74f2a0" opacity="0.8"/><rect x="13" y="3" width="8" height="8" fill="#74f2a0" opacity="0.8"/><rect x="3" y="13" width="8" height="8" fill="#74f2a0" opacity="0.8"/><rect x="13" y="13" width="8" height="8" fill="#74f2a0" opacity="0.8"/></svg>Fabric IQ + Fabric</h4>
+      <p>Traduz a pergunta, consulta dados Gold e devolve contexto governado.</p>
+    </div>
+    <div class="flowchart-arrow">→</div>
+    <div class="flowchart-box" style="background:rgba(255,152,0,0.18);border-color:rgba(255,152,0,0.45);">
+      <h4><svg class="product-icon" width="18" height="18" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" fill="#ffcc80"/></svg>Evaluators</h4>
+      <p>Validam groundedness, segurança e aderência antes da entrega.</p>
+    </div>
+    <div class="flowchart-arrow">→</div>
+    <div class="flowchart-box" style="background:rgba(74,144,226,0.18);border-color:rgba(74,144,226,0.45);">
+      <h4><svg class="product-icon" width="18" height="18" viewBox="0 0 24 24"><path d="M16 12c0 .38.04.74.12 1.1.68.5 1.12 1.32 1.12 2.24 0 1.66-1.34 3-3 3s-3-1.34-3-3c0-.47.11-.92.32-1.32-.59-.6-.96-1.43-.96-2.35 0-1.87 1.48-3.41 3.33-3.48 1.7-2.02 4.2-3.31 7-3.31.55 0 1.1.06 1.63.16l-.22.86c-.49-.14-.99-.22-1.5-.22-2.15 0-4.07.75-5.6 2m-1.3 1.48c-.51.4-.84.99-.84 1.67 0 .68.33 1.27.84 1.67.16-.32.24-.67.24-1.04s-.08-.72-.24-1.04m8.4-4.07c.59.6.96 1.43.96 2.35 0 .52-.1 1.01-.27 1.47.49.55.8 1.27.8 2.08 0 1.66-1.34 3-3 3s-3-1.34-3-3c0-.47.11-.92.32-1.32-.59-.6-.96-1.43-.96-2.35 0-1.87 1.48-3.41 3.33-3.48v-2.03c-.55 0-1.1.06-1.63.16l.22.86c.49-.14.99-.22 1.5-.22 2.15 0 4.07.75 5.6 2" fill="#74b9ff"/></svg>Resposta</h4>
+      <p>Insight claro, auditável e pronto para decisão do usuário.</p>
+    </div>
+  </div>
+  <div class="flowchart-side-rail">
+    <div class="flowchart-rail" style="background:rgba(255,107,107,0.14);border-color:rgba(255,107,107,0.4);">
+      <h4 style="color:#ff9999;"><svg class="product-icon" width="18" height="18" viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5s-5 2.24-5 5v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM9 6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9V6zm9 14H6V10h12v10zm-6-3c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z" fill="#ff9999"/></svg>Guard Rails</h4>
+      <p>Atuam durante todo o fluxo: Prompt Shields, Content Safety, Purview labels e bloqueio de acessos indevidos.</p>
+    </div>
+    <div class="flowchart-rail" style="background:rgba(123,104,238,0.14);border-color:rgba(123,104,238,0.4);">
+      <h4 style="color:#c9baff;"><svg class="product-icon" width="18" height="18" viewBox="0 0 24 24"><path d="M4 3h16c1.1 0 2 .9 2 2v14c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V5c0-1.1.9-2 2-2zm0 16h16V5H4v14zm2-8h12v2H6v-2z" fill="#c9baff"/></svg>Auditoria</h4>
+      <p>Cada etapa relevante gera rastreabilidade: identidade do agente, consulta executada, filtros RLS e resultado entregue.</p>
+    </div>
+  </div>
+  <div class="steps" style="margin-top:20px;">
+    <div class="step"><div class="step-num">1</div><div class="step-body"><h4><svg class="product-icon" width="18" height="18" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" fill="#74b9ff"/></svg>Usuário solicita (Work IQ)</h4><p>"Por que a margem caiu neste trimestre?" — pergunta em linguagem natural no Teams ou Word.</p></div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-body"><h4><svg class="product-icon" width="18" height="18" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z" fill="#b39dfc"/></svg>Agente planeja (Foundry IQ)</h4><p>Interpreta a intenção, define tool calls necessários, verifica guard rails antes de agir.</p></div></div>
+    <div class="step"><div class="step-num" style="background:rgba(80,200,120,0.4);border-color:#74f2a0;">3</div><div class="step-body"><h4><svg class="product-icon" width="18" height="18" viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" fill="#74f2a0" opacity="0.8"/><rect x="13" y="3" width="8" height="8" fill="#74f2a0" opacity="0.8"/><rect x="3" y="13" width="8" height="8" fill="#74f2a0" opacity="0.8"/><rect x="13" y="13" width="8" height="8" fill="#74f2a0" opacity="0.8"/></svg>Busca dados (Fabric IQ → Fabric)</h4><p>Query ao SQL Analytics Endpoint com RLS automático. Apenas dados autorizados retornam.</p></div></div>
+    <div class="step"><div class="step-num" style="background:rgba(255,152,0,0.4);border-color:#ffcc80;">4</div><div class="step-body"><h4><svg class="product-icon" width="18" height="18" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="#ffcc80"/></svg>Reasoning + Evaluators</h4><p>Agente combina contextos, gera análise. Evaluators validam groundedness e segurança antes de entregar.</p></div></div>
+    <div class="step"><div class="step-num" style="background:rgba(123,104,238,0.4);border-color:#b39dfc;">5</div><div class="step-body"><h4><svg class="product-icon" width="18" height="18" viewBox="0 0 24 24"><path d="M16 12c0 .38.04.74.12 1.1.68.5 1.12 1.32 1.12 2.24 0 1.66-1.34 3-3 3s-3-1.34-3-3c0-.47.11-.92.32-1.32-.59-.6-.96-1.43-.96-2.35 0-1.87 1.48-3.41 3.33-3.48 1.7-2.02 4.2-3.31 7-3.31.55 0 1.1.06 1.63.16l-.22.86c-.49-.14-.99-.22-1.5-.22-2.15 0-4.07.75-5.6 2m-1.3 1.48c-.51.4-.84.99-.84 1.67 0 .68.33 1.27.84 1.67.16-.32.24-.67.24-1.04s-.08-.72-.24-1.04m8.4-4.07c.59.6.96 1.43.96 2.35 0 .52-.1 1.01-.27 1.47.49.55.8 1.27.8 2.08 0 1.66-1.34 3-3 3s-3-1.34-3-3c0-.47.11-.92.32-1.32-.59-.6-.96-1.43-.96-2.35 0-1.87 1.48-3.41 3.33-3.48v-2.03c-.55 0-1.1.06-1.63.16l.22.86c.49-.14.99-.22 1.5-.22 2.15 0 4.07.75 5.6 2" fill="#b39dfc"/></svg>Resposta ao usuário</h4><p>Insight pronto para ação entregue na interface conhecida. Audit log registrado automaticamente.</p></div></div>
+  </div>
+</div>
+
+<!-- ================================================================ SLIDE 12 - SEÇÃO 3 -->
+<div class="slide theme-green section-title-slide">
+  <div class="section-tag tag-green">Seção 3 de 8</div>
+  <h2>Microsoft Fabric Deep Dive</h2>
+  <p class="subtitle">OneLake, Delta Lake, Shortcuts, SQL Analytics Endpoint e Medallion Architecture</p>
+</div>
+
+<!-- ================================================================ SLIDE 13 - ONELAKE -->
+<div class="slide theme-green">
+  <div class="section-tag tag-green">Microsoft Fabric</div>
+  <h2>OneLake — O Lago Unificado</h2>
+  <p class="body-text"><strong>Um único lago de dados lógico por tenant</strong>, construído sobre ADLS Gen2. É o equivalente corporativo do OneDrive para dados — provisionado automaticamente quando você ativa o Fabric.</p>
+  <div class="flowchart-stage">
+    <div class="flowchart-box" style="background:rgba(74,144,226,0.18);border-color:rgba(74,144,226,0.45);">
+      <h4><svg class="product-icon" width="18" height="18" viewBox="0 0 24 24"><path d="M12 2l8 4v12l-8 4-8-4V6z" fill="none" stroke="#ff9999" stroke-width="1.5"/></svg>OneLake</h4>
+      <p>Camada única de armazenamento corporativo no tenant.</p>
+    </div>
+    <div class="flowchart-arrow">→</div>
+    <div class="flowchart-box" style="background:rgba(123,104,238,0.18);border-color:rgba(123,104,238,0.45);">
+      <h4><svg class="product-icon" width="18" height="18" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z" fill="#b39dfc"/></svg>Workspaces</h4>
+      <p>Organizam domínios como finanças, vendas e analytics.</p>
+    </div>
+    <div class="flowchart-arrow">→</div>
+    <div class="flowchart-box" style="background:rgba(80,200,120,0.18);border-color:rgba(80,200,120,0.45);">
+      <h4><svg class="product-icon" width="18" height="18" viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" fill="#74f2a0" opacity="0.8"/><rect x="13" y="3" width="8" height="8" fill="#74f2a0" opacity="0.8"/><rect x="3" y="13" width="8" height="8" fill="#74f2a0" opacity="0.8"/><rect x="13" y="13" width="8" height="8" fill="#74f2a0" opacity="0.8"/></svg>Lakehouses</h4>
+      <p>Materializam tabelas e arquivos sem criar novos silos.</p>
+    </div>
+    <div class="flowchart-arrow">→</div>
+    <div class="flowchart-box" style="background:rgba(255,152,0,0.18);border-color:rgba(255,152,0,0.45);">
+      <h4><svg class="product-icon" width="18" height="18" viewBox="0 0 24 24\"><circle cx=\"12\" cy=\"12\" r=\"3\" fill=\"#ffcc80\"/><circle cx=\"12\" cy=\"12\" r=\"9\" fill=\"none\" stroke=\"#ffcc80\" stroke-width=\"1.5\"/><circle cx=\"4\" cy=\"6\" r=\"1.5\" fill=\"#ffcc80\"/><circle cx=\"20\" cy=\"6\" r=\"1.5\" fill=\"#ffcc80\"/><circle cx=\"20\" cy=\"18\" r=\"1.5\" fill=\"#ffcc80\"/><circle cx=\"4\" cy=\"18\" r=\"1.5\" fill=\"#ffcc80\"/></svg>Consumers</h4>
+      <p>Agentes, BI e SQL reutilizam a mesma base governada.</p>
+    </div>
+  </div>
+  <div class="cards" style="margin-top:20px;">
+    <div class="card card-green"><h4><svg class="product-icon\" width="20" height="20" viewBox="0 0 24 24\"><rect x=\"3\" y=\"3\" width=\"8\" height=\"8\" fill=\"#74f2a0\" opacity=\"0.9\"/><rect x=\"13\" y=\"3\" width=\"8\" height=\"8\" fill=\"#74f2a0\" opacity=\"0.9\"/><rect x=\"3\" y=\"13\" width=\"8\" height=\"8\" fill=\"#74f2a0\" opacity=\"0.9\"/><rect x=\"13\" y=\"13\" width=\"8\" height=\"8\" fill=\"#74f2a0\" opacity=\"0.9\"/></svg>Centralização</h4><p>Todos os dados de analytics em um único local lógico — sem silos, sem duplicação entre departamentos</p></div>
+    <div class="card card-blue"><h4><svg class="product-icon" width="20" height="20" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="#74b9ff" stroke-width="1.5"/><path d="M8 12h8M12 8v8" stroke="#74b9ff" stroke-width="1.5" stroke-linecap="round"/></svg>Interoperabilidade</h4><p>Spark, SQL, Power BI e agentes acessam <em>simultaneamente a mesma cópia</em> dos dados</p></div>
+    <div class="card card-purple"><h4><svg class="product-icon" width="20" height="20" viewBox="0 0 24 24"><path d="M12 1C6.48 1 2 5.48 2 11s4.48 10 10 10 10-4.48 10-10S17.52 1 12 1zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="#b39dfc"/></svg>Governança Unificada</h4><p>Políticas de acesso, classificação e conformidade aplicadas centralmente via Purview</p></div>
+    <div class="card card-orange"><h4><svg class="product-icon" width="20" height="20" viewBox="0 0 24 24\"><path d=\"M4 2h16c1.1 0 2 .9 2 2v16c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2m0 18h16V4H4v16m2-8h3v3H6zm5-5h3v3h-3zm5 5h3v3h-3z\" fill=\"#ffcc80\"/></svg>Estrutura</h4><p><code style="font-size:13px;color:#fff;">/Tables</code> — Delta gerenciadas<br/><code style="font-size:13px;color:#fff;">/Files</code> — qualquer formato</p></div>
+  </div>
+  <div class="highlight-box hbox-green" style="margin-top:20px;">
+    <p class="body-text" style="margin:0;"><span class="highlight-green">Shortcut</span> = referência virtual a dados externos (ADLS Gen2, S3, GCS, Dataverse). Agentes consultam como tabela local. <strong>Zero cópia, dados sempre frescos, segurança herdada automaticamente.</strong></p>
+  </div>
+</div>
+
+<!-- ================================================================ SLIDE 14 - DELTA LAKE -->
+<div class="slide theme-green">
+  <div class="section-tag tag-green">Formato de Dados</div>
+  <h2>Delta Lake — Por que importa?</h2>
+  <p class="body-text">Fabric <strong>padroniza em Delta Lake</strong>: formato open-source que adiciona transações ACID, validação de schema e histórico sobre Parquet. Todo engine (Spark, SQL, Power BI) que escreve dados cria Delta tables.</p>
+  <table style="margin-top:20px;">
+    <thead><tr><th>Propriedade</th><th>Parquet Puro</th><th>Delta Lake (Fabric)</th></tr></thead>
+    <tbody>
+      <tr><td>ACID Transactions</td><td style="color:#ff9999;">❌ Não</td><td style="color:#74f2a0;">✅ Sim</td></tr>
+      <tr><td>Schema Enforcement</td><td style="color:#ff9999;">❌ Não</td><td style="color:#74f2a0;">✅ Sim — evita dados "sujos"</td></tr>
+      <tr><td>Time Travel</td><td style="color:#ff9999;">❌ Não</td><td style="color:#74f2a0;">✅ Sim — consulta versões passadas</td></tr>
+      <tr><td>Data Rollback</td><td style="color:#ff9999;">❌ Não</td><td style="color:#74f2a0;">✅ Sim — reverte escritas ruins</td></tr>
+      <tr><td>Performance</td><td>Básico</td><td style="color:#ffcc80;">⚡ V-Order optimization</td></tr>
+      <tr><td>Auditoria</td><td style="color:#ff9999;">❌ Não</td><td style="color:#74f2a0;">✅ Sim — Delta history completo</td></tr>
+    </tbody>
+  </table>
+  <div class="highlight-box hbox-blue" style="margin-top:16px;">
+    <h4 style="color:#74b9ff;margin-bottom:6px;">Por que isso importa para agentes?</h4>
+    <p style="font-size:15px;color:#ccc;margin:0;">Agentes <strong>confiam</strong> que dados são corretos (ACID). Múltiplos agentes leem simultaneamente a mesma versão consistente. Schema enforce previne dados corrompidos. Histórico completo = auditoria garantida.</p>
+  </div>
+</div>
+
+<!-- ================================================================ SLIDE 15 - SQL ENDPOINT -->
+<div class="slide theme-green">
+  <div class="section-tag tag-green">Interface SQL</div>
+  <h2>SQL Analytics Endpoint — Como Agentes Acessam Dados</h2>
+  <p class="body-text">Cada Lakehouse em Fabric <strong>provisiona automaticamente</strong> um SQL Analytics Endpoint — endpoint TDS que expõe Delta tables como tabelas SQL padrão.</p>
+  <div class="two-col" style="margin-top:20px;">
+    <div>
+      <h4 style="color:#74f2a0;margin-bottom:10px;">Capacidades</h4>
+      <ul class="list check" style="font-size:15px;">
+        <li>SELECT contra Delta tables (incluindo Shortcuts)</li>
+        <li>Views, funções, stored procedures T-SQL</li>
+        <li>Row-Level Security (RLS) automático</li>
+        <li>Conexão com Power BI (Direct Lake)</li>
+        <li>Azure Data Studio, SSMS, qualquer cliente TDS</li>
+      </ul>
+    </div>
+    <div>
+      <h4 style="color:#74b9ff;margin-bottom:10px;">Performance</h4>
+      <ul class="list" style="font-size:15px;">
+        <li>Sincronização Lakehouse → SQL: &lt;1 minuto</li>
+        <li>V-Order: Spark grava Parquet otimizado para leitura SQL</li>
+        <li>Estatísticas e índices automáticos (sem ação manual)</li>
+        <li>Powered pelo mesmo engine do Fabric Data Warehouse</li>
+      </ul>
+    </div>
+  </div>
+  <div class="code"><strong>-- Agente consulta dados Gold via SQL Analytics Endpoint</strong>
+<strong>SELECT</strong> p.ProductName, <strong>SUM</strong>(s.Amount) <strong>AS</strong> TotalSales
+<strong>FROM</strong> Gold.Products p
+<strong>INNER JOIN</strong> Gold.Sales s <strong>ON</strong> p.ProductID = s.ProductID
+<strong>WHERE</strong> s.Date >= <strong>DATEADD</strong>(month, -3, <strong>GETDATE</strong>())
+<strong>GROUP BY</strong> p.ProductName <strong>ORDER BY</strong> TotalSales <strong>DESC</strong>
+<em>-- RLS já filtrou dados conforme identidade Entra ID do agente</em></div>
+</div>
+
+<!-- ================================================================ SLIDE 16 - MEDALLION INTRO -->
+<div class="slide theme-green">
+  <div class="section-tag tag-green">Arquitetura de Dados</div>
+  <h2>Medallion Architecture — Bronze → Silver → Gold</h2>
+  <p class="body-text">Padrão de organização de dados recomendado pela Microsoft. Cada camada aumenta progressivamente a qualidade, validação e valor dos dados.</p>
+  <div class="flowchart-stage">
+    <div class="flowchart-box" style="background:rgba(139,111,71,0.24);border-color:rgba(210,105,30,0.55);">
+      <h4><svg class="product-icon" width="18" height="18" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#8B6F47"/></svg>Bronze</h4>
+      <p>Ingestão as-is para preservar histórico e auditoria.</p>
+    </div>
+    <div class="flowchart-arrow">→</div>
+    <div class="flowchart-box" style="background:rgba(192,192,192,0.14);border-color:rgba(192,192,192,0.5);">
+      <h4><svg class="product-icon" width="18" height="18" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#C0C0C0"/></svg>Silver</h4>
+      <p>Validação, deduplicação e estruturação em Delta Lake.</p>
+    </div>
+    <div class="flowchart-arrow">→</div>
+    <div class="flowchart-box" style="background:rgba(255,215,0,0.14);border-color:rgba(255,215,0,0.5);">
+      <h4><svg class="product-icon" width="18" height="18" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#FFD700"/></svg>Gold</h4>
+      <p>Data Products com métricas prontas para consumo.</p>
+    </div>
+    <div class="flowchart-arrow">→</div>
+    <div class="flowchart-box" style="background:rgba(74,144,226,0.18);border-color:rgba(74,144,226,0.45);">
+      <h4><svg class="product-icon" width="18" height="18" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z" fill="#74b9ff"/></svg>Agentes</h4>
+      <p>Consomem apenas a camada Gold com semântica estável.</p>
+    </div>
+  </div>
+  <div class="medallion" style="margin-top:24px;">
+    <div class="medal-card medal-bronze">
+      <div class="medal-title" style="color:#D2691E;">🟤 Bronze</div>
+      <div class="medal-sub">RAW DATA</div>
+      <div class="medal-items">
+        Formato original<br/>
+        Sem limpeza<br/>
+        Sem validação<br/>
+        Histórico completo<br/>
+        <br/>
+        <em>Acesso:</em> Private<br/>
+        <em>Owner:</em> Data Engineers
+      </div>
+    </div>
+    <div class="medal-card medal-silver">
+      <div class="medal-title" style="color:#C0C0C0;">🟡 Silver</div>
+      <div class="medal-sub">CLEAN DATA</div>
+      <div class="medal-items">
+        Delta Lake padrão<br/>
+        Validado, deduplicado<br/>
+        Schema enforced<br/>
+        fct_ e dim_ tables<br/>
+        <br/>
+        <em>Acesso:</em> Semi-privado<br/>
+        <em>Owner:</em> Data Engineers
+      </div>
+    </div>
+    <div class="medal-card medal-gold">
+      <div class="medal-title" style="color:#FFD700;">🟢 Gold</div>
+      <div class="medal-sub">BUSINESS DATA</div>
+      <div class="medal-items">
+        Data Products<br/>
+        Métricas corporativas<br/>
+        SLA de atualização<br/>
+        RLS + Purview labels<br/>
+        <br/>
+        <em>Acesso:</em> Público<br/>
+        <em>Owner:</em> Analytics Eng.
+      </div>
+    </div>
+  </div>
+  <div class="highlight-box hbox-orange" style="margin-top:20px;">
+    <p style="font-size:15px;color:#ccc;margin:0;"><strong style="color:#ffcc80;">Por que Medallion importa para agentes?</strong> Agentes <strong>sempre consomem Gold</strong> — dados pré-validados, com métricas pré-calculadas, SLA garantido e segurança aplicada. Nenhum agente precisa reconstruir a lógica de "o que é margem?".</p>
+  </div>
+</div>
+
+<!-- ================================================================ SLIDE 17 - BRONZE DEEP -->
+<div class="slide theme-green">
+  <div class="section-tag tag-green">Bronze Layer</div>
+  <h2>Bronze — Capturando a Realidade Bruta</h2>
+  <p class="body-text">Captura dados <strong>como chegam</strong>, em formato original. Propósito: auditoria, reprocessamento futuro, histórico para compliance (GDPR, LGPD).</p>
+  <table style="margin-top:16px;">
+    <thead><tr><th>Fonte</th><th>Formato</th><th>Tamanho</th><th>Frequência</th><th>Qualidade</th></tr></thead>
+    <tbody>
+      <tr><td>ERP / APIs</td><td>JSON, CSV</td><td>5-50 GB/dia</td><td>Contínuo</td><td><span class="badge badge-orange">⚠️ Pode variar</span></td></tr>
+      <tr><td>DB Export (nightly)</td><td>JSON</td><td>100 MB</td><td>1x/dia</td><td><span class="badge badge-orange">⚠️ Caracteres especiais</span></td></tr>
+      <tr><td>Email / FTP</td><td>CSV</td><td>10-500 MB/dia</td><td>Diária</td><td><span class="badge badge-red">❌ Duplicatas, erros</span></td></tr>
+      <tr><td>User Uploads</td><td>PDF, Imagens</td><td>1-10 GB/dia</td><td>On-demand</td><td><span class="badge badge-red">❌ Pode ter corrupção</span></td></tr>
+    </tbody>
+  </table>
+  <div class="cards" style="margin-top:16px;">
+    <div class="card card-blue"><h4><svg class="product-icon" width="20" height="20" viewBox="0 0 24 24"><path d="M2 17h20v2H2zm1.15-4.05L6 11.9l.82-6.47C7.48 4.57 8.97 3.5 10.64 3.5c1.66 0 3.15 1.07 3.82 2.93l.82 6.47 2.85-1.05c.54-.2.98.23.98.8v.75c0 .53-.4.99-.92 1.04l-5.11.58c-.56.07-1.01-.4-1.02-.98l-.02-1.02h-2.52l-.02 1.02c-.01.59-.46 1.05-1.02.98L3.92 16c-.53-.05-.92-.51-.92-1.04v-.75c0-.57.45-.99.98-.8zM12 6c-.89 0-1.64.72-1.64 1.6s.75 1.6 1.64 1.6 1.64-.72 1.64-1.6-.75-1.6-1.64-1.6z" fill="#74b9ff"/></svg>Mirroring</h4><p>Replicação near real-time de DB → OneLake. Suporta SQL Server, MySQL, PostgreSQL, Snowflake</p></div>
+    <div class="card card-purple"><h4><svg class="product-icon" width="20" height="20" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" fill="#b39dfc"/></svg>Data Factory</h4><p>Pipelines com 200+ conectores nativos para qualquer fonte de dados</p></div>
+    <div class="card card-green"><h4><svg class="product-icon" width="20" height="20" viewBox="0 0 24 24"><path d="M7 14c1.66 0 3-1.34 3-3 0-1.31-1.16-2.41-2.41-2.41-.5 0-.95.19-1.29.49-.71-.53-1.6-.86-2.59-.86C2.67 8 1 9.67 1 11.76c0 .95.28 1.93.82 2.8.53.87 1.33 1.64 2.25 2.07 1.13.54 2.34.54 3.47 0 .91-.43 1.72-1.2 2.25-2.07.54-.87.82-1.85.82-2.8 0-1.31-1.16-2.41-2.41-2.41z" fill="#74f2a0"/></svg>Shortcuts</h4><p>Referenciar dados de ADLS Gen2/S3 sem cópia física</p></div>
+  </div>
+</div>
+
+<!-- ================================================================ SLIDE 18 - SILVER DEEP -->
+<div class="slide theme-green">
+  <div class="section-tag tag-green">Silver Layer</div>
+  <h2>Silver — Transformando em Dado Confiável</h2>
+  <p class="body-text">Transforma dados brutos em <strong>dados validados e estruturados</strong>. Usa Spark/Python para limpeza, deduplicação e integração de múltiplas fontes.</p>
+  <h4 style="margin:16px 0 10px;">Transformações típicas Bronze → Silver:</h4>
+  <table>
+    <thead><tr><th>Origem</th><th>Processamento</th><th>Validações</th><th>Saída</th></tr></thead>
+    <tbody>
+      <tr><td>Invoices (múltiplos CSVs)</td><td>Spark DataFrame merge</td><td>Dedup, Amount &gt; 0, datas</td><td><strong>fct_Invoices (Delta)</strong></td></tr>
+      <tr><td>Customers (JSON exports)</td><td>Spark DataFrame merge</td><td>SCD Type 1, email format</td><td><strong>dim_Customers (Delta)</strong></td></tr>
+      <tr><td>Products (API export)</td><td>Spark DataFrame merge</td><td>Merge por PK, Cost &gt; 0</td><td><strong>dim_Products (Delta)</strong></td></tr>
+    </tbody>
+  </table>
+  <div class="cards" style="margin-top:16px;">
+    <div class="card card-green"><h4><svg class="product-icon" width="20" height="20" viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5s-5 2.24-5 5v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM9 6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9V6zm9 14H6V10h12v10zm-6-3c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z" fill="#74f2a0"/></svg>ACID Transactions</h4><p>Nenhum dado parcial ou corrompido chega na Silver</p></div>
+    <div class="card card-blue"><h4><svg class="product-icon" width="20" height="20" viewBox="0 0 24 24"><path d="M17.71 4.71L16 3h-5c-1.1 0-2 .9-2 2v7c0 1.1.9 2 2 2h5l1.71 1.71c.63.63 1.71.18 1.71-.71V5.41c0-.89-1.08-1.34-1.71-.71zM12 2c.13 0 .26.02.39.06l5.5 2.01c.5.18.86.65.86 1.19v11.48c0 .54-.36 1.01-.86 1.19l-5.5 2.01c-.13.04-.26.06-.39.06V2z" fill="#74b9ff"/></svg>Primary Key Unique</h4><p>Sem duplicatas — cada registro tem uma chave única garantida</p></div>
+    <div class="card card-purple"><h4><svg class="product-icon" width="20" height="20" viewBox="0 0 24 24"><rect x="4" y="4" width="4" height="4" fill="#b39dfc"/><rect x="10" y="4" width="4" height="4" fill="#b39dfc"/><rect x="16" y="4" width="4" height="4" fill="#b39dfc"/><rect x="4" y="10" width="4" height="4" fill="#b39dfc"/><rect x="10" y="10" width="4" height="4" fill="#b39dfc"/><rect x="16" y="10" width="4" height="4" fill="#b39dfc"/><rect x="4" y="16" width="4" height="4" fill="#b39dfc"/><rect x="10" y="16" width="4" height="4" fill="#b39dfc"/><rect x="16" y="16" width="4" height="4" fill="#b39dfc"/></svg>Schema Strict</h4><p>Rejeita dados fora do tipo esperado — proteção de qualidade automática</p></div>
+    <div class="card card-orange"><h4><svg class="product-icon" width="20" height="20" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="#ffcc80"/></svg>Referential Integrity</h4><p>FK relationships validadas — sem órfãos ou dados inconsistentes</p></div>
+  </div>
+</div>
+
+<!-- ================================================================ SLIDE 19 - GOLD DEEP -->
+<div class="slide theme-green">
+  <div class="section-tag tag-green">Gold Layer</div>
+  <h2>Gold — Data Products prontos para Agentes</h2>
+  <p class="body-text">Dados agregados, calculados e semantificados com nomenclatura corporativa. Expostos como <strong>Data Products</strong> via SQL Analytics Endpoint.</p>
+  <table style="margin-top:16px;">
+    <thead><tr><th>Data Product</th><th>Tabela</th><th>Propósito</th><th>SLA</th><th>Sensibilidade</th></tr></thead>
+    <tbody>
+      <tr><td>Revenue</td><td><code>fct_DailyRevenue</code></td><td>Receita por produto-região-dia</td><td>2 AM UTC</td><td><span class="badge badge-blue">🔵 Internal</span></td></tr>
+      <tr><td>Profitability</td><td><code>fct_Margins</code></td><td>Margens bruta, operacional, líquida</td><td>3 AM UTC</td><td><span class="badge badge-orange">🟡 Confidential</span></td></tr>
+      <tr><td>Customer 360</td><td><code>dim_Customer</code></td><td>Lifetime value + churn risk</td><td>4 AM UTC</td><td><span class="badge badge-red">🔴 Highly Conf. (PII)</span></td></tr>
+    </tbody>
+  </table>
+  <h4 style="margin:16px 0 10px;">Cada Data Product garante:</h4>
+  <div class="cards">
+    <div class="card card-green"><h4><svg class="product-icon" width="20" height="20" viewBox="0 0 24 24"><path d="M19 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 16H5V4h14v14zm-5.04-6.71l-2.75 3.54h3.54v1.42H9.5v-1.42L6.96 10.29h3.54V8.87h2.5v1.42z" fill="#74f2a0"/></svg>Documentação</h4><p>Dicionário de dados, fórmulas, lineage visível no Purview</p></div>
+    <div class="card card-blue"><h4><svg class="product-icon" width="20" height="20" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="#74b9ff" stroke-width="1.5"/><path d="M12 6v6l4 2.4" stroke="#74b9ff" stroke-width="1.5" stroke-linecap="round"/></svg>SLA</h4><p>Horário garantido de atualização — agentes sabem quando dados estão frescos</p></div>
+    <div class="card card-red"><h4><svg class="product-icon" width="20" height="20" viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5s-5 2.24-5 5v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM9 6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9V6zm9 14H6V10h12v10zm-6-3c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z" fill="#ff9999"/></svg>Segurança</h4><p>Sensitivity labels + RLS automáticos — agente vê apenas o que deve</p></div>
+    <div class="card card-purple"><h4><svg class="product-icon" width="20" height="20" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8" fill="none" stroke="#b39dfc" stroke-width="1.5"/><path d="m21 21-4.35-4.35" stroke="#b39dfc" stroke-width="1.5" stroke-linecap="round"/></svg>Descoberta</h4><p>Indexado em Data Catalog (Purview) — discoverability para todos os times</p></div>
+  </div>
+</div>
+
+<!-- ================================================================ SLIDE 20 - PADRÕES IMPLEMENTAÇÃO -->
+<div class="slide theme-green">
+  <div class="section-tag tag-green">Padrões de Implementação</div>
+  <h2>3 Padrões Medallion no Fabric</h2>
+  <div class="three-col" style="margin-top:20px;">
+    <div class="card card-blue">
+      <h4>Opção 1<br/>Três Lakehouses</h4>
+      <p><strong>Quando usar:</strong> Times Spark-first, análises exploratórias, foco em Data Science</p>
+      <br/>
+      <p>🟤 Lakehouse-Bronze<br/>🟡 Lakehouse-Silver<br/>🟢 Lakehouse-Gold</p>
+      <br/>
+      <p style="font-size:13px;color:#aaa;">Escalabilidade: ⭐⭐⭐⭐⭐<br/>BI Support: Limitado</p>
+    </div>
+    <div class="card card-green" style="border-width:2px;border-color:rgba(80,200,120,0.7);position:relative;">
+      <div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:#74f2a0;color:#000;padding:2px 12px;border-radius:20px;font-size:11px;font-weight:800;white-space:nowrap;">⭐ RECOMENDADO</div>
+      <h4>Opção 2<br/>Lakehouse + Warehouse</h4>
+      <p><strong>Quando usar:</strong> Times com BI maduro, Power BI em escala, modelos dimensionais</p>
+      <br/>
+      <p>🟤🟡 Lakehouse-Staging<br/>🟢 Data Warehouse Gold</p>
+      <br/>
+      <p style="font-size:13px;color:#aaa;">BI Support: ⭐⭐⭐⭐⭐<br/>Direct Lake Mode nativo</p>
+    </div>
+    <div class="card card-purple">
+      <h4>Opção 3<br/>Medallion + Data Mesh</h4>
+      <p><strong>Quando usar:</strong> Org muito grande (200+ data engineers), múltiplos domínios autônomos</p>
+      <br/>
+      <p>🏢 Domain-Finance (Medallion)<br/>🏢 Domain-Sales (Medallion)<br/>🏢 Domain-Ops (Medallion)</p>
+      <br/>
+      <p style="font-size:13px;color:#aaa;">Autonomia: ⭐⭐⭐⭐⭐<br/>Complexidade: Alta</p>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================ SLIDE 21 - SEÇÃO 4 -->
+<div class="slide theme-orange section-title-slide">
+  <div class="section-tag tag-orange">Seção 4 de 8</div>
+  <h2>Governança & Segurança</h2>
+  <p class="subtitle">Microsoft Entra Agent ID, Purview Labels, RLS, Conditional Access e Auditoria</p>
+</div>
+
+<!-- ================================================================ SLIDE 22 - IDENTIDADE DO AGENTE -->
+<div class="slide theme-orange">
+  <div class="section-tag tag-orange">Governança</div>
+  <h2>Entra ID Agent Identity — Agentes têm identidade</h2>
+  <p class="body-text">Cada agente recebe uma <strong>identidade corporativa distinta</strong> no Microsoft Entra ID — não apenas um service principal genérico, mas uma identidade com contexto, rastreabilidade e políticas adaptativas.</p>
+  <table style="margin-top:16px;">
+    <thead><tr><th>Aspecto</th><th>Service Principal (Legado)</th><th>Entra Agent ID (Novo)</th></tr></thead>
+    <tbody>
+      <tr><td>Propósito</td><td>Aplicativo genérico</td><td style="color:#74f2a0;">Agente de IA específico</td></tr>
+      <tr><td>Autenticação</td><td>Username/senha ou certificado</td><td style="color:#74f2a0;">JWT + contexto de risco</td></tr>
+      <tr><td>Autorização</td><td>Baseado em função (RBAC)</td><td style="color:#74f2a0;">RBAC + risco + contexto</td></tr>
+      <tr><td>Auditoria</td><td>Logs básicos</td><td style="color:#74f2a0;">Logs estruturados com intenção</td></tr>
+      <tr><td>Conditional Access</td><td>Limitado</td><td style="color:#74f2a0;">Políticas completas por agente</td></tr>
+    </tbody>
+  </table>
+  <div class="code" style="margin-top:16px;">
+<strong>Agent ID:</strong> eng-sales-agent-001
+<strong>Auth Method:</strong> <em>JWT + Risk Context</em>
+<strong>Roles:</strong> [<em>"Data Explorer"</em>, <em>"Contributor"</em>]
+<strong>Token TTL:</strong> 1h (auto-expire)
+<strong>Context per request:</strong> Identity attached
+<em>-- Zero anonymous access | Every request audited</em></div>
+</div>
+
+<!-- ================================================================ SLIDE 23 - PURVIEW LABELS -->
+<div class="slide theme-orange">
+  <div class="section-tag tag-orange">Classificação de Dados</div>
+  <h2>Purview Sensitivity Labels — 4 Níveis de Proteção</h2>
+  <p class="body-text">Hierarquia de classificação com <strong>proteção progressiva</strong>. Labels aplicados automaticamente aos dados no OneLake, herdados por todos os consumidores.</p>
+  <table style="margin-top:16px;">
+    <thead><tr><th>Label</th><th>Cenário de uso</th><th>Proteção</th><th>Acesso por Agente</th></tr></thead>
+    <tbody>
+      <tr><td><span class="badge badge-green">🟢 Public</span></td><td>Catálogo de produtos, preços públicos</td><td>Nenhuma criptografia</td><td style="color:#74f2a0;">✅ Automático</td></tr>
+      <tr><td><span class="badge badge-blue">🔵 Internal</span></td><td>Documentos operacionais, comunicados</td><td>Marca d'água</td><td style="color:#74f2a0;">✅ Automático</td></tr>
+      <tr><td><span class="badge badge-orange">🟡 Confidential</span></td><td>Contratos, planos de vendas, financeiro</td><td>Criptografia + restrição</td><td style="color:#ffcc80;">⚠️ Requer Conditional Access</td></tr>
+      <tr><td><span class="badge badge-red">🔴 Highly Confidential</span></td><td>PII (CPF, email, fone), segredos</td><td>Criptografia forte + rígida</td><td style="color:#ff9999;">❌ Bloqueado (human-in-loop)</td></tr>
+    </tbody>
+  </table>
+  <div class="highlight-box hbox-red" style="margin-top:16px;">
+    <h4 style="color:#ff9999;margin-bottom:6px;">Exemplo de bloqueio automático</h4>
+    <p style="font-size:15px;color:#ccc;margin:0;">Agente tenta acessar dados rotulados como "Highly Confidential" → Guard Rail intercepta → registra tentativa → bloqueia acesso → log enviado ao Purview para auditoria. Tudo automático, sem intervenção humana manual.</p>
+  </div>
+</div>
+
+<!-- ================================================================ SLIDE 24 - RLS -->
+<div class="slide theme-orange">
+  <div class="section-tag tag-orange">Row-Level Security</div>
+  <h2>RLS — Agente vê apenas o que deve ver</h2>
+  <p class="body-text">O SQL Analytics Endpoint aplica <strong>Row-Level Security automaticamente</strong> baseado na identidade Entra ID do agente. Um agente de vendas da LATAM nunca vê dados da EMEA.</p>
+  <div class="two-col" style="margin-top:16px;">
+    <div>
+      <h4 style="color:#ffcc80;margin-bottom:10px;">Como funciona</h4>
+      <div class="steps">
+        <div class="step"><div class="step-num" style="width:28px;height:28px;font-size:13px;background:rgba(255,152,0,0.4);border-color:#ffcc80;">1</div><div class="step-body"><p style="font-size:14px;">Agente solicita token JWT ao Entra ID com seu ClientID</p></div></div>
+        <div class="step"><div class="step-num" style="width:28px;height:28px;font-size:13px;background:rgba(255,152,0,0.4);border-color:#ffcc80;">2</div><div class="step-body"><p style="font-size:14px;">JWT carrega roles e contexto do agente</p></div></div>
+        <div class="step"><div class="step-num" style="width:28px;height:28px;font-size:13px;background:rgba(255,152,0,0.4);border-color:#ffcc80;">3</div><div class="step-body"><p style="font-size:14px;">SQL Endpoint valida token + consulta Purview label da tabela</p></div></div>
+        <div class="step"><div class="step-num" style="width:28px;height:28px;font-size:13px;background:rgba(255,152,0,0.4);border-color:#ffcc80;">4</div><div class="step-body"><p style="font-size:14px;">RLS aplica filtro automático — agente recebe dados filtrados</p></div></div>
+        <div class="step"><div class="step-num" style="width:28px;height:28px;font-size:13px;background:rgba(255,152,0,0.4);border-color:#ffcc80;">5</div><div class="step-body"><p style="font-size:14px;">Audit log registrado: quem acessou, o quê, quando, resultado</p></div></div>
+      </div>
+    </div>
+    <div>
+      <h4 style="color:#ffcc80;margin-bottom:10px;">Exemplo prático</h4>
+      <div class="highlight-box hbox-orange">
+        <p style="font-size:14px;color:#ccc;">Agente <code>eng-sales-001</code> com role <code>LATAM,EMEA</code> executa:<br/><code>SELECT * FROM fct_Orders</code></p>
+        <br/>
+        <p style="font-size:14px;color:#ccc;">→ Tabela tem 5.000 linhas no total<br/>→ RLS filtra automaticamente<br/>→ Agente recebe <strong style="color:#74f2a0;">1.245 linhas</strong> (só LATAM+EMEA)<br/>→ Sem consciência de que existem mais dados</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================ SLIDE 25 - 4 CAMADAS VALIDAÇÃO -->
+<div class="slide theme-orange">
+  <div class="section-tag tag-orange">Segurança Multinível</div>
+  <h2>4 Camadas de Validação em Cada Acesso</h2>
+  <div class="flowchart-stage">
+    <div class="flowchart-box" style="background:rgba(74,144,226,0.18);border-color:rgba(74,144,226,0.45);">
+      <h4>1. Entra ID</h4>
+      <p>Autentica o agente e valida o token JWT.</p>
+    </div>
+    <div class="flowchart-arrow">→</div>
+    <div class="flowchart-box" style="background:rgba(123,104,238,0.18);border-color:rgba(123,104,238,0.45);">
+      <h4>2. Conditional Access</h4>
+      <p>Avalia risco, horário, IP e contexto do acesso.</p>
+    </div>
+    <div class="flowchart-arrow">→</div>
+    <div class="flowchart-box" style="background:rgba(255,215,0,0.14);border-color:rgba(255,215,0,0.5);">
+      <h4>3. Purview Labels</h4>
+      <p>Define a sensibilidade e o nível de proteção do dado.</p>
+    </div>
+    <div class="flowchart-arrow">→</div>
+    <div class="flowchart-box" style="background:rgba(80,200,120,0.18);border-color:rgba(80,200,120,0.45);">
+      <h4>4. RLS + PIM</h4>
+      <p>Filtra, aprova ou bloqueia o acesso antes da consulta.</p>
+    </div>
+  </div>
+  <div class="steps" style="margin-top:20px;">
+    <div class="step">
+      <div class="step-num" style="background:rgba(74,144,226,0.4);border-color:#74b9ff;">1</div>
+      <div class="step-body"><h4><svg class="product-icon" width="18" height="18" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" fill="#74b9ff"/></svg>Entra ID — Autenticação</h4><p>Valida JWT token, verifica assinatura e expiração. Token inválido = acesso negado imediatamente.</p></div>
+    </div>
+    <div class="step">
+      <div class="step-num" style="background:rgba(123,104,238,0.4);border-color:#b39dfc;">2</div>
+      <div class="step-body"><h4><svg class="product-icon" width="18" height="18" viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5s-5 2.24-5 5v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM9 6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9V6zm9 14H6V10h12v10zm-6-3c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z" fill="#b39dfc"/></svg>Conditional Access — Segurança Adaptativa</h4><p>Avalia contexto: IP, horário, risco, dispositivo, localização. Acesso fora do horário comercial pode exigir aprovação adicional.</p></div>
+    </div>
+    <div class="step">
+      <div class="step-num" style="background:rgba(255,215,0,0.4);border-color:#FFD700;">3</div>
+      <div class="step-body"><h4><svg class="product-icon" width="18" height="18" viewBox="0 0 24 24"><path d="M12 2l10 6v10l-10 6-10-6V8z" fill="none" stroke="#FFD700" stroke-width="1.5"/><circle cx="12" cy="12" r="3" fill="#FFD700"/></svg>Purview Labels — Classificação dos Dados</h4><p>Consulta o label da tabela solicitada. Define o nível de proteção aplicado: nenhum, RLS, ou bloqueio + PIM.</p></div>
+    </div>
+    <div class="step">
+      <div class="step-num" style="background:rgba(80,200,120,0.4);border-color:#74f2a0;">4</div>
+      <div class="step-body"><h4><svg class="product-icon" width="18" height="18" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z" fill="#74f2a0"/></svg>RLS + PIM — Filtragem e Aprovação</h4><p>Public/Internal: RLS direto. Confidential: RLS + Conditional Access. Highly Confidential: PIM (aprovação humana obrigatória em tempo real).</p></div>
+    </div>
+  </div>
+  <div class="highlight-box hbox-green" style="margin-top:14px;">
+    <p style="font-size:15px;color:#ccc;margin:0;">Todo acesso, aprovado ou negado, gera <strong style="color:#74f2a0;">audit log estruturado</strong> com JSON completo: quem, o quê, quando, de onde, resultado, número de linhas, nível de risco.</p>
+  </div>
+</div>
+
+<!-- ================================================================ SLIDE 26 - SEÇÃO 5 -->
+<div class="slide theme-blue section-title-slide">
+  <div class="section-tag tag-blue">Seção 5 de 8</div>
+  <h2>Estratégia de Adoção</h2>
+  <p class="subtitle">5 fases evolutivas — do PoC à maturidade organizacional em 18+ meses</p>
+</div>
+
+<!-- ================================================================ SLIDE 27 - 5 FASES VISÃO -->
+<div class="slide theme-blue">
+  <div class="section-tag tag-blue">Roadmap</div>
+  <h2>5 Fases da Jornada de IA</h2>
+  <div class="flowchart-stage">
+    <div class="flowchart-box" style="background:rgba(93,173,226,0.2);border-color:rgba(93,173,226,0.5);">
+      <h4>Exploration</h4>
+      <p>Entender casos de uso, dados e prontidão.</p>
+    </div>
+    <div class="flowchart-arrow">→</div>
+    <div class="flowchart-box" style="background:rgba(118,215,196,0.2);border-color:rgba(118,215,196,0.5);">
+      <h4>PoC</h4>
+      <p>Provar valor com segurança e escopo controlado.</p>
+    </div>
+    <div class="flowchart-arrow">→</div>
+    <div class="flowchart-box" style="background:rgba(248,184,139,0.2);border-color:rgba(248,184,139,0.5);">
+      <h4>Pilot</h4>
+      <p>Escalar para departamentos e consolidar operação.</p>
+    </div>
+    <div class="flowchart-arrow">→</div>
+    <div class="flowchart-box" style="background:rgba(241,148,138,0.2);border-color:rgba(241,148,138,0.5);">
+      <h4>Scale</h4>
+      <p>Tornar agentes parte da workforce da organização.</p>
+    </div>
+    <div class="flowchart-arrow">→</div>
+    <div class="flowchart-box" style="background:rgba(215,189,226,0.2);border-color:rgba(215,189,226,0.5);">
+      <h4>Optimize</h4>
+      <p>Melhorar continuamente e abrir novos casos avançados.</p>
+    </div>
+  </div>
+  <div class="timeline" style="margin-top:24px;">
+    <div class="phase" style="background:rgba(93,173,226,0.2);border-color:rgba(93,173,226,0.5);">
+      <div class="phase-num" style="color:#5DADE2;">1</div>
+      <div class="phase-label">Exploration</div>
+      <div class="phase-period">0–2 meses</div>
+    </div>
+    <div class="phase" style="background:rgba(118,215,196,0.2);border-color:rgba(118,215,196,0.5);">
+      <div class="phase-num" style="color:#76D7C4;">2</div>
+      <div class="phase-label">Proof of Concept</div>
+      <div class="phase-period">2–4 meses</div>
+    </div>
+    <div class="phase" style="background:rgba(248,184,139,0.2);border-color:rgba(248,184,139,0.5);">
+      <div class="phase-num" style="color:#F8B88B;">3</div>
+      <div class="phase-label">Pilot</div>
+      <div class="phase-period">4–10 meses</div>
+    </div>
+    <div class="phase" style="background:rgba(241,148,138,0.2);border-color:rgba(241,148,138,0.5);">
+      <div class="phase-num" style="color:#F1948A;">4</div>
+      <div class="phase-label">Scale</div>
+      <div class="phase-period">10–18 meses</div>
+    </div>
+    <div class="phase" style="background:rgba(215,189,226,0.2);border-color:rgba(215,189,226,0.5);">
+      <div class="phase-num" style="color:#D7BDE2;">5</div>
+      <div class="phase-label">Optimize</div>
+      <div class="phase-period">18+ meses</div>
+    </div>
+  </div>
+  <table style="margin-top:20px;">
+    <thead><tr><th>Fase</th><th>Foco</th><th>Usuários</th><th>Agentes</th><th>Critério de saída</th></tr></thead>
+    <tbody>
+      <tr><td><span class="badge badge-blue">Phase 1</span></td><td>Validar viabilidade e use cases</td><td>Equipe core</td><td>0</td><td>3-5 use cases + baseline metrics</td></tr>
+      <tr><td><span class="badge badge-green">Phase 2</span></td><td>Provar valor com dados reais</td><td>10 beta users</td><td>1-2</td><td>ROI projetado 3:1, 0 incidentes</td></tr>
+      <tr><td><span class="badge badge-orange">Phase 3</span></td><td>Escala controlada por departamento</td><td>100-500</td><td>5-8</td><td>60% adoption, 3 competências L300</td></tr>
+      <tr><td><span class="badge badge-red">Phase 4</span></td><td>Escala completa — agentes como workforce</td><td>1000+</td><td>20+</td><td>ROI 3:1 documentado, business ownership</td></tr>
+      <tr><td><span class="badge badge-purple">Phase 5</span></td><td>Inovação contínua, maturidade total</td><td>Toda a org</td><td>N+</td><td>IA como capacidade estratégica core</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ================================================================ SLIDE 28 - PHASE 1 -->
+<div class="slide theme-blue">
+  <div class="section-tag tag-blue">Phase 1 — 0 a 2 meses</div>
+  <h2>Exploration — Construindo a Base</h2>
+  <div class="two-col" style="margin-top:20px;">
+    <div>
+      <h4 style="color:#74b9ff;margin-bottom:12px;">Atividades principais</h4>
+      <ul class="list">
+        <li>Identificar 3-5 use cases com ROI projetado</li>
+        <li>Avaliar prontidão de dados (qualidade, sensibilidade)</li>
+        <li>Mapear gap de skills e necessidades de treinamento</li>
+        <li>Montar equipe multidisciplinar (Negócio + TI + Data)</li>
+        <li>Estabelecer métricas baseline antes da IA</li>
+        <li>Estruturar processo de aprovação de agentes</li>
+      </ul>
+    </div>
+    <div>
+      <h4 style="color:#ff9999;margin-bottom:12px;">⚠️ Riscos comuns</h4>
+      <ul class="list cross">
+        <li>Falta de patrocínio executivo → C-level alignment workshop</li>
+        <li>Use cases muito complexos → escolher processos já documentados</li>
+        <li>Dados não classificados → classificar 80% antes do PoC</li>
+      </ul>
+      <div class="highlight-box hbox-green" style="margin-top:16px;">
+        <h4 style="color:#74f2a0;margin-bottom:6px;">✅ Critérios de saída</h4>
+        <ul class="list check" style="font-size:14px;">
+          <li>3-5 use cases com ROI projetado documentado</li>
+          <li>80%+ de dados relevantes classificados</li>
+          <li>Equipe multidisciplinar designada (RACI)</li>
+          <li>Baseline metrics estabelecidas</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================ SLIDE 29 - PHASE 2 -->
+<div class="slide theme-blue">
+  <div class="section-tag tag-blue">Phase 2 — 2 a 4 meses</div>
+  <h2>Proof of Concept — Validando com Dados Reais</h2>
+  <p class="body-text">Combinar <strong>M365 Copilot</strong> (Work IQ) com <strong>dados tratados</strong> (Cenário B) para maximizar impacto rápido com mínimo risco.</p>
+  <div class="cards" style="margin-top:16px;">
+    <div class="card card-blue"><h4>⏱️ Setup Time</h4><p>3-5 dias para go-to-value com M365 Copilot</p></div>
+    <div class="card card-green"><h4>🛡️ Risco Baixo</h4><p>Managed service + dados já classificados = PoC seguro desde o dia 1</p></div>
+    <div class="card card-purple"><h4>👥 10 Beta Users</h4><p>Interno, não voltado para clientes — controle total sobre variáveis</p></div>
+  </div>
+  <div class="highlight-box hbox-red" style="margin-top:16px;">
+    <h4 style="color:#ff9999;margin-bottom:8px;">⚠️ Top 3 Blockers (pesquisa Microsoft)</h4>
+    <table style="margin:0;">
+      <tbody>
+        <tr><td style="color:#ff9999;font-weight:700;">68.7%</td><td>Output impreciso / alucinações — implementar Groundedness Check</td></tr>
+        <tr><td style="color:#ff9999;font-weight:700;">68.5%</td><td>Preocupações com segurança — Purview labels + RLS desde Phase 2</td></tr>
+        <tr><td style="color:#ff9999;font-weight:700;">64.2%</td><td>Funcionários não veem valor — PoC nos workflows existentes</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="highlight-box hbox-green" style="margin-top:12px;">
+    <p style="font-size:14px;color:#ccc;margin:0;"><strong style="color:#74f2a0;">Metas:</strong> 1-2 agentes em produção, &gt;70% uso semanal, &gt;80% satisfação, 0 breaches, ROI projetado aprovado</p>
+  </div>
+</div>
+
+<!-- ================================================================ SLIDE 30 - 3 COMPETÊNCIAS -->
+<div class="slide theme-blue">
+  <div class="section-tag tag-blue">Phase 3 — Pré-requisitos</div>
+  <h2>As 3 Competências Críticas para Escala</h2>
+  <p class="body-text">Para escalar com sucesso, <strong>3 competências devem estar em Level 300</strong> — não é apenas tecnologia, é mudança organizacional.</p>
+  <div class="cards" style="margin-top:20px;">
+    <div class="card card-blue">
+      <h4>1️⃣ Business Process — L300</h4>
+      <p>Processos <strong>documentados</strong>, <strong>medidos</strong> e prontos para automação. Dicionário de dados consistente. Sem "João sabe fazer isso".</p>
+      <br/>
+      <p style="font-size:13px;color:#74b9ff;">Exemplo: "Triagem de suporte" documentado em Visio, SLA de 4h, pronto para agente.</p>
+    </div>
+    <div class="card card-purple">
+      <h4>2️⃣ Staff & Training — L300</h4>
+      <p>Treinamento <strong>obrigatório</strong> (não voluntário). Managers adotam primeiro. Champions program estruturado (4h/mês).</p>
+      <br/>
+      <p style="font-size:13px;color:#b39dfc;">HR torna mandatory. Manager faz 40h de "AI for Managers". Equipe treinada pelo manager.</p>
+    </div>
+    <div class="card card-green">
+      <h4>3️⃣ Content Governance — L300</h4>
+      <p>Documentação clara e atualizada. Sensitivity labels aplicados. Permissões corretas. Ownership definido.</p>
+      <br/>
+      <p style="font-size:13px;color:#74f2a0;">Nenhum "shared with everyone". Todos os docs têm owner, version e sensitivity label.</p>
+    </div>
+  </div>
+  <div class="highlight-box hbox-orange" style="margin-top:16px;">
+    <p style="font-size:15px;color:#ccc;margin:0;">Pesquisa Microsoft: adoção trava em 20-30% quando essas 3 competências não chegam ao Level 300. <strong style="color:#ffcc80;">Não é problema técnico — é problema organizacional.</strong></p>
+  </div>
+</div>
+
+<!-- ================================================================ SLIDE 31 - PHASE 4 -->
+<div class="slide theme-blue">
+  <div class="section-tag tag-blue">Phase 4 — 10 a 18 meses</div>
+  <h2>Scale — Agentes como Workforce</h2>
+  <p class="body-text">A mudança mais crítica: de <strong>"agentes como experimento"</strong> para <strong>"agentes como parte da força de trabalho"</strong>, gerenciados por business managers — não por TI.</p>
+  <table style="margin-top:16px;">
+    <thead><tr><th>Aspecto</th><th>Phase 3 (Pilot)</th><th>Phase 4 (Scale)</th></tr></thead>
+    <tbody>
+      <tr><td>Ownership</td><td>TI + Data team</td><td style="color:#74f2a0;">Business manager do domínio</td></tr>
+      <tr><td>Agent Definition</td><td>Descrição técnica</td><td style="color:#74f2a0;">Job description (JD) do agente</td></tr>
+      <tr><td>Management</td><td>"Configure and forget"</td><td style="color:#74f2a0;">Managers fazem performance reviews</td></tr>
+      <tr><td>Accountability</td><td>Projeto</td><td style="color:#74f2a0;">Operacional (KPI, SLA, budget)</td></tr>
+    </tbody>
+  </table>
+  <div class="highlight-box hbox-blue" style="margin-top:16px;">
+    <h4 style="color:#74b9ff;margin-bottom:6px;">Level 400 — Predictable (Microsoft Maturity Model)</h4>
+    <ul class="list check" style="font-size:14px;">
+      <li>Copilot/agentes disponível para ~70% da org</li>
+      <li>Treinamento é programa contínuo (não evento único)</li>
+      <li>Governança abrangente com auditorias regulares</li>
+      <li>Agentes têm managers de negócio (não TI)</li>
+      <li>Sucesso medido por business outcomes, não % de adoção</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ================================================================ SLIDE 32 - SEÇÃO 6 -->
+<div class="slide theme-purple section-title-slide">
+  <div class="section-tag tag-purple">Seção 6 de 8</div>
+  <h2>Ferramentas da Plataforma</h2>
+  <p class="subtitle">M365 Copilot, Copilot Studio e Microsoft Foundry — quando usar cada uma</p>
+</div>
+
+<!-- ================================================================ SLIDE 33 - 3 FERRAMENTAS -->
+<div class="slide theme-purple">
+  <div class="section-tag tag-purple">Ferramentas</div>
+  <h2>Três Ferramentas, Três Propósitos</h2>
+  <div class="three-col" style="margin-top:20px;">
+    <div class="card card-blue">
+      <h4>💼 M365 Copilot</h4>
+      <br/>
+      <p><strong>Foco:</strong> Produtividade individual sem desenvolvimento</p><br/>
+      <p><strong>Capacidades:</strong></p>
+      <ul class="list" style="font-size:14px;margin-top:8px;">
+        <li>Resumo de reuniões e e-mails</li>
+        <li>Análise com linguagem natural (Excel)</li>
+        <li>Busca semântica via Microsoft Graph</li>
+      </ul><br/>
+      <p style="font-size:13px;color:#888;">Prazo: Short-term (Phase 2)</p>
+    </div>
+    <div class="card card-purple">
+      <h4><svg class="product-icon" width="20" height="20" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z" fill="#b39dfc"/></svg>Copilot Studio</h4><br/>
+      <p><strong>Foco:</strong> Agentes customizados por domínio (low-code)</p><br/>
+      <p><strong>Capacidades:</strong></p>
+      <ul class="list" style="font-size:14px;margin-top:8px;">
+        <li>Agentes publicáveis em Teams, web</li>
+        <li>Conectores nativos com Fabric, Dataverse</li>
+        <li>Guard rails e Entra ID nativos</li>
+      </ul><br/>
+      <p style="font-size:13px;color:#888;">Prazo: Mid-term (Phase 3)</p>
+    </div>
+    <div class="card card-green">
+      <h4>🔬 Microsoft Foundry</h4>
+      <br/>
+      <p><strong>Foco:</strong> Agentes complexos com código, reasoning avançado</p><br/>
+      <p><strong>Capacidades:</strong></p>
+      <ul class="list" style="font-size:14px;margin-top:8px;">
+        <li>Prompt flows + tool calls encadeados</li>
+        <li>Multi-model (GPT-4o, Claude, Mistral, Phi)</li>
+        <li>Fine-tuning e avaliação em escala</li>
+      </ul><br/>
+      <p style="font-size:13px;color:#888;">Prazo: Long-term (Phase 4+)</p>
+    </div>
+  </div>
+  <div class="quote" style="margin-top:20px;border-color:#b39dfc;background:rgba(123,104,238,0.1);color:#d4c8ff;">
+    "M365 Copilot começa o valor — Copilot Studio escala os agentes — Microsoft Foundry habilita a profundidade"
+  </div>
+</div>
+
+<!-- ================================================================ SLIDE 34 - PROTOCOLOS -->
+<div class="slide theme-purple">
+  <div class="section-tag tag-purple">Integração</div>
+  <h2>Protocolos de Integração no Foundry</h2>
+  <div class="cards" style="margin-top:20px;">
+    <div class="card card-blue">
+      <h4><svg class="product-icon" width="18" height="18" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="#ffcc80" stroke-width="1.5"/><path d="M8 12h8M12 8v8" stroke="#ffcc80" stroke-width="1.5" stroke-linecap="round"/></svg>MCP</h4>
+      <p><strong>Model Context Protocol</strong><br/>Protocolo open-source da Anthropic para conectar agentes a ferramentas externas. Foundry suporta MCP servers remotos com autenticação Entra ID.</p>
+    </div>
+    <div class="card card-purple">
+      <h4><svg class="product-icon" width="18" height="18" viewBox="0 0 24 24"><circle cx="6" cy="12" r="2" fill="#b39dfc"/><circle cx="18" cy="12" r="2" fill="#b39dfc"/><path d="M8 12h8" stroke="#b39dfc" stroke-width="1.5"/></svg>A2A</h4>
+      <p><strong>Agent-to-Agent</strong><br/>Protocolo para comunicação entre agentes de diferentes runtimes (Foundry, Copilot Studio, plataformas externas). Base para multi-agent systems.</p>
+    </div>
+    <div class="card card-green">
+      <h4><svg class="product-icon" width="18" height="18" viewBox="0 0 24 24"><path d="M12 1C6.48 1 2 5.48 2 11s4.48 10 10 10 10-4.48 10-10S17.52 1 12 1zm0 19c-4.97 0-9-4.03-9-9s4.03-9 9-9 9 4.03 9 9-4.03 9-9 9zm0-16c-3.86 0-7 3.14-7 7s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm3.5 9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5z" fill="#74f2a0"/></svg>Responses API</h4>
+      <p><strong>OpenAI Responses API</strong><br/>Protocolo padrão do Foundry Agent Service para tool calls, conversation state e streaming. Suportado por Claude via SDK Anthropic.</p>
+    </div>
+    <div class="card card-orange">
+      <h4>📦 SDK Unificado</h4>
+      <p><strong>azure-ai-projects</strong><br/>Pacote Python/TypeScript/C# que consolida agentes, inferência, avaliações e memória em um único SDK.</p>
+    </div>
+  </div>
+  <div class="flow" style="margin-top:20px;">
+    <div class="flow-node" style="background:rgba(74,144,226,0.3);">Work IQ<br/>(M365 Copilot)</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-node" style="background:rgba(123,104,238,0.3);">Copilot Studio<br/>(Domínio)</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-node" style="background:rgba(80,200,120,0.3);">Microsoft Foundry<br/>(Reasoning)</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-node" style="background:rgba(255,107,107,0.3);">Fabric<br/>(Dados Governados)</div>
+  </div>
+</div>
+
+<!-- ================================================================ SLIDE 35 - SEÇÃO 7 -->
+<div class="slide theme-dark section-title-slide">
+  <div class="section-tag tag-orange">Seção 7 de 8</div>
+  <h2>Cenários A vs B</h2>
+  <p class="subtitle">Self-service vs dados tratados — e como o modelo híbrido maduro une o melhor dos dois mundos</p>
+</div>
+
+<!-- ================================================================ SLIDE 36 - CENÁRIOS A vs B -->
+<div class="slide theme-dark">
+  <div class="section-tag tag-orange">Estratégias de Adoção</div>
+  <h2>Cenário A vs Cenário B</h2>
+  <div class="comparison" style="margin-top:20px;">
+    <div class="comp-side comp-a">
+      <h3 style="color:#ffcc80;">🅰️ Cenário A — Self-Service</h3>
+      <p style="font-size:14px;color:#888;margin-bottom:16px;">Agentes autônomos com acesso direto a dados variados</p>
+      <h4 style="color:#74f2a0;margin-bottom:8px;">✅ Prós</h4>
+      <ul class="list check" style="font-size:14px;">
+        <li>Alta inovação, experimentação rápida</li>
+        <li>Flexibilidade total para novos casos</li>
+        <li>Menor dependência de TI</li>
+      </ul>
+      <h4 style="color:#ff9999;margin-bottom:8px;margin-top:12px;">❌ Contras</h4>
+      <ul class="list cross" style="font-size:14px;">
+        <li>Risco de Shadow AI</li>
+        <li>Inconsistência entre respostas</li>
+        <li>Custo variável e difícil de controlar</li>
+        <li>Sem auditoria centralizada</li>
+        <li>Vazamento de PII</li>
+      </ul>
+    </div>
+    <div class="comp-side comp-b">
+      <h3 style="color:#74b9ff;">🅱️ Cenário B — Dados Tratados</h3>
+      <p style="font-size:14px;color:#888;margin-bottom:16px;">Agentes controlados acessando Fabric Gold via SQL Endpoint</p>
+      <h4 style="color:#74f2a0;margin-bottom:8px;">✅ Prós</h4>
+      <ul class="list check" style="font-size:14px;">
+        <li>Governança e conformidade garantidas</li>
+        <li>Consistência de respostas entre agentes</li>
+        <li>Auditabilidade completa</li>
+        <li>Controle de custos via quotas</li>
+      </ul>
+      <h4 style="color:#ff9999;margin-bottom:8px;margin-top:12px;">⚠️ Desafios</h4>
+      <ul class="list cross" style="font-size:14px;">
+        <li>Menor agilidade inicial</li>
+        <li>Dependência de pipeline de dados</li>
+        <li>Requer planejamento antecipado</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================ SLIDE 37 - MODELO HÍBRIDO -->
+<div class="slide theme-dark">
+  <div class="section-tag tag-orange">Conclusão Estratégica</div>
+  <h2>O Modelo Ideal: Híbrido e Evolutivo</h2>
+  <p class="body-text">Não é uma escolha binária. O modelo maduro combina os dois cenários com <strong>guardrails que evoluem com a maturidade</strong>.</p>
+  <div class="flowchart-stage">
+    <div class="flowchart-box" style="background:rgba(74,144,226,0.18);border-color:rgba(74,144,226,0.45);">
+      <h4>Curto Prazo</h4>
+      <p>Cenário B primeiro: dados tratados e controles fortes.</p>
+    </div>
+    <div class="flowchart-arrow">→</div>
+    <div class="flowchart-box" style="background:rgba(123,104,238,0.18);border-color:rgba(123,104,238,0.45);">
+      <h4>Médio Prazo</h4>
+      <p>Cenário A controlado: autonomia dentro de sandbox.</p>
+    </div>
+    <div class="flowchart-arrow">→</div>
+    <div class="flowchart-box" style="background:rgba(80,200,120,0.18);border-color:rgba(80,200,120,0.45);">
+      <h4>Longo Prazo</h4>
+      <p>Modelo híbrido maduro com liberdade e governança.</p>
+    </div>
+  </div>
+  <div class="steps" style="margin-top:20px;">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body"><h4>Curto prazo (0-4 meses) — Cenário B primeiro</h4><p>Começar com M365 Copilot + dados tratados. Estabelecer guardrails, classificação de dados, audit logging. Segurança como fundação, não como reflexo tardio.</p></div>
+    </div>
+    <div class="step">
+      <div class="step-num" style="background:rgba(123,104,238,0.4);border-color:#b39dfc;">2</div>
+      <div class="step-body"><h4>Médio prazo (4-10 meses) — Cenário A controlado</h4><p>Self-service dentro de um sandbox governado. Copilot Studio com conectores controlados. Inovação dentro dos limites estabelecidos.</p></div>
+    </div>
+    <div class="step">
+      <div class="step-num" style="background:rgba(80,200,120,0.4);border-color:#74f2a0;">3</div>
+      <div class="step-body"><h4>Longo prazo (10+ meses) — Híbrido Maduro</h4><p>Alguns agentes mais livres em sandbox com guardrails automáticos. Maioria governal com Foundry + Fabric. Inovação rápida dentro de limites claros e mensuráveis.</p></div>
+    </div>
+  </div>
+  <div class="quote" style="border-color:#74f2a0;background:rgba(80,200,120,0.1);color:#c8f7da;margin-top:16px;">
+    "Segurança e consistência primeiro, inovação rápida dentro de guardrails estabelecidos"
+  </div>
+</div>
+
+<!-- ================================================================ SLIDE 38 - SEÇÃO 8 -->
+<div class="slide theme-red section-title-slide">
+  <div class="section-tag tag-red">Seção 8 de 8</div>
+  <h2>KPIs, Riscos e<br/>Próximos Passos</h2>
+  <p class="subtitle">Como medir sucesso, antecipar riscos e definir a primeira ação concreta</p>
+</div>
+
+<!-- ================================================================ SLIDE 39 - KPIs -->
+<div class="slide theme-red">
+  <div class="section-tag tag-red">Medição de Sucesso</div>
+  <h2>KPIs por Fase de Adoção</h2>
+  <table style="margin-top:20px;">
+    <thead><tr><th>Fase</th><th>KPI Principal</th><th>Meta</th><th>Como medir</th></tr></thead>
+    <tbody>
+      <tr><td><span class="badge badge-blue">Phase 1</span></td><td>Use cases documentados</td><td>3-5 com ROI projetado</td><td>Documento aprovado</td></tr>
+      <tr><td><span class="badge badge-green">Phase 2</span></td><td>Satisfação do usuário beta</td><td>&gt;80% satisfação</td><td>Survey 1-5 semanal</td></tr>
+      <tr><td><span class="badge badge-green">Phase 2</span></td><td>ROI projetado</td><td>&gt;3:1</td><td>Horas salvas × custo hora</td></tr>
+      <tr><td><span class="badge badge-orange">Phase 3</span></td><td>Taxa de adoção</td><td>&gt;60% uso semanal</td><td>Usage analytics M365</td></tr>
+      <tr><td><span class="badge badge-orange">Phase 3</span></td><td>Incidentes de segurança</td><td>0 breaches relevantes</td><td>Audit logs Purview</td></tr>
+      <tr><td><span class="badge badge-red">Phase 4</span></td><td>ROI documentado</td><td>&gt;3:1 real</td><td>Análise antes/depois</td></tr>
+      <tr><td><span class="badge badge-red">Phase 4</span></td><td>Business ownership</td><td>100% agentes com manager</td><td>Agent registry</td></tr>
+    </tbody>
+  </table>
+  <div class="stats-row" style="margin-top:20px;">
+    <div class="stat-item"><div class="big-stat" style="color:#74b9ff;">3:1</div><div class="stat-label">ROI mínimo esperado</div></div>
+    <div class="stat-item"><div class="big-stat" style="color:#74f2a0;">60%</div><div class="stat-label">Adoption rate alvo</div></div>
+    <div class="stat-item"><div class="big-stat" style="color:#ffcc80;">0</div><div class="stat-label">Incidentes de segurança</div></div>
+    <div class="stat-item"><div class="big-stat" style="color:#b39dfc;">18</div><div class="stat-label">Meses para escala completa</div></div>
+  </div>
+</div>
+
+<!-- ================================================================ SLIDE 40 - RISCOS -->
+<div class="slide theme-red">
+  <div class="section-tag tag-red">Gerenciamento de Riscos</div>
+  <h2>Principais Riscos e Mitigações</h2>
+  <table style="margin-top:16px;">
+    <thead><tr><th>Risco</th><th>Probabilidade</th><th>Impacto</th><th>Mitigação</th></tr></thead>
+    <tbody class="">
+      <tr class="risk-row-high"><td>Alucinações / Output impreciso</td><td>Alta</td><td>Alto</td><td>Groundedness evaluators + validação humana em outputs críticos</td></tr>
+      <tr class="risk-row-high"><td>Dados sensíveis expostos</td><td>Média</td><td>Crítico</td><td>Purview labels + RLS desde Phase 2 — nunca depois</td></tr>
+      <tr class="risk-row-high"><td>Adoção trava em 20-30%</td><td>Alta</td><td>Alto</td><td>3 competências em L300 antes de escalar</td></tr>
+      <tr class="risk-row-med"><td>Shadow AI prolifera</td><td>Alta</td><td>Médio</td><td>Agent Registry centralizado + awareness sobre riscos</td></tr>
+      <tr class="risk-row-med"><td>Champions burnout</td><td>Média</td><td>Médio</td><td>Programa formal: 4h/mês, suporte do manager</td></tr>
+      <tr class="risk-row-low"><td>Budget overrun</td><td>Baixa</td><td>Médio</td><td>Cost monitoring via AI Gateway quotas em tempo real</td></tr>
+      <tr class="risk-row-low"><td>Drift de qualidade</td><td>Baixa</td><td>Médio</td><td>Evaluators contínuos com alertas automáticos</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ================================================================ SLIDE 41 - PRÓXIMOS PASSOS -->
+<div class="slide theme-red">
+  <div class="section-tag tag-red">Ação Imediata</div>
+  <h2>Próximos Passos — As 5 Primeiras Ações</h2>
+  <div class="steps" style="margin-top:20px;">
+    <div class="step">
+      <div class="step-num" style="background:rgba(255,107,107,0.4);border-color:#ff9999;">1</div>
+      <div class="step-body"><h4>Esta semana — Identificar Sponsor Executivo</h4><p>Sem patrocínio de C-level, a iniciativa não escala. Identificar o sponsor certo é a ação mais crítica e imediata.</p></div>
+    </div>
+    <div class="step">
+      <div class="step-num" style="background:rgba(255,107,107,0.4);border-color:#ff9999;">2</div>
+      <div class="step-body"><h4>Semanas 1-2 — Montar a Equipe Multidisciplinar</h4><p>Definir RACI: Data Engineer, AI Engineer, Business Owner, Compliance, HR. Cada papel tem responsabilidade clara.</p></div>
+    </div>
+    <div class="step">
+      <div class="step-num" style="background:rgba(255,107,107,0.4);border-color:#ff9999;">3</div>
+      <div class="step-body"><h4>Semanas 2-4 — Mapear e Classificar Dados</h4><p>Auditar dados dos 3-5 use cases candidatos. Aplicar Purview sensitivity labels. Meta: 80% classificado antes do PoC.</p></div>
+    </div>
+    <div class="step">
+      <div class="step-num" style="background:rgba(255,107,107,0.4);border-color:#ff9999;">4</div>
+      <div class="step-body"><h4>Mês 1 — Selecionar o Primeiro Use Case</h4><p>Critérios: alto valor de negócio, baixo risco técnico, processo já documentado, não voltado ao cliente externo.</p></div>
+    </div>
+    <div class="step">
+      <div class="step-num" style="background:rgba(255,107,107,0.4);border-color:#ff9999;">5</div>
+      <div class="step-body"><h4>Meses 1-2 — Lançar PoC com 10 Usuários</h4><p>M365 Copilot + dados classificados. Medir desde o dia 1. Documentar aprendizados. Construir o business case para Phase 3.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================ SLIDE 42 - RESUMO ARQUITETURAL -->
+<div class="slide theme-dark">
+  <div class="section-tag tag-purple">Resumo</div>
+  <h2>Resumo da Arquitetura Alvo</h2>
+  <table style="margin-top:20px;">
+    <thead><tr><th>Componente</th><th>Papel</th><th>Agentes Consomem?</th></tr></thead>
+    <tbody>
+      <tr><td>OneLake</td><td>Armazenamento lógico único, sem silos</td><td>Implicitamente (via SQL endpoint)</td></tr>
+      <tr><td>Delta Lake</td><td>ACID, schema enforcement, time-travel</td><td>Implicitamente (através de tabelas)</td></tr>
+      <tr><td>Shortcuts</td><td>Acesso a fontes externas sem cópia</td><td style="color:#74f2a0;">✅ Sim (como tabelas locais)</td></tr>
+      <tr><td>SQL Analytics Endpoint</td><td>Interface T-SQL para agentes</td><td style="color:#74f2a0;">✅ Sim (principal forma)</td></tr>
+      <tr><td>Medallion Bronze→Gold</td><td>Organização e qualidade progressiva</td><td style="color:#74f2a0;">✅ Sim (consomem Gold)</td></tr>
+      <tr><td>Data Products</td><td>Pacotes curados reutilizáveis</td><td style="color:#74f2a0;">✅ Sim (consumidor principal)</td></tr>
+      <tr><td>Purview Labels</td><td>Classificação e governança</td><td style="color:#74f2a0;">✅ Sim (define acesso)</td></tr>
+      <tr><td>Entra ID Agent ID</td><td>Identidade e autenticação</td><td style="color:#74f2a0;">✅ Sim (autenticação + auditoria)</td></tr>
+      <tr><td>Guard Rails</td><td>Segurança em runtime (Prompt Shields)</td><td style="color:#74f2a0;">✅ Sim (transversal)</td></tr>
+      <tr><td>Evaluators</td><td>Qualidade e conformidade contínua</td><td style="color:#74f2a0;">✅ Sim (validação de output)</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ================================================================ SLIDE 43 - ENCERRAMENTO -->
+<div class="slide theme-intro section-title-slide">
+  <div class="section-tag tag-blue">Encerramento</div>
+  <h2 style="background:linear-gradient(135deg,#74b9ff,#b39dfc,#74f2a0);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;">
+    Obrigado!
+  </h2>
+  <p class="subtitle" style="text-align:center;">Arquitetura Corporativa para Adoção de Agentes de IA<br/>Microsoft IQ + Fabric + Foundry</p>
+  <div class="cards" style="max-width:900px;margin-top:30px;">
+    <div class="card card-blue"><h4><svg class="product-icon" width="20" height="20" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z" fill="#74b9ff"/></svg>Work IQ</h4><p>Produtividade do usuário com M365 Copilot e Microsoft Graph</p></div>
+    <div class="card card-purple"><h4><svg class="product-icon" width="20" height="20" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z" fill="#b39dfc"/></svg>Foundry IQ</h4><p>Reasoning, orquestração e agentes complexos com Foundry</p></div>
+    <div class="card card-green"><h4><svg class="product-icon" width="20" height="20" viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" fill="#74f2a0" opacity="0.8"/><rect x="13" y="3" width="8" height="8" fill="#74f2a0" opacity="0.8"/><rect x="3" y="13" width="8" height="8" fill="#74f2a0" opacity="0.8"/><rect x="13" y="13" width="8" height="8" fill="#74f2a0" opacity="0.8"/></svg>Fabric IQ</h4><p>Dados governados com OneLake, Medallion e Data Products</p></div>
+  </div>
+  <div class="quote" style="margin-top:30px;max-width:750px;text-align:center;border:none;background:transparent;font-size:22px;">
+    "IA escala valor apenas quando decisões automatizadas são <strong>confiáveis, governadas e mensuráveis</strong>"
+  </div>
+</div>
+
+</div><!-- end slideshow -->
+
+<!-- ================================================================ NAVIGATION -->
+<div class="nav">
+  <button id="prevBtn" onclick="changeSlide(-1)" disabled>← Anterior</button>
+  <span class="slide-counter" id="slideCounter">1 / 43</span>
+  <button id="nextBtn" onclick="changeSlide(1)">Próximo →</button>
+</div>
+
+<script>
+  let currentSlide = 0;
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  
+  function showSlide(n) {
+    slides[currentSlide].classList.remove('active');
+    currentSlide = Math.max(0, Math.min(n, total - 1));
+    slides[currentSlide].classList.add('active');
+    slides[currentSlide].scrollTop = 0;
+    
+    document.getElementById('slideCounter').textContent = `${currentSlide + 1} / ${total}`;
+    document.getElementById('prevBtn').disabled = currentSlide === 0;
+    document.getElementById('nextBtn').disabled = currentSlide === total - 1;
+    document.getElementById('progressBar').style.width = `${((currentSlide + 1) / total) * 100}%`;
+  }
+  
+  function changeSlide(dir) { showSlide(currentSlide + dir); }
+  
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === 'PageDown') changeSlide(1);
+    if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp'   || e.key === 'PageUp')   changeSlide(-1);
+  });
+  
+  showSlide(0);
+</script>
+
+</body>
+</html>
