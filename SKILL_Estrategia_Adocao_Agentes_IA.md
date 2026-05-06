@@ -18,7 +18,7 @@ Esta skill ajuda a estruturar recomendacoes praticas para adocao de agentes de I
 - dados governados
 - seguranca e compliance
 - operacao e observabilidade
-- evolucao continua com avaliadores
+- evolucao continua com evaluators
 
 ## Use Quando
 

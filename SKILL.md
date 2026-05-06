@@ -3,7 +3,7 @@ name: estrategia-adocao-agentes-ia
 summary: "Orienta a definicao de arquitetura corporativa para adocao de agentes de IA com Microsoft IQ, Fabric e Foundry, incluindo governanca, seguranca, guard rails e avaliacao continua."
 license: MIT
 metadata:
-  author: Fabio
+  author: Fabio Hara
   version: "1.0.0"
   language: pt-BR
 ---
