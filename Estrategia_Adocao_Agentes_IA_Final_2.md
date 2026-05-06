@@ -24,6 +24,7 @@
 | **8.4. Agent Registry Dinâmico** | Registro, descoberta, versionamento e monitoramento de agentes com governança de onboarding. |
 | **8.5. Memória Multiagente (STM/LTM)** | Estratégia de memória de curto e longo prazo com privacidade, retenção e redaction. |
 | **8.6. Comunicação entre Agentes** | Padrões request-based, message-driven e híbrido com critérios de escolha. |
+| **8.7. Segurança de MCP Servers** | Controles build-time e runtime para MCP servers (isolamento, validação, auth, deployment) seguindo OWASP. |
 | **9. Evaluators (Qualidade e Evolução)** | Métricas e processo contínuo de avaliação para qualidade, risco e melhoria de agentes. |
 | **10. Human-in-the-Loop (HITL)** | Quando envolver validação humana para decisões críticas e mitigação de risco. |
 | **11. Integração Completa (Arquitetura Final)** | Visão integrada ponta a ponta com fluxos de dados, agentes e controles transversais. |
@@ -2406,6 +2407,16 @@ gantt
 - [**Organizational Readiness for AI Agents**](https://learn.microsoft.com/azure/cloud-adoption-framework/ai-agents/organization-people-readiness-plan) — Skills, change management, culture
 - [**Microsoft Fabric Adoption Roadmap**](https://learn.microsoft.com/power-bi/guidance/fabric-adoption-roadmap) — Phases, change management, training strategy
 
+### 🛡️ Critérios de Segurança MCP por Fase (Seção 8.7 Integration)
+
+| Fase | Critério de Segurança MCP | Status |
+|---|---|---|
+| **Phase 1-2** | OAuth 2.1/OIDC obrigatório para MCP remoto | ✅ Onda 1 |
+| **Phase 2-3** | Validação de inputs (JSON Schema) para cada tool | ✅ Onda 1 |
+| **Phase 3** | Signed tool manifests + CI/CD gates (SAST/SCA) | ✅ Onda 2 |
+| **Phase 4** | Formal onboarding workflow para novos MCP servers | ✅ Onda 2 |
+| **Phase 5** | Runtime security tools + SIEM centralized alerts | ✅ Onda 3 |
+
 ---
 
 ## 🛠️ 3.1. Ferramentas de Adoção — M365 Copilot, Copilot Studio e Microsoft Foundry
@@ -2599,6 +2610,20 @@ flowchart TD
 - [Use Azure API Management as an AI gateway](https://learn.microsoft.com/azure/api-management/genai-gateway-overview)
 - [Policies in Azure API Management](https://learn.microsoft.com/azure/api-management/api-management-howto-policies)
 - [Rate limit by key policy](https://learn.microsoft.com/azure/api-management/rate-limit-by-key-policy)
+
+### ⚙️ Complementaridade com Segurança de MCP Servers (Seção 8.7)
+
+APIM fornece governança operacional (autenticação centralizada, rate limiting, policies), mas cada MCP server exposto via APIM também deve implementar controles internos de segurança (isolamento de sessão, validação, sanitização de dados, secrets management).
+
+Veja **Seção 8.7 — Segurança de MCP Servers** para detalhes sobre:
+- Isolamento de usuários/sessions
+- Signed tool manifests
+- Validação rigorosa de inputs/outputs
+- OAuth 2.1 / OIDC e token delegation
+- CI/CD security gates (SAST, SCA)
+- Auditoria e continuous monitoring
+
+**Resultado**: APIM (perímetro) + MCP Security (interior) = **defesa em profundidade**.
 
 ### 📣 Insight
 
@@ -3622,7 +3647,162 @@ Escolher o padrão de comunicação adequado para equilibrar simplicidade, resil
 
 ---
 
-## 📊 9. Evaluators (Qualidade e Evolução)
+## � 8.7. Segurança de MCP Servers — Controles Build-Time e Runtime
+
+### 🎯 Contexto e Complementariedade
+
+A **Seção 3.2 (Azure APIM para IA)** define como escalar MCP servers de forma governada: centraliza autenticação, policies, rate limiting e auditoria em nível de gateway. Porém, o APIM fornece uma **camada de perímetro** — ele governa o tráfego, mas não pode proteger a segurança **interna** de cada MCP server.
+
+Este tópico complementa 3.2 com os controles essenciais em build-time (como construir) e runtime (como operar) MCP servers seguindo o **OWASP Practical Guide for Secure MCP Server Development v1.0**. Juntos, APIM + MCP Security definem uma abordagem em **camadas**:
+
+- **Perímetro (APIM)**: Autenticação, rate limits, roteamento, mascaramento de campos sensíveis, observabilidade
+- **Segurança interna (MCP Server)**: Isolamento, validação, sanitização, secrets management, audit logging
+
+**Sem ambas as camadas, vulnerabilidades exploráveis permanecem.**
+
+---
+
+### 🛡️ Sete Pilares de Segurança MCP (OWASP)
+
+#### **1️⃣ Arquitetura Segura e Isolamento**
+
+**Princípio**: Cada sessão de usuário/agente é uma "cápsula" isolada; nenhum dado residual entre requisições.
+
+**Controles**:
+- ✅ **Isolamento de usuários**: Sem variáveis globais, sem singletons compartilhados, sem class-level attributes com user data
+- ✅ **State management**: Use session-keyed stores (ex.: Redis com namespace `session_id:{data}`)
+- ✅ **Resource quotas per session**: Memória, CPU, file handles, API rate limits
+- ✅ **Cleanup determinístico**: Quando session termina, flushar **imediatamente** todos os dados em memória, arquivos temporários, cached tokens
+- ✅ **Timeout enforced**: Sessions expiram automaticamente após inatividade
+
+---
+
+#### **2️⃣ Design Seguro de Ferramentas (Safe Tool Design)**
+
+**Princípio**: Cada ferramenta (tool) exposta ao LLM deve ter um "contrato de segurança" verificável.
+
+**Controles**:
+- ✅ **Signed cryptographic manifests**: Cada tool tem uma assinatura digital que engloba descrição + schema + versão + permissões obrigatórias
+- ✅ **Formal onboarding approval**: Antes de qualquer tool ir para produção: SAST, SCA, manual review, teste funcional
+- ✅ **Description vs. Behavior validation**: Garantir que ferramenta faz exatamente o que sua descrição promete
+- ✅ **Minimal exposure**: Apenas campos **necessários** (name, description, input schema) expostos ao modelo
+
+---
+
+#### **3️⃣ Validação e Sanitização de Dados**
+
+**Princípio**: Trate todos os dados como untrusted. Valide forma e conteúdo; sanitize output antes de retornar ao LLM.
+
+**Controles**:
+- ✅ **JSON Schema enforcement**: Cada tool input e output validado contra schema rigoroso
+- ✅ **Strict input sanitization**: SQL injection (parametrize), command injection, XSS/code injection
+- ✅ **Output size limits**: Nenhuma ferramenta pode retornar >N KB
+- ✅ **Sensitive data masking**: Credit card, SSN, API keys, tokens redactados
+
+---
+
+#### **4️⃣ Controles contra Prompt Injection**
+
+**Princípio**: O LLM pode ser enganado por prompts maliciosos; estruture tool invocation e implemente aprovação humana para ações críticas.
+
+**Controles**:
+- ✅ **Structured JSON tool calls**: Nunca permita free-form text commands
+- ✅ **Human-in-the-Loop (HITL) para ações críticas**: Deletar dados, aprovar mudança, transferir fundos
+- ✅ **LLM-as-a-Judge**: Check em contexto separado de LLM para tool calls críticos
+- ✅ **Session reset entre contextos**: Resetar session quando agente muda de tarefa
+
+---
+
+#### **5️⃣ Autenticação e Autorização**
+
+**Princípio**: Cada MCP server call deve ser autenticado e autorizado; permissões devem ser validated em cada requisição.
+
+**Controles**:
+- ✅ **OAuth 2.1 / OIDC obrigatório**: Valide iss, aud, exp, signature em **cada requisição**
+- ✅ **Token delegation (RFC 8693)**: Passe contexto de usuário sem comprometer segurança
+- ✅ **PROIBIDO token passthrough**: NUNCA forward client token direto a downstream APIs (confused deputy)
+- ✅ **Short-lived tokens**: Access tokens 5-15 minutos, refresh tokens hours to days
+- ✅ **Centralized policy enforcement**: APIM policies ou OPA, não cada MCP decidir permissões
+
+---
+
+#### **6️⃣ Deployment Seguro e Updates**
+
+**Princípio**: MCP server artifacts e dependências são protegidos desde build até runtime.
+
+**Controles**:
+- ✅ **Secrets management**: Azure Key Vault, HashiCorp Vault, AWS Secrets Manager (NUNCA env vars)
+- ✅ **Containerization**: Non-root user, minimal base image (distroless, alpine), drop unnecessary capabilities
+- ✅ **Network segmentation**: Firewall rules, Kubernetes NetworkPolicies, egress whitelisting
+- ✅ **Supply chain controls**: Version pin, sign container images, scan CVEs (OSV, Dependabot, Snyk)
+- ✅ **CI/CD security gates**: SAST, SCA, container scan, policy-as-code (OPA)
+
+---
+
+#### **7️⃣ Governança, Auditoria e Continuous Validation**
+
+**Princípio**: Trate MCP servers e agentes como cidadãos de primeira classe; audit cada ação; monitore anomalias.
+
+**Controles**:
+- ✅ **Cryptographic integrity**: Assine commits, releases, container images
+- ✅ **Peer review obrigatório**: Nenhum código vai para produção sem security review
+- ✅ **Audit logging completo**: Tool invocations, acesso a dados, auth/authz events, configuration changes, stored immutably
+- ✅ **Non-Human Identity governance**: Trate NHI (agentes, MCP servers) como identidades de 1ª classe
+- ✅ **Continuous monitoring**: SIEM centralizado, alertas para anomalias (failed validations, unusual patterns)
+
+---
+
+### 📋 Checklist de Segurança MCP (OWASP Minimum Bar)
+
+**Isolamento e Session Management** | **Tool Design** | **Data & Auth**
+---|---|---
+[ ] Cada sessão isolada (sem shared state)? | [ ] Signed manifest para cada tool? | [ ] OAuth 2.1/OIDC remoto?
+[ ] Resource quotas por session? | [ ] Formal onboarding (SAST, SCA, review)? | [ ] Tokens short-lived (minutos)?
+[ ] Cleanup determinístico? | [ ] Tool behavior validado vs. description? | [ ] Token delegation (sem passthrough)?
+[ ] Sessions expiram automaticamente? | [ ] Apenas campos necessários expostos? | [ ] Scopes/permissions checked?
+
+**Deployment & CI/CD** | **Governance & Audit** | **Monitoring**
+---|---|---
+[ ] Container non-root? | [ ] Peer review obrigatório pre-deploy? | [ ] Centralized logging (SIEM)?
+[ ] Minimal base image? | [ ] Audit logs for invocations? | [ ] Alerts para anomalias?
+[ ] Dependencies version-pinned? | [ ] Logs stored immutably (WORM)? | [ ] Runtime security active?
+[ ] SAST/SCA gates? | [ ] NHI como 1st-class identities? |  |
+
+---
+
+### 🔗 Integração com Outras Seções
+
+**Com 3.2 (Azure APIM para IA)**: APIM fornece perímetro (autenticação centralizada, rate limiting); 8.7 fornece interior seguro. Juntos: **perímetro + interior = defesa em profundidade**.
+
+**Com 8.1 (Entra ID - Agent ID)**: Entra ID gerencia identidade de agentes como NHI; 8.7 exige validação OAuth em cada MCP call. Resultado: rastreabilidade completa.
+
+**Com 8.2 (Purview)**: Purview classifica dados; 8.7 exige sanitização antes de retornar ao LLM. Resultado: dados corporativos protegidos.
+
+**Com 9 (Evaluators)**: Evaluators detectam anomalias; 8.7 fornece audit logs com parâmetros. Resultado: continuous monitoring.
+
+**Com 12 (Modelo Operacional)**: Adicionar role "MCP Security Reviewer", cadência trimestral de security audit, SLA de CVE response.
+
+---
+
+### 🚀 Roadmap de Adoção em Ondas
+
+**Onda 1 — Fundações Seguras** (0-2 meses): Isolamento, JSON Schema validation, OAuth 2.1, secrets vault, audit logging, containerização non-root.
+
+**Onda 2 — Governança Formal** (2-4 meses): Signed manifests, CI/CD gates, formal onboarding, centralized policies, peer review obrigatório.
+
+**Onda 3 — Continuous Validation** (4+ meses): Runtime security tools, SIEM, Evaluators integration, supply chain vigilance, penetration testing.
+
+---
+
+### 📚 Referências
+
+**Primary Source**: [OWASP Practical Guide for Secure MCP Server Development v1.0](https://genai.owasp.org/) (License: CC BY-SA 4.0)
+
+**Complementary**: NIST AI RMF, OWASP Top 10 for LLMs, RFC 8693 (OAuth Token Delegation), Azure Key Vault best practices, Kubernetes Network Policies.
+
+---
+
+## �📊 9. Evaluators (Qualidade e Evolução)
 
 ### 🎯 Objetivo
 Medir qualidade, segurança e confiabilidade das respostas dos agentes, com evidências objetivas para melhorar continuamente o sistema em vez de depender apenas de percepção.
@@ -3951,6 +4131,15 @@ flowchart TD
 - **Controle**: segurança e conformidade aplicadas durante todo o ciclo de resposta.
 - **Evolução**: avaliação contínua transforma uso em aprendizado operacional.
 
+### 🔐 Integração com MCP Servers Seguros (Seção 8.7)
+
+Quando agentes invocam MCP servers para acessar ferramentas e dados externos:
+
+- **Seção 3.2 (APIM)** fornece a camada de perímetro: gateway centralizado, autenticação, rate limiting
+- **Seção 8.7 (MCP Security)** fornece a camada interna: isolamento de sessões, validação rigorosa, sanitização de dados, secrets management
+
+Resultado: **Tool calls seguros de ponta a ponta** — from user intent to MCP execution to response.
+
 ---
 
 ## 🧠 12. Modelo Operacional
@@ -4014,6 +4203,27 @@ flowchart TD
 - **Fabric IQ/Fabric**: contexto semântico e dados governados.
 - **Guard Rails**: proteção de identidade, acesso e risco de dados.
 - **Evaluators**: medição objetiva para evolução contínua.
+
+### 👥 Papéis Críticos de Governance
+
+| Papel | Responsabilidade | Exemplos de Atividade |
+|---|---|---|
+| **Chief Data Officer (CDO)** | Estratégia, dados governados, compliance | Decidir sobre governança multiagente, aprovação de dados críticos |
+| **AI/IA Lead** | Visão técnica, roadmap de agentes, arquitetura | Planejar ondas, aprovar novos agentes, organizar treinamento |
+| **Agent Owner** | Operação, qualidade, resultado de negócio | Monitorar SLOs, escalar incidentes, melhorar prompts/tools |
+| **Data Steward** | Qualidade de dados, permissões, lineage | Manter metadados, aprovar novos dados, auditar acesso |
+| **Security/Compliance** | Política, risco, conformidade | Revisar guard rails, políticas de token, compliance reporting |
+| **MCP Security Reviewer** | Segurança de MCP servers (Seção 8.7) | Revisar CI/CD gates, validar manifests assinados, audit security controls |
+| **Evaluator Engineer** | Métricas, monitoring, feedback loops | Definir evaluators, tunar thresholds, processar sinais de melhoria |
+| **Platform Engineer** | APIM, infraestrutura, observabilidade | Gerenciar gateway, policies, logs centralizados, alertas |
+
+### 📅 Cadência de Governança
+
+- **Diário**: Health checks automáticos (SLOs, erros, segurança)
+- **Semanal**: Triage operacional (incidentes, anomalias)
+- **Mensal**: Revisão de qualidade por domínio (evaluators insights, trending)
+- **Trimestral**: Security audit de MCP servers, compliance review, roadmap planning
+- **Anual**: Strategy review, maturidade assessment, investments
 
 ### 12.1. Confiabilidade Operacional (SLO/Versionamento/Rollback)
 
@@ -6395,6 +6605,18 @@ graph TD
 - [Set up continuous evaluation (Microsoft Foundry - new portal)](https://learn.microsoft.com/azure/foundry/observability/how-to/how-to-monitor-agents-dashboard#set-up-continuous-evaluation)
 - [Continuous evaluation for agents (Foundry classic, preview)](https://learn.microsoft.com/azure/foundry-classic/how-to/continuous-evaluation-agents)
 
-### 🌐 Outras Fontes (Não Microsoft)
+### 🌐 Outras Fontes (Segurança e GenAI)
 
-Até o momento, não foram usadas como referência documental fontes externas aos domínios da Microsoft neste material.
+#### OWASP GenAI Project
+- [OWASP GenAI Project](https://genai.owasp.org/) — Guidance and resources for secure AI application development
+- **Referência específica**: [A Practical Guide for Secure MCP Server Development v1.0](https://genai.owasp.org/) (License: CC BY-SA 4.0)
+  - 7 pilares de segurança: Arquitetura, Design, Validação, Prompt Injection, Auth, Deployment, Governance
+  - Usado em **Seção 8.7 (Segurança de MCP Servers)** para build-time e runtime controls
+  - Complementa APIM perímetro + MCP servidor interno = defesa em profundidade
+
+#### Outras Referências
+- **NIST AI Risk Management Framework** — Alinhamento com governance, fairness, security
+- **OWASP Top 10 for LLMs** — Vulnerabilidades críticas em aplicações LLM
+- **RFC 8693** — OAuth 2.0 Token Delegation (token exchange para segurança em cascata)
+- **Azure Key Vault best practices** — Secrets management para MCP servers
+- **Kubernetes Network Policies** — Isolamento de rede para containerized MCP servers
