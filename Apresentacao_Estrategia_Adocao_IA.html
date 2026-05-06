@@ -347,7 +347,7 @@
     <div class="agenda-item"><span class="agenda-num" style="color:#74f2a0;">3</span><div class="agenda-content"><h4>Microsoft Fabric Deep Dive</h4><p>OneLake, Delta Lake, Medallion Architecture</p></div></div>
     <div class="agenda-item"><span class="agenda-num" style="color:#ffcc80;">4</span><div class="agenda-content"><h4>Governança: Purview + Entra ID</h4><p>Identidade de agentes, labels, RLS, auditoria</p></div></div>
     <div class="agenda-item"><span class="agenda-num" style="color:#ff9999;">5</span><div class="agenda-content"><h4>Estratégia de Adoção (5 Fases)</h4><p>Do PoC à escala organizacional completa</p></div></div>
-    <div class="agenda-item"><span class="agenda-num" style="color:#74b9ff;">6</span><div class="agenda-content"><h4>Ferramentas: M365, Studio, Foundry</h4><p>Quando usar cada ferramenta</p></div></div>
+    <div class="agenda-item"><span class="agenda-num" style="color:#74b9ff;">6</span><div class="agenda-content"><h4>Ferramentas + APIM para IA</h4><p>M365, Studio, Foundry, AI Gateway e MCP</p></div></div>
     <div class="agenda-item"><span class="agenda-num" style="color:#b39dfc;">7</span><div class="agenda-content"><h4>Cenários A vs B</h4><p>Self-service x dados tratados — modelo híbrido</p></div></div>
     <div class="agenda-item"><span class="agenda-num" style="color:#74f2a0;">8</span><div class="agenda-content"><h4>KPIs, Riscos e Próximos Passos</h4><p>Como medir sucesso e mitigar riscos</p></div></div>
   </div>
@@ -1145,8 +1145,8 @@
 <!-- ================================================================ SLIDE 32 - SEÇÃO 6 -->
 <div class="slide theme-purple section-title-slide">
   <div class="section-tag tag-purple">Seção 6 de 8</div>
-  <h2>Ferramentas da Plataforma</h2>
-  <p class="subtitle">M365 Copilot, Copilot Studio e Microsoft Foundry — quando usar cada uma</p>
+  <h2>Ferramentas da Plataforma + APIM para IA</h2>
+  <p class="subtitle">M365 Copilot, Copilot Studio, Microsoft Foundry, AI Gateway e MCP — quando usar cada componente</p>
 </div>
 
 <!-- ================================================================ SLIDE 33 - 3 FERRAMENTAS -->
@@ -1228,14 +1228,100 @@
   </div>
 </div>
 
-<!-- ================================================================ SLIDE 35 - SEÇÃO 7 -->
+<!-- ================================================================ SLIDE 35 - APIM IA -->
+<div class="slide theme-purple">
+  <div class="section-tag tag-purple">APIM para IA</div>
+  <h2>Azure APIM como AI Gateway + MCP Hub</h2>
+  <p class="body-text">O <strong>Azure API Management</strong> adiciona uma camada de governança entre agentes e serviços de IA, padronizando autenticação, limites de uso, roteamento e observabilidade para modelos e ferramentas.</p>
+
+  <div class="flowchart-stage" style="margin-top:20px;">
+    <div class="flowchart-box" style="background:rgba(74,144,226,0.18);border-color:rgba(74,144,226,0.45);">
+      <h4>💼 Work IQ</h4>
+      <p>Usuário interage em Teams, Word ou apps corporativos.</p>
+    </div>
+    <div class="flowchart-arrow">→</div>
+    <div class="flowchart-box" style="background:rgba(123,104,238,0.18);border-color:rgba(123,104,238,0.45);">
+      <h4>🤖 Foundry IQ</h4>
+      <p>Agente interpreta a intenção e prepara tool calls.</p>
+    </div>
+    <div class="flowchart-arrow">→</div>
+    <div class="flowchart-box" style="background:rgba(255,152,0,0.2);border-color:rgba(255,152,0,0.5);">
+      <h4>🌐 Azure APIM</h4>
+      <p>AI Gateway aplica policies: auth, quota, rate limit, fallback e telemetria.</p>
+    </div>
+    <div class="flowchart-arrow">→</div>
+    <div class="flowchart-box" style="background:rgba(80,200,120,0.18);border-color:rgba(80,200,120,0.45);">
+      <h4>🧩 Modelos + MCP</h4>
+      <p>Roteia para endpoint de modelo ou MCP server por domínio de negócio.</p>
+    </div>
+  </div>
+
+  <div class="cards" style="margin-top:18px;">
+    <div class="card card-blue"><h4>🔐 Governança Central</h4><p>Políticas consistentes para todos os agentes e APIs, reduzindo integrações ponto a ponto.</p></div>
+    <div class="card card-orange"><h4>⚡ Resiliência</h4><p>Fallback automático entre endpoints em cenários de falha ou degradação de latência.</p></div>
+    <div class="card card-green"><h4>📊 Observabilidade</h4><p>Telemetria unificada para custo, SLA, auditoria e melhoria contínua com evaluators.</p></div>
+  </div>
+
+  <div class="quote" style="margin-top:18px;border-color:#ffcc80;background:rgba(255,152,0,0.1);color:#ffe2b8;">
+    "APIM com AI Gateway transforma integrações de agentes em produto governado: menos acoplamento, mais controle e escala previsível"
+  </div>
+</div>
+
+<!-- ================================================================ SLIDE 36 - APIM CENARIOS -->
+<div class="slide theme-purple">
+  <div class="section-tag tag-purple">Cenários de Uso</div>
+  <h2>Quando usar APIM no contexto de IA</h2>
+  <p class="body-text">Use APIM quando houver múltiplos agentes, múltiplos modelos ou MCP servers de diferentes domínios. O gateway reduz complexidade e melhora governança.</p>
+
+  <div class="two-col" style="margin-top:18px;">
+    <div>
+      <h4 style="color:#ffcc80;margin-bottom:10px;">Cenários recomendados</h4>
+      <ul class="list check" style="font-size:15px;">
+        <li>Roteamento inteligente por tipo de tarefa (custo vs qualidade)</li>
+        <li>Fallback para endpoint secundário com SLA crítico</li>
+        <li>Separação de MCP servers por domínio (Finance, RH, Operações)</li>
+        <li>Quotas por agente, time ou unidade de negócio</li>
+      </ul>
+    </div>
+    <div>
+      <h4 style="color:#74b9ff;margin-bottom:10px;">Decisão rápida</h4>
+      <div class="steps">
+        <div class="step"><div class="step-num" style="background:rgba(74,144,226,0.4);border-color:#74b9ff;">1</div><div class="step-body"><p style="font-size:14px;">Há mais de um agente ou ferramenta? Se sim, padronize via APIM.</p></div></div>
+        <div class="step"><div class="step-num" style="background:rgba(123,104,238,0.4);border-color:#b39dfc;">2</div><div class="step-body"><p style="font-size:14px;">Há requisito de SLA? Ative fallback e políticas de resiliência.</p></div></div>
+        <div class="step"><div class="step-num" style="background:rgba(255,152,0,0.4);border-color:#ffcc80;">3</div><div class="step-body"><p style="font-size:14px;">Há domínio regulado? Separe produtos/API e guard rails por contexto.</p></div></div>
+        <div class="step"><div class="step-num" style="background:rgba(80,200,120,0.4);border-color:#74f2a0;">4</div><div class="step-body"><p style="font-size:14px;">Escalou o uso? Integre métricas do APIM aos evaluators.</p></div></div>
+      </div>
+    </div>
+  </div>
+
+  <table style="margin-top:14px;">
+    <thead><tr><th>Escolha</th><th>Vantagem</th><th>Trade-off</th></tr></thead>
+    <tbody>
+      <tr><td>Conexão direta (piloto)</td><td>Mais simples no curto prazo</td><td>Baixa padronização e rastreabilidade</td></tr>
+      <tr><td>APIM com policies básicas</td><td>Segurança e controle inicial</td><td>Configuração adicional de gateway</td></tr>
+      <tr><td>APIM + AI Gateway avançado</td><td>Escala com SLA, custo e governança</td><td>Maior maturidade operacional requerida</td></tr>
+    </tbody>
+  </table>
+
+  <div class="highlight-box hbox-blue" style="margin-top:14px;">
+    <h4 style="color:#74b9ff;margin-bottom:8px;">Referências oficiais Microsoft (APIM para IA)</h4>
+    <ul class="list bullet" style="font-size:14px; margin:0;">
+      <li><a href="https://learn.microsoft.com/azure/api-management/api-management-key-concepts" target="_blank" rel="noopener noreferrer" style="color:#9ecfff;">Azure API Management - Key concepts</a></li>
+      <li><a href="https://learn.microsoft.com/azure/api-management/genai-gateway-overview" target="_blank" rel="noopener noreferrer" style="color:#9ecfff;">Use Azure API Management as an AI gateway</a></li>
+      <li><a href="https://learn.microsoft.com/azure/api-management/api-management-howto-policies" target="_blank" rel="noopener noreferrer" style="color:#9ecfff;">Policies in Azure API Management</a></li>
+      <li><a href="https://learn.microsoft.com/azure/api-management/rate-limit-by-key-policy" target="_blank" rel="noopener noreferrer" style="color:#9ecfff;">Rate limit by key policy</a></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ================================================================ SLIDE 37 - SEÇÃO 7 -->
 <div class="slide theme-dark section-title-slide">
   <div class="section-tag tag-orange">Seção 7 de 8</div>
   <h2>Cenários A vs B</h2>
   <p class="subtitle">Self-service vs dados tratados — e como o modelo híbrido maduro une o melhor dos dois mundos</p>
 </div>
 
-<!-- ================================================================ SLIDE 36 - CENÁRIOS A vs B -->
+<!-- ================================================================ SLIDE 38 - CENÁRIOS A vs B -->
 <div class="slide theme-dark">
   <div class="section-tag tag-orange">Estratégias de Adoção</div>
   <h2>Cenário A vs Cenário B</h2>
@@ -1278,7 +1364,7 @@
   </div>
 </div>
 
-<!-- ================================================================ SLIDE 37 - MODELO HÍBRIDO -->
+<!-- ================================================================ SLIDE 39 - MODELO HÍBRIDO -->
 <div class="slide theme-dark">
   <div class="section-tag tag-orange">Conclusão Estratégica</div>
   <h2>O Modelo Ideal: Híbrido e Evolutivo</h2>
@@ -1318,14 +1404,14 @@
   </div>
 </div>
 
-<!-- ================================================================ SLIDE 38 - SEÇÃO 8 -->
+<!-- ================================================================ SLIDE 40 - SEÇÃO 8 -->
 <div class="slide theme-red section-title-slide">
   <div class="section-tag tag-red">Seção 8 de 8</div>
   <h2>KPIs, Riscos e<br/>Próximos Passos</h2>
   <p class="subtitle">Como medir sucesso, antecipar riscos e definir a primeira ação concreta</p>
 </div>
 
-<!-- ================================================================ SLIDE 39 - KPIs -->
+<!-- ================================================================ SLIDE 41 - KPIs -->
 <div class="slide theme-red">
   <div class="section-tag tag-red">Medição de Sucesso</div>
   <h2>KPIs por Fase de Adoção</h2>
@@ -1349,7 +1435,7 @@
   </div>
 </div>
 
-<!-- ================================================================ SLIDE 40 - RISCOS -->
+<!-- ================================================================ SLIDE 42 - RISCOS -->
 <div class="slide theme-red">
   <div class="section-tag tag-red">Gerenciamento de Riscos</div>
   <h2>Principais Riscos e Mitigações</h2>
@@ -1367,7 +1453,7 @@
   </table>
 </div>
 
-<!-- ================================================================ SLIDE 41 - PRÓXIMOS PASSOS -->
+<!-- ================================================================ SLIDE 43 - PRÓXIMOS PASSOS -->
 <div class="slide theme-red">
   <div class="section-tag tag-red">Ação Imediata</div>
   <h2>Próximos Passos — As 5 Primeiras Ações</h2>
@@ -1395,7 +1481,7 @@
   </div>
 </div>
 
-<!-- ================================================================ SLIDE 42 - RESUMO ARQUITETURAL -->
+<!-- ================================================================ SLIDE 44 - RESUMO ARQUITETURAL -->
 <div class="slide theme-dark">
   <div class="section-tag tag-purple">Resumo</div>
   <h2>Resumo da Arquitetura Alvo</h2>
@@ -1416,7 +1502,7 @@
   </table>
 </div>
 
-<!-- ================================================================ SLIDE 43 - ENCERRAMENTO -->
+<!-- ================================================================ SLIDE 45 - ENCERRAMENTO -->
 <div class="slide theme-intro section-title-slide">
   <div class="section-tag tag-blue">Encerramento</div>
   <h2 style="background:linear-gradient(135deg,#74b9ff,#b39dfc,#74f2a0);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;">
@@ -1438,7 +1524,7 @@
 <!-- ================================================================ NAVIGATION -->
 <div class="nav">
   <button id="prevBtn" onclick="changeSlide(-1)" disabled>← Anterior</button>
-  <span class="slide-counter" id="slideCounter">1 / 43</span>
+  <span class="slide-counter" id="slideCounter">1 / 45</span>
   <button id="nextBtn" onclick="changeSlide(1)">Próximo →</button>
 </div>
 

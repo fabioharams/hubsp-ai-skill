@@ -1,5 +1,39 @@
 # 🧭 Guia de Arquitetura Corporativa para Adoção de Agentes de IA (Microsoft IQ + Fabric + Foundry)
 
+## 🗂️ Índice Executivo
+
+| Seção | O que contém |
+|---|---|
+| **1. Visão Executiva** | Contexto estratégico, objetivo, princípio central e exemplos práticos de valor de negócio. |
+| **2. Arquitetura de Referência (Visão Geral)** | Arquitetura alvo com camadas Work IQ, Foundry IQ, Fabric IQ e controles transversais. |
+| **2.1. Especificações Técnicas por Camada** | Detalhamento técnico de OneLake, Delta Lake, Medallion, SQL Endpoint, Data Products e governança. |
+| **2.2. Tipos de Modelos de IA para Agentes** | Guia de escolha de modelos (LLM, multimodal, tabular, forecasting, etc.) com trade-offs. |
+| **2.3. Orquestrador e Classificador Multiagente** | Padrão de roteamento semântico, fallback de classificação e coordenação entre agentes especializados. |
+| **3. Estratégia de Adoção (Curto e Médio Prazo)** | Roadmap em ondas, fases de adoção, critérios de sucesso e riscos de execução. |
+| **3.1. Ferramentas de Adoção** | Papel de M365 Copilot, Copilot Studio e Microsoft Foundry por cenário e maturidade. |
+| **3.2. Azure APIM para IA (AI Gateway e MCP)** | Como usar APIM como camada de controle para modelos e MCP servers, com cenários de uso e boas práticas. |
+| **4. Estratégias de Adoção (A vs B)** | Comparação entre self-service e dados tratados, com recomendação de modelo híbrido. |
+| **5. Consumo de Dados do Fabric por Múltiplos Agentes** | Padrões para reutilização de dados governados no Fabric por múltiplos agentes. |
+| **5.1. Formas de Acesso ao Fabric por Agentes** | Opções de acesso técnico e implicações de segurança e governança. |
+| **6. Exemplos de Consumo** | Exemplos práticos de integração entre agentes, dados e ferramentas corporativas. |
+| **7. Insight Estratégico Principal** | Mensagem-chave para tomada de decisão executiva e direcionamento da arquitetura alvo. |
+| **8. Guard Rails (Controle)** | Mecanismos de proteção e políticas para operação segura de agentes. |
+| **8.1. Microsoft Entra ID (Agent ID)** | Identidade de agentes, autenticação, autorização e controles de acesso. |
+| **8.2. Microsoft Purview** | Classificação de dados, políticas de proteção e conformidade para IA corporativa. |
+| **8.3. Microsoft Agent 365** | Plano de controle de agentes para operação, governança e escala. |
+| **8.4. Agent Registry Dinâmico** | Registro, descoberta, versionamento e monitoramento de agentes com governança de onboarding. |
+| **8.5. Memória Multiagente (STM/LTM)** | Estratégia de memória de curto e longo prazo com privacidade, retenção e redaction. |
+| **8.6. Comunicação entre Agentes** | Padrões request-based, message-driven e híbrido com critérios de escolha. |
+| **9. Evaluators (Qualidade e Evolução)** | Métricas e processo contínuo de avaliação para qualidade, risco e melhoria de agentes. |
+| **10. Human-in-the-Loop (HITL)** | Quando envolver validação humana para decisões críticas e mitigação de risco. |
+| **11. Integração Completa (Arquitetura Final)** | Visão integrada ponta a ponta com fluxos de dados, agentes e controles transversais. |
+| **12. Modelo Operacional** | Estrutura de papéis, governança, cadência e operação para sustentação em escala. |
+| **12.1. Confiabilidade Operacional (SLO/Versionamento/Rollback)** | SLOs, estratégia de versões, rollback e continuidade para operação segura em produção. |
+| **12.2. Matriz de Maturidade Multiagente (Níveis 1-5)** | Critérios objetivos para avaliar evolução de capacidades técnicas e de governança em ondas. |
+| **13. Mensagem Estratégica Final** | Síntese executiva para alinhamento de liderança e próximos passos. |
+
+> Dica de navegação: use a busca do editor (`Ctrl+F`) pelo número da seção (ex.: `8.2.`) para ir direto ao ponto desejado.
+
 ## 📌 1. Visão Executiva
 
 ### 🎯 Objetivo
@@ -1856,6 +1890,57 @@ Para a maior parte dos programas corporativos de adocao, a sequencia recomendada
 
 ---
 
+## 🧭 2.3. Orquestrador e Classificador Multiagente
+
+### 🎯 Objetivo
+Padronizar como o sistema decide **quem faz o quê** em uma arquitetura com múltiplos agentes, reduzindo roteamentos incorretos e custo desnecessário.
+
+### 🧠 Padrão recomendado
+
+1. **Orquestrador central**
+    - Recebe a solicitação do usuário.
+    - Preserva contexto de sessão.
+    - Seleciona agentes e tools.
+    - Agrega respostas e trata fallback/erro.
+
+2. **Classificador em camadas (custo-eficiente)**
+    - NLU/SLM para intenções simples e de baixo custo.
+    - LLM para casos ambíguos ou complexos.
+    - Se confiança baixa no fim do pipeline: retorno controlado (IDK + pedido de clarificação).
+
+3. **Roteamento semântico com fallback**
+    - Primeira decisão por taxonomia de capacidades.
+    - Fallback para modelo mais robusto quando confiança < limiar.
+    - Registro de decisão para auditoria e tuning de classificadores.
+
+```mermaid
+flowchart LR
+     U[Usuario] --> O[Orquestrador]
+     O --> C[Classificador NLU/SLM]
+     C -->|Confianca alta| R[Seleciona agente]
+     C -->|Confianca baixa| L[Fallback LLM]
+     L --> R
+     R --> A1[Agente especializado]
+     R --> A2[Agente especializado]
+     A1 --> O
+     A2 --> O
+     O --> S[Resposta sintetizada]
+```
+
+### ✅ Boas práticas
+
+- Definir limiar explícito de confiança para fallback.
+- Evitar proliferação de agentes quase idênticos (causa confusão no roteamento).
+- Agrupar agentes semelhantes sob supervisor de domínio.
+- Registrar decisões de classificação para melhoria contínua.
+
+### 🔗 Referência oficial usada para esta seção
+
+- [Multi-Agent Reference Architecture (Microsoft)](https://microsoft.github.io/multi-agent-reference-architecture/index.html)
+- [Repositório GitHub - microsoft/multi-agent-reference-architecture](https://github.com/microsoft/multi-agent-reference-architecture)
+
+---
+
 ## ⏱️ 3. Estratégia de Adoção (Curto e Médio Prazo)
 
 A estratégia de adoção de agentes de IA segue um modelo **interno de 5 fases evolutivas**, alinhado ao framework oficial da Microsoft para agentes de IA (**Plan, Govern and secure, Build, Manage**), com foco em construir capacidades organizacionais, não apenas tecnológicas. Este modelo reconhece que o sucesso depende de pessoas, processos e dados tanto quanto de tecnologia.
@@ -2395,6 +2480,129 @@ Mapear as três ferramentas principais ao framework de adoção e aos cenários 
 
 📣 **Insight**
 > "M365 Copilot começa o valor — Copilot Studio escala os agentes — Microsoft Foundry habilita a profundidade"
+
+---
+
+## 🌐 3.2. Azure API Management para IA — AI Gateway e MCP Servers
+
+### 🎯 Objetivo
+Adicionar uma camada de governança e padronização para consumo de modelos e ferramentas por agentes, reduzindo risco operacional e acelerando escala.
+
+### 🧭 Onde APIM entra na arquitetura alvo
+
+Na arquitetura alvo, o Azure APIM atua como **plano de controle de APIs e ferramentas** entre as camadas:
+
+- **Work IQ**: experiências de usuário (Copilot, Teams, apps) continuam simples e transparentes.
+- **Foundry IQ**: agentes executam reasoning e tool calling com endpoints padronizados.
+- **Fabric IQ e dados governados**: respostas continuam fundamentadas em dados corporativos.
+- **APIM (AI Gateway + APIs de ferramentas)**: aplica guard rails de tráfego, segurança, observabilidade e política de uso.
+
+Isso evita acoplamento direto entre cada agente e cada API externa, reduzindo complexidade e facilitando governança em escala.
+
+### 🧱 Componentes-chave
+
+1. **AI Gateway no APIM**
+    - Centraliza chamadas para provedores de modelo e endpoints de inferência.
+    - Permite padronizar autenticação, limites de uso, roteamento e fallback.
+    - Suporta políticas para custo, latência e confiabilidade.
+
+2. **MCP servers expostos via APIM**
+    - Ferramentas MCP (internas ou externas) passam por uma fachada única.
+    - O agente consome contratos estáveis, mesmo quando backend muda.
+    - Facilita versionamento e controle de acesso por domínio.
+
+3. **Policies de governança no gateway**
+    - Rate limit, quota, validação de headers, mascaramento de campos sensíveis.
+    - Enriquecimento de telemetria para auditoria de chamadas de agente.
+    - Separação por produto/API para domínio (ex.: Finance, RH, Operações).
+
+### 🏗️ Fluxo de referência (didático)
+
+```mermaid
+flowchart LR
+     U[Usuario em Work IQ] --> A[Agente em Foundry IQ]
+     A --> G[Azure APIM - AI Gateway]
+
+     G --> M1[Endpoint de Modelo A]
+     G --> M2[Endpoint de Modelo B]
+     G --> T1[MCP Server Financeiro]
+     G --> T2[MCP Server Operacional]
+
+     T1 --> F[Fabric IQ e Dados Governados]
+     T2 --> F
+
+     G --> O[Observabilidade e Auditoria]
+     G --> S[Seguranca e Guard Rails]
+
+     F --> A
+     A --> U
+```
+
+### 🔄 Cenários de uso recomendados
+
+#### 1) Roteamento inteligente por tipo de tarefa
+- **Quando usar**: múltiplos modelos com perfis diferentes (custo, latência, qualidade).
+- **Como funciona**: APIM roteia para modelo mais adequado por política.
+- **Benefício**: otimiza trade-off entre custo e desempenho sem alterar o agente a cada ajuste.
+
+#### 2) Fallback e resiliência de inferência
+- **Quando usar**: workloads críticos com SLA rígido.
+- **Como funciona**: se endpoint principal falhar, APIM redireciona para rota secundária.
+- **Benefício**: reduz indisponibilidade percebida em Work IQ.
+
+#### 3) Governança de ferramentas MCP por domínio
+- **Quando usar**: crescimento de MCP servers por áreas de negócio.
+- **Como funciona**: APIM publica produtos de API por domínio com escopo e políticas próprias.
+- **Benefício**: controle granular sem perder velocidade de entrega.
+
+#### 4) Controle de consumo e custo
+- **Quando usar**: expansão de agentes para múltiplas áreas.
+- **Como funciona**: quotas e rate limits por agente, time ou produto.
+- **Benefício**: previsibilidade financeira e prevenção de abuso.
+
+### 📊 Diagrama de decisão simples
+
+```mermaid
+flowchart TD
+     Q[Precisa expor modelo ou ferramenta para varios agentes?] -->|Nao| D[Conexao direta pode bastar em piloto]
+     Q -->|Sim| P[Use APIM como camada padrao]
+
+     P --> R{Ha requisito forte de SLA ou fallback?}
+     R -->|Sim| R1[Configurar roteamento e fallback no AI Gateway]
+     R -->|Nao| R2[Comecar com politicas basicas de autenticacao e quota]
+
+     P --> M{Ha MCP servers de dominios diferentes?}
+     M -->|Sim| M1[Separar produtos por dominio e aplicar guard rails por contexto]
+     M -->|Nao| M2[Publicar catalogo unico com versionamento simples]
+
+     R1 --> E[Escalar com observabilidade e evaluators]
+     R2 --> E
+     M1 --> E
+     M2 --> E
+```
+
+### ✅ Boas práticas para adoção em ondas
+
+1. **Onda 1 (piloto controlado)**: publicar 1 agente e 1 MCP server via APIM com autenticação e quota.
+2. **Onda 2 (escala por domínio)**: separar produtos de API por área e ativar políticas de custo/latência.
+3. **Onda 3 (otimização contínua)**: integrar telemetria do APIM com evaluators para ajustes de roteamento e qualidade.
+
+### ⚖️ Trade-offs explícitos
+
+- **Vantagens**: governança central, segurança consistente, reuso, observabilidade, escala sustentável.
+- **Custos**: camada adicional de arquitetura e operação de policies.
+- **Risco se não adotar**: proliferação de integrações ponto a ponto, baixa rastreabilidade e maior variabilidade de resposta.
+
+### 🔗 Referências Microsoft
+
+- [Azure API Management overview](https://learn.microsoft.com/azure/api-management/api-management-key-concepts)
+- [Use Azure API Management as an AI gateway](https://learn.microsoft.com/azure/api-management/genai-gateway-overview)
+- [Policies in Azure API Management](https://learn.microsoft.com/azure/api-management/api-management-howto-policies)
+- [Rate limit by key policy](https://learn.microsoft.com/azure/api-management/rate-limit-by-key-policy)
+
+### 📣 Insight
+
+> "APIM com AI Gateway transforma integrações de agentes em produto governado: menos acoplamento, mais controle e escala previsível."
 
 ---
 
@@ -3326,6 +3534,94 @@ A Microsoft indica que o Agent 365 pode ser habilitado sem pre-requisito tecnico
 
 ---
 
+## 🗃️ 8.4. Agent Registry Dinâmico (Descoberta e Lifecycle)
+
+### 🎯 Objetivo
+Manter um catálogo confiável de agentes para descoberta, roteamento, governança e operação contínua.
+
+### 🧩 Componentes mínimos do registry
+
+1. **Register** (descoberta)
+    - Registry-initiated register (o registry consulta endpoints dos agentes).
+    - Agent-initiated self-register (o agente se registra no registry).
+2. **Repository** (armazenamento)
+    - Metadados de capacidade, owner, versão, endpoint e autenticação.
+3. **View** (consulta)
+    - Listagem e filtros por domínio, criticidade, status e versão.
+4. **Monitor** (saúde)
+    - Uptime, latência, erro, desatualização de metadados.
+
+### 📌 Metadados essenciais por agente
+
+- `name`, `description`, `capabilities`, `owner`, `url`, `auth_mode`, `version`, `status`, `risk_tier`.
+
+### ✅ Regras de onboarding recomendadas
+
+1. Validação técnica (contrato, segurança, telemetria).
+2. Validação funcional (escopo e não sobreposição indevida).
+3. Validação de risco (dados sensíveis, ações críticas, HITL obrigatório).
+4. Publicação controlada (canary por domínio).
+
+---
+
+## 🧠 8.5. Memória Multiagente (STM/LTM)
+
+### 🎯 Objetivo
+Definir estratégia de memória para manter contexto útil sem comprometer privacidade, conformidade e consistência.
+
+### 🧱 Estrutura recomendada
+
+1. **STM (Short-Term Memory)**
+    - Escopo por sessão/conversa.
+    - Retenção curta e orientada a tarefa.
+2. **LTM (Long-Term Memory)**
+    - Conhecimento persistente entre sessões.
+    - Armazenar preferências e resultados aprovados.
+
+### 🔐 Controles essenciais
+
+- Redaction de PII antes de persistência em LTM.
+- Política de retenção por categoria de dado.
+- Consentimento e trilha de auditoria para memória persistente.
+- Separação de ownership (memória do usuário vs memória operacional do agente).
+
+```mermaid
+flowchart TD
+     I[Interacao do usuario] --> STM[Memoria de curto prazo]
+     STM --> D{Informacao deve persistir?}
+     D -->|Nao| X[Descarta por politica de retencao]
+     D -->|Sim| R[Redaction e validacao]
+     R --> LTM[Memoria de longo prazo]
+     LTM --> Q[Consultas futuras do agente]
+```
+
+---
+
+## 🔁 8.6. Comunicação entre Agentes
+
+### 🎯 Objetivo
+Escolher o padrão de comunicação adequado para equilibrar simplicidade, resiliência e escala.
+
+### 📡 Padrões
+
+1. **Request-based**
+    - Direto, síncrono/assíncrono.
+    - Melhor para cenários com baixa latência e fluxo previsível.
+2. **Message-driven**
+    - Via broker/event bus.
+    - Melhor para desacoplamento, resiliência e escala distribuída.
+3. **Híbrido**
+    - Request para decisões em tempo real.
+    - Eventos para processamento assíncrono e integrações externas.
+
+### ⚖️ Critério prático de escolha
+
+- Se o SLA for interativo e decisão imediata: priorizar request-based.
+- Se houver alta fan-out/fan-in e recuperação de falhas: priorizar message-driven.
+- Para ambientes corporativos complexos: adotar híbrido por domínio.
+
+---
+
 ## 📊 9. Evaluators (Qualidade e Evolução)
 
 ### 🎯 Objetivo
@@ -3718,6 +4014,80 @@ flowchart TD
 - **Fabric IQ/Fabric**: contexto semântico e dados governados.
 - **Guard Rails**: proteção de identidade, acesso e risco de dados.
 - **Evaluators**: medição objetiva para evolução contínua.
+
+### 12.1. Confiabilidade Operacional (SLO/Versionamento/Rollback)
+
+### 🎯 Objetivo
+Operar agentes em produção com previsibilidade de serviço, recuperação rápida e risco controlado.
+
+### 📏 SLOs mínimos recomendados
+
+1. **Disponibilidade**: ex. 99,9% para agentes críticos.
+2. **Latência p95**: ex. <= 4s para canais interativos.
+3. **Qualidade operacional**: task success rate e groundedness por domínio.
+4. **Segurança**: taxa de bloqueio de risco e incidentes por período.
+
+### 🧷 Estratégia de versão e rollout
+
+- Versionar agente, prompt, contratos MCP e políticas.
+- Coexistência de versões (`v1` produção / `v2` canary).
+- Feature flags por domínio/área.
+
+### ⏪ Política de rollback
+
+1. Definir gatilhos de rollback automático (latência, erro, violação de policy).
+2. Retornar para última versão estável em minutos.
+3. Registrar causa raiz e ação corretiva no backlog.
+
+### 🛟 Continuidade e segurança do usuário
+
+- Mecanismo de pausa/desativação de classe de agentes.
+- Health checks contínuos de runtime e tool calls.
+- Fallback para fluxo humano quando risco operacional subir.
+
+### 12.2. Matriz de Maturidade Multiagente (Níveis 1-5)
+
+### 🎯 Objetivo
+Oferecer um instrumento prático para medir maturidade da arquitetura alvo e priorizar o roadmap em ondas com critérios verificáveis.
+
+### 🧭 Como usar
+
+1. Avaliar cada capacidade na escala de 1 a 5.
+2. Definir nível atual e nível-alvo por trimestre.
+3. Priorizar gaps com maior risco para segurança, qualidade e continuidade.
+
+### 📊 Escala de maturidade
+
+| Nível | Descrição executiva |
+|---|---|
+| **1 - Inicial** | Pilotos isolados, baixa padronização, controles reativos. |
+| **2 - Repetível** | Padrões básicos documentados, execução ainda dependente de pessoas-chave. |
+| **3 - Definido** | Processo formal por domínio, governança consistente e telemetria estruturada. |
+| **4 - Gerenciado** | Operação orientada por métricas, SLOs ativos, melhoria contínua com evaluators. |
+| **5 - Otimizado** | Escala corporativa com automação avançada, prevenção de risco e evolução contínua por evidência. |
+
+### 🧩 Matriz por capacidade crítica
+
+| Capacidade | Nível 1 | Nível 3 | Nível 5 |
+|---|---|---|---|
+| **Orquestração e classificação** | Roteamento manual ou heurístico | Orquestrador central + fallback de classificação | Roteamento adaptativo com otimização por qualidade/custo/latência |
+| **Agent Registry** | Lista estática de agentes | Registry com metadados e monitor de saúde | Discovery dinâmico, validação de onboarding e gestão de versões automatizada |
+| **Memória (STM/LTM)** | Contexto efêmero sem política clara | STM/LTM com retenção e redaction definidos | Governança completa de memória com consentimento, auditoria e otimização contínua |
+| **Comunicação entre agentes** | Chamadas ad hoc ponto a ponto | Padrão definido (request/message/híbrido) por domínio | Arquitetura híbrida otimizada com resiliência e rastreabilidade end-to-end |
+| **Segurança e guard rails** | Controles pontuais | Políticas consistentes com Entra, Purview e guard rails | Controles adaptativos com resposta automatizada e red teaming contínuo |
+| **Evaluators e qualidade** | Avaliação ocasional e manual | Avaliação offline/online por domínio | Avaliação contínua com feedback loop automatizado para operação |
+| **Confiabilidade operacional** | Sem SLO formal, rollback manual | SLOs definidos e rollback padronizado | SLOs por domínio com gatilhos automáticos e engenharia de resiliência madura |
+
+### 📌 Critérios mínimos para considerar nível 4 (gerenciado)
+
+1. SLOs ativos para disponibilidade, latência e qualidade em produção.
+2. Registry com monitoramento de saúde e metadados atualizados.
+3. Guard rails e controles de dados aplicados por padrão em todos os agentes críticos.
+4. Evaluators operando com ciclos de melhoria contínua.
+5. Rollback testado e acionável em minutos.
+
+### 📣 Insight
+> "Maturidade multiagente não é quantidade de agentes em produção; é previsibilidade de resultado com controle de risco em escala."
 
 ---
 
