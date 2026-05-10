@@ -3888,6 +3888,59 @@ flowchart TD
 4. Para monitoramento contínuo em produção: integração com Azure Monitor/Application Insights.
 5. Para produção, priorizar o fluxo de continuous evaluation no portal novo do Microsoft Foundry; quando usar documentação/classic, considerar as limitações de recurso em preview.
 
+### 🧪 Benchmarking complementar com WAZA (alto grau de coerência)
+
+O conteúdo oficial de WAZA é altamente coerente com esta seção porque reforça o mesmo princípio arquitetural já adotado aqui: **medir, comparar, validar e evoluir agentes por evidência**, com execução repetível e integrada ao ciclo de engenharia.
+
+### ✅ Onde WAZA agrega no framework
+
+1. **Benchmark estruturado em YAML** para padronizar cenários de avaliação por skill/agente.
+2. **Validadores pluggable** para checar qualidade funcional, comportamento e sequência de ações.
+3. **Comparação cross-model** para decisões de custo, qualidade e latência entre modelos.
+4. **Integração com CI/CD** para rodar gates de qualidade em pull requests.
+5. **Dashboard de tendências** para apoiar governança operacional e priorização de melhorias.
+
+### ⚖️ Posicionamento recomendado na arquitetura alvo
+
+1. Usar WAZA como camada complementar de benchmark técnico no ciclo de engenharia.
+2. Manter evaluators do Foundry como base de avaliação operacional e observabilidade em produção.
+3. Consolidar resultados no modelo operacional (seção 12) para decisões de promoção, rollback e roadmap em ondas.
+
+Trade-off prático: WAZA acelera padronização e automação de testes de habilidade, mas não substitui controles de produção, guard rails e telemetria corporativa.
+
+### 🧰 Agent Evaluations CLI (Microsoft 365 Copilot) — Coerência com esta arquitetura
+
+A página oficial da Microsoft sobre o **Agent Evaluations CLI** (preview) é coerente com esta seção porque reforça o mesmo ciclo operacional já descrito aqui: dataset de teste, execução de avaliação, scoring estruturado, análise de resultados e iteração.
+
+### ✅ O que a documentação adiciona de forma prática
+
+1. **Modos de execução**: avaliação em batch e interativa.
+2. **Formato de entrada**: prompts inline, input interativo e datasets JSON.
+3. **Saídas de resultado**: relatórios em HTML, JSON e CSV.
+4. **Scoring automatizado**: uso de métricas AI-assisted para acelerar comparação entre versões de agente.
+
+### 📏 Métricas padrão relevantes para o framework
+
+1. **Relevance** e **Coherence** como defaults.
+2. Métricas opcionais como **Groundedness** e **Similarity**.
+3. Métricas determinísticas/comparativas como **ExactMatch**, **PartialMatch** e contagem de **Citations**.
+
+Essas métricas são aderentes ao que já definimos na taxonomia de evaluators (qualidade, RAG e segurança), com vantagem operacional para times que precisam de execução rápida de regressão entre versões.
+
+### 🔐 Variáveis de ambiente e implicações de governança
+
+Para operar o CLI, a Microsoft explicita variáveis como `TENANT_ID`, `AZURE_AI_OPENAI_ENDPOINT`, `AZURE_AI_API_KEY`, `AZURE_AI_API_VERSION`, `AZURE_AI_MODEL_NAME` e identificadores de agente (`M365_TITLE_ID`/`M365_AGENT_ID`).
+
+Implicação direta para a arquitetura alvo:
+
+1. Seguir gestão de segredos em cofre corporativo e rotação de chaves.
+2. Garantir rastreabilidade por ambiente (dev/homolog/prod).
+3. Tratar esse CLI como componente de **eval pipeline** no roadmap em ondas (principalmente Onda 1 e Onda 2).
+
+### ⚠️ Limite atual (preview)
+
+Como o recurso está em preview, convém manter adoção progressiva e combinar com os evaluators do Foundry para cenários críticos de produção.
+
 ### 📌 Exemplo
 
 **Pergunta:**
@@ -3907,6 +3960,8 @@ flowchart TD
 - https://learn.microsoft.com/azure/ai-foundry/how-to/evaluate-generative-ai-app
 - https://learn.microsoft.com/azure/foundry/observability/how-to/how-to-monitor-agents-dashboard#set-up-continuous-evaluation
 - https://learn.microsoft.com/azure/foundry-classic/how-to/continuous-evaluation-agents (preview/classic)
+- https://learn.microsoft.com/en-us/microsoft-365/copilot/extensibility/evaluations-cli-overview
+- https://microsoft.github.io/waza/
 
 ### 📣 Insight
 > "Sem evaluators, você aposta em IA — não opera IA"
@@ -4544,6 +4599,7 @@ Quando Instructions e Skills são tratados como ativos arquiteturais (e não ape
 - [Use skills in Copilot Studio](https://learn.microsoft.com/microsoft-copilot-studio/advanced-use-skills)
 - [Use skills in Foundry (preview)](https://learn.microsoft.com/azure/foundry/agents/how-to/tools/skills)
 - [Tool best practices for Microsoft Foundry Agent Service](https://learn.microsoft.com/azure/foundry/agents/concepts/tool-best-practice)
+- [Agent Evaluations CLI overview (Microsoft 365 Copilot)](https://learn.microsoft.com/en-us/microsoft-365/copilot/extensibility/evaluations-cli-overview)
 
 ---
 
