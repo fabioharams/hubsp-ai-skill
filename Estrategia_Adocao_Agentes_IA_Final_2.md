@@ -1,40 +1,5 @@
 # 🧭 Guia de Arquitetura Corporativa para Adoção de Agentes de IA (Microsoft IQ + Fabric + Foundry)
 
-## 🗂️ Índice Executivo
-
-| Seção | O que contém |
-|---|---|
-| **1. Visão Executiva** | Contexto estratégico, objetivo, princípio central e exemplos práticos de valor de negócio. |
-| **2. Arquitetura de Referência (Visão Geral)** | Arquitetura alvo com camadas Work IQ, Foundry IQ, Fabric IQ e controles transversais. |
-| **2.1. Especificações Técnicas por Camada** | Detalhamento técnico de OneLake, Delta Lake, Medallion, SQL Endpoint, Data Products e governança. |
-| **2.2. Tipos de Modelos de IA para Agentes** | Guia de escolha de modelos (LLM, multimodal, tabular, forecasting, etc.) com trade-offs. |
-| **2.3. Orquestrador e Classificador Multiagente** | Padrão de roteamento semântico, fallback de classificação e coordenação entre agentes especializados. |
-| **3. Estratégia de Adoção (Curto e Médio Prazo)** | Roadmap em ondas, fases de adoção, critérios de sucesso e riscos de execução. |
-| **3.1. Ferramentas de Adoção** | Papel de M365 Copilot, Copilot Studio e Microsoft Foundry por cenário e maturidade. |
-| **3.2. Azure APIM para IA (AI Gateway e MCP)** | Como usar APIM como camada de controle para modelos e MCP servers, com cenários de uso e boas práticas. |
-| **4. Estratégias de Adoção (A vs B)** | Comparação entre self-service e dados tratados, com recomendação de modelo híbrido. |
-| **5. Consumo de Dados do Fabric por Múltiplos Agentes** | Padrões para reutilização de dados governados no Fabric por múltiplos agentes. |
-| **5.1. Formas de Acesso ao Fabric por Agentes** | Opções de acesso técnico e implicações de segurança e governança. |
-| **6. Exemplos de Consumo** | Exemplos práticos de integração entre agentes, dados e ferramentas corporativas. |
-| **7. Insight Estratégico Principal** | Mensagem-chave para tomada de decisão executiva e direcionamento da arquitetura alvo. |
-| **8. Guard Rails (Controle)** | Mecanismos de proteção e políticas para operação segura de agentes. |
-| **8.1. Microsoft Entra ID (Agent ID)** | Identidade de agentes, autenticação, autorização e controles de acesso. |
-| **8.2. Microsoft Purview** | Classificação de dados, políticas de proteção e conformidade para IA corporativa. |
-| **8.3. Microsoft Agent 365** | Plano de controle de agentes para operação, governança e escala. |
-| **8.4. Agent Registry Dinâmico** | Registro, descoberta, versionamento e monitoramento de agentes com governança de onboarding. |
-| **8.5. Memória Multiagente (STM/LTM)** | Estratégia de memória de curto e longo prazo com privacidade, retenção e redaction. |
-| **8.6. Comunicação entre Agentes** | Padrões request-based, message-driven e híbrido com critérios de escolha. |
-| **8.7. Segurança de MCP Servers** | Controles build-time e runtime para MCP servers (isolamento, validação, auth, deployment) seguindo OWASP. |
-| **9. Evaluators (Qualidade e Evolução)** | Métricas e processo contínuo de avaliação para qualidade, risco e melhoria de agentes. |
-| **10. Human-in-the-Loop (HITL)** | Quando envolver validação humana para decisões críticas e mitigação de risco. |
-| **11. Integração Completa (Arquitetura Final)** | Visão integrada ponta a ponta com fluxos de dados, agentes e controles transversais. |
-| **12. Modelo Operacional** | Estrutura de papéis, governança, cadência e operação para sustentação em escala. |
-| **12.1. Confiabilidade Operacional (SLO/Versionamento/Rollback)** | SLOs, estratégia de versões, rollback e continuidade para operação segura em produção. |
-| **12.2. Matriz de Maturidade Multiagente (Níveis 1-5)** | Critérios objetivos para avaliar evolução de capacidades técnicas e de governança em ondas. |
-| **13. Mensagem Estratégica Final** | Síntese executiva para alinhamento de liderança e próximos passos. |
-
-> Dica de navegação: use a busca do editor (`Ctrl+F`) pelo número da seção (ex.: `8.2.`) para ir direto ao ponto desejado.
-
 ## 📌 1. Visão Executiva
 
 ### 🎯 Objetivo
@@ -70,6 +35,267 @@ A importância da arquitetura corporativa está em transformar IA de uma experim
 **Exemplo 4 — Governança em escala:** diferentes áreas publicam agentes para RH, finanças e operações. Mesmo com finalidades distintas, todos seguem o mesmo padrão de identidade, acesso, classificação de dados, observabilidade e avaliação. Esse é o principal benefício da arquitetura corporativa: permitir diversidade de agentes sobre uma base comum de controle.
 
 **Referências Microsoft (discretas):** Microsoft 365 Copilot architecture e semantic indexing; Microsoft Fabric OneLake, lakehouse e SQL analytics endpoint; Azure AI Content Safety e Prompt Shields; Microsoft Purview sensitivity labels; Microsoft Entra managed identities.
+
+---
+
+## 🧬 1.1. Fundamentos de Arquitetura de IA — LLM × RAG × AI Agent × Agentic AI
+
+> Esta seção estabelece a base conceitual do guia. Antes de detalhar as camadas corporativas (Work IQ, Foundry IQ, Fabric IQ e a plataforma de dados), é essencial entender os quatro padrões que formam o **espectro de autonomia e complexidade** das aplicações de IA generativa. Eles não são tecnologias concorrentes: cada nível **incorpora** o anterior e adiciona uma nova capacidade.
+
+### 📈 Visão geral — o espectro de complexidade
+
+```mermaid
+flowchart LR
+    A["<b>LLM</b><br/>gera texto"] --> B["<b>RAG</b><br/>aterra a resposta<br/>em dados"]
+    B --> C["<b>AI Agent</b><br/>planeja e age<br/>com ferramentas"]
+    C --> D["<b>Agentic AI</b><br/>coordena vários<br/>agentes especializados"]
+
+    style A fill:#4A90E2,stroke:#2E5C8A,color:#fff,stroke-width:2px
+    style B fill:#50C878,stroke:#3A9B5C,color:#fff,stroke-width:2px
+    style C fill:#7B68EE,stroke:#5A4DB0,color:#fff,stroke-width:2px
+    style D fill:#FF6B6B,stroke:#CC5555,color:#fff,stroke-width:2px
+```
+
+A Microsoft descreve essa progressão como um **espectro de complexidade** e recomenda, como princípio de arquitetura, usar **o menor nível de complexidade que resolve o problema de forma confiável** — cada degrau adicional introduz latência, custo e novos modos de falha.
+
+> ⚠️ **Nota terminológica.** A indústria usa "AI Agent" e "Agentic AI" de formas variadas. Na documentação da Microsoft, a distinção principal é entre **agente único com ferramentas** (single agent) e **orquestração multiagente** (multi-agent), e não há fronteira rígida — é um contínuo. Neste guia tratamos "Agentic AI" como o nível de **orquestração multiagente** (detalhado na seção 17).
+
+### 📊 Quadro comparativo
+
+| Aspecto | **LLM** | **RAG** | **AI Agent** | **Agentic AI** |
+|---|---|---|---|---|
+| **Definição** | Gerador de texto: você pergunta, ele responde com base no que aprendeu no treino. | LLM que recupera informação de uma base de dados *antes* de responder. | IA que planeja passos, usa ferramentas e executa tarefas completas. | Conjunto de agentes especializados que colaboram, coordenados por um orquestrador. |
+| **Arquitetura** | `pergunta → modelo → resposta` | `pergunta → busca em índice → recupera trechos → gera resposta fundamentada` | `objetivo → plano → uso de ferramentas → avalia → ajusta → conclui` | `objetivo → orquestrador distribui → agentes executam → revisão → entrega` |
+| **Componentes** | Um modelo treinado em grande volume de texto. | Modelo + índice pesquisável (vetorial/keyword/híbrido) + *embeddings*. | Modelo + instruções + recuperação + ferramentas + memória. | Múltiplos agentes + memória/estado compartilhado + camada de orquestração. |
+| **Funcionalidade** | Prevê o próximo token; gera linguagem natural. | Responde fundamentado em dados próprios e atualizados (*grounding*). | Decompõe o objetivo, escolhe ferramentas e itera até concluir. | Especialistas distribuem trabalho, trocam contexto e coordenam-se como um time. |
+| **Caso típico** | Redação, resumo, tradução, classificação. | Q&A sobre políticas internas, manuais, base de conhecimento. | Pesquisa multi-etapa, coleta de dados, automação de fluxos. | Campanhas, projetos grandes, processos de negócio ponta a ponta. |
+| **Ferramentas** | Nenhuma. Opera isolado. | Lê dados via índice, mas não executa ações. | Usa busca, APIs, código etc. (via *function calling* / MCP). | Cada agente usa as ferramentas do seu domínio; integração via MCP / A2A. |
+| **Memória** | Sem memória entre sessões (só janela de contexto). | Busca informação fresca a cada consulta, mas não lembra perguntas anteriores. | Mantém estado ao longo dos passos (memória de trabalho). | Estado/memória compartilhada entre os agentes do time. |
+| **Planejamento** | Responde de imediato, sem planejar. | Recupera e responde; não planeja adiante. | Raciocina e se autocorrige (ReAct, CoT, Plan-and-Solve, Reflexion). | Agentes decidem em conjunto; orquestração serial, concorrente ou dinâmica. |
+| **Autonomia** | Reativo: precisa de um *prompt* a cada interação. | Recupera documentos automaticamente, mas só responde quando perguntado. | Executa a tarefa sozinho após receber o objetivo. | Conduz projetos inteiros com mínima supervisão humana. |
+| **Custo relativo** *(ilustrativo)* | Mais baixo — paga só pela geração. | Médio — modelo + índice. | Mais alto — múltiplas chamadas e ferramentas. | Mais alto de todos — vários agentes em execução. |
+| **Tempo de implementação** *(ilustrativo)* | Horas. | Dias. | Dias a semanas. | Semanas ou mais. |
+| **Pontos fortes** | Rápido, simples, ótimo para texto. | Reduz alucinação, cita fontes, usa conhecimento privado e atualizado. | Resolve tarefas complexas multi-etapa; aprende com erros. | Especialização por agente; paralelismo; resolve problemas grandes. |
+| **Fraquezas** | Alucina; sem memória; *knowledge cutoff*. | Qualidade limitada pela dos dados/índice; não age. | Não determinístico; exige governança e limites de iteração. | Difícil de configurar e controlar; falha de um agente afeta os demais. |
+| **Quando usar** | Respostas rápidas ou geração simples de texto. | Quando a resposta precisa vir de documentos/dados específicos. | Projetos multi-etapa, pesquisa, coleta de dados. | Projetos complexos que exigiriam um time inteiro. |
+
+> Os campos **Custo** e **Tempo de implementação** são estimativas ilustrativas de ordem de grandeza — **não** constam como números oficiais na documentação Microsoft.
+
+### 🏛️ Diagramas de arquitetura por padrão
+
+#### LLM puro
+
+```mermaid
+flowchart LR
+    U["👤 Usuário / Prompt"] --> M["🧠 LLM"]
+    M --> R["📤 Resposta gerada"]
+
+    style U fill:#4A90E2,stroke:#2E5C8A,color:#fff,stroke-width:2px
+    style M fill:#7B68EE,stroke:#5A4DB0,color:#fff,stroke-width:2px
+    style R fill:#FFD93D,stroke:#CCB030,color:#333,stroke-width:2px
+```
+
+#### RAG — Retrieval · Augmentation · Generation
+
+```mermaid
+flowchart LR
+    U["👤 Pergunta do usuário"] --> Q["🔎 Consulta ao índice"]
+    Q --> IDX["🗂️ Índice / Vector Store"]
+    IDX --> C["📄 Trechos relevantes<br/>(grounding)"]
+    C --> P["🧩 Prompt aumentado"]
+    U --> P
+    P --> M["🧠 LLM"]
+    M --> A["📤 Resposta fundamentada<br/>+ citações"]
+
+    style U fill:#4A90E2,stroke:#2E5C8A,color:#fff,stroke-width:2px
+    style Q fill:#50C878,stroke:#3A9B5C,color:#fff,stroke-width:2px
+    style IDX fill:#FF6B6B,stroke:#CC5555,color:#fff,stroke-width:2px
+    style C fill:#50C878,stroke:#3A9B5C,color:#fff,stroke-width:2px
+    style P fill:#FF9800,stroke:#E65100,color:#fff,stroke-width:2px
+    style M fill:#7B68EE,stroke:#5A4DB0,color:#fff,stroke-width:2px
+    style A fill:#FFD93D,stroke:#CCB030,color:#333,stroke-width:2px
+```
+
+As três etapas canônicas do RAG, conforme a Microsoft: **recuperação** (consulta à base externa), **aumento** (combinação dos dados recuperados com o prompt) e **geração** (o LLM produz a resposta fundamentada).
+
+#### AI Agent — os 5 componentes centrais
+
+```mermaid
+flowchart TB
+    G["🎯 Objetivo do usuário"] --> ORQ
+    subgraph AGENTE["🤖 Agente de IA"]
+        ORQ["🔁 Camada de orquestração<br/>(loop de raciocínio)"]
+        MODEL["🧠 Modelo<br/>(motor de raciocínio)"]
+        INST["📋 Instruções<br/>(escopo e regras)"]
+        KNOW["📚 Recuperação<br/>(conhecimento/grounding)"]
+        TOOLS["🛠️ Ferramentas<br/>(APIs, busca, código)"]
+        MEM["💾 Memória<br/>(histórico e estado)"]
+        ORQ --- MODEL
+        ORQ --- INST
+        ORQ --- KNOW
+        ORQ --- TOOLS
+        ORQ --- MEM
+    end
+    AGENTE --> OUT["✅ Tarefa concluída"]
+
+    style G fill:#FF6B6B,stroke:#CC5555,color:#fff,stroke-width:2px
+    style ORQ fill:#FF9800,stroke:#E65100,color:#fff,stroke-width:2px
+    style MODEL fill:#7B68EE,stroke:#5A4DB0,color:#fff,stroke-width:2px
+    style INST fill:#4A90E2,stroke:#2E5C8A,color:#fff,stroke-width:2px
+    style KNOW fill:#50C878,stroke:#3A9B5C,color:#fff,stroke-width:2px
+    style TOOLS fill:#4A90E2,stroke:#2E5C8A,color:#fff,stroke-width:2px
+    style MEM fill:#FFD93D,stroke:#CCB030,color:#333,stroke-width:2px
+    style OUT fill:#50C878,stroke:#3A9B5C,color:#fff,stroke-width:2px
+```
+
+A Microsoft define o agente sobre cinco componentes: **modelo** (motor de raciocínio), **instruções**, **recuperação/conhecimento** (grounding), **ações/ferramentas** e **memória**. A camada de orquestração é o loop cíclico que recebe informação, raciocina e decide a próxima ação até atingir o objetivo ou um critério de parada.
+
+#### Agentic AI — orquestração multiagente
+
+```mermaid
+flowchart TB
+    G["🎯 Objetivo"] --> O["🧭 Orquestrador / Manager"]
+    O --> A1["🔍 Agente Pesquisador"]
+    O --> A2["✍️ Agente Redator"]
+    O --> A3["🔎 Agente Revisor"]
+    A1 --> MEM["💾 Memória / estado compartilhado"]
+    A2 --> MEM
+    A3 --> MEM
+    A3 --> HITL{"🙋 Revisão humana<br/>(HITL)"}
+    HITL --> ENTREGA["📤 Entrega final"]
+
+    style G fill:#FF6B6B,stroke:#CC5555,color:#fff,stroke-width:2px
+    style O fill:#FF9800,stroke:#E65100,color:#fff,stroke-width:2px
+    style A1 fill:#4A90E2,stroke:#2E5C8A,color:#fff,stroke-width:2px
+    style A2 fill:#7B68EE,stroke:#5A4DB0,color:#fff,stroke-width:2px
+    style A3 fill:#50C878,stroke:#3A9B5C,color:#fff,stroke-width:2px
+    style MEM fill:#FFD93D,stroke:#CCB030,color:#333,stroke-width:2px
+    style HITL fill:#FFB347,stroke:#CC8835,color:#000,stroke-width:2px
+    style ENTREGA fill:#50C878,stroke:#3A9B5C,color:#fff,stroke-width:2px
+```
+
+### 🧠 LLM — o modelo de linguagem
+
+**O que é.** Um modelo treinado em grande volume de texto que gera linguagem natural prevendo a continuação mais provável. É a base ("cérebro") de todos os padrões seguintes — e, nesta arquitetura, o motor de raciocínio hospedado na camada **Foundry IQ**.
+
+**Características.** Conhecimento congelado no treino (*knowledge cutoff*); sem memória persistente entre conversas; pode **alucinar** (afirmações plausíveis, porém incorretas); não acessa ferramentas ou sistemas externos por conta própria.
+
+**Quando basta um LLM (chamada direta de modelo).** É o nível **menos complexo**: uma única chamada com um *prompt* bem elaborado, sem lógica de agente nem ferramentas. Se a engenharia de prompt resolve (classificar, resumir, traduzir, tarefas de um passo), **não há necessidade de um agente**.
+
+### 📚 RAG — geração aumentada por recuperação
+
+**O que é.** Técnica que **fundamenta** (*grounds*) as respostas do LLM em dados próprios, em vez de depender apenas do que o modelo aprendeu no treino. Nesta arquitetura, o RAG é viabilizado pela camada **Fabric IQ** + **Microsoft Fabric**, que fornecem os dados governados e o índice pesquisável.
+
+**As três etapas (definição Microsoft).**
+
+1. **Recuperação (Retrieval):** a solicitação consulta uma base externa — *vector store*, busca por palavra-chave ou SQL — para obter dados de apoio.
+2. **Aumento (Augmentation):** os dados de apoio são combinados com o pedido do usuário, normalmente via *template* com instruções, formando o *prompt*.
+3. **Geração (Generation):** o *prompt* é enviado ao LLM, que gera a resposta fundamentada.
+
+**Benefícios validados pela Microsoft.** Incorpora **conhecimento proprietário**; entrega **informação atualizada** (contorna o *knowledge cutoff*); permite **citar fontes** (verificação factual); e a recuperação pode respeitar **controles de acesso (ACL)** por credencial do usuário — exatamente o que os rótulos do Purview e o RLS do Fabric garantem nesta arquitetura.
+
+**RAG vs. Fine-tuning.** Escolha **RAG** para conteúdo dinâmico, ampla cobertura de tópicos e recursos limitados de treino. Escolha **fine-tuning** para desempenho em tarefa muito específica, controle sobre dados proprietários e conteúdo estável.
+
+### 🤖 AI Agent — agente único com ferramentas
+
+**Definição (Microsoft).** Um agente é uma aplicação de IA que usa um modelo generativo para **raciocinar** sobre solicitações e **tomar ações autônomas** para atendê-las. Diferente de um chatbot que só gera texto, o agente chama ferramentas, acessa dados externos e toma decisões ao longo de **múltiplos passos** — papel da camada **Foundry IQ**.
+
+**Os 5 componentes (Cloud Adoption Framework).** (1) Modelo generativo — motor de raciocínio; (2) Instruções — escopo, limites e regras; (3) Recuperação/Conhecimento — dados de *grounding*; (4) Ações/Ferramentas — funções, APIs e sistemas; (5) Memória — histórico e estado (ver seção 18).
+
+**Diferença essencial entre RAG e Agente.** O RAG segue um processo de recuperação **determinístico**. O agente usa o modelo generativo para **decidir, a cada passo**, qual conhecimento e quais ferramentas usar — comportamento **adaptativo e não determinístico**, que exige testes, evaluators (seção 9) e governança robusta (seção 8).
+
+**Raciocínio e planejamento.** Frameworks de agentes incorporam métodos como **ReAct** (intercala raciocínio e ação), **Chain-of-Thought**, **Plan-and-Solve** (divide a tarefa em subtarefas) e **Reflexion/self-critique** (auto-reflexão sobre o feedback).
+
+**Boa prática.** Para evitar laços infinitos de chamadas de ferramenta, **defina limites de iteração**. O agente único costuma ser o **padrão default** para muitos casos corporativos — mais simples de depurar e testar que arranjos multiagente.
+
+### 🕸️ Agentic AI — orquestração multiagente
+
+**O que é.** Múltiplos agentes especializados que **coordenam** para resolver problemas, com um orquestrador (ou protocolo entre pares) gerenciando distribuição de trabalho, compartilhamento de contexto e agregação de resultados. A implementação detalhada em Foundry — com os padrões Sequencial, Paralelo, Condicional e Feedback Loop — está na **seção 17**.
+
+**Vantagens (Azure Architecture Center).** Especialização (cada agente foca um domínio); escalabilidade (adicionar/alterar agentes sem redesenhar tudo); manutenibilidade (testar agente por agente); otimização (cada agente usa modelo e ferramentas distintos).
+
+**Quando NÃO partir direto para multiagente.** A Microsoft recomenda começar com multiagente **apenas** quando critérios específicos exigem separação: (1) **fronteiras de segurança/conformidade** (isolamento de dados imposto por regulação); (2) **múltiplos times** (domínios mantidos por equipes distintas, com ciclos independentes); (3) **crescimento futuro planejado** (soluções com mais de 3–5 funções distintas se beneficiam da modularidade).
+
+**Padrões de orquestração multiagente (documentação Microsoft).**
+
+| Padrão | Descrição | Quando usar |
+|---|---|---|
+| **Sequencial (serial)** | Agentes encadeados em ordem predefinida (A → B → C). | Processos com ordem estrita, regras de negócio e auditabilidade. |
+| **Concorrente (fan-out/fan-in)** | Vários agentes processam a mesma entrada em paralelo; resultados agregados (*scatter-gather* / *map-reduce*). | Análises independentes sob perspectivas distintas. |
+| **Orquestrador + subagentes** | Orquestrador delega a especialistas (também "Russian doll" / magentic). | Separação clara de responsabilidades; reuso de agentes especializados. |
+| **Agents-as-Tools** | Um agente principal invoca outros como se fossem ferramentas (via *function calling*). | Pedidos diretos, com 2–3 agentes e escopos bem delimitados. |
+| **Magentic** | Orquestração dinâmica para problemas abertos, sem fluxo predefinido. | Domínios criativos/exploratórios onde os subtarefas não são conhecidos de antemão. |
+
+**Integração e governança de ferramentas.** A Microsoft recomenda **MCP (Model Context Protocol)** para acesso seguro e autenticado a ferramentas/dados, e o protocolo **A2A (Agent2Agent, Linux Foundation)** para integração entre agentes de plataformas diferentes. Princípios transversais: **menor privilégio**, simplicidade, auditabilidade, governança robusta e **HITL (human-in-the-loop)** em pontos de aprovação (ver seção 10).
+
+### 🧭 Guia de decisão arquitetural
+
+Use o **menor nível de complexidade** que atende ao requisito de forma confiável.
+
+```mermaid
+flowchart TD
+    A["❓ Qual o problema?"] --> B{"Precisa de dados<br/>próprios/atualizados?"}
+    B -- Não --> C{"Tarefa de<br/>um passo só?"}
+    C -- Sim --> LLM["🧠 Chamada direta de LLM"]
+    C -- Não --> D{"Precisa agir /<br/>usar ferramentas?"}
+    B -- Sim --> E{"Precisa agir<br/>ou só responder?"}
+    E -- "Só responder" --> RAG["📚 RAG"]
+    E -- "Agir" --> D
+    D -- "Um domínio,<br/>depuração simples" --> AGENT["🤖 AI Agent único"]
+    D -- "Cruza segurança /<br/>vários times / vai crescer" --> MULTI["🕸️ Agentic AI (multiagente)"]
+
+    style A fill:#FF6B6B,stroke:#CC5555,color:#fff,stroke-width:2px
+    style LLM fill:#4A90E2,stroke:#2E5C8A,color:#fff,stroke-width:2px
+    style RAG fill:#50C878,stroke:#3A9B5C,color:#fff,stroke-width:2px
+    style AGENT fill:#7B68EE,stroke:#5A4DB0,color:#fff,stroke-width:2px
+    style MULTI fill:#FF9800,stroke:#E65100,color:#fff,stroke-width:2px
+```
+
+**Resumo prático.**
+
+- **Resposta de texto, um passo →** LLM.
+- **Resposta fundamentada em documentos →** RAG.
+- **Tarefa multi-etapa, com ações, em um domínio →** AI Agent único (default corporativo).
+- **Cruza fronteiras de segurança, múltiplos times ou crescimento previsto →** Agentic AI (multiagente).
+
+### ✅ Validação com fontes oficiais Microsoft
+
+| Afirmação | Status | Observação |
+|---|---|---|
+| RAG busca em documentos antes de responder | ✅ Confirmado | As 3 etapas (retrieval/augmentation/generation) são a definição canônica Microsoft. |
+| RAG reduz invenção de fatos e permite citar fontes | ✅ Confirmado | Microsoft cita redução de alucinação, *grounding* e citação de fontes. |
+| LLM "esquece" após a conversa e pode alucinar | ✅ Confirmado | LLMs são estáticos (conhecimento do treino) e propensos a alucinação sem *grounding*. |
+| Agente planeja, usa ferramentas e itera | ✅ Confirmado | Definição Microsoft de agente; inclui ReAct, planejamento e auto-correção. |
+| Agente tem memória dos passos | ✅ Confirmado | Memória é um dos 5 componentes centrais do agente. |
+| Agentic AI = vários especialistas coordenados | ✅ Confirmado | Corresponde à orquestração multiagente do Azure Architecture Center. |
+| AI Agent e Agentic AI são categorias totalmente distintas | ⚠️ Ajuste | A Microsoft trata como **espectro/contínuo**, não como caixas estanques. |
+| Agentic AI é "sempre" mais caro e demorado | ⚠️ Contextualizar | Tendência verdadeira, mas a recomendação oficial é **evitar** complexidade desnecessária. |
+| Valores de custo e tempo de implementação | ⚠️ Ilustrativo | Não há números oficiais Microsoft; tratar como ordem de grandeza. |
+
+**Conclusão da validação.** As definições e capacidades de cada padrão estão **substancialmente corretas**. Os ajustes são de **enquadramento**: (1) ver os quatro padrões como um espectro contínuo de complexidade; (2) usar sempre o nível mínimo necessário; (3) tratar custo/tempo como estimativas, não fatos oficiais.
+
+### 📖 Glossário de fundamentos
+
+- **LLM (Large Language Model):** modelo treinado para gerar linguagem natural prevendo o próximo token.
+- **RAG (Retrieval-Augmented Generation):** padrão que fundamenta respostas do LLM em dados recuperados de uma base externa.
+- **Grounding:** ancorar a resposta em dados reais/recuperados, reduzindo alucinação.
+- **Embeddings:** representações numéricas (vetores) de conteúdo, usadas em busca por similaridade.
+- **Índice / Vector Store:** estrutura otimizada para recuperação (keyword, semântica, vetorial ou híbrida).
+- **AI Agent:** aplicação que usa um modelo para raciocinar e tomar ações autônomas com ferramentas.
+- **Agentic AI / Multiagente:** sistema de múltiplos agentes especializados coordenados por orquestração.
+- **Orquestração:** camada/loop que distribui trabalho, compartilha contexto e agrega resultados entre agentes.
+- **MCP (Model Context Protocol):** protocolo para acesso seguro e autenticado a ferramentas e dados.
+- **A2A (Agent2Agent):** protocolo (Linux Foundation) para integração entre agentes de plataformas distintas.
+- **Function calling:** mecanismo pelo qual o LLM gera parâmetros para invocar ferramentas/funções.
+- **ReAct (Reason + Act):** método que intercala traços de raciocínio e ações específicas.
+- **Chain-of-Thought (CoT):** raciocínio passo a passo antes da resposta.
+- **Plan-and-Solve:** divide a tarefa em subtarefas e as executa conforme um plano.
+- **Reflexion / self-critique:** o agente reflete verbalmente sobre o feedback para melhorar decisões futuras.
+- **HITL (Human-in-the-Loop):** pontos de revisão/aprovação humana no fluxo (seção 10).
+- **Knowledge cutoff:** data limite do conhecimento aprendido pelo modelo no treino.
+- **Fan-out/Fan-in:** padrão concorrente — distribui (fan-out) e agrega (fan-in) resultados.
+
+> **Conexão com as camadas deste guia:** o **LLM** é o motor de raciocínio em **Foundry IQ**; o **RAG** materializa-se no consumo de dados governados de **Fabric IQ + Microsoft Fabric**; o **AI Agent** e a **Agentic AI** operam em **Foundry IQ**, com a experiência entregue por **Work IQ** e controles aplicados por **Guard Rails** e **Evaluators**. As fontes oficiais que embasam esta seção estão consolidadas na seção 15 e na seção 20.
 
 ---
 
@@ -1745,203 +1971,6 @@ flowchart TD
 
 ---
 
-## 🧠 2.2. Tipos de Modelos de IA para Agentes e Como Escolher
-
-### 🎯 Princípio arquitetural
-
-Um agente corporativo raramente depende de um único modelo. Na prática, a arquitetura mais robusta combina um modelo principal de raciocínio com modelos especializados para percepção, grounding, busca semântica, previsão ou decisão. A escolha correta reduz custo, melhora latência e aumenta previsibilidade operacional.
-
-Em termos de arquitetura alvo, a regra mais útil é esta:
-
-- **Work IQ** consome a experiência pronta para o usuário.
-- **Foundry IQ** escolhe, orquestra e combina os modelos conforme a tarefa.
-- **Fabric IQ** fornece o contexto semântico e os dados governados que alimentam esses modelos.
-
-Isso evita um erro comum: tentar resolver toda necessidade com um único LLM generalista. Em cenários corporativos, o melhor desenho normalmente é **compor capacidades**, e não superdimensionar um único modelo.
-
-### 📚 Tipos de modelos e cenário ideal de uso
-
-| Tipo de modelo | Papel no agente | Quando usar | Exemplo de cenário corporativo | Observação arquitetural |
-|---|---|---|---|---|
-| **LLMs** | Entender linguagem natural, resumir, responder, gerar texto e apoiar raciocínio geral | Quando o problema é predominantemente textual e exige interpretação, síntese ou geração | Agente que responde perguntas sobre políticas internas, gera sumários executivos ou redige respostas para analistas | É o ponto de partida mais comum para agentes de conhecimento |
-| **Vision Models** | Extrair e interpretar conteúdo visual | Quando o agente precisa ler documentos escaneados, imagens, telas, etiquetas, fotos ou frames de video | Agente que interpreta notas fiscais, fotos de inspeção, OCR de contratos ou imagens de estoque | Deve ser usado quando a imagem e a fonte primária de verdade, e não apenas um anexo eventual |
-| **Speech Models** | Converter fala em texto, texto em fala e traduzir audio | Quando a interação e por voz ou quando o insumo principal e audio | Agente de call center que transcreve chamadas, resume atendimentos e responde com voz sintetizada | Fundamental para canais de voz em tempo real e automação de atendimento |
-| **Multimodal Models** | Raciocinar sobre mais de uma modalidade na mesma tarefa | Quando o agente precisa combinar texto, imagem e, em alguns casos, audio no mesmo fluxo decisorio | Agente que recebe foto de equipamento + relato textual e produz diagnostico orientado | Evita pipelines fragmentados quando o entendimento depende da combinacao entre modalidades |
-| **Embedding Models** | Transformar conteudo em vetores para busca por similaridade | Quando o agente precisa fazer RAG, memoria semantica, deduplicacao, clustering ou descoberta de conteudo relevante | Agente que busca politicas, contratos e procedimentos similares antes de responder | Normalmente nao conversa com o usuario; sustenta grounding, memoria e recuperacao |
-| **Recommender Models** | Ranquear a melhor proxima acao, conteudo, produto ou decisao | Quando o problema principal e personalizacao e ranking, nao geracao de texto | Agente comercial que decide qual oferta, campanha ou proxima acao sugerir para cada cliente | Muito util quando ha historico de interacoes, preferencias e sinais de comportamento |
-| **Time-Series Forecasting Models** | Prever valores futuros ao longo do tempo | Quando a pergunta principal e "o que deve acontecer depois" em demanda, receita, consumo, risco ou capacidade | Agente de supply chain que projeta demanda, estoque e ruptura nas proximas semanas | Deve ser escolhido quando o tempo e a sequencia historica sao a variavel central |
-| **Tabular Models** | Classificar, regressar ou pontuar com base em colunas estruturadas | Quando o problema e decidir com base em registros estruturados e variaveis explicitas | Agente de risco que pontua fraude, inadimplencia, churn ou propensao de compra | Ideal para decisao operacional repetitiva, auditavel e baseada em features estruturadas |
-| **Agent Models** | Executar raciocinio multi-etapas, usar tools, estruturar saida e operar com maior autonomia | Quando o agente precisa planejar, chamar ferramentas, usar contexto longo e completar tarefas em varias etapas | Agente que consulta Fabric, chama APIs, compara respostas e produz uma acao final auditavel | Na pratica, e uma categoria operacional de modelos otimizados para comportamento agentico |
-| **Robotics Models** | Perceber ambiente fisico e orientar ou executar acoes em sensores e atuadores | Quando o agente controla maquinas, dispositivos, robos ou fluxos ciberfisicos | Agente em operacao industrial que orienta inspeção robotizada ou executa acoes supervisionadas no chao de fabrica | Exige guard rails mais rigidos, limites fisicos, telemetria em tempo real e HITL em pontos criticos |
-
-### 🧭 Leitura executiva para escolha
-
-- Se o agente **fala, escreve, resume, interpreta instrucoes e responde perguntas**, comece com **LLM**.
-- Se ele precisa **planejar, usar ferramentas, chamar APIs e operar em varias etapas**, prefira **Agent Model**.
-- Se o valor depende de **grounding, memoria e busca semantica**, adicione **Embedding Model**.
-- Se a entrada principal for **imagem**, use **Vision Model**; se precisar combinar imagem com texto no mesmo raciocinio, use **Multimodal Model**.
-- Se a entrada ou saida principal for **voz**, use **Speech Model**.
-- Se a tarefa for **ranking personalizado**, use **Recommender Model**.
-- Se a tarefa for **previsao temporal**, use **Time-Series Forecasting Model**.
-- Se a tarefa for **score, classificacao ou regressao com dados estruturados**, use **Tabular Model**.
-- Se houver **acao no mundo fisico**, a categoria correta passa a ser **Robotics Model**, com controles mais duros.
-
-### 🌳 Diagrama de decisão para escolha do modelo
-
-```mermaid
-flowchart TD
-    A["🧩 Qual e o problema principal que o agente precisa resolver?"]
-
-    A --> B{"O agente atua no mundo fisico?"}
-    B -->|Sim| R["🤖 Robotics Model<br/>Sensores, atuadores, tempo real<br/>+ safety hard limits + HITL"]
-    B -->|Nao| C{"A decisao principal e previsao ou ranking?"}
-
-    C -->|Ranking personalizado / next best action| REC["🎯 Recommender Model"]
-    C -->|Prever demanda, receita, carga, risco futuro| TS["📈 Time-Series Forecasting Model"]
-    C -->|Classificar ou estimar score por registro estruturado| TAB["📊 Tabular Model"]
-    C -->|Nao| D{"Qual e a modalidade dominante?"}
-
-    D -->|Audio / voz| S["🎙️ Speech Model"]
-    D -->|Imagem / documento / video| E{"Precisa apenas extrair ou tambem raciocinar entre modalidades?"}
-    D -->|Texto / linguagem natural| F{"Precisa grounding por similaridade?"}
-
-    E -->|Extrair, detectar, OCR, inspecionar| V["👁️ Vision Model"]
-    E -->|Combinar imagem + texto + contexto| M["🧠 Multimodal Model"]
-
-    F -->|Sim| EMB["🧷 Embedding Model<br/>Busca vetorial, memoria, RAG"]
-    F -->|Nao| G{"Precisa tool calling, planejamento e varias etapas?"}
-
-    G -->|Sim| AG["🛠️ Agent Model"]
-    G -->|Nao| L["💬 LLM"]
-
-    EMB -.-> AG
-    EMB -.-> L
-
-    style A fill:#2E4053,stroke:#1C2833,color:#fff,stroke-width:2px
-    style B fill:#C0392B,stroke:#922B21,color:#fff,stroke-width:2px
-    style C fill:#8E44AD,stroke:#5B2C6F,color:#fff,stroke-width:2px
-    style D fill:#2980B9,stroke:#1F618D,color:#fff,stroke-width:2px
-    style E fill:#16A085,stroke:#117864,color:#fff,stroke-width:2px
-    style F fill:#2471A3,stroke:#1B4F72,color:#fff,stroke-width:2px
-    style G fill:#7D6608,stroke:#7E5109,color:#fff,stroke-width:2px
-    style R fill:#E74C3C,stroke:#A93226,color:#fff,stroke-width:2px
-    style REC fill:#F39C12,stroke:#AF601A,color:#fff,stroke-width:2px
-    style TS fill:#27AE60,stroke:#1E8449,color:#fff,stroke-width:2px
-    style TAB fill:#52BE80,stroke:#239B56,color:#fff,stroke-width:2px
-    style S fill:#5DADE2,stroke:#21618C,color:#fff,stroke-width:2px
-    style V fill:#48C9B0,stroke:#138D75,color:#fff,stroke-width:2px
-    style M fill:#17A589,stroke:#0E6655,color:#fff,stroke-width:2px
-    style EMB fill:#7FB3D5,stroke:#2E86C1,color:#fff,stroke-width:2px
-    style AG fill:#F4D03F,stroke:#B7950B,color:#333,stroke-width:2px
-    style L fill:#85C1E9,stroke:#2E86C1,color:#333,stroke-width:2px
-```
-
-### 🏢 Padrões de composição mais comuns em arquitetura corporativa
-
-Na maior parte dos casos corporativos, os arranjos mais eficazes nao sao de um modelo isolado, mas de **combinacoes recorrentes**:
-
-- **Agent Model + Embeddings + Fabric IQ**: padrao mais comum para agentes de conhecimento com RAG e dados governados.
-- **LLM + Speech**: assistentes de voz, atendimento, copilots de call center e sumarizacao de reunioes.
-- **Multimodal + Vision + Embeddings**: inspeção documental, engenharia, operacoes de campo, OCR e entendimento de imagens com grounding.
-- **Agent Model + Tabular Model**: agentes que explicam uma decisao operacional baseada em score preditivo.
-- **Agent Model + Time-Series Forecasting Model**: agentes que nao apenas explicam o passado, mas recomendam acoes sobre o futuro.
-- **Agent Model + Recommender Model**: agentes de vendas, marketing e servico que sugerem a melhor proxima acao em vez de apenas responder perguntas.
-
-### ⚖️ Trade-offs de arquitetura
-
-| Escolha | Vantagem principal | Risco principal |
-|---|---|---|
-| Usar apenas LLM | Rapidez de implantacao | Custo mais alto e pior precisao em tarefas especializadas |
-| Adicionar embeddings | Melhor grounding e recuperacao | Requer pipeline de indexacao e governanca vetorial |
-| Adicionar modelos especializados | Melhor acuracia por tarefa | Mais integracoes, observabilidade e operacao |
-| Usar agent models mais autonomos | Maior capacidade de agir e orquestrar | Mais cuidado com guard rails, loops, custo e confiabilidade |
-| Levar IA para voz, visao ou robotica | Mais proximidade com operacao real | Maior superficie de risco, latencia e dependencia do ambiente |
-
-### ✅ Recomendacao pratica
-
-Para a maior parte dos programas corporativos de adocao, a sequencia recomendada e:
-
-1. Comecar com **LLM ou Agent Model** para a camada de raciocinio.
-2. Adicionar **Embedding Model** para grounding e memoria.
-3. Introduzir **Vision**, **Speech** ou **Multimodal** apenas quando a modalidade fizer parte do processo de negocio.
-4. Incorporar **Tabular**, **Forecasting** e **Recommender Models** quando o agente precisar decidir com base em previsao, score ou ranking.
-5. Tratar **Robotics Models** como uma frente separada de maior rigor operacional, com seguranca funcional, telemetria e aprovacoes humanas.
-
-### 🔗 Referências oficiais usadas nesta seção
-
-- Microsoft Learn: Azure OpenAI and Foundry models catalog, incluindo capacidades de LLMs, modelos multimodais, embeddings e audio.
-- Microsoft Learn: Azure Speech overview, para speech-to-text, text-to-speech, traducao e voz em tempo real.
-- Microsoft Learn: Azure Vision overview, para OCR, analise de imagem e interpretacao visual.
-- Microsoft Learn: Azure Machine Learning AutoML e forecasting methods, para modelos tabulares, regressao, classificacao e series temporais.
-- Microsoft Learn: Microsoft Foundry Agent Service overview, para definicao oficial de agente, tools, tipos de agentes e runtime.
-- Anthropic Docs: Claude Models Overview, para comparacao entre familias de modelos, trade-offs entre inteligencia, latencia e uso agentico.
-- Microsoft Recommenders Project, para padroes e algoritmos de sistemas de recomendacao em ambiente produtivo.
-
-### 📎 Referências oficiais diretas
-
-- [Azure OpenAI and Foundry models](https://learn.microsoft.com/en-us/azure/foundry/foundry-models/concepts/models-sold-directly-by-azure)
-- [AI agent orchestration patterns](https://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/ai-agent-design-patterns)
-- [What is Microsoft Foundry Agent Service?](https://learn.microsoft.com/en-us/azure/foundry/agents/overview)
-- [What is Azure Speech?](https://learn.microsoft.com/en-us/azure/ai-services/speech-service/overview)
-- [What is Azure Vision in Foundry Tools?](https://learn.microsoft.com/en-us/azure/ai-services/computer-vision/overview)
-- [What is automated machine learning (AutoML)?](https://learn.microsoft.com/en-us/azure/machine-learning/concept-automated-ml?view=azureml-api-2)
-- [Overview of forecasting methods in AutoML](https://learn.microsoft.com/en-us/azure/machine-learning/concept-automl-forecasting-methods?view=azureml-api-2)
-- [Anthropic Claude Models Overview](https://platform.claude.com/docs/en/docs/about-claude/models/overview)
-- [Microsoft Recommenders Project](https://github.com/recommenders-team/recommenders)
-
----
-
-## 🧭 2.3. Orquestrador e Classificador Multiagente
-
-### 🎯 Objetivo
-Padronizar como o sistema decide **quem faz o quê** em uma arquitetura com múltiplos agentes, reduzindo roteamentos incorretos e custo desnecessário.
-
-### 🧠 Padrão recomendado
-
-1. **Orquestrador central**
-    - Recebe a solicitação do usuário.
-    - Preserva contexto de sessão.
-    - Seleciona agentes e tools.
-    - Agrega respostas e trata fallback/erro.
-
-2. **Classificador em camadas (custo-eficiente)**
-    - NLU/SLM para intenções simples e de baixo custo.
-    - LLM para casos ambíguos ou complexos.
-    - Se confiança baixa no fim do pipeline: retorno controlado (IDK + pedido de clarificação).
-
-3. **Roteamento semântico com fallback**
-    - Primeira decisão por taxonomia de capacidades.
-    - Fallback para modelo mais robusto quando confiança < limiar.
-    - Registro de decisão para auditoria e tuning de classificadores.
-
-```mermaid
-flowchart LR
-     U[Usuario] --> O[Orquestrador]
-     O --> C[Classificador NLU/SLM]
-     C -->|Confianca alta| R[Seleciona agente]
-     C -->|Confianca baixa| L[Fallback LLM]
-     L --> R
-     R --> A1[Agente especializado]
-     R --> A2[Agente especializado]
-     A1 --> O
-     A2 --> O
-     O --> S[Resposta sintetizada]
-```
-
-### ✅ Boas práticas
-
-- Definir limiar explícito de confiança para fallback.
-- Evitar proliferação de agentes quase idênticos (causa confusão no roteamento).
-- Agrupar agentes semelhantes sob supervisor de domínio.
-- Registrar decisões de classificação para melhoria contínua.
-
-### 🔗 Referência oficial usada para esta seção
-
-- [Multi-Agent Reference Architecture (Microsoft)](https://microsoft.github.io/multi-agent-reference-architecture/index.html)
-- [Repositório GitHub - microsoft/multi-agent-reference-architecture](https://github.com/microsoft/multi-agent-reference-architecture)
-
----
-
 ## ⏱️ 3. Estratégia de Adoção (Curto e Médio Prazo)
 
 A estratégia de adoção de agentes de IA segue um modelo **interno de 5 fases evolutivas**, alinhado ao framework oficial da Microsoft para agentes de IA (**Plan, Govern and secure, Build, Manage**), com foco em construir capacidades organizacionais, não apenas tecnológicas. Este modelo reconhece que o sucesso depende de pessoas, processos e dados tanto quanto de tecnologia.
@@ -2407,16 +2436,6 @@ gantt
 - [**Organizational Readiness for AI Agents**](https://learn.microsoft.com/azure/cloud-adoption-framework/ai-agents/organization-people-readiness-plan) — Skills, change management, culture
 - [**Microsoft Fabric Adoption Roadmap**](https://learn.microsoft.com/power-bi/guidance/fabric-adoption-roadmap) — Phases, change management, training strategy
 
-### 🛡️ Critérios de Segurança MCP por Fase (Seção 8.7 Integration)
-
-| Fase | Critério de Segurança MCP | Status |
-|---|---|---|
-| **Phase 1-2** | OAuth 2.1/OIDC obrigatório para MCP remoto | ✅ Onda 1 |
-| **Phase 2-3** | Validação de inputs (JSON Schema) para cada tool | ✅ Onda 1 |
-| **Phase 3** | Signed tool manifests + CI/CD gates (SAST/SCA) | ✅ Onda 2 |
-| **Phase 4** | Formal onboarding workflow para novos MCP servers | ✅ Onda 2 |
-| **Phase 5** | Runtime security tools + SIEM centralized alerts | ✅ Onda 3 |
-
 ---
 
 ## 🛠️ 3.1. Ferramentas de Adoção — M365 Copilot, Copilot Studio e Microsoft Foundry
@@ -2491,143 +2510,6 @@ Mapear as três ferramentas principais ao framework de adoção e aos cenários 
 
 📣 **Insight**
 > "M365 Copilot começa o valor — Copilot Studio escala os agentes — Microsoft Foundry habilita a profundidade"
-
----
-
-## 🌐 3.2. Azure API Management para IA — AI Gateway e MCP Servers
-
-### 🎯 Objetivo
-Adicionar uma camada de governança e padronização para consumo de modelos e ferramentas por agentes, reduzindo risco operacional e acelerando escala.
-
-### 🧭 Onde APIM entra na arquitetura alvo
-
-Na arquitetura alvo, o Azure APIM atua como **plano de controle de APIs e ferramentas** entre as camadas:
-
-- **Work IQ**: experiências de usuário (Copilot, Teams, apps) continuam simples e transparentes.
-- **Foundry IQ**: agentes executam reasoning e tool calling com endpoints padronizados.
-- **Fabric IQ e dados governados**: respostas continuam fundamentadas em dados corporativos.
-- **APIM (AI Gateway + APIs de ferramentas)**: aplica guard rails de tráfego, segurança, observabilidade e política de uso.
-
-Isso evita acoplamento direto entre cada agente e cada API externa, reduzindo complexidade e facilitando governança em escala.
-
-### 🧱 Componentes-chave
-
-1. **AI Gateway no APIM**
-    - Centraliza chamadas para provedores de modelo e endpoints de inferência.
-    - Permite padronizar autenticação, limites de uso, roteamento e fallback.
-    - Suporta políticas para custo, latência e confiabilidade.
-
-2. **MCP servers expostos via APIM**
-    - Ferramentas MCP (internas ou externas) passam por uma fachada única.
-    - O agente consome contratos estáveis, mesmo quando backend muda.
-    - Facilita versionamento e controle de acesso por domínio.
-
-3. **Policies de governança no gateway**
-    - Rate limit, quota, validação de headers, mascaramento de campos sensíveis.
-    - Enriquecimento de telemetria para auditoria de chamadas de agente.
-    - Separação por produto/API para domínio (ex.: Finance, RH, Operações).
-
-### 🏗️ Fluxo de referência (didático)
-
-```mermaid
-flowchart LR
-     U[Usuario em Work IQ] --> A[Agente em Foundry IQ]
-     A --> G[Azure APIM - AI Gateway]
-
-     G --> M1[Endpoint de Modelo A]
-     G --> M2[Endpoint de Modelo B]
-     G --> T1[MCP Server Financeiro]
-     G --> T2[MCP Server Operacional]
-
-     T1 --> F[Fabric IQ e Dados Governados]
-     T2 --> F
-
-     G --> O[Observabilidade e Auditoria]
-     G --> S[Seguranca e Guard Rails]
-
-     F --> A
-     A --> U
-```
-
-### 🔄 Cenários de uso recomendados
-
-#### 1) Roteamento inteligente por tipo de tarefa
-- **Quando usar**: múltiplos modelos com perfis diferentes (custo, latência, qualidade).
-- **Como funciona**: APIM roteia para modelo mais adequado por política.
-- **Benefício**: otimiza trade-off entre custo e desempenho sem alterar o agente a cada ajuste.
-
-#### 2) Fallback e resiliência de inferência
-- **Quando usar**: workloads críticos com SLA rígido.
-- **Como funciona**: se endpoint principal falhar, APIM redireciona para rota secundária.
-- **Benefício**: reduz indisponibilidade percebida em Work IQ.
-
-#### 3) Governança de ferramentas MCP por domínio
-- **Quando usar**: crescimento de MCP servers por áreas de negócio.
-- **Como funciona**: APIM publica produtos de API por domínio com escopo e políticas próprias.
-- **Benefício**: controle granular sem perder velocidade de entrega.
-
-#### 4) Controle de consumo e custo
-- **Quando usar**: expansão de agentes para múltiplas áreas.
-- **Como funciona**: quotas e rate limits por agente, time ou produto.
-- **Benefício**: previsibilidade financeira e prevenção de abuso.
-
-### 📊 Diagrama de decisão simples
-
-```mermaid
-flowchart TD
-     Q[Precisa expor modelo ou ferramenta para varios agentes?] -->|Nao| D[Conexao direta pode bastar em piloto]
-     Q -->|Sim| P[Use APIM como camada padrao]
-
-     P --> R{Ha requisito forte de SLA ou fallback?}
-     R -->|Sim| R1[Configurar roteamento e fallback no AI Gateway]
-     R -->|Nao| R2[Comecar com politicas basicas de autenticacao e quota]
-
-     P --> M{Ha MCP servers de dominios diferentes?}
-     M -->|Sim| M1[Separar produtos por dominio e aplicar guard rails por contexto]
-     M -->|Nao| M2[Publicar catalogo unico com versionamento simples]
-
-     R1 --> E[Escalar com observabilidade e evaluators]
-     R2 --> E
-     M1 --> E
-     M2 --> E
-```
-
-### ✅ Boas práticas para adoção em ondas
-
-1. **Onda 1 (piloto controlado)**: publicar 1 agente e 1 MCP server via APIM com autenticação e quota.
-2. **Onda 2 (escala por domínio)**: separar produtos de API por área e ativar políticas de custo/latência.
-3. **Onda 3 (otimização contínua)**: integrar telemetria do APIM com evaluators para ajustes de roteamento e qualidade.
-
-### ⚖️ Trade-offs explícitos
-
-- **Vantagens**: governança central, segurança consistente, reuso, observabilidade, escala sustentável.
-- **Custos**: camada adicional de arquitetura e operação de policies.
-- **Risco se não adotar**: proliferação de integrações ponto a ponto, baixa rastreabilidade e maior variabilidade de resposta.
-
-### 🔗 Referências Microsoft
-
-- [Azure API Management overview](https://learn.microsoft.com/azure/api-management/api-management-key-concepts)
-- [Use Azure API Management as an AI gateway](https://learn.microsoft.com/azure/api-management/genai-gateway-overview)
-- [Policies in Azure API Management](https://learn.microsoft.com/azure/api-management/api-management-howto-policies)
-- [Rate limit by key policy](https://learn.microsoft.com/azure/api-management/rate-limit-by-key-policy)
-
-### ⚙️ Complementaridade com Segurança de MCP Servers (Seção 8.7)
-
-APIM fornece governança operacional (autenticação centralizada, rate limiting, policies), mas cada MCP server exposto via APIM também deve implementar controles internos de segurança (isolamento de sessão, validação, sanitização de dados, secrets management).
-
-Veja **Seção 8.7 — Segurança de MCP Servers** para detalhes sobre:
-- Isolamento de usuários/sessions
-- Signed tool manifests
-- Validação rigorosa de inputs/outputs
-- OAuth 2.1 / OIDC e token delegation
-- CI/CD security gates (SAST, SCA)
-- Auditoria e continuous monitoring
-
-**Resultado**: APIM (perímetro) + MCP Security (interior) = **defesa em profundidade**.
-
-### 📣 Insight
-
-> "APIM com AI Gateway transforma integrações de agentes em produto governado: menos acoplamento, mais controle e escala previsível."
 
 ---
 
@@ -2709,7 +2591,370 @@ O modelo ideal é **híbrido e evolutivo**:
 
 ---
 
-## 🔗 5. Consumo de Dados do Fabric por Múltiplos Agentes
+## � 4.1. Modelo de ROI — IA vs. Custo de Homem-Hora
+
+> **Objetivo:** dar aos gestores um modelo de decisão **financeiro e auditável** para responder, em cada cenário de adoção, à pergunta central: *"vale mais a pena usar IA ou pagar pelo trabalho humano?"* — e justificar, em números, as decisões de roadmap das seções 3 e 4.
+
+### 📌 Resumo executivo
+
+A decisão não deve ser tomada "no token" (custo unitário de inferência), mas sim **no custo por tarefa concluída e validada**. O preço de um token é irrisório; o custo escondido está no *retrabalho, na revisão humana (HITL) e na infraestrutura*. A regra prática: **medir custo por tarefa completa, não por token, é o que separa quem otimiza de quem apenas economiza.**
+
+A fórmula central é o **Índice de Vantagem da IA (IVA)**:
+
+$$
+\text{IVA} = \frac{\text{Custo Humano da Tarefa}}{\text{Custo Total da IA por Tarefa}}
+$$
+
+- **IVA > 1** → a IA é financeiramente vantajosa.
+- **IVA = 1** → ponto de equilíbrio (indiferente).
+- **IVA < 1** → manter o trabalho humano.
+
+Quanto maior o IVA, maior o retorno. Um IVA de $4{,}0$ significa que a tarefa via IA custa **¼** do valor da mesma tarefa feita por uma pessoa.
+
+> **Dois modos de avaliar o ROI.**
+> 1. **Modo eficiência/substituição:** *"a IA faz esta tarefa mais barato que um humano?"* — usa o IVA acima.
+> 2. **Modo ampliação:** *"quanto a IA aumenta a produtividade do funcionário que continua no comando?"* — a IA não substitui a pessoa; amplia a vazão de quem já está lá (ver final desta seção). Coerente com o modo *ampliação* das camadas Work IQ e Foundry IQ deste guia.
+
+### 🧮 As duas metades da equação
+
+**Custo Humano da Tarefa (numerador):**
+
+$$
+\text{Custo}_{\text{Humano}} = \text{Valor}_{\text{Homem-Hora}} \times \text{Horas}_{\text{por Tarefa}} \times \text{N}^\circ_{\text{Tarefas}}
+$$
+
+| Variável | Descrição | Como obter |
+|---|---|---|
+| `Valor_Homem_Hora` | Custo **totalmente carregado** (salário + encargos + overhead), **não** o salário-base | Salário-hora × fator de carga |
+| `Horas_por_Tarefa` | Tempo médio que um humano leva na tarefa | Amostragem / sistema de tickets |
+| `Nº_Tarefas` | Volume de tarefas no período | Histórico operacional |
+
+> ⚠️ **Erro mais comum:** usar o salário bruto. O *Employment Cost Index* do BLS (EUA) aponta carga adicional de **~42% sobre o salário**. No Brasil, encargos CLT elevam o custo entre **+70% e +100%** sobre o salário-base. **Use sempre o custo carregado.** Exemplo (Brasil/CLT): salário-base R$ 8.000 × fator de carga 1,8 = R$ 14.400/mês ÷ ~160 h ≈ **R$ 90/hora**.
+
+**Custo Total da IA por Tarefa (denominador):**
+
+$$
+\text{Custo}_{\text{IA Tarefa}} = \text{Custo}_{\text{Inferência}} + \text{Custo}_{\text{Infra}} + \text{Custo}_{\text{HITL}} + \text{Custo}_{\text{Amortizado}}
+$$
+
+| Componente | O que inclui | Observação crítica |
+|---|---|---|
+| `Custo_Inferência` | Tokens de entrada + saída × preço do modelo | Tokens de **saída** custam **3× a 10× mais** que os de entrada |
+| `Custo_Infra` | GPUs/cloud, orquestração de agentes, bancos vetoriais (RAG), APIs | Diluído por tarefa |
+| `Custo_HITL` | Tempo humano de **revisão, correção e aprovação** das saídas da IA | É aqui que mora a *"produtividade fantasma"* |
+| `Custo_Amortizado` | Setup único (integração, *prompt engineering*, limpeza de dados) ÷ volume total | Integração com legado costuma levar **2× a 3×** o estimado |
+
+Detalhe do custo de inferência:
+
+$$
+\text{Custo}_{\text{Inferência}} = (\text{Tokens}_{\text{Entrada}} \times \text{Preço}_{\text{Entrada}}) + (\text{Tokens}_{\text{Saída}} \times \text{Preço}_{\text{Saída}})
+$$
+
+Preços de referência por **milhão de tokens** (mercado, 2026 — entrada / saída):
+
+| Faixa / Modelo | Entrada (US$/1M) | Saída (US$/1M) | Uso típico |
+|---|---|---|---|
+| Econômico (Haiku, GPT mini, Gemini Flash) | ~0,10 – 1,00 | ~0,40 – 5,00 | Chat, classificação, alto volume |
+| Intermediário (Sonnet, GPT-5) | ~2,50 – 3,00 | ~15,00 | Raciocínio de produção, código |
+| Premium (Opus, o3) | ~5,00 – 15,00 | ~25,00 – 75,00 | Análise crítica, agentes multi-passo |
+
+> 💡 **Alavancas de redução de inferência:** **Prompt caching** reduz custo de *input* em **30–60%** quando o system prompt se repete; **Batch API** corta entrada e saída pela metade quando latência não é crítica; **janela de contexto** — encher 80% de 128K pode custar **4–6×** mais que um contexto de 16K para a mesma tarefa.
+
+### 📈 A fórmula completa do ROI
+
+$$
+\text{ROI}\,(\%) = \frac{\text{Custo}_{\text{Humano}} - \text{Custo}_{\text{IA Total}}}{\text{Custo}_{\text{IA Total}}} \times 100
+$$
+
+Onde, no horizonte avaliado:
+
+$$
+\text{Custo}_{\text{IA Total}} = \text{Custos}_{\text{Únicos}} + (\text{Custos}_{\text{Recorrentes}} \times \text{Períodos}) + \text{Custo}_{\text{HITL}}
+$$
+
+> 📌 **Horizonte temporal.** Muitos projetos têm **ROI negativo no ano 1** (setup) e só viram positivos no ano 2. O *Project NANDA* (MIT) constatou que **95% das empresas não veem impacto no resultado em 6 meses** — frequentemente por medir cedo demais. **Avalie em janela de 12–18 meses** (coerente com o roadmap em ondas das seções 3 e 19).
+
+### 🌐 O multiplicador de escopo (o fator mais decisivo)
+
+$$
+\text{Benefício}_{\text{Real}} = \text{Benefício}_{\text{Potencial}} \times \text{Multiplicador}_{\text{Escopo}}
+$$
+
+A McKinsey (2025) aponta o paradoxo: **88% de adoção declarada, mas só 6% de impacto real**. Se apenas 5% dos funcionários estão no rollout, o retorno é **5% do potencial total**. Esse fator pesa mais que a matemática por tarefa — e conecta-se diretamente às metas de adoção (`adoption rate`) dos KPIs deste guia.
+
+### 🔀 Fluxograma de decisão
+
+```mermaid
+flowchart TD
+    A["🎯 Início: tarefa<br/>candidata a IA"] --> B{"Tarefa é repetitiva<br/>e mensurável?"}
+    B -- Não --> Z["⛔ Manter humano<br/>(baixa previsibilidade<br/>de ganho)"]
+    B -- Sim --> C["📏 Medir baseline humano:<br/>horas/tarefa × valor homem-hora"]
+    C --> D["🧮 Estimar custo IA/tarefa:<br/>inferência + infra + HITL + amortização"]
+    D --> E["➗ Calcular IVA =<br/>Custo Humano ÷ Custo IA"]
+    E --> F{"IVA > 1?"}
+    F -- Não --> Z
+    F -- Sim --> G{"Qualidade aceitável<br/>com HITL viável?"}
+    G -- Não --> Z
+    G -- Sim --> H["📅 Calcular ROI no<br/>horizonte 12–18 meses"]
+    H --> I{"ROI positivo<br/>com escopo real?"}
+    I -- Não --> J["🧪 Piloto restrito<br/>reavaliar em 90 dias"]
+    I -- Sim --> K["✅ Adotar IA e escalar"]
+
+    style A fill:#FF6B6B,stroke:#CC5555,color:#fff,stroke-width:2px
+    style Z fill:#D32F2F,stroke:#991212,color:#fff,stroke-width:2px
+    style C fill:#4A90E2,stroke:#2E5C8A,color:#fff,stroke-width:2px
+    style D fill:#7B68EE,stroke:#5A4DB0,color:#fff,stroke-width:2px
+    style E fill:#50C878,stroke:#3A9B5C,color:#fff,stroke-width:2px
+    style H fill:#50C878,stroke:#3A9B5C,color:#fff,stroke-width:2px
+    style J fill:#FF9800,stroke:#E65100,color:#fff,stroke-width:2px
+    style K fill:#FFD93D,stroke:#CCB030,color:#333,stroke-width:2px
+```
+
+### 🧠 Anatomia da decisão (mapa dos custos)
+
+```mermaid
+graph LR
+    subgraph HUMANO["💼 Custo Humano"]
+        H1["Salário-base"]
+        H2["Encargos +42% a +100%"]
+        H3["Overhead / benefícios"]
+        H1 --> HT["Valor Homem-Hora<br/>Carregado"]
+        H2 --> HT
+        H3 --> HT
+    end
+
+    subgraph IA["🤖 Custo da IA"]
+        I1["Tokens entrada"]
+        I2["Tokens saída (3–10×)"]
+        I3["Infra / GPU / RAG"]
+        I4["HITL: revisão humana"]
+        I5["Setup amortizado"]
+        I1 --> IT["Custo IA por Tarefa"]
+        I2 --> IT
+        I3 --> IT
+        I4 --> IT
+        I5 --> IT
+    end
+
+    HT --> DEC{"IVA = Humano ÷ IA"}
+    IT --> DEC
+    DEC --> R["📋 Decisão do gestor"]
+
+    style HT fill:#4A90E2,stroke:#2E5C8A,color:#fff,stroke-width:2px
+    style IT fill:#7B68EE,stroke:#5A4DB0,color:#fff,stroke-width:2px
+    style DEC fill:#FFD93D,stroke:#CCB030,color:#333,stroke-width:2px
+    style R fill:#50C878,stroke:#3A9B5C,color:#fff,stroke-width:2px
+```
+
+### 🔢 Exemplo numérico — triagem de e-mails de suporte
+
+**Cenário:** 1.000 tarefas/mês.
+
+**Lado humano:** R$ 90/h carregado × 0,5 h/tarefa = **R$ 45/tarefa** → R$ 45.000/mês.
+
+**Lado IA (modelo intermediário, com revisão):**
+
+| Componente | Valor/tarefa |
+|---|---|
+| Inferência (2.000 entrada + 800 saída) | ≈ R$ 0,12 |
+| Infra diluída | ≈ R$ 0,20 |
+| HITL (revisão de 20% × 5 min × R$ 90/h) | ≈ R$ 1,50 |
+| Setup amortizado (R$ 60.000 ÷ 12.000 tarefas/ano) | ≈ R$ 5,00 |
+| **Custo IA total/tarefa** | **≈ R$ 6,82** |
+
+**Resultado:** $\text{IVA} = 45{,}00 \div 6{,}82 \approx 6{,}6$ (fortemente vantajoso); $\text{ROI} = (45.000 - 6.820) \div 6.820 \times 100 \approx 560\%$.
+
+> Note que **HITL + setup amortizado** (R$ 6,50 dos R$ 6,82) dominam o custo — a inferência é quase desprezível. **É por isso que a fórmula não pode parar no preço do token.**
+
+### 📉 Tabela de sensibilidade (quando a IA *deixa* de valer)
+
+| % de saídas que exigem revisão | Custo HITL/tarefa | Custo IA total/tarefa | IVA | Decisão |
+|---|---|---|---|---|
+| 0% (autônomo) | R$ 0,00 | R$ 5,32 | 8,5 | ✅ Excelente |
+| 20% | R$ 1,50 | R$ 6,82 | 6,6 | ✅ Ótimo |
+| 60% | R$ 4,50 | R$ 9,82 | 4,6 | ✅ Bom |
+| 100% (revisão total) | R$ 7,50 | R$ 12,82 | 3,5 | ✅ Ainda vale |
+| Tarefa de baixo valor (R$ 12/tarefa humana) + revisão 100% | R$ 7,50 | R$ 12,82 | 0,9 | ❌ Não vale |
+
+**Leitura:** o ponto de virada quase nunca é o custo de inferência — é a **combinação de baixo valor da tarefa humana com alta necessidade de revisão**. Tarefas baratas para um humano e que exigem supervisão constante são as piores candidatas.
+
+### ✅ Checklist do gestor antes de decidir
+
+1. Usei o custo de homem-hora **carregado** (com encargos), não o salário bruto?
+2. Inclui o **HITL** (tempo de revisão humana) no custo da IA?
+3. **Amortizei o setup** (integração, prompt engineering) pelo volume real?
+4. Estabeleci um **baseline** humano *antes* do projeto?
+5. Avaliei no horizonte de **12–18 meses**, não em 3?
+6. Apliquei o **multiplicador de escopo** (quantos realmente vão usar)?
+7. Considerei **alavancas** (caching, batch, modelo certo para a tarefa certa)?
+
+### 📊 Benchmarks de mercado para calibrar expectativas
+
+- **Valor por tarefa:** a Anthropic estima a tarefa mediana em **US$ 54** de trabalho humano, com tarefas **80% mais rápidas** com IA (estudo de 100.000 conversas, nov/2025).
+- **Ganhos operacionais:** **15–35%** de redução de custo operacional, **20–40%** de ganho de eficiência e **30–60%** de redução de erros em processos repetitivos.
+- **Produtividade em código:** o RCT do GitHub Copilot (Kalliamvakou et al., 2022) mostrou desenvolvedores **55% mais rápidos**.
+- **ROI agêntico:** retornos típicos relatados de **250–600%**.
+- **Taxa de descarte:** **46% dos pilotos** foram abandonados antes da produção em 2025 — geralmente por gestão de mudança e integração, não falha tecnológica.
+
+### 🔎 Guia de descoberta com o cliente (do discovery ao número)
+
+Cada bloco de perguntas mapeia para uma variável da fórmula. Ao final, você terá os números para o IVA e o ROI.
+
+| Bloco | Foco | Alimenta |
+|---|---|---|
+| **A — Tarefa e volume** | Escopo, repetitividade, frequência, tempo por tarefa, crescimento, baseline | Numerador (`Nº_Tarefas`, `Horas_por_Tarefa`) |
+| **B — Custo da equipe** | Headcount, faixa salarial, regime (CLT/PJ), encargos, realocação vs. economia | `Valor_Homem_Hora` carregado |
+| **C — Qualidade e HITL** | Custo do erro, necessidade de aprovação, fração revisada, tempo de revisão, acurácia mínima | `Custo_HITL` (define a viabilidade) |
+| **D — Infra e integração** | RAG, sistemas (CRM/ERP), APIs vs. legado, LGPD, batch, caching | `Custo_Amortizado` e `Custo_Infra` |
+| **E — Escopo e horizonte** | Quantos usariam, piloto vs. produção, prazo de retorno, patrocínio, orçamento | `Multiplicador_Escopo` |
+
+```mermaid
+flowchart LR
+    A["Bloco A<br/>Tarefa e volume"] --> N["Custo Humano<br/>(numerador)"]
+    B["Bloco B<br/>Custo da equipe"] --> N
+    C["Bloco C<br/>Revisão HITL"] --> D["Custo da IA<br/>(denominador)"]
+    DI["Bloco D<br/>Infra e integração"] --> D
+    N --> IVA["IVA e ROI"]
+    D --> IVA
+    E["Bloco E<br/>Escopo e adoção"] --> ESC["Multiplicador<br/>de escopo"]
+    ESC --> IVA
+    IVA --> DEC["📋 Recomendação<br/>ao cliente"]
+
+    style N fill:#4A90E2,stroke:#2E5C8A,color:#fff,stroke-width:2px
+    style D fill:#7B68EE,stroke:#5A4DB0,color:#fff,stroke-width:2px
+    style IVA fill:#FFD93D,stroke:#CCB030,color:#333,stroke-width:2px
+    style ESC fill:#FF9800,stroke:#E65100,color:#fff,stroke-width:2px
+    style DEC fill:#50C878,stroke:#3A9B5C,color:#fff,stroke-width:2px
+```
+
+**As 5 perguntas mínimas (se o tempo for curto):** (1) Quantas **tarefas**/mês? (2) Quanto **tempo** cada uma, por uma pessoa? (3) Qual o **custo carregado/hora** dessa pessoa? (4) Que **fração das saídas** da IA precisaria de revisão? (5) Quantas **pessoas** de fato usariam a solução?
+
+### 🏦 Caso prático — Credit/Investment Analysis (investir ou não em um cliente)
+
+Uma área de investimento recebe, de cada cliente potencial, um **pacote de documentos** (demonstrações financeiras, faturamento, fluxo de caixa, contratos). Um **analista pleno** lê, consolida e emite recomendação. Hoje consome **~1,5 dia (12 h)** por cliente; volume de **40 clientes/mês**.
+
+```mermaid
+flowchart LR
+    A["📨 Cliente envia<br/>pacote de documentos"] --> B["📖 Analista lê e<br/>consolida dados"]
+    B --> C["📊 Análise de faturamento,<br/>vendas, fluxo de caixa"]
+    C --> D["⚠️ Avaliação de risco"]
+    D --> E{"Investir<br/>ou recusar?"}
+    E -->|Aprovar| F["✅ Cliente entra<br/>no portfólio"]
+    E -->|Recusar| G["❌ Cliente declinado"]
+
+    style A fill:#FF6B6B,stroke:#CC5555,color:#fff,stroke-width:2px
+    style B fill:#4A90E2,stroke:#2E5C8A,color:#fff,stroke-width:2px
+    style C fill:#7B68EE,stroke:#5A4DB0,color:#fff,stroke-width:2px
+    style D fill:#FF9800,stroke:#E65100,color:#fff,stroke-width:2px
+    style E fill:#FFD93D,stroke:#CCB030,color:#333,stroke-width:2px
+    style F fill:#50C878,stroke:#3A9B5C,color:#fff,stroke-width:2px
+    style G fill:#D32F2F,stroke:#991212,color:#fff,stroke-width:2px
+```
+
+**Premissas:** salário-base R$ 6.000 × fator 1,8 = R$ 10.800/mês ÷ 168 h ≈ **R$ 64,30/h carregado**. Custo humano por análise = 64,30 × 12 h ≈ **R$ 771,60** → R$ 30.864/mês (≈ 3 analistas para 40 clientes).
+
+O agente faz **extração e consolidação dos documentos**, calcula indicadores e produz **parecer estruturado com recomendação preliminar**. Como a decisão é de risco, **mantém-se o analista no circuito (HITL)** — agora ele **revisa e decide**, em vez de garimpar dados:
+
+| Componente | Valor/análise |
+|---|---|
+| Inferência (~150K entrada + 8K saída, com *caching*) | ≈ R$ 4,50 |
+| Infra (orquestração, RAG, OCR) diluída | ≈ R$ 2,00 |
+| **HITL**: analista revisa e decide (2 h × R$ 64,30) | **R$ 128,60** |
+| Setup amortizado (R$ 120.000 ÷ 480 análises/ano) | ≈ R$ 250,00 |
+| **Custo IA total/análise (ano 1)** | **≈ R$ 385,10** |
+| **Custo IA total/análise (ano 2+)** | **≈ R$ 135,10** |
+
+**Resultado:** Ano 1 → $\text{IVA} \approx 2{,}0$, $\text{ROI} \approx 100\%$. Ano 2+ → $\text{IVA} \approx 5{,}7$, $\text{ROI} \approx 471\%$.
+
+**Impacto na capacidade (o ganho real não é demitir, é multiplicar a vazão):**
+
+| Métrica | Sem IA | Com IA | Efeito |
+|---|---|---|---|
+| Tempo do analista por análise | 12 h | 2 h (só revisão/decisão) | **−83%** |
+| Análises por analista/mês | ~14 | ~84 | **6× a capacidade** |
+| Analistas p/ 40 clientes/mês | ~3 | ~1 (com folga) | Libera 2 p/ trabalho de maior valor |
+| Custo mensal da operação (ano 2+) | R$ 30.864 | R$ 5.404 | **−82%** |
+
+> O HITL **não é opcional** aqui — a IA acelera triagem e consolidação, mas a **decisão de risco permanece humana**. Isso conecta-se ao Human-in-the-Loop da seção 10 e aos guard rails da seção 8.
+
+### 🚀 Modo ampliação — quanto a IA aumenta a produtividade do funcionário
+
+Em vez de *"a IA é mais barata que o humano?"*, este modo pergunta: **"se eu der IA ao meu funcionário, quanto a mais ele produz — e isso paga a ferramenta?"** A pessoa **não sai do circuito**; passa a entregar mais no mesmo tempo. Dados da Anthropic (nov/2025) mostram **52% das conversas já "aumentadas"** (copiloto) contra 45% "automatizadas".
+
+$$
+\text{ROI}_{\text{ampl}} = \frac{\text{Valor}_{\text{Tempo Liberado}} - \text{Custo}_{\text{IA}}}{\text{Custo}_{\text{IA}}} \times 100
+$$
+
+$$
+\text{Valor}_{\text{Tempo Liberado}} = \text{Valor}_{\text{Homem-Hora}} \times \text{Horas}_{\text{Trabalhadas}} \times \text{Ganho}_{\text{Produtividade}}
+$$
+
+> ⚠️ **A armadilha do ganho bruto.** Um funcionário não passa 100% do dia em tarefas que a IA acelera. Se a IA economiza 50% do tempo, mas só **40% do trabalho** é "automatizável", o ganho **efetivo** é $50\% \times 40\% = 20\%$, não 50%:
+>
+> $$\text{Ganho}_{\text{Efetivo}} = \text{Ganho}_{\text{na Tarefa}} \times \text{Fração}_{\text{do Trabalho Afetada}}$$
+
+**Tempo liberado só vira valor se for reaproveitado.** Economizar 1 hora só gera retorno se preenchida com trabalho de valor; senão o ganho é **potencial**, não **realizado**:
+
+```mermaid
+flowchart LR
+    A["IA acelera parte<br/>do trabalho"] --> B["Tempo economizado"]
+    B --> C{"Tempo é<br/>reaproveitado?"}
+    C -->|"Sim: mais entregas<br/>ou trabalho estratégico"| D["✅ Ganho REALIZADO<br/>vira valor"]
+    C -->|"Não: vira ociosidade"| E["⚠️ Ganho apenas<br/>POTENCIAL"]
+
+    style A fill:#4A90E2,stroke:#2E5C8A,color:#fff,stroke-width:2px
+    style B fill:#7B68EE,stroke:#5A4DB0,color:#fff,stroke-width:2px
+    style C fill:#FFD93D,stroke:#CCB030,color:#333,stroke-width:2px
+    style D fill:#50C878,stroke:#3A9B5C,color:#fff,stroke-width:2px
+    style E fill:#FF9800,stroke:#E65100,color:#fff,stroke-width:2px
+```
+
+$$
+\text{Valor}_{\text{Realizado}} = \text{Valor}_{\text{Tempo Liberado}} \times \text{Fator}_{\text{de Realização}}
+$$
+
+**Exemplo (analista financeiro com copiloto):** R$ 64,30/h, 168 h/mês, ganho na tarefa 50%, fração afetada 40% → ganho efetivo **20%**; fator de realização 70%; custo da IA R$ 300/mês.
+
+$$
+\text{Valor}_{\text{Tempo Liberado}} = 64{,}30 \times 168 \times 20\% = R\$\,2.160{,}48/\text{mês}
+$$
+$$
+\text{Valor}_{\text{Realizado}} = 2.160{,}48 \times 70\% = R\$\,1.512{,}34/\text{mês}
+$$
+$$
+\text{ROI}_{\text{ampl}} = (1.512{,}34 - 300) \div 300 \times 100 \approx 404\%
+$$
+
+Em horas: o analista "devolve" $168 \times 20\% = 33{,}6$ h/mês; com 70% de reaproveitamento, **~23,5 h/mês** viram trabalho de valor — quase **três dias úteis a mais por mês**, ao custo de R$ 300.
+
+| Ganho efetivo | Horas liberadas/mês | Valor realizado/mês | ROI ampliação | Veredito |
+|---|---|---|---|---|
+| 5% | 8,4 | R$ 378 | +26% | ✅ Compensa, margem baixa |
+| 10% | 16,8 | R$ 756 | +152% | ✅ Compensa |
+| 20% | 33,6 | R$ 1.512 | +404% | ✅ Forte |
+| 35% | 58,8 | R$ 2.647 | +782% | ✅ Excelente |
+
+> Ponto de equilíbrio: para R$ 64,30/h, IA de R$ 300/mês e 70% de realização, basta um ganho efetivo de **~4%** (≈ 4,7 h/mês reaproveitadas) para a ferramenta se pagar. **Por isso copilotos de baixo custo quase sempre têm ROI positivo para trabalho qualificado** — o salário carregado torna cada hora liberada muito mais valiosa que a assinatura.
+
+### 🔗 Como o modelo de ROI se conecta à arquitetura deste guia
+
+| Conceito do ROI | No modo eficiência | No modo ampliação | Camada/seção relacionada |
+|---|---|---|---|
+| Numerador | Custo humano da tarefa | Valor do tempo liberado | Casos de negócio (seções 3–4) |
+| Denominador | Custo total da IA por tarefa | Custo da IA por funcionário | Foundry IQ + Fabric (seção 2) |
+| Fator de realidade | Multiplicador de escopo | Fator de realização | KPIs de adoção (seções 3, 19) |
+| HITL | Custo a subtrair | Não se aplica (humano comanda) | Human-in-the-Loop (seção 10) |
+| Pergunta-chave | "Substituir sai mais barato?" | "Ampliar gera mais valor que custa?" | Mensagem estratégica (seção 13) |
+
+> **Trade-offs explícitos:** o modelo torna mensurável o equilíbrio entre **custo, risco, velocidade e complexidade** — tarefas de alto volume e baixa criticidade favorecem automação (IVA alto, HITL baixo); tarefas de alto risco mantêm o humano no comando (HITL como custo necessário, não opcional). Use sempre o **menor nível de automação** que entrega o ROI desejado dentro dos guard rails.
+
+**Fontes:** Anthropic — *Estimating AI Productivity Gains* (nov/2025), *Economic Index Report* (jan/2026); CloudZero — *State of AI Costs* (2026); McKinsey *State of AI* (2025); MIT *Project NANDA* (2025); Kalliamvakou et al. — *GitHub Copilot RCT* (2022); US BLS *Employment Cost Index*; Portal Salário/CAGED, Glassdoor, Indeed (2025–2026).
+
+> *Nota: modelo de apoio à decisão; não constitui aconselhamento financeiro. Calibre as variáveis com os dados reais da operação.*
+
+---
+
+## �🔗 5. Consumo de Dados do Fabric por Múltiplos Agentes
 
 ### 🧠 Insight Central — OneLake como Ativo Corporativo Compartilhado
 
@@ -3559,250 +3804,7 @@ A Microsoft indica que o Agent 365 pode ser habilitado sem pre-requisito tecnico
 
 ---
 
-## 🗃️ 8.4. Agent Registry Dinâmico (Descoberta e Lifecycle)
-
-### 🎯 Objetivo
-Manter um catálogo confiável de agentes para descoberta, roteamento, governança e operação contínua.
-
-### 🧩 Componentes mínimos do registry
-
-1. **Register** (descoberta)
-    - Registry-initiated register (o registry consulta endpoints dos agentes).
-    - Agent-initiated self-register (o agente se registra no registry).
-2. **Repository** (armazenamento)
-    - Metadados de capacidade, owner, versão, endpoint e autenticação.
-3. **View** (consulta)
-    - Listagem e filtros por domínio, criticidade, status e versão.
-4. **Monitor** (saúde)
-    - Uptime, latência, erro, desatualização de metadados.
-
-### 📌 Metadados essenciais por agente
-
-- `name`, `description`, `capabilities`, `owner`, `url`, `auth_mode`, `version`, `status`, `risk_tier`.
-
-### ✅ Regras de onboarding recomendadas
-
-1. Validação técnica (contrato, segurança, telemetria).
-2. Validação funcional (escopo e não sobreposição indevida).
-3. Validação de risco (dados sensíveis, ações críticas, HITL obrigatório).
-4. Publicação controlada (canary por domínio).
-
----
-
-## 🧠 8.5. Memória Multiagente (STM/LTM)
-
-### 🎯 Objetivo
-Definir estratégia de memória para manter contexto útil sem comprometer privacidade, conformidade e consistência.
-
-### 🧱 Estrutura recomendada
-
-1. **STM (Short-Term Memory)**
-    - Escopo por sessão/conversa.
-    - Retenção curta e orientada a tarefa.
-2. **LTM (Long-Term Memory)**
-    - Conhecimento persistente entre sessões.
-    - Armazenar preferências e resultados aprovados.
-
-### 🔐 Controles essenciais
-
-- Redaction de PII antes de persistência em LTM.
-- Política de retenção por categoria de dado.
-- Consentimento e trilha de auditoria para memória persistente.
-- Separação de ownership (memória do usuário vs memória operacional do agente).
-
-```mermaid
-flowchart TD
-     I[Interacao do usuario] --> STM[Memoria de curto prazo]
-     STM --> D{Informacao deve persistir?}
-     D -->|Nao| X[Descarta por politica de retencao]
-     D -->|Sim| R[Redaction e validacao]
-     R --> LTM[Memoria de longo prazo]
-     LTM --> Q[Consultas futuras do agente]
-```
-
----
-
-## 🔁 8.6. Comunicação entre Agentes
-
-### 🎯 Objetivo
-Escolher o padrão de comunicação adequado para equilibrar simplicidade, resiliência e escala.
-
-### 📡 Padrões
-
-1. **Request-based**
-    - Direto, síncrono/assíncrono.
-    - Melhor para cenários com baixa latência e fluxo previsível.
-2. **Message-driven**
-    - Via broker/event bus.
-    - Melhor para desacoplamento, resiliência e escala distribuída.
-3. **Híbrido**
-    - Request para decisões em tempo real.
-    - Eventos para processamento assíncrono e integrações externas.
-
-### ⚖️ Critério prático de escolha
-
-- Se o SLA for interativo e decisão imediata: priorizar request-based.
-- Se houver alta fan-out/fan-in e recuperação de falhas: priorizar message-driven.
-- Para ambientes corporativos complexos: adotar híbrido por domínio.
-
----
-
-## � 8.7. Segurança de MCP Servers — Controles Build-Time e Runtime
-
-### 🎯 Contexto e Complementariedade
-
-A **Seção 3.2 (Azure APIM para IA)** define como escalar MCP servers de forma governada: centraliza autenticação, policies, rate limiting e auditoria em nível de gateway. Porém, o APIM fornece uma **camada de perímetro** — ele governa o tráfego, mas não pode proteger a segurança **interna** de cada MCP server.
-
-Este tópico complementa 3.2 com os controles essenciais em build-time (como construir) e runtime (como operar) MCP servers seguindo o **OWASP Practical Guide for Secure MCP Server Development v1.0**. Juntos, APIM + MCP Security definem uma abordagem em **camadas**:
-
-- **Perímetro (APIM)**: Autenticação, rate limits, roteamento, mascaramento de campos sensíveis, observabilidade
-- **Segurança interna (MCP Server)**: Isolamento, validação, sanitização, secrets management, audit logging
-
-**Sem ambas as camadas, vulnerabilidades exploráveis permanecem.**
-
----
-
-### 🛡️ Sete Pilares de Segurança MCP (OWASP)
-
-#### **1️⃣ Arquitetura Segura e Isolamento**
-
-**Princípio**: Cada sessão de usuário/agente é uma "cápsula" isolada; nenhum dado residual entre requisições.
-
-**Controles**:
-- ✅ **Isolamento de usuários**: Sem variáveis globais, sem singletons compartilhados, sem class-level attributes com user data
-- ✅ **State management**: Use session-keyed stores (ex.: Redis com namespace `session_id:{data}`)
-- ✅ **Resource quotas per session**: Memória, CPU, file handles, API rate limits
-- ✅ **Cleanup determinístico**: Quando session termina, flushar **imediatamente** todos os dados em memória, arquivos temporários, cached tokens
-- ✅ **Timeout enforced**: Sessions expiram automaticamente após inatividade
-
----
-
-#### **2️⃣ Design Seguro de Ferramentas (Safe Tool Design)**
-
-**Princípio**: Cada ferramenta (tool) exposta ao LLM deve ter um "contrato de segurança" verificável.
-
-**Controles**:
-- ✅ **Signed cryptographic manifests**: Cada tool tem uma assinatura digital que engloba descrição + schema + versão + permissões obrigatórias
-- ✅ **Formal onboarding approval**: Antes de qualquer tool ir para produção: SAST, SCA, manual review, teste funcional
-- ✅ **Description vs. Behavior validation**: Garantir que ferramenta faz exatamente o que sua descrição promete
-- ✅ **Minimal exposure**: Apenas campos **necessários** (name, description, input schema) expostos ao modelo
-
----
-
-#### **3️⃣ Validação e Sanitização de Dados**
-
-**Princípio**: Trate todos os dados como untrusted. Valide forma e conteúdo; sanitize output antes de retornar ao LLM.
-
-**Controles**:
-- ✅ **JSON Schema enforcement**: Cada tool input e output validado contra schema rigoroso
-- ✅ **Strict input sanitization**: SQL injection (parametrize), command injection, XSS/code injection
-- ✅ **Output size limits**: Nenhuma ferramenta pode retornar >N KB
-- ✅ **Sensitive data masking**: Credit card, SSN, API keys, tokens redactados
-
----
-
-#### **4️⃣ Controles contra Prompt Injection**
-
-**Princípio**: O LLM pode ser enganado por prompts maliciosos; estruture tool invocation e implemente aprovação humana para ações críticas.
-
-**Controles**:
-- ✅ **Structured JSON tool calls**: Nunca permita free-form text commands
-- ✅ **Human-in-the-Loop (HITL) para ações críticas**: Deletar dados, aprovar mudança, transferir fundos
-- ✅ **LLM-as-a-Judge**: Check em contexto separado de LLM para tool calls críticos
-- ✅ **Session reset entre contextos**: Resetar session quando agente muda de tarefa
-
----
-
-#### **5️⃣ Autenticação e Autorização**
-
-**Princípio**: Cada MCP server call deve ser autenticado e autorizado; permissões devem ser validated em cada requisição.
-
-**Controles**:
-- ✅ **OAuth 2.1 / OIDC obrigatório**: Valide iss, aud, exp, signature em **cada requisição**
-- ✅ **Token delegation (RFC 8693)**: Passe contexto de usuário sem comprometer segurança
-- ✅ **PROIBIDO token passthrough**: NUNCA forward client token direto a downstream APIs (confused deputy)
-- ✅ **Short-lived tokens**: Access tokens 5-15 minutos, refresh tokens hours to days
-- ✅ **Centralized policy enforcement**: APIM policies ou OPA, não cada MCP decidir permissões
-
----
-
-#### **6️⃣ Deployment Seguro e Updates**
-
-**Princípio**: MCP server artifacts e dependências são protegidos desde build até runtime.
-
-**Controles**:
-- ✅ **Secrets management**: Azure Key Vault, HashiCorp Vault, AWS Secrets Manager (NUNCA env vars)
-- ✅ **Containerization**: Non-root user, minimal base image (distroless, alpine), drop unnecessary capabilities
-- ✅ **Network segmentation**: Firewall rules, Kubernetes NetworkPolicies, egress whitelisting
-- ✅ **Supply chain controls**: Version pin, sign container images, scan CVEs (OSV, Dependabot, Snyk)
-- ✅ **CI/CD security gates**: SAST, SCA, container scan, policy-as-code (OPA)
-
----
-
-#### **7️⃣ Governança, Auditoria e Continuous Validation**
-
-**Princípio**: Trate MCP servers e agentes como cidadãos de primeira classe; audit cada ação; monitore anomalias.
-
-**Controles**:
-- ✅ **Cryptographic integrity**: Assine commits, releases, container images
-- ✅ **Peer review obrigatório**: Nenhum código vai para produção sem security review
-- ✅ **Audit logging completo**: Tool invocations, acesso a dados, auth/authz events, configuration changes, stored immutably
-- ✅ **Non-Human Identity governance**: Trate NHI (agentes, MCP servers) como identidades de 1ª classe
-- ✅ **Continuous monitoring**: SIEM centralizado, alertas para anomalias (failed validations, unusual patterns)
-
----
-
-### 📋 Checklist de Segurança MCP (OWASP Minimum Bar)
-
-**Isolamento e Session Management** | **Tool Design** | **Data & Auth**
----|---|---
-[ ] Cada sessão isolada (sem shared state)? | [ ] Signed manifest para cada tool? | [ ] OAuth 2.1/OIDC remoto?
-[ ] Resource quotas por session? | [ ] Formal onboarding (SAST, SCA, review)? | [ ] Tokens short-lived (minutos)?
-[ ] Cleanup determinístico? | [ ] Tool behavior validado vs. description? | [ ] Token delegation (sem passthrough)?
-[ ] Sessions expiram automaticamente? | [ ] Apenas campos necessários expostos? | [ ] Scopes/permissions checked?
-
-**Deployment & CI/CD** | **Governance & Audit** | **Monitoring**
----|---|---
-[ ] Container non-root? | [ ] Peer review obrigatório pre-deploy? | [ ] Centralized logging (SIEM)?
-[ ] Minimal base image? | [ ] Audit logs for invocations? | [ ] Alerts para anomalias?
-[ ] Dependencies version-pinned? | [ ] Logs stored immutably (WORM)? | [ ] Runtime security active?
-[ ] SAST/SCA gates? | [ ] NHI como 1st-class identities? |  |
-
----
-
-### 🔗 Integração com Outras Seções
-
-**Com 3.2 (Azure APIM para IA)**: APIM fornece perímetro (autenticação centralizada, rate limiting); 8.7 fornece interior seguro. Juntos: **perímetro + interior = defesa em profundidade**.
-
-**Com 8.1 (Entra ID - Agent ID)**: Entra ID gerencia identidade de agentes como NHI; 8.7 exige validação OAuth em cada MCP call. Resultado: rastreabilidade completa.
-
-**Com 8.2 (Purview)**: Purview classifica dados; 8.7 exige sanitização antes de retornar ao LLM. Resultado: dados corporativos protegidos.
-
-**Com 9 (Evaluators)**: Evaluators detectam anomalias; 8.7 fornece audit logs com parâmetros. Resultado: continuous monitoring.
-
-**Com 12 (Modelo Operacional)**: Adicionar role "MCP Security Reviewer", cadência trimestral de security audit, SLA de CVE response.
-
----
-
-### 🚀 Roadmap de Adoção em Ondas
-
-**Onda 1 — Fundações Seguras** (0-2 meses): Isolamento, JSON Schema validation, OAuth 2.1, secrets vault, audit logging, containerização non-root.
-
-**Onda 2 — Governança Formal** (2-4 meses): Signed manifests, CI/CD gates, formal onboarding, centralized policies, peer review obrigatório.
-
-**Onda 3 — Continuous Validation** (4+ meses): Runtime security tools, SIEM, Evaluators integration, supply chain vigilance, penetration testing.
-
----
-
-### 📚 Referências
-
-**Primary Source**: [OWASP Practical Guide for Secure MCP Server Development v1.0](https://genai.owasp.org/) (License: CC BY-SA 4.0)
-
-**Complementary**: NIST AI RMF, OWASP Top 10 for LLMs, RFC 8693 (OAuth Token Delegation), Azure Key Vault best practices, Kubernetes Network Policies.
-
----
-
-## �📊 9. Evaluators (Qualidade e Evolução)
+## 📊 9. Evaluators (Qualidade e Evolução)
 
 ### 🎯 Objetivo
 Medir qualidade, segurança e confiabilidade das respostas dos agentes, com evidências objetivas para melhorar continuamente o sistema em vez de depender apenas de percepção.
@@ -3888,59 +3890,6 @@ flowchart TD
 4. Para monitoramento contínuo em produção: integração com Azure Monitor/Application Insights.
 5. Para produção, priorizar o fluxo de continuous evaluation no portal novo do Microsoft Foundry; quando usar documentação/classic, considerar as limitações de recurso em preview.
 
-### 🧪 Benchmarking complementar com WAZA (alto grau de coerência)
-
-O conteúdo oficial de WAZA é altamente coerente com esta seção porque reforça o mesmo princípio arquitetural já adotado aqui: **medir, comparar, validar e evoluir agentes por evidência**, com execução repetível e integrada ao ciclo de engenharia.
-
-### ✅ Onde WAZA agrega no framework
-
-1. **Benchmark estruturado em YAML** para padronizar cenários de avaliação por skill/agente.
-2. **Validadores pluggable** para checar qualidade funcional, comportamento e sequência de ações.
-3. **Comparação cross-model** para decisões de custo, qualidade e latência entre modelos.
-4. **Integração com CI/CD** para rodar gates de qualidade em pull requests.
-5. **Dashboard de tendências** para apoiar governança operacional e priorização de melhorias.
-
-### ⚖️ Posicionamento recomendado na arquitetura alvo
-
-1. Usar WAZA como camada complementar de benchmark técnico no ciclo de engenharia.
-2. Manter evaluators do Foundry como base de avaliação operacional e observabilidade em produção.
-3. Consolidar resultados no modelo operacional (seção 12) para decisões de promoção, rollback e roadmap em ondas.
-
-Trade-off prático: WAZA acelera padronização e automação de testes de habilidade, mas não substitui controles de produção, guard rails e telemetria corporativa.
-
-### 🧰 Agent Evaluations CLI (Microsoft 365 Copilot) — Coerência com esta arquitetura
-
-A página oficial da Microsoft sobre o **Agent Evaluations CLI** (preview) é coerente com esta seção porque reforça o mesmo ciclo operacional já descrito aqui: dataset de teste, execução de avaliação, scoring estruturado, análise de resultados e iteração.
-
-### ✅ O que a documentação adiciona de forma prática
-
-1. **Modos de execução**: avaliação em batch e interativa.
-2. **Formato de entrada**: prompts inline, input interativo e datasets JSON.
-3. **Saídas de resultado**: relatórios em HTML, JSON e CSV.
-4. **Scoring automatizado**: uso de métricas AI-assisted para acelerar comparação entre versões de agente.
-
-### 📏 Métricas padrão relevantes para o framework
-
-1. **Relevance** e **Coherence** como defaults.
-2. Métricas opcionais como **Groundedness** e **Similarity**.
-3. Métricas determinísticas/comparativas como **ExactMatch**, **PartialMatch** e contagem de **Citations**.
-
-Essas métricas são aderentes ao que já definimos na taxonomia de evaluators (qualidade, RAG e segurança), com vantagem operacional para times que precisam de execução rápida de regressão entre versões.
-
-### 🔐 Variáveis de ambiente e implicações de governança
-
-Para operar o CLI, a Microsoft explicita variáveis como `TENANT_ID`, `AZURE_AI_OPENAI_ENDPOINT`, `AZURE_AI_API_KEY`, `AZURE_AI_API_VERSION`, `AZURE_AI_MODEL_NAME` e identificadores de agente (`M365_TITLE_ID`/`M365_AGENT_ID`).
-
-Implicação direta para a arquitetura alvo:
-
-1. Seguir gestão de segredos em cofre corporativo e rotação de chaves.
-2. Garantir rastreabilidade por ambiente (dev/homolog/prod).
-3. Tratar esse CLI como componente de **eval pipeline** no roadmap em ondas (principalmente Onda 1 e Onda 2).
-
-### ⚠️ Limite atual (preview)
-
-Como o recurso está em preview, convém manter adoção progressiva e combinar com os evaluators do Foundry para cenários críticos de produção.
-
 ### 📌 Exemplo
 
 **Pergunta:**
@@ -3960,8 +3909,6 @@ Como o recurso está em preview, convém manter adoção progressiva e combinar 
 - https://learn.microsoft.com/azure/ai-foundry/how-to/evaluate-generative-ai-app
 - https://learn.microsoft.com/azure/foundry/observability/how-to/how-to-monitor-agents-dashboard#set-up-continuous-evaluation
 - https://learn.microsoft.com/azure/foundry-classic/how-to/continuous-evaluation-agents (preview/classic)
-- https://learn.microsoft.com/en-us/microsoft-365/copilot/extensibility/evaluations-cli-overview
-- https://microsoft.github.io/waza/
 
 ### 📣 Insight
 > "Sem evaluators, você aposta em IA — não opera IA"
@@ -4186,15 +4133,6 @@ flowchart TD
 - **Controle**: segurança e conformidade aplicadas durante todo o ciclo de resposta.
 - **Evolução**: avaliação contínua transforma uso em aprendizado operacional.
 
-### 🔐 Integração com MCP Servers Seguros (Seção 8.7)
-
-Quando agentes invocam MCP servers para acessar ferramentas e dados externos:
-
-- **Seção 3.2 (APIM)** fornece a camada de perímetro: gateway centralizado, autenticação, rate limiting
-- **Seção 8.7 (MCP Security)** fornece a camada interna: isolamento de sessões, validação rigorosa, sanitização de dados, secrets management
-
-Resultado: **Tool calls seguros de ponta a ponta** — from user intent to MCP execution to response.
-
 ---
 
 ## 🧠 12. Modelo Operacional
@@ -4258,101 +4196,6 @@ flowchart TD
 - **Fabric IQ/Fabric**: contexto semântico e dados governados.
 - **Guard Rails**: proteção de identidade, acesso e risco de dados.
 - **Evaluators**: medição objetiva para evolução contínua.
-
-### 👥 Papéis Críticos de Governance
-
-| Papel | Responsabilidade | Exemplos de Atividade |
-|---|---|---|
-| **Chief Data Officer (CDO)** | Estratégia, dados governados, compliance | Decidir sobre governança multiagente, aprovação de dados críticos |
-| **AI/IA Lead** | Visão técnica, roadmap de agentes, arquitetura | Planejar ondas, aprovar novos agentes, organizar treinamento |
-| **Agent Owner** | Operação, qualidade, resultado de negócio | Monitorar SLOs, escalar incidentes, melhorar prompts/tools |
-| **Data Steward** | Qualidade de dados, permissões, lineage | Manter metadados, aprovar novos dados, auditar acesso |
-| **Security/Compliance** | Política, risco, conformidade | Revisar guard rails, políticas de token, compliance reporting |
-| **MCP Security Reviewer** | Segurança de MCP servers (Seção 8.7) | Revisar CI/CD gates, validar manifests assinados, audit security controls |
-| **Evaluator Engineer** | Métricas, monitoring, feedback loops | Definir evaluators, tunar thresholds, processar sinais de melhoria |
-| **Platform Engineer** | APIM, infraestrutura, observabilidade | Gerenciar gateway, policies, logs centralizados, alertas |
-
-### 📅 Cadência de Governança
-
-- **Diário**: Health checks automáticos (SLOs, erros, segurança)
-- **Semanal**: Triage operacional (incidentes, anomalias)
-- **Mensal**: Revisão de qualidade por domínio (evaluators insights, trending)
-- **Trimestral**: Security audit de MCP servers, compliance review, roadmap planning
-- **Anual**: Strategy review, maturidade assessment, investments
-
-### 12.1. Confiabilidade Operacional (SLO/Versionamento/Rollback)
-
-### 🎯 Objetivo
-Operar agentes em produção com previsibilidade de serviço, recuperação rápida e risco controlado.
-
-### 📏 SLOs mínimos recomendados
-
-1. **Disponibilidade**: ex. 99,9% para agentes críticos.
-2. **Latência p95**: ex. <= 4s para canais interativos.
-3. **Qualidade operacional**: task success rate e groundedness por domínio.
-4. **Segurança**: taxa de bloqueio de risco e incidentes por período.
-
-### 🧷 Estratégia de versão e rollout
-
-- Versionar agente, prompt, contratos MCP e políticas.
-- Coexistência de versões (`v1` produção / `v2` canary).
-- Feature flags por domínio/área.
-
-### ⏪ Política de rollback
-
-1. Definir gatilhos de rollback automático (latência, erro, violação de policy).
-2. Retornar para última versão estável em minutos.
-3. Registrar causa raiz e ação corretiva no backlog.
-
-### 🛟 Continuidade e segurança do usuário
-
-- Mecanismo de pausa/desativação de classe de agentes.
-- Health checks contínuos de runtime e tool calls.
-- Fallback para fluxo humano quando risco operacional subir.
-
-### 12.2. Matriz de Maturidade Multiagente (Níveis 1-5)
-
-### 🎯 Objetivo
-Oferecer um instrumento prático para medir maturidade da arquitetura alvo e priorizar o roadmap em ondas com critérios verificáveis.
-
-### 🧭 Como usar
-
-1. Avaliar cada capacidade na escala de 1 a 5.
-2. Definir nível atual e nível-alvo por trimestre.
-3. Priorizar gaps com maior risco para segurança, qualidade e continuidade.
-
-### 📊 Escala de maturidade
-
-| Nível | Descrição executiva |
-|---|---|
-| **1 - Inicial** | Pilotos isolados, baixa padronização, controles reativos. |
-| **2 - Repetível** | Padrões básicos documentados, execução ainda dependente de pessoas-chave. |
-| **3 - Definido** | Processo formal por domínio, governança consistente e telemetria estruturada. |
-| **4 - Gerenciado** | Operação orientada por métricas, SLOs ativos, melhoria contínua com evaluators. |
-| **5 - Otimizado** | Escala corporativa com automação avançada, prevenção de risco e evolução contínua por evidência. |
-
-### 🧩 Matriz por capacidade crítica
-
-| Capacidade | Nível 1 | Nível 3 | Nível 5 |
-|---|---|---|---|
-| **Orquestração e classificação** | Roteamento manual ou heurístico | Orquestrador central + fallback de classificação | Roteamento adaptativo com otimização por qualidade/custo/latência |
-| **Agent Registry** | Lista estática de agentes | Registry com metadados e monitor de saúde | Discovery dinâmico, validação de onboarding e gestão de versões automatizada |
-| **Memória (STM/LTM)** | Contexto efêmero sem política clara | STM/LTM com retenção e redaction definidos | Governança completa de memória com consentimento, auditoria e otimização contínua |
-| **Comunicação entre agentes** | Chamadas ad hoc ponto a ponto | Padrão definido (request/message/híbrido) por domínio | Arquitetura híbrida otimizada com resiliência e rastreabilidade end-to-end |
-| **Segurança e guard rails** | Controles pontuais | Políticas consistentes com Entra, Purview e guard rails | Controles adaptativos com resposta automatizada e red teaming contínuo |
-| **Evaluators e qualidade** | Avaliação ocasional e manual | Avaliação offline/online por domínio | Avaliação contínua com feedback loop automatizado para operação |
-| **Confiabilidade operacional** | Sem SLO formal, rollback manual | SLOs definidos e rollback padronizado | SLOs por domínio com gatilhos automáticos e engenharia de resiliência madura |
-
-### 📌 Critérios mínimos para considerar nível 4 (gerenciado)
-
-1. SLOs ativos para disponibilidade, latência e qualidade em produção.
-2. Registry com monitoramento de saúde e metadados atualizados.
-3. Guard rails e controles de dados aplicados por padrão em todos os agentes críticos.
-4. Evaluators operando com ciclos de melhoria contínua.
-5. Rollback testado e acionável em minutos.
-
-### 📣 Insight
-> "Maturidade multiagente não é quantidade de agentes em produção; é previsibilidade de resultado com controle de risco em escala."
 
 ---
 
@@ -4599,7 +4442,6 @@ Quando Instructions e Skills são tratados como ativos arquiteturais (e não ape
 - [Use skills in Copilot Studio](https://learn.microsoft.com/microsoft-copilot-studio/advanced-use-skills)
 - [Use skills in Foundry (preview)](https://learn.microsoft.com/azure/foundry/agents/how-to/tools/skills)
 - [Tool best practices for Microsoft Foundry Agent Service](https://learn.microsoft.com/azure/foundry/agents/concepts/tool-best-practice)
-- [Agent Evaluations CLI overview (Microsoft 365 Copilot)](https://learn.microsoft.com/en-us/microsoft-365/copilot/extensibility/evaluations-cli-overview)
 
 ---
 
@@ -6661,18 +6503,16 @@ graph TD
 - [Set up continuous evaluation (Microsoft Foundry - new portal)](https://learn.microsoft.com/azure/foundry/observability/how-to/how-to-monitor-agents-dashboard#set-up-continuous-evaluation)
 - [Continuous evaluation for agents (Foundry classic, preview)](https://learn.microsoft.com/azure/foundry-classic/how-to/continuous-evaluation-agents)
 
-### 🌐 Outras Fontes (Segurança e GenAI)
+#### Fundamentos de arquitetura de IA (LLM, RAG, AI Agent, Agentic AI)
+- [AI agent orchestration patterns - Azure Architecture Center](https://learn.microsoft.com/azure/architecture/ai-ml/guide/ai-agent-design-patterns)
+- [Single agent or multiple agents - Cloud Adoption Framework](https://learn.microsoft.com/azure/cloud-adoption-framework/ai-agents/single-agent-multiple-agents)
+- [Retrieval augmented generation (RAG) and indexes - Microsoft Foundry](https://learn.microsoft.com/azure/foundry/concepts/retrieval-augmented-generation)
+- [Augment large language models with RAG or fine-tuning](https://learn.microsoft.com/azure/developer/ai/augment-llm-rag-fine-tuning)
+- [AI agents in Azure Cosmos DB (ReAct, Reflexion)](https://learn.microsoft.com/azure/cosmos-db/ai-agents)
+- [Multi-agent patterns (MCP, A2A, magentic) - Microsoft Agents](https://learn.microsoft.com/agents/architecture/multi-agent-patterns)
+- [Semantic Kernel Agent Framework](https://learn.microsoft.com/semantic-kernel/frameworks/agent/)
+- [What is Microsoft Foundry Agent Service?](https://learn.microsoft.com/azure/foundry/agents/overview)
 
-#### OWASP GenAI Project
-- [OWASP GenAI Project](https://genai.owasp.org/) — Guidance and resources for secure AI application development
-- **Referência específica**: [A Practical Guide for Secure MCP Server Development v1.0](https://genai.owasp.org/) (License: CC BY-SA 4.0)
-  - 7 pilares de segurança: Arquitetura, Design, Validação, Prompt Injection, Auth, Deployment, Governance
-  - Usado em **Seção 8.7 (Segurança de MCP Servers)** para build-time e runtime controls
-  - Complementa APIM perímetro + MCP servidor interno = defesa em profundidade
+### 🌐 Outras Fontes (Não Microsoft)
 
-#### Outras Referências
-- **NIST AI Risk Management Framework** — Alinhamento com governance, fairness, security
-- **OWASP Top 10 for LLMs** — Vulnerabilidades críticas em aplicações LLM
-- **RFC 8693** — OAuth 2.0 Token Delegation (token exchange para segurança em cascata)
-- **Azure Key Vault best practices** — Secrets management para MCP servers
-- **Kubernetes Network Policies** — Isolamento de rede para containerized MCP servers
+Até o momento, não foram usadas como referência documental fontes externas aos domínios da Microsoft neste material.

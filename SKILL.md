@@ -1,10 +1,10 @@
 ---
 name: estrategia-adocao-agentes-ia
-summary: "Orienta a definicao de arquitetura corporativa para adocao de agentes de IA com Microsoft IQ, Fabric e Foundry, incluindo governanca, seguranca, guard rails e avaliacao continua."
+summary: "Orienta a definicao de arquitetura corporativa para adocao de agentes de IA com Microsoft IQ, Fabric e Foundry, incluindo fundamentos de arquitetura (LLM, RAG, AI Agent, Agentic AI), modelo de ROI (IA vs. homem-hora), governanca, seguranca, guard rails e avaliacao continua."
 license: MIT
 metadata:
-  author: Fabio Hara
-  version: "1.0.0"
+  author: Fabio
+  version: "1.1.0"
   language: pt-BR
 ---
 
@@ -14,8 +14,10 @@ metadata:
 
 Esta skill ajuda a estruturar recomendacoes praticas para adocao de agentes de IA em ambiente corporativo, com foco em:
 
+- fundamentos de arquitetura de IA (LLM, RAG, AI Agent, Agentic AI)
 - arquitetura de referencia
 - dados governados
+- justificativa financeira (ROI: IA vs. custo de homem-hora)
 - seguranca e compliance
 - operacao e observabilidade
 - evolucao continua com evaluators
@@ -24,8 +26,11 @@ Esta skill ajuda a estruturar recomendacoes praticas para adocao de agentes de I
 
 - O usuario pedir estrategia de adocao de agentes de IA.
 - O usuario quiser desenhar arquitetura com Work IQ, Foundry IQ e Fabric IQ.
+- O usuario precisar entender ou comparar os padroes LLM, RAG, AI Agent e Agentic AI.
+- O usuario quiser decidir o nivel minimo de complexidade para um caso de uso.
 - O usuario precisar conectar IA com governanca de dados e seguranca.
 - O usuario solicitar roteiro de implantacao por fases.
+- O usuario pedir justificativa financeira ou ROI (IA vs. homem-hora, modo eficiencia ou ampliacao).
 - O usuario pedir padroes para escalar agentes entre areas de negocio.
 
 ## Nao Use Quando
@@ -47,11 +52,13 @@ Se faltar informacao critica, solicitar apenas o minimo necessario antes de reco
 ## Processo Recomendado
 
 1. Entender o problema de negocio e o resultado esperado.
-2. Mapear as fontes de dados e o nivel de governanca atual.
-3. Definir separacao de camadas: experiencia (Work IQ), agentes (Foundry IQ), inteligencia de dados (Fabric IQ) e plataforma (Microsoft Fabric).
-4. Definir controles transversais: Guard Rails e Evaluators.
-5. Propor roadmap em ondas: piloto, expansao e escala.
-6. Fechar com metricas de sucesso, riscos e plano de mitigacao.
+2. Escolher o padrao arquitetural pelo menor nivel de complexidade que resolve de forma confiavel: LLM (texto, um passo), RAG (resposta fundamentada em dados), AI Agent unico (tarefa multi-etapa, um dominio) ou Agentic AI multiagente (cruza seguranca, multiplos times ou crescimento previsto).
+3. Mapear as fontes de dados e o nivel de governanca atual.
+4. Definir separacao de camadas: experiencia (Work IQ), agentes (Foundry IQ), inteligencia de dados (Fabric IQ) e plataforma (Microsoft Fabric).
+5. Definir controles transversais: Guard Rails e Evaluators.
+6. Validar a viabilidade financeira com o modelo de ROI (IVA = custo humano / custo IA por tarefa), incluindo HITL, setup amortizado e multiplicador de escopo; avaliar no horizonte de 12-18 meses.
+7. Propor roadmap em ondas: piloto, expansao e escala.
+8. Fechar com metricas de sucesso, riscos e plano de mitigacao.
 
 ## Regras de Qualidade da Resposta
 
@@ -64,15 +71,19 @@ Se faltar informacao critica, solicitar apenas o minimo necessario antes de reco
 ## Termos Preferenciais
 
 - Priorizar os termos: guard rails, evaluators, roadmap em ondas, arquitetura alvo, dados governados.
+- Para fundamentos, usar: espectro de complexidade, grounding, RAG, AI Agent unico, Agentic AI (multiagente), HITL, MCP, A2A.
+- Para ROI, usar: custo de homem-hora carregado, IVA (Indice de Vantagem da IA), custo por tarefa, HITL, multiplicador de escopo, fator de realizacao, modo eficiencia, modo ampliacao.
 - Quando houver sinonimos, manter os termos acima para consistencia entre respostas.
 - Em respostas executivas, usar frases curtas e orientadas a decisao.
 
 ## Formato de Saida Sugerido
 
 - Visao executiva (curta)
+- Padrao arquitetural recomendado (LLM, RAG, AI Agent ou Agentic AI) e por que
 - Arquitetura recomendada (camadas e responsabilidades)
 - Governanca e seguranca (controles)
 - Plano de implantacao por fases
+- Justificativa financeira (ROI/IVA, quando aplicavel)
 - KPIs de sucesso
 - Riscos e mitigacoes
 
@@ -80,3 +91,7 @@ Se faltar informacao critica, solicitar apenas o minimo necessario antes de reco
 
 Base de conteudo principal para aprofundamento:
 - Estrategia_Adocao_Agentes_IA_Final_2.md
+  - Secao 1.1: Fundamentos de Arquitetura de IA (LLM x RAG x AI Agent x Agentic AI)
+  - Secao 4.1: Modelo de ROI (IA vs. custo de homem-hora)
+- guia-arquitetura-llm-rag-agentes.md
+- ROI-IA-vs-Homem-Hora.md
