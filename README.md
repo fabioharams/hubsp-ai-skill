@@ -15,9 +15,13 @@ O projeto foi estruturado para servir como referencia executiva e tecnica: ajuda
 
 ## O que voce encontra neste repositorio
 
-- Estrategia_Adocao_Agentes_IA_Final_2.md: guia principal com visao executiva, arquitetura por camadas, controles e plano de implantacao.
-- SKILL.md e SKILL_Estrategia_Adocao_Agentes_IA.md: definicao da skill para orientar respostas consistentes em contexto de arquitetura de adocao.
-- Apresentacao_Estrategia_Adocao_IA.html: material de apoio para comunicacao executiva.
+- SKILL.md: definicao unica da skill (roteador) que orienta respostas consistentes em contexto de arquitetura de adocao. Aponta para os arquivos de referencia sob demanda (progressive disclosure).
+- Estrategia_Adocao_Agentes_IA_Final_2.md: guia principal e fonte canonica, com visao executiva, indice e ponteiros para os arquivos de referencia.
+- referencias/: conteudo tematico fatiado para carregamento sob demanda:
+  - referencias/01-fundamentos-llm-rag-agentes.md: LLM x RAG x AI Agent x Agentic AI; espectro de complexidade e guia de decisao.
+  - referencias/02-arquitetura-referencia-camadas.md: Work IQ, Foundry IQ, Fabric IQ, Microsoft Fabric e especificacoes tecnicas por camada.
+  - referencias/03-roi-ia-vs-homem-hora.md: modelo de ROI/IVA, HITL e multiplicador de escopo.
+  - referencias/04-governanca-guardrails-evaluators-hitl.md: Guard Rails, Evaluators e Human-in-the-Loop.
 - Guias complementares de dinamicas e setup para facilitar colaboracao e uso no VS Code.
 
 ## Publico-alvo
