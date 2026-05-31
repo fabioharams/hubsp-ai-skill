@@ -89,9 +89,11 @@ Se faltar informacao critica, solicitar apenas o minimo necessario antes de reco
 
 ## Referencia Interna
 
-Base de conteudo principal para aprofundamento:
-- Estrategia_Adocao_Agentes_IA_Final_2.md
-  - Secao 1.1: Fundamentos de Arquitetura de IA (LLM x RAG x AI Agent x Agentic AI)
-  - Secao 4.1: Modelo de ROI (IA vs. custo de homem-hora)
-- guia-arquitetura-llm-rag-agentes.md
-- ROI-IA-vs-Homem-Hora.md
+Carregue apenas o arquivo de referencia necessario para a pergunta (progressive disclosure):
+
+- referencias/01-fundamentos-llm-rag-agentes.md — LLM x RAG x AI Agent x Agentic AI; espectro de complexidade e guia de decisao.
+- referencias/02-arquitetura-referencia-camadas.md — Work IQ, Foundry IQ, Fabric IQ, Microsoft Fabric; especificacoes tecnicas por camada.
+- referencias/03-roi-ia-vs-homem-hora.md — modelo de ROI/IVA, HITL, multiplicador de escopo.
+- referencias/04-governanca-guardrails-evaluators-hitl.md — Guard Rails, Evaluators e Human-in-the-Loop.
+
+Indice completo e demais secoes: Estrategia_Adocao_Agentes_IA_Final_2.md (fonte canonica, com ponteiros para os arquivos acima).
