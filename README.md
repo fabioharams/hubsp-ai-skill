@@ -23,6 +23,7 @@ O projeto foi estruturado para servir como referencia executiva e tecnica: ajuda
   - referencias/03-roi-ia-vs-homem-hora.md: modelo de ROI/IVA, HITL e multiplicador de escopo.
   - referencias/04-governanca-guardrails-evaluators-hitl.md: Guard Rails, Evaluators e Human-in-the-Loop.
   - referencias/05-decision-framework-bxt.md: Microsoft AI Decision Framework (Intake Filter, BXT, 9 perguntas criticas, Capability Model e selecao de tecnologia por cenario).
+  - referencias/06-metodos-priorizacao-luma.md: adendo com os metodos de priorizacao do LUMA System (Rose/Thorn/Bud, Affinity Clustering, Statement Starters, Bull's-Eye) para priorizar e mapear oportunidades de projetos de IA.
 - ROI-IA-Calculadora.xlsx: planilha operacional do modelo de ROI/IVA (referencias/03), com 5 abas (Calculadora, Sensibilidade HITL, Como usar, Capacidade e Grafico, Ampliacao). Preencha as celulas azuis com as premissas da operacao e obtenha IVA, ROI (%), veredito (USAR IA / MANTER HUMANO) e impacto na capacidade da equipe. Instrucoes de uso e interpretacao em referencias/03-roi-ia-vs-homem-hora.md.
 
 > Observacao: IVA (Indice de Vantagem da IA) e a razao entre o custo humano da tarefa e o custo total da IA por tarefa (IVA = Custo Humano / Custo IA). IVA > 1 indica que a IA e financeiramente vantajosa (um IVA de 4,0 significa que a tarefa via IA custa 1/4 do valor da mesma tarefa feita por uma pessoa); IVA = 1 e o ponto de equilibrio; IVA < 1 indica manter o trabalho humano. Nao confundir com o imposto IVA (Imposto sobre Valor Agregado).
@@ -45,6 +46,7 @@ graph TD
     REF --> R3[03-roi-ia-vs-homem-hora.md<br/>ROI / IVA - HITL - escopo]
     REF --> R4[04-governanca-guardrails-evaluators-hitl.md<br/>Guard Rails - Evaluators - HITL]
     REF --> R5[05-decision-framework-bxt.md<br/>BXT - 9 perguntas - Capability Model]
+    REF --> R6[06-metodos-priorizacao-luma.md<br/>LUMA - priorizacao de oportunidades]
 
     SKILL --> README[README.md<br/>Visao geral do repositorio]
 
@@ -53,7 +55,7 @@ graph TD
     classDef ref fill:#E6F2FA,stroke:#0078D4,color:#1a1a1a;
     class SKILL entry;
     class CANON canon;
-    class R1,R2,R3,R4,R5 ref;
+    class R1,R2,R3,R4,R5,R6 ref;
 ```
 
 ## Como navegar (fluxograma de decisao)
@@ -76,6 +78,7 @@ flowchart TD
     Q3 -- Justificativa<br/>financeira / ROI --> R3[referencias/03-roi-ia-vs-homem-hora.md]
     Q3 -- Governanca<br/>e seguranca --> R4[referencias/04-governanca-guardrails-evaluators-hitl.md]
     Q3 -- Escolha de<br/>tecnologia Microsoft --> R5[referencias/05-decision-framework-bxt.md]
+    Q3 -- Priorizar e mapear<br/>oportunidades de IA --> R6[referencias/06-metodos-priorizacao-luma.md]
     Q3 -- Visao completa<br/>ou outras secoes --> CANON[Estrategia_Adocao_Agentes_IA_Final_2.md]
 
     R1 --> END([Aplique no seu caso de uso])
@@ -83,6 +86,7 @@ flowchart TD
     R3 --> END
     R4 --> END
     R5 --> END
+    R6 --> END
     CANON --> END
     README --> END
 ```
