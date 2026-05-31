@@ -26,60 +26,58 @@ O projeto foi estruturado para servir como referencia executiva e tecnica: ajuda
 
 ## Estrutura do repositorio (diagrama)
 
-O diagrama abaixo mostra como os arquivos se relacionam. O SKILL.md atua como roteador e
-carrega apenas a referencia necessaria (progressive disclosure); o guia principal e a fonte
-canonica com ponteiros para os arquivos tematicos.
+O diagrama abaixo mostra como os arquivos se relacionam. O SKILL.md e o ponto de entrada (roteador); a fonte canonica concentra o conteudo completo e aponta, sob demanda, para os arquivos tematicos em referencias/.
 
 ```mermaid
-flowchart TD
-    User([Usuario faz pergunta sobre<br/>adocao de agentes de IA])
+graph TD
+    USER([Usuario / Agente faz uma pergunta]) --> SKILL[SKILL.md<br/>Skill roteadora - ponto de entrada]
+    SKILL --> CANON[Estrategia_Adocao_Agentes_IA_Final_2.md<br/>Fonte canonica - indice + ponteiros]
 
-    subgraph Skill["Camada de Skill"]
-        SKILL[SKILL.md<br/>roteador / ponto de entrada]
-    end
+    SKILL -. progressive disclosure .-> REF{{referencias/}}
+    CANON -. ponteiros .-> REF
 
-    subgraph Base["Base de conteudo"]
-        GUIA[Estrategia_Adocao_Agentes_IA_Final_2.md<br/>fonte canonica + indice + ponteiros]
-    end
+    REF --> R1[01-fundamentos-llm-rag-agentes.md<br/>LLM x RAG x AI Agent x Agentic AI]
+    REF --> R2[02-arquitetura-referencia-camadas.md<br/>Work IQ - Foundry IQ - Fabric IQ - Fabric]
+    REF --> R3[03-roi-ia-vs-homem-hora.md<br/>ROI / IVA - HITL - escopo]
+    REF --> R4[04-governanca-guardrails-evaluators-hitl.md<br/>Guard Rails - Evaluators - HITL]
 
-    subgraph Refs["referencias/ - carregadas sob demanda"]
-        R1[01-fundamentos-llm-rag-agentes.md<br/>LLM x RAG x AI Agent x Agentic AI]
-        R2[02-arquitetura-referencia-camadas.md<br/>Work IQ - Foundry IQ - Fabric IQ - Fabric]
-        R3[03-roi-ia-vs-homem-hora.md<br/>ROI / IVA / HITL]
-        R4[04-governanca-guardrails-evaluators-hitl.md<br/>Guard Rails - Evaluators - HITL]
-    end
+    SKILL --> README[README.md<br/>Visao geral do repositorio]
 
-    User --> SKILL
-    SKILL -->|usa como base canonica| GUIA
-    SKILL -->|carrega so o necessario| R1
-    SKILL -->|carrega so o necessario| R2
-    SKILL -->|carrega so o necessario| R3
-    SKILL -->|carrega so o necessario| R4
-    GUIA -.ponteiros.-> R1
-    GUIA -.ponteiros.-> R2
-    GUIA -.ponteiros.-> R3
-    GUIA -.ponteiros.-> R4
+    classDef entry fill:#0078D4,stroke:#004578,color:#fff;
+    classDef canon fill:#107C10,stroke:#0B5A0B,color:#fff;
+    classDef ref fill:#E6F2FA,stroke:#0078D4,color:#1a1a1a;
+    class SKILL entry;
+    class CANON canon;
+    class R1,R2,R3,R4 ref;
 ```
 
-## Fluxograma de uso (como a skill responde)
+## Como navegar (fluxograma de decisao)
+
+Use este fluxo para escolher qual arquivo abrir conforme a sua necessidade.
 
 ```mermaid
 flowchart TD
-    A([Pergunta do usuario]) --> B{Tema de adocao de<br/>agentes de IA?}
-    B -- Nao --> Z([Skill nao se aplica<br/>seguir fluxo padrao])
-    B -- Sim --> C[SKILL.md identifica<br/>o subtema da pergunta]
+    START([Qual e a sua necessidade?]) --> Q1{Quer apenas a<br/>visao geral do repo?}
+    Q1 -- Sim --> README[Leia README.md]
+    Q1 -- Nao --> Q2{Vai pedir uma<br/>recomendacao a IA?}
 
-    C --> D{Qual subtema?}
-    D -- Conceitos / padroes --> R1[Carrega 01-fundamentos]
-    D -- Arquitetura / camadas --> R2[Carrega 02-arquitetura-camadas]
-    D -- Justificativa financeira --> R3[Carrega 03-roi]
-    D -- Governanca / seguranca --> R4[Carrega 04-governanca]
+    Q2 -- Sim --> SKILL[Use SKILL.md<br/>como contexto/skill]
+    Q2 -- Nao --> Q3{Que tema voce<br/>precisa aprofundar?}
 
-    R1 --> E[Compoe resposta executiva<br/>com trade-offs e proximos passos]
-    R2 --> E
-    R3 --> E
-    R4 --> E
-    E --> F([Resposta entregue ao usuario])
+    SKILL --> Q3
+
+    Q3 -- Fundamentos<br/>LLM/RAG/Agentes --> R1[referencias/01-fundamentos-llm-rag-agentes.md]
+    Q3 -- Arquitetura<br/>por camadas --> R2[referencias/02-arquitetura-referencia-camadas.md]
+    Q3 -- Justificativa<br/>financeira / ROI --> R3[referencias/03-roi-ia-vs-homem-hora.md]
+    Q3 -- Governanca<br/>e seguranca --> R4[referencias/04-governanca-guardrails-evaluators-hitl.md]
+    Q3 -- Visao completa<br/>ou outras secoes --> CANON[Estrategia_Adocao_Agentes_IA_Final_2.md]
+
+    R1 --> END([Aplique no seu caso de uso])
+    R2 --> END
+    R3 --> END
+    R4 --> END
+    CANON --> END
+    README --> END
 ```
 
 ## Publico-alvo
