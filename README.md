@@ -24,6 +24,8 @@ O projeto foi estruturado para servir como referencia executiva e tecnica: ajuda
   - referencias/04-governanca-guardrails-evaluators-hitl.md: Guard Rails, Evaluators e Human-in-the-Loop.
   - referencias/05-decision-framework-bxt.md: Microsoft AI Decision Framework (Intake Filter, BXT, 9 perguntas criticas, Capability Model e selecao de tecnologia por cenario).
 - ROI-IA-Calculadora.xlsx: planilha operacional do modelo de ROI/IVA (referencias/03), com 5 abas (Calculadora, Sensibilidade HITL, Como usar, Capacidade e Grafico, Ampliacao). Preencha as celulas azuis com as premissas da operacao e obtenha IVA, ROI (%), veredito (USAR IA / MANTER HUMANO) e impacto na capacidade da equipe. Instrucoes de uso e interpretacao em referencias/03-roi-ia-vs-homem-hora.md.
+
+> Observacao: IVA (Indice de Vantagem da IA) e a razao entre o custo humano da tarefa e o custo total da IA por tarefa (IVA = Custo Humano / Custo IA). IVA > 1 indica que a IA e financeiramente vantajosa (um IVA de 4,0 significa que a tarefa via IA custa 1/4 do valor da mesma tarefa feita por uma pessoa); IVA = 1 e o ponto de equilibrio; IVA < 1 indica manter o trabalho humano. Nao confundir com o imposto IVA (Imposto sobre Valor Agregado).
 - Guias complementares de dinamicas e setup para facilitar colaboracao e uso no VS Code.
 
 ## Estrutura do repositorio (diagrama)
