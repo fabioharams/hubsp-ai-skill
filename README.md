@@ -22,6 +22,7 @@ O projeto foi estruturado para servir como referencia executiva e tecnica: ajuda
   - referencias/02-arquitetura-referencia-camadas.md: Work IQ, Foundry IQ, Fabric IQ, Microsoft Fabric e especificacoes tecnicas por camada.
   - referencias/03-roi-ia-vs-homem-hora.md: modelo de ROI/IVA, HITL e multiplicador de escopo.
   - referencias/04-governanca-guardrails-evaluators-hitl.md: Guard Rails, Evaluators e Human-in-the-Loop.
+  - referencias/05-decision-framework-bxt.md: Microsoft AI Decision Framework (Intake Filter, BXT, 9 perguntas criticas, Capability Model e selecao de tecnologia por cenario).
 - Guias complementares de dinamicas e setup para facilitar colaboracao e uso no VS Code.
 
 ## Estrutura do repositorio (diagrama)
@@ -40,6 +41,7 @@ graph TD
     REF --> R2[02-arquitetura-referencia-camadas.md<br/>Work IQ - Foundry IQ - Fabric IQ - Fabric]
     REF --> R3[03-roi-ia-vs-homem-hora.md<br/>ROI / IVA - HITL - escopo]
     REF --> R4[04-governanca-guardrails-evaluators-hitl.md<br/>Guard Rails - Evaluators - HITL]
+    REF --> R5[05-decision-framework-bxt.md<br/>BXT - 9 perguntas - Capability Model]
 
     SKILL --> README[README.md<br/>Visao geral do repositorio]
 
@@ -48,7 +50,7 @@ graph TD
     classDef ref fill:#E6F2FA,stroke:#0078D4,color:#1a1a1a;
     class SKILL entry;
     class CANON canon;
-    class R1,R2,R3,R4 ref;
+    class R1,R2,R3,R4,R5 ref;
 ```
 
 ## Como navegar (fluxograma de decisao)
@@ -70,12 +72,14 @@ flowchart TD
     Q3 -- Arquitetura<br/>por camadas --> R2[referencias/02-arquitetura-referencia-camadas.md]
     Q3 -- Justificativa<br/>financeira / ROI --> R3[referencias/03-roi-ia-vs-homem-hora.md]
     Q3 -- Governanca<br/>e seguranca --> R4[referencias/04-governanca-guardrails-evaluators-hitl.md]
+    Q3 -- Escolha de<br/>tecnologia Microsoft --> R5[referencias/05-decision-framework-bxt.md]
     Q3 -- Visao completa<br/>ou outras secoes --> CANON[Estrategia_Adocao_Agentes_IA_Final_2.md]
 
     R1 --> END([Aplique no seu caso de uso])
     R2 --> END
     R3 --> END
     R4 --> END
+    R5 --> END
     CANON --> END
     README --> END
 ```

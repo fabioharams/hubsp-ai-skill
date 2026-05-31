@@ -53,6 +53,7 @@ Se faltar informacao critica, solicitar apenas o minimo necessario antes de reco
 
 1. Entender o problema de negocio e o resultado esperado.
 2. Escolher o padrao arquitetural pelo menor nivel de complexidade que resolve de forma confiavel: LLM (texto, um passo), RAG (resposta fundamentada em dados), AI Agent unico (tarefa multi-etapa, um dominio) ou Agentic AI multiagente (cruza seguranca, multiplos times ou crescimento previsto).
+2.1. Quando o pedido envolver escolha de tecnologia/produto Microsoft, aplicar o Microsoft AI Decision Framework (referencias/05-decision-framework-bxt.md): Intake Filter, BXT (Business/Experience/Technology), as 9 perguntas criticas e a selecao por cenario.
 3. Mapear as fontes de dados e o nivel de governanca atual.
 4. Definir separacao de camadas: experiencia (Work IQ), agentes (Foundry IQ), inteligencia de dados (Fabric IQ) e plataforma (Microsoft Fabric).
 5. Definir controles transversais: Guard Rails e Evaluators.
@@ -95,5 +96,6 @@ Carregue apenas o arquivo de referencia necessario para a pergunta (progressive 
 - referencias/02-arquitetura-referencia-camadas.md — Work IQ, Foundry IQ, Fabric IQ, Microsoft Fabric; especificacoes tecnicas por camada.
 - referencias/03-roi-ia-vs-homem-hora.md — modelo de ROI/IVA, HITL, multiplicador de escopo.
 - referencias/04-governanca-guardrails-evaluators-hitl.md — Guard Rails, Evaluators e Human-in-the-Loop.
+- referencias/05-decision-framework-bxt.md — Microsoft AI Decision Framework: Intake Filter, BXT, 9 perguntas criticas, Capability Model e selecao de tecnologia por cenario.
 
 Indice completo e demais secoes: Estrategia_Adocao_Agentes_IA_Final_2.md (fonte canonica, com ponteiros para os arquivos acima).

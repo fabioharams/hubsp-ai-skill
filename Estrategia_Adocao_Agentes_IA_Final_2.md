@@ -1201,6 +1201,7 @@ Esta seção resume como o conteúdo deste documento se conecta aos padrões ofi
 | **Microsoft Fabric Architecture Patterns** | Unificar dados para analytics/IA com governança e reutilização em escala. | O desenho Bronze/Silver/Gold com OneLake, SQL Analytics Endpoint e Data Products (seções técnicas e 5-7) aplica o padrão de plataforma de dados unificada para agentes. |
 | **Microsoft Entra + Purview + Agent 365** | Garantir identidade, acesso, conformidade e controle centralizado de agentes. | As seções 8.1, 8.2 e 8.3 detalham identidade de agentes, classificação/proteção de dados e plano de controle central, com foco em rastreabilidade e políticas consistentes. |
 | **Microsoft Foundry Observability and Evaluations** | Medir qualidade e segurança ao longo do ciclo de vida (pré-produção e produção). | A seção 9 define taxonomia de evaluators, pipeline de avaliação contínua e integração com observabilidade para feedback loop operacional. |
+| **Microsoft AI Decision Framework (BXT + 9 perguntas + Capability Model)** | Selecionar a tecnologia certa de forma repetível: Intake Filter, BXT (Business/Experience/Technology), 9 perguntas críticas e seleção por cenário. | O método de seleção está detalhado em referencias/05-decision-framework-bxt.md, conectando o espectro de complexidade (LLM→Agentic), o ROI/IVA e as camadas Work IQ, Foundry IQ e Fabric IQ às fases do framework. |
 
 ### 🧩 Mapa Visual de Alinhamento (Mermaid)
 
