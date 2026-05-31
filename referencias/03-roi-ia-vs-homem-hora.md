@@ -359,5 +359,55 @@ Em horas: o analista "devolve" $168 \times 20\% = 33{,}6$ h/mês; com 70% de rea
 
 > *Nota: modelo de apoio à decisão; não constitui aconselhamento financeiro. Calibre as variáveis com os dados reais da operação.*
 
+### 🧮 Calculadora de ROI (planilha `ROI-IA-Calculadora.xlsx`)
+
+O arquivo `ROI-IA-Calculadora.xlsx`, na raiz do repositório, é a **versão operacional desta seção**: uma planilha que transforma o modelo IVA/ROI em uma ferramenta de cálculo onde o gestor preenche as premissas da operação e obtém, automaticamente, o Índice de Vantagem da IA (IVA), o ROI percentual, o veredito (USAR IA / MANTER HUMANO) e o impacto na capacidade da equipe. Use-a para sair do conceito e chegar a um número defensável por cenário.
+
+#### O que é
+
+Uma calculadora de apoio à decisão que responde, em números, à pergunta central da seção: *"para esta tarefa, vale mais a pena usar IA ou pagar pelo trabalho humano?"*. Ela cobre os **dois modos** de avaliação descritos acima — **eficiência/substituição** (IVA e ROI por tarefa) e **ampliação** (ganho de produtividade do funcionário que permanece no comando) — e já vem com **três cenários** pré-preenchidos para calibrar expectativas.
+
+A pasta de trabalho tem **5 abas**:
+
+| Aba | Função |
+|---|---|
+| **Calculadora** | Núcleo do modelo. Três colunas de cenário (Suporte/e-mails, Análise de Investimento e Personalizado) com lado humano, lado IA, escopo e os resultados IVA/ROI/veredito. |
+| **Sensibilidade HITL** | Varia o tempo de revisão humana (0 a 4 h) sobre o Cenário 2 e mostra como o HITL muda o IVA e a decisão. |
+| **Como usar** | Instruções, dicas de preenchimento e premissas de mercado (2025–2026). |
+| **Capacidade e Gráfico** | Converte os números em impacto de equipe: custo humano × IA, tarefas/pessoa, analistas necessários, pessoas liberadas e multiplicador de capacidade. |
+| **Ampliação (produtividade)** | Modo ampliação: calcula o ROI quando a IA aumenta a vazão do funcionário (copiloto), sem substituí-lo. O Funcionário 1 herda o homem-hora da aba Calculadora. |
+
+#### Como usar
+
+1. **Abra no Excel** e vá para a aba **Calculadora**.
+2. **Edite apenas as células azuis (fundo amarelo)** — tudo em preto é calculado por fórmula e não deve ser alterado.
+3. **Escolha o cenário** (cada coluna é independente): **Cenário 1** = triagem de e-mails (alto volume, tarefa barata); **Cenário 2** = análise de investimento/crédito (analista pleno, ~1,5 dia/cliente); **Cenário 3** = livre, para o seu caso.
+4. **Preencha o lado humano:** salário-base mensal, **fator de carga** (encargos+benefícios+overhead; CLT ~1,8), horas úteis/mês, horas por tarefa e nº de tarefas/mês. A planilha calcula o **valor homem-hora carregado** e o custo humano por tarefa.
+5. **Preencha o lado IA:** custo de inferência (tokens) por tarefa, infra/RAG por tarefa, **tempo de revisão humana (HITL)** em horas, setup único e o horizonte de amortização (nº de tarefas no período). A planilha separa **Custo IA Ano 1** (com setup) de **Ano 2+** (setup pago).
+6. **Ajuste escopo:** multiplicador de adoção (% que realmente usa) — corrige a economia mensal para a realidade.
+7. **Leia os resultados** (linhas IVA, ROI %, economia mensal e VEREDITO). Para produtividade de copilotos, use a aba **Ampliação**; para impacto de headcount, a aba **Capacidade e Gráfico**.
+
+> Para coletar essas premissas com o cliente, use o **Guia de descoberta (Blocos A–E)** e as **5 perguntas mínimas** desta mesma seção — cada bloco alimenta diretamente uma célula de entrada da planilha.
+
+#### Como interpretar os resultados
+
+| Indicador (célula) | Leitura | Decisão sugerida |
+|---|---|---|
+| **IVA > 1** | A IA custa menos que o humano por tarefa | Forte candidata a adoção (quanto maior, melhor) |
+| **IVA = 1** | Ponto de equilíbrio | Indiferente no custo; decida por risco/velocidade |
+| **IVA < 1** | A IA sai mais cara que o humano | Manter o trabalho humano |
+| **VEREDITO** | `USAR IA` (IVA Ano 2+ ≥ 1) ou `MANTER HUMANO` | Recomendação automática do modelo |
+| **ROI % (Ano 1 × Ano 2+)** | Ano 1 inclui o setup; Ano 2+ é o regime | Avalie sempre o Ano 2+ e a janela de 12–18 meses |
+| **Economia mensal (ajustada por escopo)** | Ganho real após o multiplicador de adoção | Se baixa apesar de IVA alto, ataque a adoção |
+| **Ampliação — ROI / ganho de equilíbrio** | Quanto o copiloto rende vs. quanto custa | `VALE A PENA` quando o tempo liberado é reaproveitado |
+
+**Sinais de atenção ao ler a planilha:**
+
+- O **HITL e o setup amortizado** costumam dominar o custo da IA — a inferência é quase irrelevante. Preencha o tempo de revisão com cuidado: é o fator que mais derruba o ROI (veja a aba **Sensibilidade HITL**).
+- Um IVA alto com **escopo baixo** entrega pouca economia real: priorize adoção (`adoption rate`).
+- Tarefas **baratas para um humano + revisão alta** são as piores candidatas (IVA tende a < 1).
+- Na **Ampliação**, lembre que ganho efetivo = ganho na tarefa × fração do trabalho afetada, e só vira valor com **fator de realização** (tempo reinvestido em entregas).
+- Resultados são **estimativas de apoio à decisão**, não aconselhamento financeiro: calibre com dados reais e revise após o piloto.
+
 ---
 

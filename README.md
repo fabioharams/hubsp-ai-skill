@@ -23,6 +23,7 @@ O projeto foi estruturado para servir como referencia executiva e tecnica: ajuda
   - referencias/03-roi-ia-vs-homem-hora.md: modelo de ROI/IVA, HITL e multiplicador de escopo.
   - referencias/04-governanca-guardrails-evaluators-hitl.md: Guard Rails, Evaluators e Human-in-the-Loop.
   - referencias/05-decision-framework-bxt.md: Microsoft AI Decision Framework (Intake Filter, BXT, 9 perguntas criticas, Capability Model e selecao de tecnologia por cenario).
+- ROI-IA-Calculadora.xlsx: planilha operacional do modelo de ROI/IVA (referencias/03), com 5 abas (Calculadora, Sensibilidade HITL, Como usar, Capacidade e Grafico, Ampliacao). Preencha as celulas azuis com as premissas da operacao e obtenha IVA, ROI (%), veredito (USAR IA / MANTER HUMANO) e impacto na capacidade da equipe. Instrucoes de uso e interpretacao em referencias/03-roi-ia-vs-homem-hora.md.
 - Guias complementares de dinamicas e setup para facilitar colaboracao e uso no VS Code.
 
 ## Estrutura do repositorio (diagrama)
@@ -90,3 +91,64 @@ flowchart TD
 - Arquitetos corporativos, arquitetos de dados e equipes de plataforma.
 - Times de governanca, seguranca e compliance.
 - Squads que estao iniciando ou escalando agentes de IA.
+
+## Como usar no Visual Studio Code
+
+Pre-requisitos: VS Code, a extensao GitHub Copilot Chat e uma assinatura ativa do GitHub Copilot.
+
+1. Clonar e abrir o repositorio:
+
+   ```bash
+   git clone https://github.com/<sua-org>/HARASKILL.git
+   code HARASKILL
+   ```
+
+2. Abrir o Copilot Chat (icone de chat na barra lateral ou `Ctrl+Alt+I` / `Cmd+Alt+I`) e usar o modo Agent.
+3. O arquivo `.github/copilot-instructions.md` e carregado automaticamente como contexto do workspace, garantindo respostas em pt-BR e o formato executivo padrao.
+4. Trazer um arquivo para o contexto da conversa de uma destas formas:
+   - Digitar `#` e selecionar o arquivo (ex.: `#SKILL.md`).
+   - Arrastar o arquivo do Explorer para o painel de chat.
+   - Abrir o arquivo no editor e referenciar com `#file`.
+5. Fluxo recomendado: comece pelo `SKILL.md` e deixe o agente carregar os arquivos de `referencias/` sob demanda (progressive disclosure), conforme o tema da pergunta.
+
+Exemplo de prompt:
+
+> Usando o #SKILL.md, recomende a arquitetura alvo para um copilot de atendimento com dados governados no Fabric.
+
+Dica: para tratar o `SKILL.md` como uma skill reutilizavel, copie-o (ou crie um link) para a pasta de prompts/skills do seu usuario no VS Code e referencie-o nas conversas.
+
+## Como usar no GitHub Copilot CLI
+
+Pre-requisitos: Node.js 22 ou superior, uma assinatura ativa do GitHub Copilot e (no Windows) PowerShell 6+.
+
+1. Instalar o CLI (npm em qualquer plataforma):
+
+   ```bash
+   npm install -g @github/copilot
+   ```
+
+   Alternativas oficiais: `brew install copilot-cli` (macOS/Linux) ou `winget install GitHub.Copilot` (Windows).
+
+2. Entrar na pasta do repositorio e iniciar uma sessao interativa (o CLI usa o diretorio atual como contexto e pede confirmacao para confiar nele):
+
+   ```bash
+   cd HARASKILL
+   copilot
+   ```
+
+3. Autenticar na primeira execucao: se voce ainda nao estiver logado, use o comando `/login` na sessao e siga as instrucoes na tela.
+4. Referenciar os arquivos do repositorio diretamente no prompt. O CLI tem acesso de leitura aos arquivos do diretorio de trabalho:
+
+   > Leia o SKILL.md e o referencias/05-decision-framework-bxt.md e me ajude a escolher a tecnologia Microsoft para um agente proativo de monitoramento.
+
+5. Para um prompt unico e nao interativo, usar o modo programatico (`-p` / `--prompt`):
+
+   ```bash
+   copilot -p "Com base em SKILL.md, gere uma visao executiva da arquitetura alvo (Work IQ, Foundry IQ, Fabric IQ)."
+   ```
+
+Observacoes:
+
+- O CLI combina automaticamente arquivos de custom instructions, mas nao carrega `.github/copilot-instructions.md` exatamente como o VS Code. Para garantir o tom executivo em pt-BR, referencie o `SKILL.md` explicitamente no prompt.
+- Use caminhos relativos (ex.: `referencias/03-roi-ia-vs-homem-hora.md`) ao citar arquivos, para que a ferramenta os localize.
+- Inicie o CLI apenas em diretorios confiaveis; evite executa-lo a partir do seu diretorio pessoal.
