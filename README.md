@@ -16,7 +16,7 @@ O projeto foi estruturado para servir como referencia executiva e tecnica: ajuda
 ## O que voce encontra neste repositorio
 
 - SKILL.md: definicao unica da skill (roteador) que orienta respostas consistentes em contexto de arquitetura de adocao. Aponta para os arquivos de referencia sob demanda (progressive disclosure).
-- Estrategia_Adocao_Agentes_IA_Final_2.md: guia principal e fonte canonica, com visao executiva, indice e ponteiros para os arquivos de referencia.
+- Estrategia_Adocao_Agentes_IA_Final_2.md: guia principal e documento-base, com visao executiva, indice e ponteiros para os arquivos de referencia.
 - referencias/: conteudo tematico fatiado para carregamento sob demanda:
   - referencias/01-fundamentos-llm-rag-agentes.md: LLM x RAG x AI Agent x Agentic AI; espectro de complexidade e guia de decisao.
   - referencias/02-arquitetura-referencia-camadas.md: Work IQ, Foundry IQ, Fabric IQ, Microsoft Fabric e especificacoes tecnicas por camada.
@@ -26,12 +26,12 @@ O projeto foi estruturado para servir como referencia executiva e tecnica: ajuda
 
 ## Estrutura do repositorio (diagrama)
 
-O diagrama abaixo mostra como os arquivos se relacionam. O SKILL.md e o ponto de entrada (roteador); a fonte canonica concentra o conteudo completo e aponta, sob demanda, para os arquivos tematicos em referencias/.
+O diagrama abaixo mostra como os arquivos se relacionam. O SKILL.md e o ponto de entrada (roteador); o documento-base concentra o conteudo completo e aponta, sob demanda, para os arquivos tematicos em referencias/.
 
 ```mermaid
 graph TD
     USER([Usuario / Agente faz uma pergunta]) --> SKILL[SKILL.md<br/>Skill roteadora - ponto de entrada]
-    SKILL --> CANON[Estrategia_Adocao_Agentes_IA_Final_2.md<br/>Fonte canonica - indice + ponteiros]
+    SKILL --> CANON[Estrategia_Adocao_Agentes_IA_Final_2.md<br/>Documento-base - indice + ponteiros]
 
     SKILL -. progressive disclosure .-> REF{{referencias/}}
     CANON -. ponteiros .-> REF
