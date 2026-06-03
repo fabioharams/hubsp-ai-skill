@@ -42,6 +42,8 @@ Arquitetura corporativa transforma IA de experimento em capacidade operacional. 
 
 > Conteudo movido para [referencias/02-arquitetura-referencia-camadas.md](referencias/02-arquitetura-referencia-camadas.md) — Arquitetura de Referencia e Especificacoes Tecnicas por Camada (Microsoft IQ: Work IQ, Foundry IQ, Fabric IQ, Web IQ + Microsoft Fabric).
 
+> Conteudo movido para [referencias/07-pl-2338-2023-copilot-studio-foundry.md](referencias/07-pl-2338-2023-copilot-studio-foundry.md) — Analise do PL 2338/2023 e como Microsoft Copilot Studio e Microsoft Foundry podem atender os requisitos de transparencia, governanca, risco, auditoria e protecao de dados com fontes oficiais.
+
 ## ⏱️ 3. Estratégia de Adoção (Curto e Médio Prazo)
 
 A estratégia de adoção segue um modelo interno de **5 fases evolutivas**, alinhado ao framework da Microsoft para agentes de IA (**Plan, Govern and secure, Build, Manage**). O objetivo é construir capacidade organizacional, e não apenas entregar tecnologia. O sucesso depende de pessoas, processos e dados governados.
@@ -889,8 +891,12 @@ graph TB
 - Agent faz tool call 2: busca benchmarks do setor via MCP (web search)
 - Claude raciocina sobre os dois contextos → gera análise + recomendações estruturadas
 - Evaluator valida groundedness e task adherence → resposta entregue ao usuário via Copilot Studio
+- ASSERT pode ser usado no ciclo de desenvolvimento para transformar políticas corporativas em testes executáveis antes do rollout
+- Agent Control Specification (ACS) pode ser usado no runtime para aplicar controles determinísticos em checkpoints críticos, como entrada, tool execution e saída
 
 📌 Claude pode operar via Foundry e integrar com sistemas e dados
+
+**Leitura arquitetural:** neste padrão, **ASSERT** reforça a disciplina de avaliação antes e depois de mudanças; **ACS** reforça a aplicação consistente de guard rails durante a execução.
 
 ---
 
@@ -1212,8 +1218,12 @@ São o mecanismo de entrega de valor. Convertem intenção do usuário em ação
 4. **Guard Rails (segurança e conformidade)**
 Definem os limites operacionais. Controlam acesso, reduzem risco de vazamento e evitam comportamento fora de política.
 
+No contexto do Build 2026, esse papel fica mais concreto com o **Agent Control Specification (ACS)**, que ajuda a padronizar onde e como os controles são aplicados no loop do agente.
+
 5. **Evaluators (qualidade e evolução)**
 Fecham o ciclo de gestão. Medem desempenho real, detectam drift e orientam melhorias contínuas em prompts, tools e fluxos.
+
+No contexto do Build 2026, **ASSERT** reforça esta camada ao permitir avaliação policy-driven e regressão contínua com artefatos auditáveis.
 
 ### 🧭 Leitura em uma frase
 

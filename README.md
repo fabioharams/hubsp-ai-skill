@@ -24,6 +24,7 @@ O projeto foi estruturado para servir como referencia executiva e tecnica: ajuda
    - referencias/04-governanca-guardrails-evaluators-hitl.md: Guard Rails, Evaluators e Human-in-the-Loop.
    - referencias/05-decision-framework-bxt.md: Microsoft AI Decision Framework (Intake Filter, BXT, 9 perguntas criticas, Capability Model e selecao de tecnologia por cenario).
    - referencias/06-metodos-priorizacao-luma.md: adendo com os metodos de priorizacao do LUMA System (Rose/Thorn/Bud, Affinity Clustering, Statement Starters, Bull's-Eye) para priorizar e mapear oportunidades de projetos de IA.
+   - referencias/07-pl-2338-2023-copilot-studio-foundry.md: analise do PL 2338/2023 e como Microsoft Copilot Studio, Microsoft Foundry e Purview respondem aos eixos de transparencia, governanca, risco, auditoria, supervisao humana e protecao de dados com fontes oficiais.
 - ROI-IA-Calculadora.xlsx: planilha operacional do modelo de ROI/IVA (referencias/03), com 5 abas (Calculadora, Sensibilidade HITL, Como usar, Capacidade e Grafico, Ampliacao). Preencha as celulas azuis com as premissas da operacao e obtenha IVA, ROI (%), veredito (USAR IA / MANTER HUMANO) e impacto na capacidade da equipe. Instrucoes de uso e interpretacao em referencias/03-roi-ia-vs-homem-hora.md.
 
 > Observacao: IVA (Indice de Vantagem da IA) e a razao entre o custo humano da tarefa e o custo total da IA por tarefa (IVA = Custo Humano / Custo IA). IVA > 1 indica que a IA e financeiramente vantajosa (um IVA de 4,0 significa que a tarefa via IA custa 1/4 do valor da mesma tarefa feita por uma pessoa); IVA = 1 e o ponto de equilibrio; IVA < 1 indica manter o trabalho humano. Nao confundir com o imposto IVA (Imposto sobre Valor Agregado).
@@ -121,7 +122,7 @@ Exemplo de prompt:
 
 > Usando o #SKILL.md, recomende a arquitetura alvo para um copilot de atendimento com dados governados no Fabric.
 
-Dica: para tratar o `SKILL.md` como uma skill reutilizavel, copie-o (ou crie um link) para a pasta de prompts/skills do seu usuario no VS Code e referencie-o nas conversas.
+Dica: para tratar o `SKILL.md` como uma skill reutilizavel no formato oficial do VS Code, copie-o (ou crie um link) para uma pasta como `.github/skills/haraskill/` ou `~/.copilot/skills/haraskill/`. Neste repositorio, o arquivo na raiz funciona como **fonte canonica/roteador** para uso por referencia direta em prompts, enquanto a instalacao formal da skill deve seguir a convencao de pasta em minusculas.
 
 ## Como usar no GitHub Copilot CLI
 

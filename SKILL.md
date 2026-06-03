@@ -1,10 +1,11 @@
 ---
-name: estrategia-adocao-agentes-ia
+name: haraskill
 summary: "Orienta a definicao de arquitetura corporativa para adocao de agentes de IA com Microsoft IQ, Fabric e Foundry, incluindo Work IQ, Foundry IQ, Fabric IQ e Web IQ, fundamentos de arquitetura (LLM, RAG, AI Agent, Agentic AI), modelo de ROI (IA vs. homem-hora), governanca, seguranca, guard rails e avaliacao continua."
+description: "Skill para orientar estrategia de adocao de agentes de IA no ecossistema Microsoft, incluindo arquitetura alvo, governanca, ROI, seguranca e aderencia regulatoria."
 license: MIT
 metadata:
   author: Fabio
-  version: "1.1.0"
+  version: "1.2.0"
   language: pt-BR
 ---
 
@@ -32,6 +33,7 @@ Esta skill ajuda a estruturar recomendacoes praticas para adocao de agentes de I
 - O usuario solicitar roteiro de implantacao por fases.
 - O usuario pedir justificativa financeira ou ROI (IA vs. homem-hora, modo eficiencia ou ampliacao).
 - O usuario pedir padroes para escalar agentes entre areas de negocio.
+- O usuario pedir analise regulatoria, governanca ou aderencia de Microsoft Copilot Studio, Microsoft Foundry e Purview a requisitos como transparencia, auditoria, risco, supervisao humana e protecao de dados.
 
 ## Nao Use Quando
 
@@ -57,6 +59,7 @@ Se faltar informacao critica, solicitar apenas o minimo necessario antes de reco
 3. Mapear as fontes de dados e o nivel de governanca atual.
 4. Definir separacao de camadas: experiencia (Work IQ), agentes (Foundry IQ), inteligencia de dados (Fabric IQ), contexto externo (Web IQ, quando necessario) e plataforma (Microsoft Fabric).
 5. Definir controles transversais: Guard Rails e Evaluators.
+5.1. Quando o pedido envolver regulacao, compliance ou aderencia a requisitos legais, mapear os eixos regulatorios para capacidades tecnicas e de governanca da Microsoft, sem afirmar conformidade juridica automatica.
 6. Validar a viabilidade financeira com o modelo de ROI (IVA = custo humano / custo IA por tarefa), incluindo HITL, setup amortizado e multiplicador de escopo; avaliar no horizonte de 12-18 meses.
 7. Propor roadmap em ondas: piloto, expansao e escala.
 8. Fechar com metricas de sucesso, riscos e plano de mitigacao.
@@ -97,5 +100,6 @@ Carregue apenas o arquivo de referencia necessario para a pergunta (progressive 
 - referencias/03-roi-ia-vs-homem-hora.md — modelo de ROI/IVA, HITL, multiplicador de escopo.
 - referencias/04-governanca-guardrails-evaluators-hitl.md — Guard Rails, Evaluators e Human-in-the-Loop.
 - referencias/05-decision-framework-bxt.md — Microsoft AI Decision Framework: Intake Filter, BXT, 9 perguntas criticas, Capability Model e selecao de tecnologia por cenario.
+- referencias/07-pl-2338-2023-copilot-studio-foundry.md — analise do PL 2338/2023, com foco em transparencia, governanca, risco, auditoria, supervisao humana e protecao de dados com fontes oficiais.
 
 Indice completo e demais secoes: Estrategia_Adocao_Agentes_IA_Final_2.md (fonte canonica, com ponteiros para os arquivos acima).
