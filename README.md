@@ -51,13 +51,17 @@ graph TD
       REF --> R7[07-pl-2338-2023-copilot-studio-foundry.md<br/>PL 2338 - transparencia - governanca - risco - auditoria]
 
     SKILL --> README[README.md<br/>Visao geral do repositorio]
+   README --> DOC[doc/especificacoes-agente-projeto.md<br/>Especificacoes e necessidades do projeto]
+   SKILL -. contexto do projeto .-> DOC
 
     classDef entry fill:#0078D4,stroke:#004578,color:#fff;
     classDef canon fill:#107C10,stroke:#0B5A0B,color:#fff;
     classDef ref fill:#E6F2FA,stroke:#0078D4,color:#1a1a1a;
+   classDef doc fill:#FFF4CE,stroke:#C19C00,color:#1a1a1a;
     class SKILL entry;
     class CANON canon;
    class R1,R2,R3,R4,R5,R6,R7 ref;
+   class DOC doc;
 ```
 
 ## Como navegar (fluxograma de decisao)
@@ -73,7 +77,11 @@ flowchart TD
     Q2 -- Sim --> SKILL[Use SKILL.md<br/>como contexto/skill]
     Q2 -- Nao --> Q3{Que tema voce<br/>precisa aprofundar?}
 
-    SKILL --> Q3
+   SKILL --> QDOC{Ja existe documento<br/>em doc/?}
+   QDOC -- Sim --> DOC[doc/especificacoes-agente-projeto.md]
+   QDOC -- Nao --> DOCNEW[Crie doc/especificacoes-agente-projeto.md]
+   DOC --> Q3
+   DOCNEW --> Q3
 
     Q3 -- Fundamentos<br/>LLM/RAG/Agentes --> R1[referencias/01-fundamentos-llm-rag-agentes.md]
     Q3 -- Arquitetura<br/>por camadas --> R2[referencias/02-arquitetura-referencia-camadas.md]
@@ -125,7 +133,62 @@ Exemplo de prompt:
 
 > Usando o #SKILL.md, recomende a arquitetura alvo para um copilot de atendimento com dados governados no Fabric.
 
+Exemplo com documento de especificacoes do projeto:
+
+> Usando o #SKILL.md e o #doc/especificacoes-agente-projeto.md, proponha a arquitetura alvo, os guard rails e o roadmap em ondas para este agente, considerando requisitos funcionais, integracoes, SLA e restricoes de compliance descritas no documento.
+
 Dica: para tratar o `SKILL.md` como uma skill reutilizavel no formato oficial do VS Code, copie-o (ou crie um link) para uma pasta como `.github/skills/hubsp-ai-skill/` ou `~/.copilot/skills/hubsp-ai-skill/`. Neste repositorio, o arquivo na raiz funciona como **fonte canonica/roteador** para uso por referencia direta em prompts, enquanto a instalacao formal da skill deve seguir a convencao de pasta em minusculas.
+
+## Observacao sobre documentos de projeto (pasta `doc`)
+
+Para padronizar o uso da skill em qualquer canal (VS Code, GitHub Copilot App e CLI), crie uma pasta `doc/` na raiz do repositorio e adicione nela o documento com as especificacoes e necessidades do projeto que sera analisado.
+
+Exemplo de caminho recomendado:
+
+`doc/especificacoes-agente-projeto.md`
+
+Template pronto para uso:
+
+`doc/especificacoes-agente-projeto.md` (preencha e anexe este arquivo ao chat junto com o `SKILL.md`).
+
+Recomendacao de estrutura minima do documento (ordem sugerida):
+
+1. Contexto de negocio e objetivo do agente.
+2. Escopo funcional (o que o agente faz e o que nao faz).
+3. Perfis de usuarios, jornadas e canais.
+4. Requisitos nao funcionais (SLA, latencia, disponibilidade, escala).
+5. Dados e integracoes (fontes, APIs, sistemas, classificacao de dados).
+6. Governanca e seguranca (guard rails, compliance, auditoria, HITL).
+7. Criterios de sucesso e KPIs.
+8. Restricoes, riscos e premissas.
+9. Roadmap em ondas (piloto, expansao, escala).
+
+Extensoes de arquivo suportadas (pratica recomendada):
+
+- `.md`: melhor desempenho e maior previsibilidade de leitura pelo agente (recomendado).
+- `.txt`: desempenho alto, sem recursos de formatacao.
+- `.pdf`: suportado, mas pode perder estrutura em tabelas/diagramas e variar conforme a extracao de texto.
+- `.docx`: suportado, bom para autoria executiva, com possivel variacao de interpretacao em layouts complexos.
+
+Melhor desempenho geral para analise pela skill: **`.md`** (texto simples, secoes claras e titulos objetivos).
+
+## Como usar no GitHub Copilot App
+
+Pre-requisitos: app do GitHub Copilot com acesso ao repositorio e uma assinatura ativa do GitHub Copilot.
+
+1. Abrir este repositorio no app como workspace/projeto.
+2. Iniciar um chat em modo Agent.
+3. Anexar o `SKILL.md` ao contexto (ou usar `#SKILL.md`) para aplicar as regras de resposta em pt-BR e o formato executivo.
+4. Quando precisar de profundidade, anexar tambem os arquivos de `referencias/` conforme o tema (arquitetura, ROI, governanca, decision framework).
+5. Fazer a pergunta com contexto de negocio e objetivo de decisao.
+
+Exemplo de prompt no app:
+
+> Usando o #SKILL.md e o referencias/02-arquitetura-referencia-camadas.md, recomende a arquitetura alvo para um agente de atendimento com dados governados no Fabric.
+
+Exemplo no app com documento de especificacoes do projeto:
+
+> Usando o #SKILL.md e o #doc/especificacoes-agente-projeto.md, traduza as necessidades do projeto em arquitetura alvo (Work IQ, Foundry IQ e Fabric IQ), controles de governanca e plano de implantacao por fases.
 
 ## Como usar no GitHub Copilot CLI
 
@@ -155,6 +218,16 @@ Pre-requisitos: Node.js 22 ou superior, uma assinatura ativa do GitHub Copilot e
 
    ```bash
    copilot -p "Com base em SKILL.md, gere uma visao executiva da arquitetura alvo (Work IQ, Foundry IQ, Fabric IQ)."
+   ```
+
+Exemplo no CLI com documento de especificacoes do projeto (sessao interativa):
+
+   > Leia o SKILL.md e o doc/especificacoes-agente-projeto.md e recomende a arquitetura alvo, os guard rails e os KPIs de sucesso para este agente, com trade-offs entre custo, risco, velocidade e complexidade.
+
+Exemplo no CLI com documento de especificacoes do projeto (prompt unico):
+
+   ```bash
+   copilot -p "Leia SKILL.md e doc/especificacoes-agente-projeto.md e gere uma recomendacao executiva com arquitetura alvo, governanca e roadmap em ondas para o agente do projeto."
    ```
 
 Observacoes:
