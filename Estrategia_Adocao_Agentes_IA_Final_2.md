@@ -565,6 +565,23 @@ Mapear as três ferramentas principais ao framework de adoção e aos cenários 
 
 ### 🧠 Modelos disponíveis no Microsoft Foundry
 
+O Build 2026 consolidou a família **MAI** como uma nova linha de modelos da Microsoft AI dentro do ecossistema Foundry. A leitura coerente para este guia é tratar MAI como **portfolio de modelos** e não como uma nova camada arquitetural: eles reforçam a camada de modelo/raciocínio, enquanto **Work IQ, Foundry IQ e Fabric IQ continuam sendo as camadas de experiência, orquestração e dados**.
+
+**Onde MAI se encaixa neste guia**
+- **Reasoning e planejamento**: modelos da família MAI reforçam cenários de raciocínio e decisão onde Foundry já é a camada de orquestração.
+- **Coding e automação agentica**: a linha voltada a código faz sentido em fluxos de build, tool calling e agentes de desenvolvimento.
+- **Transcription, voice e image**: cobrem cenários multimodais e experiências ricas, úteis para extensões de produto e automação especializada.
+
+**Diretriz executiva para produção**
+- Priorizar o uso de MAI por **capacidade e caso de uso**, não por novidade de anúncio.
+- Tratar variantes em **preview** como trilha controlada de inovação, com guard rails e critérios de saída claros.
+- Manter o padrão do guia: dados governados no Fabric, orquestração no Foundry e avaliadores/guard rails como controles transversais.
+
+**Fontes oficiais de referência**
+- [Microsoft AI: Building a hill-climbing machine: Launching seven new MAI models](https://microsoft.ai/news/building-a-hillclimbing-machine-launching-seven-new-mai-models/)
+- [Foundry Models from partners and community — Microsoft](https://learn.microsoft.com/azure/foundry/foundry-models/concepts/models-from-partners#microsoft)
+- [Deploy and use MAI image models in Microsoft Foundry (preview)](https://learn.microsoft.com/azure/foundry/foundry-models/how-to/use-foundry-models-mai)
+
 ### 🔌 Protocolos de integração no Microsoft Foundry
 
 **MCP (Model Context Protocol):** protocolo open-source da Anthropic para conectar agentes a ferramentas externas — o Microsoft Foundry suporta MCP servers remotos com autenticação via Entra ID
@@ -1067,6 +1084,7 @@ flowchart TD
 
 - **Foundry portal em GA (core scenarios):** o novo Microsoft Foundry portal foi anunciado como pronto para produção em cenários centrais de descoberta, build e operação em Foundry projects.
 - **Foundry IQ com GA parcial:** no Build 2026, a mensagem oficial é de GA parcial para capacidades de Foundry IQ/agentic retrieval via APIs estáveis (Azure AI Search), enquanto parte das experiências avançadas permanece em preview.
+- **MAI como portfolio de modelos:** o Build 2026 lançou a família MAI como nova linha de modelos da Microsoft AI, cobrindo reasoning, coding, image, transcription e voice; a coerência arquitetural aqui é tratá-los como opções do catálogo de modelos, com governança de preview onde aplicável.
 - **Distinção crítica para arquitetura alvo:** o portal do Foundry e do Azure ainda expõe capacidades de agentic retrieval com componentes em preview; portanto, decisões de produção devem separar explicitamente dependências GA de dependências preview.
 - **Implicação executiva:** a organização pode acelerar rollout com Foundry em produção, desde que use guard rails de governança para bloquear preview em workloads críticos ou trate preview como trilha controlada de inovação.
 
