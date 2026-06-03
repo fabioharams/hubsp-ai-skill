@@ -567,10 +567,15 @@ Mapear as três ferramentas principais ao framework de adoção e aos cenários 
 
 O Build 2026 consolidou a família **MAI** como uma nova linha de modelos da Microsoft AI dentro do ecossistema Foundry. A leitura coerente para este guia é tratar MAI como **portfolio de modelos** e não como uma nova camada arquitetural: eles reforçam a camada de modelo/raciocínio, enquanto **Work IQ, Foundry IQ e Fabric IQ continuam sendo as camadas de experiência, orquestração e dados**.
 
-**Onde MAI se encaixa neste guia**
-- **Reasoning e planejamento**: modelos da família MAI reforçam cenários de raciocínio e decisão onde Foundry já é a camada de orquestração.
-- **Coding e automação agentica**: a linha voltada a código faz sentido em fluxos de build, tool calling e agentes de desenvolvimento.
-- **Transcription, voice e image**: cobrem cenários multimodais e experiências ricas, úteis para extensões de produto e automação especializada.
+**Leitura executiva da família MAI**
+
+| Modelo / família | Principal uso | Maturidade prática | Risco de adoção | Encaixe na arquitetura |
+| --- | --- | --- | --- | --- |
+| MAI-Thinking-1 | Reasoning, planejamento e tarefas complexas | Alto valor para análise avançada | Médio | Camada de raciocínio no Foundry |
+| MAI-Code-1-Flash | Coding agentico e tool calling eficiente | Forte para fluxos de desenvolvimento | Médio | Foundry para automação e build |
+| MAI-Image-2.5 / Flash | Geração e edição de imagens | Bom para experiências multimodais | Alto quando preview | Extensão de produto e automação rica |
+| MAI-Transcribe-1.5 | Transcrição e entrada de voz | Forte para cenários de speech | Médio | Entrada multimodal para agentes |
+| MAI-Voice-2 | Síntese de voz natural | Bom para experiências conversacionais | Alto quando preview | Camada de experiência / canais |
 
 **Diretriz executiva para produção**
 - Priorizar o uso de MAI por **capacidade e caso de uso**, não por novidade de anúncio.
