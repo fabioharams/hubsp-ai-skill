@@ -53,15 +53,22 @@ graph TD
     SKILL --> README[README.md<br/>Visao geral do repositorio]
    README --> DOC[doc/especificacoes-agente-projeto.md<br/>Especificacoes e necessidades do projeto]
    SKILL -. contexto do projeto .-> DOC
+   README --> PROMPT[Prompt padrao reutilizavel<br/>geracao de resposta diagramada]
+   DOC --> PROMPT
+   PROMPT --> OUTMD[doc/respostas/arquitetura-alvo-projeto-x.md<br/>Saida em Markdown]
 
     classDef entry fill:#0078D4,stroke:#004578,color:#fff;
     classDef canon fill:#107C10,stroke:#0B5A0B,color:#fff;
     classDef ref fill:#E6F2FA,stroke:#0078D4,color:#1a1a1a;
    classDef doc fill:#FFF4CE,stroke:#C19C00,color:#1a1a1a;
+   classDef prompt fill:#EDE7F6,stroke:#5E35B1,color:#1a1a1a;
+   classDef output fill:#E8F5E9,stroke:#2E7D32,color:#1a1a1a;
     class SKILL entry;
     class CANON canon;
    class R1,R2,R3,R4,R5,R6,R7 ref;
    class DOC doc;
+   class PROMPT prompt;
+   class OUTMD output;
 ```
 
 ## Como navegar (fluxograma de decisao)
@@ -80,8 +87,12 @@ flowchart TD
    SKILL --> QDOC{Ja existe documento<br/>em doc/?}
    QDOC -- Sim --> DOC[doc/especificacoes-agente-projeto.md]
    QDOC -- Nao --> DOCNEW[Crie doc/especificacoes-agente-projeto.md]
-   DOC --> Q3
-   DOCNEW --> Q3
+   DOC --> QOUT{Quer salvar resposta<br/>em arquivo Markdown?}
+   DOCNEW --> QOUT
+   QOUT -- Sim --> PROMPT[Use o prompt padrao<br/>do README]
+   PROMPT --> OUTMD[doc/respostas/arquitetura-alvo-projeto-x.md]
+   QOUT -- Nao --> Q3
+   OUTMD --> Q3
 
     Q3 -- Fundamentos<br/>LLM/RAG/Agentes --> R1[referencias/01-fundamentos-llm-rag-agentes.md]
     Q3 -- Arquitetura<br/>por camadas --> R2[referencias/02-arquitetura-referencia-camadas.md]
@@ -171,6 +182,16 @@ Extensoes de arquivo suportadas (pratica recomendada):
 - `.docx`: suportado, bom para autoria executiva, com possivel variacao de interpretacao em layouts complexos.
 
 Melhor desempenho geral para analise pela skill: **`.md`** (texto simples, secoes claras e titulos objetivos).
+
+## Prompt padrao reutilizavel (gerar arquivo Markdown diagramado)
+
+Use este prompt em qualquer projeto. Ajuste apenas os campos entre colchetes:
+
+> Usando o #SKILL.md e o #doc/especificacoes-agente-projeto.md, gere uma recomendacao executiva para o projeto [NOME_DO_PROJETO] no contexto [SEGMENTO/AREA]. Estruture a resposta com: 1) visao executiva curta, 2) arquitetura recomendada com camadas e responsabilidades (incluindo Work IQ, Foundry IQ, Fabric IQ e Web IQ quando aplicavel), 3) governanca e seguranca com guard rails, evaluators e HITL, 4) roadmap em ondas (piloto, expansao, escala), 5) KPIs de sucesso, 6) riscos e mitigacoes, sempre explicando trade-offs entre custo, risco, velocidade e complexidade. Formate o conteudo em Markdown devidamente diagramado, com tabela de decisoes e pelo menos um diagrama Mermaid. Salve o resultado em doc/respostas/arquitetura-alvo-[NOME_DO_PROJETO].md.
+
+Variacao para foco tecnico detalhado:
+
+> Usando o #SKILL.md e o #doc/especificacoes-agente-projeto.md, gere um arquivo Markdown tecnico em doc/respostas/arquitetura-tecnica-[NOME_DO_PROJETO].md com arquitetura alvo detalhada, componentes por camada, requisitos nao funcionais, plano de implementacao, observabilidade, seguranca e checklist de operacao.
 
 ## Como usar no GitHub Copilot App
 
