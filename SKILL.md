@@ -1,6 +1,6 @@
 ---
 name: estrategia-adocao-agentes-ia
-summary: "Orienta a definicao de arquitetura corporativa para adocao de agentes de IA com Microsoft IQ, Fabric e Foundry, incluindo fundamentos de arquitetura (LLM, RAG, AI Agent, Agentic AI), modelo de ROI (IA vs. homem-hora), governanca, seguranca, guard rails e avaliacao continua."
+summary: "Orienta a definicao de arquitetura corporativa para adocao de agentes de IA com Microsoft IQ, Fabric e Foundry, incluindo Work IQ, Foundry IQ, Fabric IQ e Web IQ, fundamentos de arquitetura (LLM, RAG, AI Agent, Agentic AI), modelo de ROI (IA vs. homem-hora), governanca, seguranca, guard rails e avaliacao continua."
 license: MIT
 metadata:
   author: Fabio
@@ -25,7 +25,7 @@ Esta skill ajuda a estruturar recomendacoes praticas para adocao de agentes de I
 ## Use Quando
 
 - O usuario pedir estrategia de adocao de agentes de IA.
-- O usuario quiser desenhar arquitetura com Work IQ, Foundry IQ e Fabric IQ.
+- O usuario quiser desenhar arquitetura com Work IQ, Foundry IQ e Fabric IQ, incluindo contexto externo via Web IQ quando aplicavel.
 - O usuario precisar entender ou comparar os padroes LLM, RAG, AI Agent e Agentic AI.
 - O usuario quiser decidir o nivel minimo de complexidade para um caso de uso.
 - O usuario precisar conectar IA com governanca de dados e seguranca.
@@ -55,7 +55,7 @@ Se faltar informacao critica, solicitar apenas o minimo necessario antes de reco
 2. Escolher o padrao arquitetural pelo menor nivel de complexidade que resolve de forma confiavel: LLM (texto, um passo), RAG (resposta fundamentada em dados), AI Agent unico (tarefa multi-etapa, um dominio) ou Agentic AI multiagente (cruza seguranca, multiplos times ou crescimento previsto).
 2.1. Quando o pedido envolver escolha de tecnologia/produto Microsoft, aplicar o Microsoft AI Decision Framework (referencias/05-decision-framework-bxt.md): Intake Filter, BXT (Business/Experience/Technology), as 9 perguntas criticas e a selecao por cenario.
 3. Mapear as fontes de dados e o nivel de governanca atual.
-4. Definir separacao de camadas: experiencia (Work IQ), agentes (Foundry IQ), inteligencia de dados (Fabric IQ) e plataforma (Microsoft Fabric).
+4. Definir separacao de camadas: experiencia (Work IQ), agentes (Foundry IQ), inteligencia de dados (Fabric IQ), contexto externo (Web IQ, quando necessario) e plataforma (Microsoft Fabric).
 5. Definir controles transversais: Guard Rails e Evaluators.
 6. Validar a viabilidade financeira com o modelo de ROI (IVA = custo humano / custo IA por tarefa), incluindo HITL, setup amortizado e multiplicador de escopo; avaliar no horizonte de 12-18 meses.
 7. Propor roadmap em ondas: piloto, expansao e escala.
@@ -93,7 +93,7 @@ Se faltar informacao critica, solicitar apenas o minimo necessario antes de reco
 Carregue apenas o arquivo de referencia necessario para a pergunta (progressive disclosure):
 
 - referencias/01-fundamentos-llm-rag-agentes.md — LLM x RAG x AI Agent x Agentic AI; espectro de complexidade e guia de decisao.
-- referencias/02-arquitetura-referencia-camadas.md — Work IQ, Foundry IQ, Fabric IQ, Microsoft Fabric; especificacoes tecnicas por camada.
+- referencias/02-arquitetura-referencia-camadas.md — Microsoft IQ (Work IQ, Foundry IQ, Fabric IQ, Web IQ) e Microsoft Fabric; especificacoes tecnicas por camada.
 - referencias/03-roi-ia-vs-homem-hora.md — modelo de ROI/IVA, HITL, multiplicador de escopo.
 - referencias/04-governanca-guardrails-evaluators-hitl.md — Guard Rails, Evaluators e Human-in-the-Loop.
 - referencias/05-decision-framework-bxt.md — Microsoft AI Decision Framework: Intake Filter, BXT, 9 perguntas criticas, Capability Model e selecao de tecnologia por cenario.

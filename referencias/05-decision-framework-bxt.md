@@ -87,10 +87,11 @@ Dado o agrupamento da Fase 2, aplicar criterios em ordem para escolher a tecnolo
 4. AI services e building blocks (Foundry: modelos, retrieval, evaluations, governanca)
 5. Agentes especializados (nao reconstruir o que ja existe)
 
-**As 3 camadas IQ** (como os agentes entendem a organizacao) — ancoram diretamente a arquitetura deste guia (referencia 02):
+**As camadas IQ** (como os agentes entendem a organizacao) — ancoram diretamente a arquitetura deste guia (referencia 02):
 - **Foundry IQ = Memory** (knowledge bases / agentic retrieval, citacoes, ACL + Purview)
 - **Work IQ = Awareness** (mesma inteligencia do M365 Copilot; Mail, Calendar, Teams, 1.500+ conectores via MCP)
 - **Fabric IQ = Understanding** (ontologias, semantic models, regras de negocio, acoes governadas)
+- **Web IQ = External Grounding** (evidencia web atualizada para contexto de mercado e fatos publicos)
 
 ---
 
@@ -105,7 +106,7 @@ flowchart TD
 
     BXT -. ROI/IVA .-> R3[referencia 03 - ROI]
     Q9 -. espectro LLM-RAG-Agent-Agentic .-> R1[referencia 01 - Fundamentos]
-    Q9 -. Work/Foundry/Fabric IQ .-> R2[referencia 02 - Camadas]
+    Q9 -. Work/Foundry/Fabric/Web IQ .-> R2[referencia 02 - Camadas]
     GOV -. Guard Rails / Evaluators / HITL .-> R4[referencia 04 - Governanca]
 
     style IF fill:#FF6B6B,stroke:#CC5555,color:#fff

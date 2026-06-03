@@ -18,11 +18,11 @@ Definir uma arquitetura corporativa para adoção de IA baseada em:
 
 ### 🏢 Arquitetura corporativa — o que significa neste contexto
 
-Neste guia, arquitetura corporativa significa o desenho integrado de processos, dados, identidade, segurança, governança e experiências de usuário para que agentes de IA operem de forma previsível, escalável e alinhada às políticas da organização. Em vez de tratar IA como um conjunto de casos isolados, a arquitetura corporativa define como as camadas se conectam: o Microsoft 365 Copilot atua na experiência do usuário e no grounding com dados do Microsoft Graph; o Copilot Studio e o Microsoft Foundry estruturam agentes, orquestração e avaliações; o Microsoft Fabric, com OneLake, lakehouses, warehouses e modelos semânticos, fornece a base de dados governada; e serviços como Microsoft Purview e Microsoft Entra ID impõem classificação, proteção, identidade e controle de acesso. Essa abordagem é consistente com a orientação da Microsoft de unificar a plataforma de dados para analytics e IA, de fazer agentes consumirem dados governados e de manter segurança e conformidade em todas as camadas.
+Neste guia, arquitetura corporativa é o desenho integrado de processos, dados, identidade, segurança, governança e experiência do usuário para operação de agentes com previsibilidade e escala. O foco não é tratar IA como iniciativas isoladas. O foco é conectar camadas com papéis claros: Microsoft 365 Copilot na experiência e no contexto de trabalho; Copilot Studio e Microsoft Foundry na orquestração; Microsoft Fabric como base de dados governada; e Purview + Entra ID como controles de classificação, proteção e acesso. Essa abordagem segue a direção da Microsoft para unificar dados de analytics e IA, usar dados governados como grounding e manter segurança e conformidade de ponta a ponta.
 
 ### ⭐ Por que isso é importante
 
-A importância da arquitetura corporativa está em transformar IA de uma experimentação pontual em uma capacidade operacional da empresa. Sem essa arquitetura, cada agente tende a acessar fontes diferentes, aplicar regras diferentes e produzir respostas com níveis distintos de qualidade e risco. Com uma arquitetura corporativa bem definida, a organização estabelece uma fonte confiável de verdade, reduz retrabalho, evita duplicação de integrações, melhora a rastreabilidade e permite que segurança, conformidade e observabilidade sejam aplicadas desde o início. Na prática, isso significa que a empresa consegue escalar agentes sem perder controle: o usuário continua trabalhando nas interfaces já conhecidas, os agentes acessam apenas o que devem acessar, os dados permanecem protegidos por permissões e rótulos de sensibilidade, e a qualidade das respostas pode ser medida continuamente por evaluators e controles de segurança.
+Arquitetura corporativa transforma IA de experimento em capacidade operacional. Sem esse desenho, cada agente tende a usar fontes e regras diferentes, elevando risco e inconsistência. Com o desenho correto, a organização estabelece uma verdade única, reduz retrabalho, evita integrações duplicadas e melhora rastreabilidade. Na prática, isso permite escalar agentes sem perder controle: o usuário permanece nas interfaces conhecidas, o acesso segue políticas de identidade e sensibilidade, e a qualidade é medida continuamente por evaluators e observabilidade.
 
 ### 🧩 Exemplos práticos
 
@@ -40,11 +40,11 @@ A importância da arquitetura corporativa está em transformar IA de uma experim
 
 > Conteudo movido para [referencias/01-fundamentos-llm-rag-agentes.md](referencias/01-fundamentos-llm-rag-agentes.md) — Fundamentos de Arquitetura de IA — LLM x RAG x AI Agent x Agentic AI.
 
-> Conteudo movido para [referencias/02-arquitetura-referencia-camadas.md](referencias/02-arquitetura-referencia-camadas.md) — Arquitetura de Referencia e Especificacoes Tecnicas por Camada (Work IQ, Foundry IQ, Fabric IQ, Microsoft Fabric).
+> Conteudo movido para [referencias/02-arquitetura-referencia-camadas.md](referencias/02-arquitetura-referencia-camadas.md) — Arquitetura de Referencia e Especificacoes Tecnicas por Camada (Microsoft IQ: Work IQ, Foundry IQ, Fabric IQ, Web IQ + Microsoft Fabric).
 
 ## ⏱️ 3. Estratégia de Adoção (Curto e Médio Prazo)
 
-A estratégia de adoção de agentes de IA segue um modelo **interno de 5 fases evolutivas**, alinhado ao framework oficial da Microsoft para agentes de IA (**Plan, Govern and secure, Build, Manage**), com foco em construir capacidades organizacionais, não apenas tecnológicas. Este modelo reconhece que o sucesso depende de pessoas, processos e dados tanto quanto de tecnologia.
+A estratégia de adoção segue um modelo interno de **5 fases evolutivas**, alinhado ao framework da Microsoft para agentes de IA (**Plan, Govern and secure, Build, Manage**). O objetivo é construir capacidade organizacional, e não apenas entregar tecnologia. O sucesso depende de pessoas, processos e dados governados.
 
 ```mermaid
 graph LR
@@ -71,7 +71,7 @@ graph LR
 ### 🔍 Phase 1: Exploration (0–2 meses) — Validação Inicial
 
 **🎯 Objetivo**
-Validar viabilidade técnica, identificar use cases prioritários, avaliar preparação organizacional.
+Validar viabilidade técnica, priorizar casos de uso e medir preparação organizacional.
 
 **📋 Atividades Chave**
 
@@ -137,16 +137,16 @@ graph TD
 ### 🔬 Phase 2: Proof of Concept (2–4 meses) — Validação Técnica
 
 **🎯 Objetivo**
-Demonstrar viabilidade técnica de 1-2 use cases prioritários com dados reais, identificar desafios práticos, confirmar ROI.
+Demonstrar viabilidade de 1-2 casos prioritários com dados reais, identificar riscos práticos e confirmar ROI.
 
 **🛠️ Abordagem — Work IQ + Cenário B**
 
-Phase 2 combina **Microsoft 365 Copilot** (Work IQ) com **dados tratados** (Cenário B) para maximizar impacto rápido com mínimo risco técnico:
+A Phase 2 combina **Microsoft 365 Copilot** (Work IQ) com **dados tratados** (Cenário B) para maximizar impacto rápido com risco técnico controlado:
 
 | Dimensão | Work IQ (M365 Copilot) | Dados Existentes | Benefício |
 |----------|---|---|---|
 | **Setup Time** | 3-5 dias | Já disponível | Go-to-value em dias |
-| **Technical Risk** | Baixo (managed service) | Controladocommon | PoC de baixo risco |
+| **Technical Risk** | Baixo (managed service) | Controlado | PoC de baixo risco |
 | **User Impact** | Direto (embarcado em Word, Excel, Teams) | Imediato (contexto atual) | Valor visível em semanas |
 | **Governança** | Nativo (Microsoft Purview) | Já classificado (Cenário B) | Conformidade desde o dia 1 |
 | **Escalabilidade** | SaaS (auto-scale) | Fabric integration path | Caminho claro de evolução |
@@ -263,26 +263,26 @@ Pesquisa Microsoft mostra os **Top 3 Blockers** para IA rollout:
 ### 📊 Phase 3: Pilot / Deployment (4–10 meses) — Escala Controlada
 
 **🎯 Objetivo**
-Escalar de 10 usuários para 100-500 usuários, validar processos operacionais, construir cultura de adopção.
+Escalar de 10 usuários para 100-500 usuários, validar processos operacionais e consolidar cultura de adoção.
 
 **🚀 Abordagem — Hybrid (Cenário A + B) + Fabric + Foundry**
 
-Phase 3 introduz **Copilot Studio** e **Microsoft Foundry** para:
-- Agentes customizados por domínio
+A Phase 3 introduz **Copilot Studio** e **Microsoft Foundry** para:
+- Agentes por domínio
 - Integração com Fabric Data Products
-- Multi-agent orchestration
-- Advanced governance
+- Orquestração multiagente
+- Governança avançada
 
 | Ferramenta | Use Case | Características |
 |-----------|----------|---|
-| **M365 Copilot** | General productivity | IA embarcada, users já familiar |
-| **Copilot Studio** | Domain-specific agents | Low-code, agentes conversacionais |
-| **Microsoft Foundry** | Complex, multi-step | Code-first, reasoning avançado |
-| **Fabric Data Products** | Governed data | OneLake, RLS, Purview integration |
+| **M365 Copilot** | Produtividade geral | IA embarcada, experiência familiar |
+| **Copilot Studio** | Agentes por domínio | Low-code, agentes conversacionais |
+| **Microsoft Foundry** | Cenários complexos e multi-step | Code-first, reasoning avançado |
+| **Fabric Data Products** | Dados governados | OneLake, RLS, integração com Purview |
 
 **🎯 Três Competências Críticas (Microsoft Maturity Model)**
 
-Para sucesso em Phase 3, **3 competências DEVEM estar em Level 300**:
+Para sucesso na Phase 3, **3 competências devem estar em Level 300**:
 
 ```mermaid
 graph TD
@@ -347,7 +347,7 @@ graph TD
 | Risco | Impacto | Mitigation |
 |-------|--------|-----------|
 | Adoption plateaus at 20-30% | Investments stranded | Ensure 3 competencies at L300, not just tech |
-| Quality issues escalate | Users lose trust in IA | Implement guardrails (Groundedness check, PII detection) |
+| Quality issues escalate | Users lose trust in IA | Implement guard rails (Groundedness check, PII detection) |
 | Data security breaches | Compliance failure | Enforce Purview + RLS from day 1 |
 | Budget overruns | Stakeholder support lost | Cost monitoring via AI Gateway quotas |
 | Champions burnout | Knowledge transfer fails | Formalize champions program (4h/mo, manager support) |
@@ -364,11 +364,11 @@ graph TD
 ### 🚀 Phase 4: Scale (10–18 meses) — Escala Completa com Agentes Gerenciados
 
 **🎯 Objetivo**
-Escalar para organização completa, agentes se tornam parte da workforce operacional, governados por business managers (não IT).
+Escalar para a organização inteira, com agentes como parte da workforce operacional e governança liderada por business managers.
 
 **🔑 Mudança Crítica em Phase 4**
 
-Passagem de **agentes como experimento** para **agentes como workforce**:
+Transição de **agentes como experimento** para **agentes como workforce**:
 
 | Aspecto | Phase 3 (Pilot) | Phase 4 (Scale) |
 |--------|---|---|
@@ -450,7 +450,7 @@ A organização atinge **Level 400 - Predictable**:
 ### ♻️ Phase 5: Optimize (18+ meses) — Maturidade e Inovação Contínua
 
 **🎯 Objetivo**
-Continuous optimization, advanced use cases, exploration de novas fronteiras (multi-agent, reasoning, o que vem depois).
+Otimização contínua, expansão de casos avançados e exploração de novas fronteiras (multi-agent, reasoning e próximos ciclos de inovação).
 
 **🎓 Level 500 - Optimizing**
 
@@ -1020,13 +1020,14 @@ graph TB
 
 ### 🎯 Como as camadas se conectam
 
-Esta arquitetura integra experiência de usuário, orquestração de agentes, semântica de dados e plataforma analítica em um único fluxo operacional.
+Esta arquitetura conecta experiência, orquestração, semântica de dados, contexto web e plataforma analítica em um fluxo único e governado.
 
 1. **Work IQ** recebe a intenção do usuário nas interfaces de trabalho (Copilot, Teams, apps M365).
 2. **Foundry IQ** interpreta a intenção, planeja a execução e coordena agentes, tools e workflows.
 3. **Fabric IQ** traduz a pergunta para o contexto semântico corporativo (métricas, entidades e regras de negócio).
-4. **Microsoft Fabric** entrega os dados governados para execução analítica e grounding da resposta.
-5. **Guard Rails** e **Evaluators** atuam transversalmente: um controla risco e acesso, o outro mede qualidade e alimenta melhoria contínua.
+4. **Web IQ** complementa o grounding com evidências externas atualizadas (web, notícias e multimídia) quando o caso exige contexto de mercado.
+5. **Microsoft Fabric** entrega os dados governados para execução analítica e grounding da resposta.
+6. **Guard Rails** e **Evaluators** atuam de forma transversal: um controla risco e acesso, o outro mede qualidade e alimenta melhoria contínua.
 
 ### 🧩 Diagrama consolidado (Mermaid)
 
@@ -1034,13 +1035,16 @@ Esta arquitetura integra experiência de usuário, orquestração de agentes, se
 flowchart TD
     U[Usuario e Copilot\nWork IQ] --> A[Orquestracao de agentes\nFoundry IQ]
     A --> B[Semantica e contexto\nFabric IQ]
+    A --> W[Grounding web externo\nWeb IQ]
     B --> C[Dados governados\nMicrosoft Fabric]
     C --> A
+    W --> A
     A --> R[Resposta ao usuario]
 
     G[Guard Rails\nidentidade acesso seguranca] --> A
     G --> B
     G --> C
+    G --> W
 
     E[Evaluators\nqualidade seguranca drift] --> A
     E --> M[Feedback de melhoria\nprompt tools dados policies]
@@ -1049,9 +1053,24 @@ flowchart TD
 
 ### 📌 Leitura executiva da integração
 
-- **Valor**: decisões assistidas por IA com base em dados corporativos confiáveis.
+- **Valor**: decisões assistidas por IA com base em dados corporativos confiáveis e contexto externo atualizado.
 - **Controle**: segurança e conformidade aplicadas durante todo o ciclo de resposta.
-- **Evolução**: avaliação contínua transforma uso em aprendizado operacional.
+- **Evolução**: evaluators e observabilidade convertem uso em aprendizado operacional.
+
+### 📣 Atualização de contexto — Microsoft Build 2026 (Foundry IQ)
+
+- **Foundry portal em GA (core scenarios):** o novo Microsoft Foundry portal foi anunciado como pronto para produção em cenários centrais de descoberta, build e operação em Foundry projects.
+- **Foundry IQ com GA parcial:** no Build 2026, a mensagem oficial é de GA parcial para capacidades de Foundry IQ/agentic retrieval via APIs estáveis (Azure AI Search), enquanto parte das experiências avançadas permanece em preview.
+- **Distinção crítica para arquitetura alvo:** o portal do Foundry e do Azure ainda expõe capacidades de agentic retrieval com componentes em preview; portanto, decisões de produção devem separar explicitamente dependências GA de dependências preview.
+- **Implicação executiva:** a organização pode acelerar rollout com Foundry em produção, desde que use guard rails de governança para bloquear preview em workloads críticos ou trate preview como trilha controlada de inovação.
+
+### 🧪 Atualização de contexto — Microsoft Build 2026 (ASSERT e ACS)
+
+- **ASSERT (open-source evaluation):** o Build 2026 posiciona ASSERT como framework open-source e orientado a políticas para transformar requisitos em avaliações executáveis e regressão contínua de agentes.
+- **Agent Control Specification (ACS):** o Build 2026 apresenta ACS como especificação aberta de controles determinísticos em checkpoints do ciclo de execução do agente, com foco em portabilidade entre frameworks.
+- **Valor arquitetural direto:** ASSERT reforça a camada de evaluators (medição e validação contínua) e ACS reforça guard rails (enforcement em runtime), aumentando auditabilidade e consistência operacional.
+- **Uso recomendado neste guia:** tratar ASSERT como mecanismo de avaliação policy-driven no ciclo de melhoria contínua e ACS como contrato técnico de controles no runtime de agentes.
+- **Nota de sigla:** neste documento, **ACS** significa **Agent Control Specification**. Não confundir com **Azure ACS (Access Control Services)**, tecnologia legada já aposentada no contexto de SharePoint Online.
 
 ---
 
@@ -1066,24 +1085,27 @@ Padronizar como cada interação de IA acontece em produção, com previsibilida
 O usuário faz uma pergunta, solicita análise ou aciona uma tarefa em canais como Copilot, Teams ou apps M365.
 
 2. **Interpretação e planejamento (Foundry IQ)**
-O agente identifica intenção, contexto e escopo da tarefa. Nessa etapa, decide se responde diretamente ou se precisa acionar ferramentas e dados.
+O agente identifica intenção, contexto e escopo da tarefa. Nessa etapa, decide se responde diretamente ou se aciona tools e dados.
 
 3. **Validação de políticas (Guard Rails + Entra + Purview)**
-Antes de qualquer acesso sensível, o fluxo aplica controles de identidade, autorização e classificação de dados.
+Antes de qualquer acesso sensível, o fluxo aplica controles de identidade, autorização e classificação.
 
-4. **Acesso a dados e grounding (Fabric IQ + Microsoft Fabric)**
+4. **Grounding corporativo (Fabric IQ + Microsoft Fabric)**
 O agente consulta dados governados e semântica corporativa para produzir resposta ancorada em informação confiável.
 
-5. **Raciocínio e composição da resposta (Foundry IQ)**
-Com dados e contexto, o agente sintetiza a resposta final e prepara a saída no formato esperado pelo usuário.
+5. **Grounding externo complementar (Web IQ, quando aplicável)**
+Quando a tarefa exige sinais de mercado ou contexto público recente, o fluxo incorpora evidências web com rastreabilidade de fonte e separação clara entre dado interno e externo.
 
-6. **Validação de qualidade e segurança (Evaluators)**
+6. **Raciocínio e composição da resposta (Foundry IQ)**
+Com dados e contexto, o agente sintetiza a resposta final no formato esperado pelo usuário.
+
+7. **Validação de qualidade e segurança (Evaluators)**
 A saída passa por avaliação de qualidade (ex.: relevância, groundedness, coerência) e de risco (ex.: safety/compliance).
 
-7. **Entrega e observabilidade**
-Resposta é entregue ao usuário e os sinais operacionais (traces, métricas, scores, logs) são registrados para monitoramento.
+8. **Entrega e observabilidade**
+Resposta é entregue ao usuário e os sinais operacionais (traces, métricas, scores e logs) são registrados para monitoramento.
 
-8. **Melhoria contínua**
+9. **Melhoria contínua**
 Resultados de avaliação e incidentes alimentam backlog de melhorias em prompts, tools, políticas, dados e fluxos de agente.
 
 ### 🧩 Fluxograma operacional (Mermaid)
@@ -1096,7 +1118,10 @@ flowchart TD
     C -->|nao| F[Gerar resposta direta]
     C -->|sim| D[Guard Rails validam\nidentidade acesso classificacao]
     D --> E[Fabric IQ e Fabric\nfornecem contexto e dados]
-    E --> F[Foundry IQ compoe\nresposta final]
+    E --> W{Precisa contexto\nweb externo atualizado}
+    W -->|nao| F[Foundry IQ compoe\nresposta final]
+    W -->|sim| X[Web IQ fornece\nevidencias externas]
+    X --> F
 
     F --> G[Evaluators avaliam\nqualidade e seguranca]
     G --> H{Aprovado}
@@ -1114,8 +1139,17 @@ flowchart TD
 - **Work IQ**: experiência e produtividade do usuário final.
 - **Foundry IQ**: orquestração, decisão e execução dos agentes.
 - **Fabric IQ/Fabric**: contexto semântico e dados governados.
+- **Web IQ**: contexto externo em tempo quase real para grounding complementar.
 - **Guard Rails**: proteção de identidade, acesso e risco de dados.
 - **Evaluators**: medição objetiva para evolução contínua.
+
+### ✅ Diretriz de prontidão (GA vs preview)
+
+Para preservar confiabilidade e conformidade em escala:
+
+1. **Produção crítica:** priorizar apenas recursos Foundry/Foundry IQ classificados como GA.
+2. **Inovação controlada:** usar recursos preview somente com exceção formal, telemetria reforçada e rollback definido.
+3. **Governança contínua:** revisar periodicamente status de features (GA/preview) antes de promover novos agentes para produção.
 
 ---
 
@@ -1201,7 +1235,8 @@ Esta seção resume como o conteúdo deste documento se conecta aos padrões ofi
 | **Microsoft Fabric Architecture Patterns** | Unificar dados para analytics/IA com governança e reutilização em escala. | O desenho Bronze/Silver/Gold com OneLake, SQL Analytics Endpoint e Data Products (seções técnicas e 5-7) aplica o padrão de plataforma de dados unificada para agentes. |
 | **Microsoft Entra + Purview + Agent 365** | Garantir identidade, acesso, conformidade e controle centralizado de agentes. | As seções 8.1, 8.2 e 8.3 detalham identidade de agentes, classificação/proteção de dados e plano de controle central, com foco em rastreabilidade e políticas consistentes. |
 | **Microsoft Foundry Observability and Evaluations** | Medir qualidade e segurança ao longo do ciclo de vida (pré-produção e produção). | A seção 9 define taxonomia de evaluators, pipeline de avaliação contínua e integração com observabilidade para feedback loop operacional. |
-| **Microsoft AI Decision Framework (BXT + 9 perguntas + Capability Model)** | Selecionar a tecnologia certa de forma repetível: Intake Filter, BXT (Business/Experience/Technology), 9 perguntas críticas e seleção por cenário. | O método de seleção está detalhado em referencias/05-decision-framework-bxt.md, conectando o espectro de complexidade (LLM→Agentic), o ROI/IVA e as camadas Work IQ, Foundry IQ e Fabric IQ às fases do framework. |
+| **Build 2026 Open Trust Stack (ASSERT + Agent Control Specification)** | Padronizar avaliação policy-driven e controles determinísticos de segurança no loop de agentes, com interoperabilidade entre frameworks. | A arquitetura deste guia já separa avaliação contínua (evaluators) e enforcement (guard rails); ASSERT e ACS fortalecem esse desenho e permitem evolução com mais evidência, portabilidade e governança. |
+| **Microsoft AI Decision Framework (BXT + 9 perguntas + Capability Model)** | Selecionar a tecnologia certa de forma repetível: Intake Filter, BXT (Business/Experience/Technology), 9 perguntas críticas e seleção por cenário. | O método de seleção está detalhado em referencias/05-decision-framework-bxt.md, conectando o espectro de complexidade (LLM→Agentic), o ROI/IVA e as camadas Work IQ, Foundry IQ, Fabric IQ e Web IQ às fases do framework. |
 
 ### 🧩 Mapa Visual de Alinhamento (Mermaid)
 

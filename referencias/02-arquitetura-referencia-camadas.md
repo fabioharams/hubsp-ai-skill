@@ -1,10 +1,13 @@
 ## 🏗️ 2. Arquitetura de Referência (Visão Geral)
 
+> Atualizacao de contexto: esta secao incorpora os anuncios recentes do **Microsoft IQ**, incluindo **Web IQ**, e o posicionamento oficial mais recente de **Work IQ**, **Foundry IQ** e **Fabric IQ**.
+
 ```mermaid
 graph TD
     A["<b>Work IQ</b><br/>(User Layer)<br/>─────────────────<br/>Copilot, Teams, Apps<br/>Interfaces de Consumo"] 
     B["<b>Foundry IQ</b><br/>(Agents Layer)<br/>─────────────────<br/>Orquestração de agentes<br/>workflows, reasoning"]
     C["<b>Fabric IQ</b><br/>(Data Intelligence)<br/>─────────────────<br/>Semântica, ontologia<br/>métricas unificadas"]
+    W["<b>Web IQ</b><br/>(Web Context Layer)<br/>─────────────────<br/>Grounding web em tempo quase real<br/>evidências externas"]
     D["<b>Microsoft Fabric</b><br/>(Data Platform)<br/>─────────────────<br/>OneLake, Data Products<br/>Lakehouse, Warehouse"]
     
     E["🛡️ Guard Rails<br/>Controle"]
@@ -13,6 +16,7 @@ graph TD
     A --> B
     B --> C
     C --> D
+    W --> B
     
     D -.-> E
     D -.-> F
@@ -20,6 +24,7 @@ graph TD
     style A fill:#4A90E2,stroke:#2E5C8A,color:#fff,stroke-width:2px
     style B fill:#7B68EE,stroke:#5A4DB0,color:#fff,stroke-width:2px
     style C fill:#50C878,stroke:#3A9B5C,color:#fff,stroke-width:2px
+    style W fill:#00A3A3,stroke:#006D6D,color:#fff,stroke-width:2px
     style D fill:#FF6B6B,stroke:#CC5555,color:#fff,stroke-width:2px
     style E fill:#FFD93D,stroke:#CCB030,color:#333,stroke-width:2px
     style F fill:#6BCB77,stroke:#54A05F,color:#fff,stroke-width:2px
@@ -40,13 +45,25 @@ A camada de interface com o usuário final. Integra o **Microsoft 365 Copilot** 
 
 #### 🤖 **Foundry IQ (Agents Layer)**
 A camada de **inteligência agêntica** — onde a lógica de decisão, reasoning e orquestração acontecem. Hospedada no **Microsoft Foundry** e **Copilot Studio**, seu papel é:
-- Executar raciocínio encadeado: Claude Opus 4.6 processa contexto de 1M tokens e decide qual tool call fazer
-- Orquestrar multi-agent systems: agentes comunicam entre si (via A2A protocol) para resolver problemas complexos
-- Aplicar lógica de negócio: implementa regras que Work IQ não pode executar sozinha
-- Fazer tool calls controlados: integra com APIs, Fabric, e MCP servers com autenticação Entra ID
-- Implementar guardrails em runtime: bloqueia ou redirecionam requisições perigosas
+- Operar uma knowledge base corporativa permission-aware com fontes estruturadas e não estruturadas
+- Executar agentic retrieval: decompõe perguntas em subconsultas, busca paralela e reranqueia evidências com citações
+- Sincronizar ACLs e rótulos de sensibilidade (Purview) para enforcement no tempo de consulta
+- Aplicar lógica de negócio e orquestrar tools/workflows em agentes do Foundry e Copilot Studio
+- Conectar Azure, SharePoint, OneLake e web no mesmo plano de grounding empresarial
 
 **Exemplo:** Um agente recebe "analise por que a margem caiu" → realiza tool call 1 (busca dados financeiros no Fabric) → tool call 2 (busca benchmarks do setor via MCP) → raciocina sobre contexto → gera análise estruturada.
+
+---
+
+#### 🌐 **Web IQ (Web Context Layer)**
+Camada de **grounding externo** do Microsoft IQ para contexto público e atualizado da web. Seu papel é:
+- Trazer evidências web (páginas, notícias, imagens e vídeos) para fluxos agênticos
+- Operar com foco em qualidade de grounding, baixa latência e eficiência de tokens
+- Entregar passagens/evidências mais densas para melhorar precisão de raciocínio em múltiplos passos
+- Respeitar controles de publishers e convenções da web (incluindo robots e preferências de acesso)
+- Complementar, sem substituir, os dados corporativos governados (Fabric IQ + Foundry IQ)
+
+**Exemplo:** Ao investigar variação de margem, o agente combina métricas internas (Fabric) com sinais externos de mercado (Web IQ), mantendo trilha de evidência separada para dado interno e fonte pública.
 
 ---
 
@@ -139,6 +156,14 @@ flowchart TD
 ```
 
 **Insight:** Fabric fornece a base de verdade dos dados. Guard Rails ajudam a assegurar que apenas os agentes certos acessem os dados adequados. Evaluators reforçam a confiabilidade da resposta. Foundry IQ e Work IQ viabilizam que o usuário receba valor pronto para ação.
+
+### 📰 Atualizações recentes do Microsoft IQ (2025-2026)
+
+- **Microsoft IQ** passa a ser explicitamente descrito como a camada de inteligência corporativa com **Work IQ, Foundry IQ, Fabric IQ e Web IQ**.
+- **Work IQ** reforça a arquitetura em 3 camadas (dados, contexto, skills/tools), com extensibilidade por MCP tools e evolução do Work IQ CLI (preview).
+- **Foundry IQ** consolida o padrão de knowledge base + agentic retrieval com enforcement de ACL/Purview e citações para rastreabilidade.
+- **Fabric IQ (preview)** evolui com novos itens e capacidades de operacionalização semântica (ex.: ontology/plan/rules) e integrações para agentes.
+- **Web IQ** é anunciado como suite de APIs de grounding web para era agêntica, ampliando contexto externo em tempo quase real para agentes.
 
 ---
 
