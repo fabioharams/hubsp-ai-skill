@@ -48,6 +48,7 @@ graph TD
       REF --> R4[04-governanca-guardrails-evaluators-hitl.md<br/>Guard Rails - Evaluators - HITL]
       REF --> R5[05-decision-framework-bxt.md<br/>BXT - 9 perguntas - Capability Model]
       REF --> R6[06-metodos-priorizacao-luma.md<br/>LUMA - priorizacao de oportunidades]
+      REF --> R7[07-pl-2338-2023-copilot-studio-foundry.md<br/>PL 2338 - transparencia - governanca - risco - auditoria]
 
     SKILL --> README[README.md<br/>Visao geral do repositorio]
 
@@ -56,7 +57,7 @@ graph TD
     classDef ref fill:#E6F2FA,stroke:#0078D4,color:#1a1a1a;
     class SKILL entry;
     class CANON canon;
-    class R1,R2,R3,R4,R5,R6 ref;
+   class R1,R2,R3,R4,R5,R6,R7 ref;
 ```
 
 ## Como navegar (fluxograma de decisao)
@@ -80,6 +81,7 @@ flowchart TD
     Q3 -- Governanca<br/>e seguranca --> R4[referencias/04-governanca-guardrails-evaluators-hitl.md]
     Q3 -- Escolha de<br/>tecnologia Microsoft --> R5[referencias/05-decision-framework-bxt.md]
     Q3 -- Priorizar e mapear<br/>oportunidades de IA --> R6[referencias/06-metodos-priorizacao-luma.md]
+   Q3 -- Analise regulatoria<br/>PL 2338/2023 --> R7[referencias/07-pl-2338-2023-copilot-studio-foundry.md]
     Q3 -- Visao completa<br/>ou outras secoes --> CANON[Estrategia_Adocao_Agentes_IA_Final_2.md]
 
     R1 --> END([Aplique no seu caso de uso])
@@ -88,6 +90,7 @@ flowchart TD
     R4 --> END
     R5 --> END
     R6 --> END
+   R7 --> END
     CANON --> END
     README --> END
 ```
