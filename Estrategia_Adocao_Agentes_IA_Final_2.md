@@ -3034,96 +3034,109 @@ Pipeline recomendado:
 ### A.1 Python — Agent Framework para Foundry
 
 ```python
-# agent_foundry_example.py
+# agent_framework_foundry_example.py
+import asyncio
 import os
-from azure.ai.projects import AIProjectClient
 
-project_client = AIProjectClient.from_connection_string(
-    connection_string=os.getenv("PROJECT_CONNECTION_STRING")
-)
+from agent_framework import Agent, tool
+from agent_framework.foundry import FoundryChatClient
+from azure.identity.aio import AzureCliCredential
+from dotenv import load_dotenv
 
-AGENT_INSTRUCTIONS = """
-You are a Sales Analysis Agent.
+load_dotenv()
 
-YOUR RESPONSIBILITIES:
-- Answer questions about sales pipeline
-- Provide data-driven insights on customer segments
-- Identify upsell opportunities
 
-BOUNDARIES:
-- You CANNOT approve discounts (only recommend)
-- You CANNOT access customer PII beyond Segment & Region (RLS enforced)
-- You MUST cite data source when answering
+@tool(approval_mode="always_require")
+def get_top_product_by_margin(quarter: str, region: str) -> str:
+    """Skill de exemplo: em producao, conecte ao seu data product governado."""
+    return f"Top produto por margem em {quarter} na regiao {region}: Contoso Analytics Suite (32.4%)."
 
-GUARDRAILS:
-- If asked for confidential info: "I can provide aggregated insights instead"
-- If question outside scope: "This is outside my expertise. Please contact..."
-"""
 
-agent = project_client.agents.create_agent(
-    name="Sales Analysis Agent",
-    model="gpt-4-turbo",
-    instructions=AGENT_INSTRUCTIONS
-)
+async def main() -> None:
+    credential = AzureCliCredential()
+    try:
+        client = FoundryChatClient(
+            project_endpoint=os.environ["FOUNDRY_PROJECT_ENDPOINT"],
+            model=os.getenv("FOUNDRY_MODEL", "gpt-4.1-mini"),
+            credential=credential,
+        )
 
-def invoke_agent(query: str):
-    response = project_client.agents.invoke(
-        agent_id=agent.id,
-        user_message=query,
-        context={"user_region": "LATAM"}
-    )
-    return response
+        agent = Agent(
+            client=client,
+            name="SalesAnalysisAgent",
+            instructions=(
+                "Voce e um agente de analise comercial. "
+                "Responda com dados objetivos, cite fonte e nao aprove descontos."
+            ),
+            tools=[get_top_product_by_margin],
+        )
 
-result = invoke_agent("What is the top-performing product in Q3 2026?")
-print(f"Agent response:\n{result}")
+        # Sessao explicita para conversa multi-turn com estado controlado.
+        session = agent.create_session()
+
+        result_1 = await agent.run(
+            "Qual foi o produto com maior margem no Q3 2026 em LATAM?",
+            session=session,
+        )
+        print("Turno 1:", result_1.text)
+
+        result_2 = await agent.run(
+            "Agora explique em 3 bullets o motivo e inclua recomendacao de upsell.",
+            session=session,
+        )
+        print("Turno 2:", result_2.text)
+    finally:
+        await credential.close()
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
 ```
 
-### A.2 C# — Azure AI Foundry
+### A.2 C# — Microsoft Agent Framework (.NET)
 
 ```csharp
-using Azure.AI.Projects;
+using Azure.AI.OpenAI;
 using Azure.Identity;
+using Microsoft.Agents.AI;
+using Microsoft.Extensions.AI;
+using OpenAI.Chat;
 
-var projectConnectionString = Environment.GetEnvironmentVariable("PROJECT_CONNECTION_STRING");
-var client = new AIProjectClient(projectConnectionString, new DefaultAzureCredential());
+var endpoint = Environment.GetEnvironmentVariable("AZURE_OPENAI_ENDPOINT")
+    ?? throw new InvalidOperationException("AZURE_OPENAI_ENDPOINT is not set.");
+var deploymentName = Environment.GetEnvironmentVariable("AZURE_OPENAI_DEPLOYMENT_NAME")
+    ?? "gpt-5.4-mini";
 
-var agentDefinition = new AgentDefinition
-{
-    Name = "Sales Analysis Agent",
-    Model = "gpt-4-turbo",
-    Instructions = @"
-You are a Sales Analysis Agent.
+// Em producao, prefira ManagedIdentityCredential quando aplicavel.
+AIAgent agent = new AzureOpenAIClient(new Uri(endpoint), new DefaultAzureCredential())
+    .GetChatClient(deploymentName)
+    .AsAIAgent(
+        name: "SalesAnalysisAgent",
+        instructions: "You are a sales analysis agent. Cite data sources and never approve discounts.",
+        tools: [AIFunctionFactory.Create(GetTopProductByMargin)]);
 
-INSTRUCTIONS:
-- Answer questions about sales pipeline
-- Always cite data source
-- Ask clarification if ambiguous
+AgentSession session = await agent.CreateSessionAsync();
 
-BOUNDARIES:
-- Cannot approve discounts
-- Cannot access PII beyond segment
-- RLS automatically applied
-"
-};
+var response1 = await agent.RunAsync("What is the top product by margin in Q3 2026 for LATAM?", session);
+Console.WriteLine($"Turn 1: {response1}");
 
-var agent = await client.Agents.CreateAgentAsync(agentDefinition);
+var response2 = await agent.RunAsync("Summarize in 3 bullets and propose one upsell action.", session);
+Console.WriteLine($"Turn 2: {response2}");
 
-var response = await client.Agents.InvokeAgentAsync(
-    agentId: agent.Id,
-    userMessage: "What is Q3 top product by margin?",
-    context: new Dictionary<string, string>
-    {
-        { "user_region", "LATAM" }
-    }
-);
-
-Console.WriteLine($"Agent response: {response}");
+static string GetTopProductByMargin(string quarter, string region)
+    => $"Top product by margin in {quarter} for {region}: Contoso Analytics Suite (32.4%).";
 ```
 
-### A.3 Node.js — Copilot Studio Agent
+### A.3 Node.js — Integracao de canal (fora do core do MAF)
+
+> Observacao executiva: o **Microsoft Agent Framework (MAF)** tem SDK principal em **Python e .NET**. Em Node.js, o padrao e usar SDKs de canal/orquestracao (por exemplo, Teams AI) e integrar com servicos/agentes corporativos governados.
 
 ```javascript
 const { ConversationBot } = require("@microsoft/teams-ai");
+
+const config = {
+    // Exemplo simplificado: carregue credenciais/config do ambiente.
+};
 
 const AGENT_INSTRUCTIONS = `
 You are a Sales Analysis Agent.
@@ -3146,10 +3159,11 @@ TONE:
 
 const bot = new ConversationBot({
   adapterConfig: config,
-  requestHandler: async (context, state) => {
+    requestHandler: async (context) => {
     const userMessage = context.activity.text;
     console.log(`User: ${userMessage}`);
-    await context.sendActivity("Processing...");
+        // Em producao, delegue para um endpoint de agente governado.
+        await context.sendActivity("Processing your request with policy controls...");
   }
 });
 
