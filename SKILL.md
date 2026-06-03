@@ -1,5 +1,5 @@
 ---
-name: haraskill
+name: hubsp-ai-skill
 summary: "Orienta a definicao de arquitetura corporativa para adocao de agentes de IA com Microsoft IQ, Fabric e Foundry, incluindo Work IQ, Foundry IQ, Fabric IQ e Web IQ, fundamentos de arquitetura (LLM, RAG, AI Agent, Agentic AI), modelo de ROI (IA vs. homem-hora), governanca, seguranca, guard rails e avaliacao continua."
 description: "Skill para orientar estrategia de adocao de agentes de IA no ecossistema Microsoft, incluindo arquitetura alvo, governanca, ROI, seguranca e aderencia regulatoria."
 license: MIT

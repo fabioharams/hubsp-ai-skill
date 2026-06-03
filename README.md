@@ -1,4 +1,4 @@
-# HARASKILL
+# hubsp-ai-skill
 
 ## O que e este projeto
 
@@ -109,8 +109,8 @@ Pre-requisitos: VS Code, a extensao GitHub Copilot Chat e uma assinatura ativa d
 1. Clonar e abrir o repositorio:
 
    ```bash
-   git clone https://github.com/<sua-org>/HARASKILL.git
-   code HARASKILL
+   git clone https://github.com/<sua-org>/hubsp-ai-skill.git
+   code hubsp-ai-skill
    ```
 
 2. Abrir o Copilot Chat (icone de chat na barra lateral ou `Ctrl+Alt+I` / `Cmd+Alt+I`) e usar o modo Agent.
@@ -125,7 +125,7 @@ Exemplo de prompt:
 
 > Usando o #SKILL.md, recomende a arquitetura alvo para um copilot de atendimento com dados governados no Fabric.
 
-Dica: para tratar o `SKILL.md` como uma skill reutilizavel no formato oficial do VS Code, copie-o (ou crie um link) para uma pasta como `.github/skills/haraskill/` ou `~/.copilot/skills/haraskill/`. Neste repositorio, o arquivo na raiz funciona como **fonte canonica/roteador** para uso por referencia direta em prompts, enquanto a instalacao formal da skill deve seguir a convencao de pasta em minusculas.
+Dica: para tratar o `SKILL.md` como uma skill reutilizavel no formato oficial do VS Code, copie-o (ou crie um link) para uma pasta como `.github/skills/hubsp-ai-skill/` ou `~/.copilot/skills/hubsp-ai-skill/`. Neste repositorio, o arquivo na raiz funciona como **fonte canonica/roteador** para uso por referencia direta em prompts, enquanto a instalacao formal da skill deve seguir a convencao de pasta em minusculas.
 
 ## Como usar no GitHub Copilot CLI
 
@@ -142,7 +142,7 @@ Pre-requisitos: Node.js 22 ou superior, uma assinatura ativa do GitHub Copilot e
 2. Entrar na pasta do repositorio e iniciar uma sessao interativa (o CLI usa o diretorio atual como contexto e pede confirmacao para confiar nele):
 
    ```bash
-   cd HARASKILL
+   cd hubsp-ai-skill
    copilot
    ```
 
