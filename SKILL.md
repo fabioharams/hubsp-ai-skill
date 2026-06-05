@@ -117,11 +117,16 @@ Se faltar informacao critica, solicitar apenas o minimo necessario antes de reco
 - Governanca e seguranca (controles)
   - Detalhar guard rails tecnicos e operacionais: Entra ID, RBAC, DLP, trilha de auditoria, versionamento de regras/checklists, evaluators e HITL.
   - Relacionar cada controle ao risco que ele mitiga (ex.: alucinacao, acesso indevido, decisao critica sem supervisao).
+  - Incluir analise explicita do PL 2338/2023, conectando a arquitetura recomendada aos eixos de transparencia, governanca, risco, auditoria, supervisao humana e protecao de dados.
+  - Explicar como as ferramentas e servicos selecionados na arquitetura respondem a cada eixo regulatorio, indicando limites, dependencias e eventuais lacunas de implementacao.
+  - Priorizar o uso de fontes oficiais Microsoft e, quando relevante, mencionar o arquivo de referencia regulatoria do repositorio para sustentar a analise.
   - Incluir pelo menos 1 diagrama ou fluxograma em Mermaid mostrando a sequencia de controles, validacoes e pontos de bloqueio/aprovacao.
   - Referencias Microsoft:
     - Microsoft Entra: https://learn.microsoft.com/entra/identity/
     - Microsoft Purview: https://learn.microsoft.com/purview/governance-solutions-overview
     - Responsible AI no Azure AI Foundry: https://learn.microsoft.com/azure/ai-foundry/responsible-ai/overview
+    - Microsoft Security: https://learn.microsoft.com/security/
+    - Well-Architected Framework - Security: https://learn.microsoft.com/azure/well-architected/security/
 
 - Plano de implantacao por fases (detalhado)
   - Descrever no minimo 3 fases: Piloto, Expansao e Escala.
