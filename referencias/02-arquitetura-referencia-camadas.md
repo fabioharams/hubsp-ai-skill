@@ -157,6 +157,26 @@ flowchart TD
 
 **Insight:** Fabric fornece a base de verdade dos dados. Guard Rails ajudam a assegurar que apenas os agentes certos acessem os dados adequados. Evaluators reforçam a confiabilidade da resposta. Foundry IQ e Work IQ viabilizam que o usuário receba valor pronto para ação.
 
+### 🧭 Critérios de adoção: Copilot Studio, Foundry ou solução mista
+
+| Opção | Quando priorizar | Limite principal |
+|---|---|---|
+| **Copilot Studio** | Domínio de negócio com fluxo conversacional bem definido, baixo/médio esforço técnico e entrega rápida em canais como Teams/web | Menor controle para cenários de reasoning avançado e engenharia complexa |
+| **Azure AI Foundry** | Casos com integração técnica profunda, tool calling avançado, multi-step/multiagente e necessidade de controle pro-code | Maior esforço de engenharia e governança operacional |
+| **Solução mista (Studio + Foundry)** | Casos corporativos com necessidade simultânea de experiência de negócio + orquestração avançada | Exige arquitetura e observabilidade mais disciplinadas |
+
+**Padrão recomendado para arquitetura alvo corporativa:**
+1. Work IQ e canais no front (experiência).
+2. Copilot Studio na camada conversacional/orquestração de domínio.
+3. Azure AI Foundry no núcleo de reasoning e integrações complexas.
+4. Fabric IQ + Microsoft Fabric para dados governados.
+
+**Fontes oficiais Microsoft:**
+- Microsoft Copilot Studio documentation: https://learn.microsoft.com/microsoft-copilot-studio/
+- Azure AI Foundry documentation: https://learn.microsoft.com/azure/ai-foundry/
+- Microsoft 365 Copilot documentation: https://learn.microsoft.com/microsoft-365-copilot/
+- Microsoft Fabric documentation: https://learn.microsoft.com/fabric/
+
 ### 📰 Atualizações recentes do Microsoft IQ (2025-2026)
 
 - **Microsoft IQ** passa a ser explicitamente descrito como a camada de inteligência corporativa com **Work IQ, Foundry IQ, Fabric IQ e Web IQ**.

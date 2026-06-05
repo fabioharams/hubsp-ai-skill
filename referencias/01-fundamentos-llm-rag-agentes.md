@@ -218,6 +218,22 @@ flowchart TD
 - **Tarefa multi-etapa, com ações, em um domínio →** AI Agent único (default corporativo).
 - **Cruza fronteiras de segurança, múltiplos times ou crescimento previsto →** Agentic AI (multiagente).
 
+### 🔗 Mapeamento para stack Microsoft (incluindo solução mista)
+
+| Necessidade | Padrão | Tecnologia Microsoft recomendada |
+|---|---|---|
+| Produtividade pessoal e assistiva no fluxo de trabalho | LLM/RAG leve | Microsoft 365 Copilot |
+| Automação conversacional de domínio com baixo/médio nível de complexidade | AI Agent único | Copilot Studio |
+| Raciocínio avançado, tool calling complexo, multi-step e engenharia pro-code | AI Agent avançado / Agentic AI | Azure AI Foundry |
+| Experiência de negócio + raciocínio técnico avançado no mesmo caso | Arquitetura híbrida | Copilot Studio + Azure AI Foundry |
+
+**Regra prática:** quando houver simultaneamente necessidade de canal de negócio (Teams/web, low-code, ciclo rápido) e orquestração técnica avançada (reasoning, ferramentas complexas, multiagente), priorizar **solução mista**.
+
+**Fontes oficiais Microsoft:**
+- Microsoft 365 Copilot documentation: https://learn.microsoft.com/microsoft-365-copilot/
+- Microsoft Copilot Studio documentation: https://learn.microsoft.com/microsoft-copilot-studio/
+- Azure AI Foundry documentation: https://learn.microsoft.com/azure/ai-foundry/
+
 ### ✅ Validação com fontes oficiais Microsoft
 
 | Afirmação | Status | Observação |

@@ -33,6 +33,22 @@ Garantir comportamento seguro, consistente e em conformidade dos agentes atravé
 | **RLS + Purview** | Dados negam acesso indevido na fonte | ✓ Exfiltração significativamente reduzida (defesa em profundidade) |
 | **Audit & Feedback Loop** | Cada requisição/resposta registrada | ✓ Rastreabilidade completa |
 
+### 🧩 Guard Rails em solução mista (Copilot Studio + Azure AI Foundry)
+
+Para manter coerência com a arquitetura alvo deste repositório, aplicar controles em ambos os runtimes:
+
+1. **Camada de negócio (Copilot Studio):** políticas de conectores, autenticação Entra, DLP e governança de publicação por ambiente.
+2. **Camada de orquestração avançada (Azure AI Foundry):** content safety, prompt shields, avaliação contínua, tracing e observabilidade técnica.
+3. **Camada de dados (Fabric/Purview):** classificação, controle de acesso, retenção e auditoria fim a fim.
+
+**Regra prática:** em solução mista, nenhum agente deve acessar dado sensível sem combinação de identidade (Entra), política (Purview/DLP) e validação de saída (guard rails + evaluators).
+
+**Fontes oficiais Microsoft:**
+- Microsoft Copilot Studio security and governance: https://learn.microsoft.com/microsoft-copilot-studio/security-and-governance
+- Azure AI Foundry responsible AI: https://learn.microsoft.com/azure/ai-foundry/responsible-ai/overview
+- Azure AI Content Safety: https://learn.microsoft.com/azure/ai-services/content-safety/
+- Microsoft Purview governance overview: https://learn.microsoft.com/purview/governance-solutions-overview
+
 ### 🏗️ Camadas de Guard Rails
 
 ```mermaid

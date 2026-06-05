@@ -601,6 +601,70 @@ O Build 2026 consolidou a família **MAI** como uma nova linha de modelos da Mic
 
 `M365 Copilot (interface do usuário) → Copilot Studio (agente de domínio) → Microsoft Foundry (reasoning e orquestração) → Fabric (dados governados)`
 
+### 🧭 Quando usar Copilot Studio, Foundry ou Solução Mista
+
+Para evitar ambiguidades de arquitetura, adotar a seguinte matriz de decisão:
+
+| Opção | Quando usar | Evitar quando | Decisão prática |
+|---|---|---|---|
+| **Copilot Studio (isolado)** | Fluxos de negócio bem definidos, baixa/média complexidade, time de produto com perfil low-code, entrega rápida em canais como Teams e web | Necessidade de raciocínio avançado, multiagente complexo, controle fino de código/modelo | Preferir para automações de domínio com alto ritmo de evolução e governança central |
+| **Microsoft Foundry (isolado)** | Casos complexos, multi-step, necessidade de código, engenharia de prompts avançada, avaliação técnica profunda, integração extensa com ferramentas | Demanda simples de negócio que pode ser resolvida com baixo esforço em low-code | Preferir para casos críticos de escala técnica, reasoning avançado e integrações sofisticadas |
+| **Solução mista (Copilot Studio + Foundry)** | Quando é necessário combinar experiência de negócio/canal (Studio) com inteligência avançada e orquestração técnica (Foundry) | Organizações sem governança mínima de identidade, dados e observabilidade | Padrão recomendado para arquitetura alvo corporativa: Studio na borda de experiência e Foundry no núcleo de raciocínio/orquestração |
+
+#### Critérios objetivos para acionar o modelo misto
+
+1. **Canal e experiência**: jornada exige publicação rápida em Teams/web com UX conversacional de negócio.
+2. **Complexidade cognitiva**: caso requer planejamento multi-etapa, tool calling avançado ou coordenação entre agentes.
+3. **Risco e compliance**: necessidade de guard rails reforçados, auditabilidade, rastreabilidade e controles de dados.
+4. **Escalabilidade**: expectativa de crescimento para múltiplos domínios, com reuso de componentes e observabilidade central.
+
+#### Fluxograma de decisão (Copilot Studio vs Foundry vs Misto)
+
+```mermaid
+flowchart TD
+    A[Inicio: novo caso de uso de agente] --> B{Fluxo de negocio e majoritariamente\nlow-code, com entrega rapida em canais?}
+    B -->|sim| C{Requer reasoning avancado,\nplanejamento multi-etapa ou\nintegracoes tecnicas complexas?}
+    B -->|nao| D{Caso exige controle de codigo,\nengenharia de prompts avancada\nou avaliacao tecnica profunda?}
+
+    C -->|nao| E[Decisao: Copilot Studio isolado]
+    C -->|sim| F[Decisao: Solucao mista\nCopilot Studio + Microsoft Foundry]
+
+    D -->|sim| G[Decisao: Microsoft Foundry isolado]
+    D -->|nao| H{Existe requisito forte de\nexperiencia de negocio +\norquestracao avancada juntos?}
+
+    H -->|sim| F
+    H -->|nao| E
+
+    E --> I[Aplicar guard rails, evaluators,\nHITL e observabilidade]
+    F --> I
+    G --> I
+```
+
+#### Referências oficiais Microsoft para a decisão
+
+- Microsoft Copilot Studio documentation: https://learn.microsoft.com/microsoft-copilot-studio/
+- Azure AI Foundry documentation: https://learn.microsoft.com/azure/ai-foundry/
+- Microsoft 365 Copilot documentation: https://learn.microsoft.com/microsoft-365-copilot/
+- Microsoft Fabric documentation: https://learn.microsoft.com/fabric/
+- Microsoft Purview governance overview: https://learn.microsoft.com/purview/governance-solutions-overview
+- Microsoft Entra ID documentation: https://learn.microsoft.com/entra/identity/
+
+#### Padrão de referência para solução mista
+
+1. **Microsoft 365 Copilot / canais** recebem a intenção do usuário no contexto de trabalho.
+2. **Copilot Studio** trata a camada conversacional de domínio, políticas e roteamento operacional.
+3. **Microsoft Foundry** executa reasoning avançado, orquestração e integrações complexas.
+4. **Fabric + Purview + Entra** garantem dados governados, segurança e acesso por menor privilégio.
+
+#### Fontes oficiais Microsoft para justificativa da arquitetura
+
+- Microsoft Copilot Studio documentation: https://learn.microsoft.com/microsoft-copilot-studio/
+- Azure AI Foundry documentation: https://learn.microsoft.com/azure/ai-foundry/
+- Microsoft 365 Copilot documentation: https://learn.microsoft.com/microsoft-365-copilot/
+- Microsoft Fabric documentation: https://learn.microsoft.com/fabric/
+- Microsoft Purview governance overview: https://learn.microsoft.com/purview/governance-solutions-overview
+- Microsoft Entra ID documentation: https://learn.microsoft.com/entra/identity/
+
 ### 🚀 Mapeamento por Prazo de Adoção
 
 📣 **Insight**

@@ -72,6 +72,25 @@ Dado o agrupamento da Fase 2, aplicar criterios em ordem para escolher a tecnolo
 6. **Necessidades de orquestracao** (checkpointing, multiagente, workflow)
 7. **Operacionalizar e governar** (CAF: Strategy → Plan → Ready → Govern → Secure → Manage + Responsible AI v2)
 
+#### Matriz de decisão prática (Copilot Studio vs Foundry vs Misto)
+
+| Cenário predominante | Escolha sugerida | Justificativa |
+|---|---|---|
+| Experiência conversacional de negócio, baixa/média complexidade, time low-code | **Copilot Studio** | Menor time-to-market e integração nativa com canais Microsoft |
+| Raciocínio avançado, integrações complexas, engenharia pro-code, multi-step/multiagente | **Azure AI Foundry** | Maior controle técnico, avaliação e orquestração avançada |
+| Necessidade combinada de UX de negócio + inteligência/orquestração avançada | **Solução mista (Copilot Studio + Azure AI Foundry)** | Melhor equilíbrio entre velocidade de entrega e profundidade técnica |
+
+**Gatilhos para adotar solução mista:**
+1. O caso exige publicação rápida em canais de negócio e também reasoning/tool calling avançado.
+2. Há requisitos de compliance e rastreabilidade fortes em fluxo multi-etapa.
+3. O roadmap prevê escala para múltiplos domínios com reuso de componentes.
+
+**Fontes oficiais Microsoft:**
+- Microsoft Copilot Studio documentation: https://learn.microsoft.com/microsoft-copilot-studio/
+- Azure AI Foundry documentation: https://learn.microsoft.com/azure/ai-foundry/
+- Microsoft 365 Copilot documentation: https://learn.microsoft.com/microsoft-365-copilot/
+- Cloud Adoption Framework for AI: https://learn.microsoft.com/azure/cloud-adoption-framework/scenarios/ai/
+
 **Template de saida da decisao:** Tecnologia selecionada · Racional (grupos da Fase 2) · Time-to-market · Managed x self-managed · Complexidade · Budget · Integracoes · Orquestracao · Padrao de arquitetura · Trade-offs aceitos · Proximos passos (piloto/POC/deploy).
 
 ---

@@ -58,6 +58,7 @@ Se faltar informacao critica, solicitar apenas o minimo necessario antes de reco
 2.1. Quando o pedido envolver escolha de tecnologia/produto Microsoft, aplicar o Microsoft AI Decision Framework (referencias/05-decision-framework-bxt.md): Intake Filter, BXT (Business/Experience/Technology), as 9 perguntas criticas e a selecao por cenario.
 3. Mapear as fontes de dados e o nivel de governanca atual.
 4. Definir separacao de camadas: experiencia (Work IQ), agentes (Foundry IQ), inteligencia de dados (Fabric IQ), contexto externo (Web IQ, quando necessario) e plataforma (Microsoft Fabric).
+4.1. Quando o caso exigir, recomendar **solucao mista**: Copilot Studio na camada conversacional/fluxo de negocio e Microsoft Foundry na camada de reasoning/orquestracao avancada.
 5. Definir controles transversais: Guard Rails e Evaluators.
 5.1. Quando o pedido envolver regulacao, compliance ou aderencia a requisitos legais, mapear os eixos regulatorios para capacidades tecnicas e de governanca da Microsoft, sem afirmar conformidade juridica automatica.
 6. Validar a viabilidade financeira com o modelo de ROI (IVA = custo humano / custo IA por tarefa), incluindo HITL, setup amortizado e multiplicador de escopo; avaliar no horizonte de 12-18 meses.
@@ -82,14 +83,78 @@ Se faltar informacao critica, solicitar apenas o minimo necessario antes de reco
 
 ## Formato de Saida Sugerido
 
-- Visao executiva (curta)
-- Padrao arquitetural recomendado (LLM, RAG, AI Agent ou Agentic AI) e por que
-- Arquitetura recomendada (camadas e responsabilidades)
+- Visao executiva (media)
+  - Entregar em 1-2 paragrafos, com contexto, decisao recomendada, impacto esperado e principais trade-offs (custo, risco, velocidade e complexidade).
+  - Deve deixar claro o problema de negocio, a arquitetura alvo proposta e o resultado de curto prazo (piloto) vs. medio prazo (escala).
+  - Incluir pelo menos 1 diagrama ou fluxograma simples em Mermaid para explicar visualmente a decisao recomendada.
+  - O visual deve resumir a logica da recomendacao em linguagem executiva e ser de facil leitura.
+  - Referencia Microsoft: https://learn.microsoft.com/azure/cloud-adoption-framework/strategy/
+
+- Padrao arquitetural recomendado (LLM, RAG, AI Agent ou Agentic AI) com justificativa detalhada
+  - Comparar as opcoes no contexto do caso e justificar por que a recomendacao minimiza risco e maximiza valor.
+  - Explicar criterios tecnicos: grounding, necessidade de orquestracao, autonomia, qualidade de dados, latencia, custo por tarefa e necessidade de HITL.
+  - Incluir justificativas com fontes oficiais Microsoft para sustentar cada escolha.
+  - Incluir pelo menos 1 fluxograma ou diagrama em Mermaid para explicar o padrao arquitetural escolhido e os caminhos descartados.
+  - O visual deve facilitar a compreensao do espectro LLM → RAG → AI Agent → Agentic AI e a decisao final.
+  - Referencias Microsoft:
+    - Azure OpenAI: https://learn.microsoft.com/azure/ai-services/openai/overview
+    - RAG no Azure AI Search: https://learn.microsoft.com/azure/search/retrieval-augmented-generation-overview
+    - Azure AI Foundry Agent Service: https://learn.microsoft.com/azure/ai-foundry/agents/overview
+    - Microsoft AI Decision Framework: https://learn.microsoft.com/azure/cloud-adoption-framework/scenarios/ai/
+
+- Arquitetura recomendada (camadas e responsabilidades) com explicacao detalhada
+  - Descrever papeis e limites de Work IQ, Foundry IQ, Fabric IQ e Web IQ, incluindo como se conectam a dados governados e controles transversais.
+  - Explicar responsabilidades por camada (experiencia/canais, orquestracao de agentes, dados/analytics, contexto externo).
+  - Obrigatorio incluir:
+    - 1 diagrama de arquitetura em Mermaid (camadas e fluxos principais).
+    - 1 fluxograma em Mermaid (decisao de roteamento: autosservico, escalonamento, HITL).
+  - Os diagramas devem ser simples, legiveis e orientados a decisao executiva.
+  - Referencias Microsoft:
+    - Microsoft 365 Copilot: https://learn.microsoft.com/microsoft-365-copilot/
+    - Azure AI Foundry: https://learn.microsoft.com/azure/ai-foundry/
+    - Microsoft Fabric: https://learn.microsoft.com/fabric/
+
 - Governanca e seguranca (controles)
-- Plano de implantacao por fases
+  - Detalhar guard rails tecnicos e operacionais: Entra ID, RBAC, DLP, trilha de auditoria, versionamento de regras/checklists, evaluators e HITL.
+  - Relacionar cada controle ao risco que ele mitiga (ex.: alucinacao, acesso indevido, decisao critica sem supervisao).
+  - Incluir pelo menos 1 diagrama ou fluxograma em Mermaid mostrando a sequencia de controles, validacoes e pontos de bloqueio/aprovacao.
+  - Referencias Microsoft:
+    - Microsoft Entra: https://learn.microsoft.com/entra/identity/
+    - Microsoft Purview: https://learn.microsoft.com/purview/governance-solutions-overview
+    - Responsible AI no Azure AI Foundry: https://learn.microsoft.com/azure/ai-foundry/responsible-ai/overview
+
+- Plano de implantacao por fases (detalhado)
+  - Descrever no minimo 3 fases: Piloto, Expansao e Escala.
+  - Para cada fase, explicitar: objetivo, escopo funcional, integracoes, guard rails minimos, criterios de entrada, criterios de saida, KPI alvo e risco dominante.
+  - Informar dependencias criticas (dados, integracoes, patrocino executivo, change management).
+  - Incluir pelo menos 1 diagrama ou fluxograma em Mermaid para explicar a progressao entre fases, dependencias e gates de decisao.
+  - Referencia Microsoft: https://learn.microsoft.com/azure/cloud-adoption-framework/plan/
+
 - Justificativa financeira (ROI/IVA, quando aplicavel)
+  - Explicar premissas, baseline, metodo de calculo e horizonte de captura de valor.
+  - Incluir custo de homem-hora carregado, custo IA por tarefa, HITL, setup amortizado e sensibilidade (conservador/base/agressivo).
+  - Incluir pelo menos 1 diagrama ou fluxograma em Mermaid para explicar a logica de calculo, os drivers de custo e o criterio de decisao financeira.
+  - Referencias Microsoft:
+    - Azure Pricing Calculator: https://azure.microsoft.com/pricing/calculator/
+    - Azure TCO Calculator: https://azure.microsoft.com/pricing/tco/calculator/
+
 - KPIs de sucesso
-- Riscos e mitigacoes
+  - Cobrir KPIs de eficiencia, qualidade, risco e adocao (ex.: SLA, FCR, retrabalho, latencia, taxa de escalonamento indevido, custo por caso, NPS interno).
+  - Sugerir janelas de afericao (30/60/90 dias) e gatilhos de ajuste.
+  - Incluir pelo menos 1 diagrama ou fluxograma em Mermaid para organizar KPIs por categoria, horizonte de medicao ou relacao causal com valor de negocio.
+  - Referencias Microsoft:
+    - Azure Monitor: https://learn.microsoft.com/azure/azure-monitor/
+    - Application Insights: https://learn.microsoft.com/azure/azure-monitor/app/app-insights-overview
+
+- Riscos e mitigacoes (claros, com justificativa oficial)
+  - Explicar com clareza os principais riscos: dados, seguranca, compliance, operacao, adocao e dependencia de integracao.
+  - Para cada risco, incluir impacto, probabilidade, sinal de alerta e mitigacao tecnica/processual.
+  - Sempre justificar as mitigacoes com links oficiais Microsoft.
+  - Incluir pelo menos 1 diagrama ou fluxograma em Mermaid para mostrar relacao entre risco, controle, mitigacao e responsavel de resposta.
+  - Referencias Microsoft:
+    - Microsoft Security: https://learn.microsoft.com/security/
+    - Well-Architected Framework (Security): https://learn.microsoft.com/azure/well-architected/security/
+    - Well-Architected Framework (Operational Excellence): https://learn.microsoft.com/azure/well-architected/operational-excellence/
 
 ## Referencia Interna
 
