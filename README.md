@@ -55,7 +55,7 @@ graph TD
    SKILL -. contexto do projeto .-> DOC
    README --> PROMPT[Prompt padrao reutilizavel<br/>geracao de resposta diagramada]
    DOC --> PROMPT
-   PROMPT --> OUTMD[doc/respostas/arquitetura-alvo-projeto-x.md<br/>Saida em Markdown]
+   PROMPT --> OUTMD[doc/resultado.md<br/>Saida em Markdown]
 
     classDef entry fill:#0078D4,stroke:#004578,color:#fff;
     classDef canon fill:#107C10,stroke:#0B5A0B,color:#fff;
@@ -90,7 +90,7 @@ flowchart TD
    DOC --> QOUT{Quer salvar resposta<br/>em arquivo Markdown?}
    DOCNEW --> QOUT
    QOUT -- Sim --> PROMPT[Use o prompt padrao<br/>do README]
-   PROMPT --> OUTMD[doc/respostas/arquitetura-alvo-projeto-x.md]
+   PROMPT --> OUTMD[doc/resultado.md]
    QOUT -- Nao --> Q3
    OUTMD --> Q3
 
@@ -146,7 +146,7 @@ Exemplo de prompt:
 
 Exemplo com documento de especificacoes do projeto:
 
-> Usando o #SKILL.md e o #doc/especificacoes-agente-projeto.md, proponha a arquitetura alvo, os guard rails e o roadmap em ondas para este agente, considerando requisitos funcionais, integracoes, SLA e restricoes de compliance descritas no documento.
+> Usando o #SKILL.md e o #doc/especificacoes-agente-projeto.md, gere uma recomendacao executiva no formato completo: (1) visao executiva media (1-2 paragrafos) com pelo menos 1 diagrama ou fluxograma Mermaid para explicar a decisao recomendada, (2) padrao arquitetural recomendado (LLM/RAG/AI Agent/Agentic AI) com justificativas detalhadas, links oficiais da Microsoft e pelo menos 1 diagrama ou fluxograma Mermaid para explicar a escolha, (3) arquitetura alvo (Work IQ, Foundry IQ, Fabric IQ e Web IQ) com explicacao detalhada e 2 diagramas Mermaid obrigatorios (arquitetura e fluxograma de decisao), (4) governanca e seguranca com guard rails e evaluators e pelo menos 1 diagrama ou fluxograma Mermaid, (5) plano de implantacao por fases com detalhamento por fase (objetivo, escopo, integracoes, criterios de entrada/saida, KPI alvo e risco dominante) e pelo menos 1 diagrama ou fluxograma Mermaid, (6) premissas de ROI/IVA com pelo menos 1 diagrama ou fluxograma Mermaid para explicar a logica financeira, (7) KPIs de sucesso com pelo menos 1 diagrama ou fluxograma Mermaid, e (8) riscos e mitigacoes com clareza, links oficiais Microsoft e pelo menos 1 diagrama ou fluxograma Mermaid. A resposta devera ser entregue em um novo documento em markdown chamado doc/resultado.md.
 
 Dica: para tratar o `SKILL.md` como uma skill reutilizavel no formato oficial do VS Code, copie-o (ou crie um link) para uma pasta como `.github/skills/hubsp-ai-skill/` ou `~/.copilot/skills/hubsp-ai-skill/`. Neste repositorio, o arquivo na raiz funciona como **fonte canonica/roteador** para uso por referencia direta em prompts, enquanto a instalacao formal da skill deve seguir a convencao de pasta em minusculas.
 
@@ -185,13 +185,13 @@ Melhor desempenho geral para analise pela skill: **`.md`** (texto simples, secoe
 
 ## Prompt padrao reutilizavel (gerar arquivo Markdown diagramado)
 
-Use este prompt em qualquer projeto. Ajuste apenas os campos entre colchetes:
+Use este prompt em qualquer projeto com documento em `doc/especificacoes-agente-projeto.md`:
 
-> Usando o #SKILL.md e o #doc/especificacoes-agente-projeto.md, gere uma recomendacao executiva para o projeto [NOME_DO_PROJETO] no contexto [SEGMENTO/AREA]. Estruture a resposta com: 1) visao executiva curta, 2) arquitetura recomendada com camadas e responsabilidades (incluindo Work IQ, Foundry IQ, Fabric IQ e Web IQ quando aplicavel), 3) governanca e seguranca com guard rails, evaluators e HITL, 4) roadmap em ondas (piloto, expansao, escala), 5) KPIs de sucesso, 6) riscos e mitigacoes, sempre explicando trade-offs entre custo, risco, velocidade e complexidade. Formate o conteudo em Markdown devidamente diagramado, com tabela de decisoes e pelo menos um diagrama Mermaid. Salve o resultado em doc/respostas/arquitetura-alvo-[NOME_DO_PROJETO].md.
+> Usando o #SKILL.md e o #doc/especificacoes-agente-projeto.md, gere uma recomendacao executiva no formato completo: (1) visao executiva media (1-2 paragrafos) com pelo menos 1 diagrama ou fluxograma Mermaid para explicar a decisao recomendada, (2) padrao arquitetural recomendado (LLM/RAG/AI Agent/Agentic AI) com justificativas detalhadas, links oficiais da Microsoft e pelo menos 1 diagrama ou fluxograma Mermaid para explicar a escolha, (3) arquitetura alvo (Work IQ, Foundry IQ, Fabric IQ e Web IQ) com explicacao detalhada e 2 diagramas Mermaid obrigatorios (arquitetura e fluxograma de decisao), (4) governanca e seguranca com guard rails e evaluators e pelo menos 1 diagrama ou fluxograma Mermaid, (5) plano de implantacao por fases com detalhamento por fase (objetivo, escopo, integracoes, criterios de entrada/saida, KPI alvo e risco dominante) e pelo menos 1 diagrama ou fluxograma Mermaid, (6) premissas de ROI/IVA com pelo menos 1 diagrama ou fluxograma Mermaid para explicar a logica financeira, (7) KPIs de sucesso com pelo menos 1 diagrama ou fluxograma Mermaid, e (8) riscos e mitigacoes com clareza, links oficiais Microsoft e pelo menos 1 diagrama ou fluxograma Mermaid. A resposta devera ser entregue em um novo documento em markdown chamado doc/resultado.md.
 
-Variacao para foco tecnico detalhado:
+Variacao para GitHub Copilot CLI:
 
-> Usando o #SKILL.md e o #doc/especificacoes-agente-projeto.md, gere um arquivo Markdown tecnico em doc/respostas/arquitetura-tecnica-[NOME_DO_PROJETO].md com arquitetura alvo detalhada, componentes por camada, requisitos nao funcionais, plano de implementacao, observabilidade, seguranca e checklist de operacao.
+> Leia SKILL.md e doc/especificacoes-agente-projeto.md e gere recomendacao executiva em formato avancado: visao executiva media com diagrama ou fluxograma Mermaid; padrao arquitetural com justificativas detalhadas, fontes Microsoft e diagrama ou fluxograma Mermaid; arquitetura Work IQ/Foundry IQ/Fabric IQ/Web IQ com diagrama Mermaid e fluxograma Mermaid; governanca e seguranca com diagrama ou fluxograma Mermaid; plano em fases detalhado com diagrama ou fluxograma Mermaid; premissas de ROI/IVA com diagrama ou fluxograma Mermaid; KPIs com diagrama ou fluxograma Mermaid; riscos e mitigacoes com links oficiais da Microsoft e diagrama ou fluxograma Mermaid. A resposta devera ser entregue em um novo documento em markdown chamado doc/resultado.md.
 
 ## Como usar no GitHub Copilot App
 
@@ -209,7 +209,7 @@ Exemplo de prompt no app:
 
 Exemplo no app com documento de especificacoes do projeto:
 
-> Usando o #SKILL.md e o #doc/especificacoes-agente-projeto.md, traduza as necessidades do projeto em arquitetura alvo (Work IQ, Foundry IQ e Fabric IQ), controles de governanca e plano de implantacao por fases.
+> Usando o #SKILL.md e o #doc/especificacoes-agente-projeto.md, gere uma recomendacao executiva no formato completo: (1) visao executiva media (1-2 paragrafos) com pelo menos 1 diagrama ou fluxograma Mermaid para explicar a decisao recomendada, (2) padrao arquitetural recomendado (LLM/RAG/AI Agent/Agentic AI) com justificativas detalhadas, links oficiais da Microsoft e pelo menos 1 diagrama ou fluxograma Mermaid para explicar a escolha, (3) arquitetura alvo (Work IQ, Foundry IQ, Fabric IQ e Web IQ) com explicacao detalhada e 2 diagramas Mermaid obrigatorios (arquitetura e fluxograma de decisao), (4) governanca e seguranca com guard rails e evaluators e pelo menos 1 diagrama ou fluxograma Mermaid, (5) plano de implantacao por fases com detalhamento por fase (objetivo, escopo, integracoes, criterios de entrada/saida, KPI alvo e risco dominante) e pelo menos 1 diagrama ou fluxograma Mermaid, (6) premissas de ROI/IVA com pelo menos 1 diagrama ou fluxograma Mermaid para explicar a logica financeira, (7) KPIs de sucesso com pelo menos 1 diagrama ou fluxograma Mermaid, e (8) riscos e mitigacoes com clareza, links oficiais Microsoft e pelo menos 1 diagrama ou fluxograma Mermaid. A resposta devera ser entregue em um novo documento em markdown chamado doc/resultado.md.
 
 ## Como usar no GitHub Copilot CLI
 
@@ -243,12 +243,12 @@ Pre-requisitos: Node.js 22 ou superior, uma assinatura ativa do GitHub Copilot e
 
 Exemplo no CLI com documento de especificacoes do projeto (sessao interativa):
 
-   > Leia o SKILL.md e o doc/especificacoes-agente-projeto.md e recomende a arquitetura alvo, os guard rails e os KPIs de sucesso para este agente, com trade-offs entre custo, risco, velocidade e complexidade.
+   > Leia SKILL.md e doc/especificacoes-agente-projeto.md e gere recomendacao executiva em formato avancado: visao executiva media com diagrama ou fluxograma Mermaid; padrao arquitetural com justificativas detalhadas, fontes Microsoft e diagrama ou fluxograma Mermaid; arquitetura Work IQ/Foundry IQ/Fabric IQ/Web IQ com diagrama Mermaid e fluxograma Mermaid; governanca e seguranca com diagrama ou fluxograma Mermaid; plano em fases detalhado com diagrama ou fluxograma Mermaid; premissas de ROI/IVA com diagrama ou fluxograma Mermaid; KPIs com diagrama ou fluxograma Mermaid; riscos e mitigacoes com links oficiais da Microsoft e diagrama ou fluxograma Mermaid. A resposta devera ser entregue em um novo documento em markdown chamado doc/resultado.md.
 
 Exemplo no CLI com documento de especificacoes do projeto (prompt unico):
 
    ```bash
-   copilot -p "Leia SKILL.md e doc/especificacoes-agente-projeto.md e gere uma recomendacao executiva com arquitetura alvo, governanca e roadmap em ondas para o agente do projeto."
+   copilot -p "Leia SKILL.md e doc/especificacoes-agente-projeto.md e gere recomendacao executiva em formato avancado: visao executiva media com diagrama ou fluxograma Mermaid; padrao arquitetural com justificativas detalhadas, fontes Microsoft e diagrama ou fluxograma Mermaid; arquitetura Work IQ/Foundry IQ/Fabric IQ/Web IQ com diagrama Mermaid e fluxograma Mermaid; governanca e seguranca com diagrama ou fluxograma Mermaid; plano em fases detalhado com diagrama ou fluxograma Mermaid; premissas de ROI/IVA com diagrama ou fluxograma Mermaid; KPIs com diagrama ou fluxograma Mermaid; riscos e mitigacoes com links oficiais da Microsoft e diagrama ou fluxograma Mermaid. A resposta devera ser entregue em um novo documento em markdown chamado doc/resultado.md."
    ```
 
 Observacoes:
