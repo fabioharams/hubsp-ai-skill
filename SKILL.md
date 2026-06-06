@@ -33,6 +33,7 @@ Esta skill ajuda a estruturar recomendacoes praticas para adocao de agentes de I
 - O usuario solicitar roteiro de implantacao por fases.
 - O usuario pedir justificativa financeira ou ROI (IA vs. homem-hora, modo eficiencia ou ampliacao).
 - O usuario pedir padroes para escalar agentes entre areas de negocio.
+- O usuario quiser priorizar ou mapear oportunidades de projetos de IA (discovery e enquadramento), aplicando os metodos do LUMA System (Rose/Thorn/Bud, Affinity Clustering, Statement Starters, Bull's-Eye) antes do ROI/IVA e da selecao de tecnologia.
 - O usuario pedir analise regulatoria, governanca ou aderencia de Microsoft Copilot Studio, Microsoft Foundry e Purview a requisitos como transparencia, auditoria, risco, supervisao humana e protecao de dados.
 
 ## Nao Use Quando
@@ -170,6 +171,7 @@ Carregue apenas o arquivo de referencia necessario para a pergunta (progressive 
 - referencias/03-roi-ia-vs-homem-hora.md — modelo de ROI/IVA, HITL, multiplicador de escopo.
 - referencias/04-governanca-guardrails-evaluators-hitl.md — Guard Rails, Evaluators e Human-in-the-Loop.
 - referencias/05-decision-framework-bxt.md — Microsoft AI Decision Framework: Intake Filter, BXT, 9 perguntas criticas, Capability Model e selecao de tecnologia por cenario.
+- referencias/06-metodos-priorizacao-luma.md — metodos de priorizacao do LUMA System (Rose/Thorn/Bud, Affinity Clustering, Statement Starters, Bull's-Eye) para priorizar e mapear oportunidades de projetos de IA nas fases de discovery e enquadramento.
 - referencias/07-pl-2338-2023-copilot-studio-foundry.md — analise do PL 2338/2023, com foco em transparencia, governanca, risco, auditoria, supervisao humana e protecao de dados com fontes oficiais.
 
 Indice completo e demais secoes: Estrategia_Adocao_Agentes_IA_Final_2.md (fonte canonica, com ponteiros para os arquivos acima).
