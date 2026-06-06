@@ -42,7 +42,7 @@ Arquitetura corporativa transforma IA de experimento em capacidade operacional. 
 
 > Conteudo movido para [referencias/02-arquitetura-referencia-camadas.md](referencias/02-arquitetura-referencia-camadas.md) — Arquitetura de Referencia e Especificacoes Tecnicas por Camada (Microsoft IQ: Work IQ, Foundry IQ, Fabric IQ, Web IQ + Microsoft Fabric).
 
-> Conteudo movido para [referencias/07-pl-2338-2023-copilot-studio-foundry.md](referencias/07-pl-2338-2023-copilot-studio-foundry.md) — Analise do PL 2338/2023 e como Microsoft Copilot Studio e Microsoft Foundry podem atender os requisitos de transparencia, governanca, risco, auditoria e protecao de dados com fontes oficiais.
+> Conteudo movido para [referencias/06-pl-2338-2023-copilot-studio-foundry.md](referencias/06-pl-2338-2023-copilot-studio-foundry.md) — Analise do PL 2338/2023 e como Microsoft Copilot Studio e Microsoft Foundry podem atender os requisitos de transparencia, governanca, risco, auditoria e protecao de dados com fontes oficiais.
 
 ## ⏱️ 3. Estratégia de Adoção (Curto e Médio Prazo)
 
