@@ -17,6 +17,7 @@ The project was structured to serve as both an executive and technical reference
 
 - SKILL.md: single skill definition (router) that guides consistent responses in an adoption architecture context. Points to reference files on demand (progressive disclosure).
 - AI_Agent_Adoption_Strategy_Final_2.md: main guide and base document, with executive overview, index and pointers to reference files.
+- section_3_2.txt: extracted plain-text section used as a lightweight source for quick copy, review and prompt experiments without markdown formatting overhead.
 - references/: thematically sliced content for on-demand loading:
    - references/01-llm-rag-ai-agent-fundamentals.md: LLM vs RAG vs AI Agent vs Agentic AI; complexity spectrum and decision guide.
    - references/02-reference-architecture-layers.md: Microsoft IQ (Work IQ, Foundry IQ, Fabric IQ, Web IQ), Microsoft Fabric and technical specifications per layer.
@@ -25,6 +26,9 @@ The project was structured to serve as both an executive and technical reference
    - references/05-decision-framework-bxt.md: Microsoft AI Decision Framework (Intake Filter, BXT, 9 critical questions, Capability Model and technology selection by scenario).
    - references/06-pl-2338-2023-copilot-studio-foundry.md: analysis of PL 2338/2023 and how Microsoft Copilot Studio, Microsoft Foundry and Purview address the axes of transparency, governance, risk, audit, human oversight and data protection with official sources.
 - ROI-IA-Calculadora.xlsx: operational spreadsheet for the ROI/AAI model (references/03), with 5 tabs (Calculator, HITL Sensitivity, How to Use, Capacity and Chart, Expansion). Fill in the blue cells with your operation's assumptions to obtain AAI, ROI (%), verdict (USE AI / KEEP HUMAN) and impact on team capacity. Usage and interpretation instructions in references/03-roi-ai-vs-man-hour.md.
+- doc/agent-project-specifications-example.md: starter example of a project specification document to accelerate onboarding before creating or customizing doc/agent-project-specifications.md.
+- doc/agent-project-specifications.md: working specification used as primary project input in recommendation prompts.
+- doc/recommendation-output.md: generated output artifact where the executive recommendation is persisted in markdown format.
 
 > Note: AAI (AI Advantage Index) is the ratio between the human cost of the task and the total AI cost per task (AAI = Human Cost / AI Cost). AAI > 1 indicates that AI is financially advantageous (an AAI of 4.0 means the task via AI costs 1/4 of the same task done by a person); AAI = 1 is the break-even point; AAI < 1 indicates keeping human work. Not to be confused with VAT (Value Added Tax).
 - Supplementary guides for dynamics and setup to facilitate collaboration and use in VS Code.
@@ -50,10 +54,14 @@ graph TD
 
     SKILL --> README[README.md<br/>Repository overview]
    README --> DOC[doc/agent-project-specifications.md<br/>Project specifications and requirements]
+   README --> DOCEX[doc/agent-project-specifications-example.md<br/>Starter template/example]
    SKILL -. project context .-> DOC
+   DOCEX --> DOC
    README --> PROMPT[Default reusable prompt<br/>diagrammed response generation]
    DOC --> PROMPT
    PROMPT --> OUTMD[doc/recommendation-output.md<br/>Markdown output]
+   R3 --> XLSX[ROI-IA-Calculadora.xlsx<br/>Operational ROI/AAI calculator]
+   CANON --> TXT[section_3_2.txt<br/>Plain-text extracted section]
 
     classDef entry fill:#0078D4,stroke:#004578,color:#fff;
     classDef canon fill:#107C10,stroke:#0B5A0B,color:#fff;
@@ -61,12 +69,14 @@ graph TD
    classDef doc fill:#FFF4CE,stroke:#C19C00,color:#1a1a1a;
    classDef prompt fill:#EDE7F6,stroke:#5E35B1,color:#1a1a1a;
    classDef output fill:#E8F5E9,stroke:#2E7D32,color:#1a1a1a;
+   classDef artifact fill:#FFF3E0,stroke:#EF6C00,color:#1a1a1a;
     class SKILL entry;
     class CANON canon;
    class R1,R2,R3,R4,R5,R6 ref;
-   class DOC doc;
+   class DOC,DOCEX doc;
    class PROMPT prompt;
    class OUTMD output;
+   class XLSX,TXT artifact;
 ```
 
 ## How to navigate (decision flowchart)
