@@ -1,25 +1,25 @@
-3.2. Azure APIM para IA (AI Gateway e MCP)** | Como usar APIM como camada de controle para modelos e MCP servers, com cenários de uso e boas práticas. |
-| **4. Estratégias de Adoção (A vs B)** | Comparação entre self-service e dados tratados, com recomendação de modelo híbrido. |
-| **5. Consumo de Dados do Fabric por Múltiplos Agentes** | Padrões para reutilização de dados governados no Fabric por múltiplos agentes. |
-| **5.1. Formas de Acesso ao Fabric por Agentes** | Opções de acesso técnico e implicações de segurança e governança. |
-| **6. Exemplos de Consumo** | Exemplos práticos de integração entre agentes, dados e ferramentas corporativas. |
-| **7. Insight Estratégico Principal** | Mensagem-chave para tomada de decisão executiva e direcionamento da arquitetura alvo. |
-| **8. Guard Rails (Controle)** | Mecanismos de proteção e políticas para operação segura de agentes. |
-| **8.1. Microsoft Entra ID (Agent ID)** | Identidade de agentes, autenticação, autorização e controles de acesso. |
-| **8.2. Microsoft Purview** | Classificação de dados, políticas de proteção e conformidade para IA corporativa. |
-| **8.3. Microsoft Agent 365** | Plano de controle de agentes para operação, governança e escala. |
-| **8.4. Agent Registry Dinâmico** | Registro, descoberta, versionamento e monitoramento de agentes com governança de onboarding. |
-| **8.5. Memória Multiagente (STM/LTM)** | Estratégia de memória de curto e longo prazo com privacidade, retenção e redaction. |
-| **8.6. Comunicação entre Agentes** | Padrões request-based, message-driven e híbrido com critérios de escolha. |
-| **9. Evaluators (Qualidade e Evolução)** | Métricas e processo contínuo de avaliação para qualidade, risco e melhoria de agentes. |
-| **10. Human-in-the-Loop (HITL)** | Quando envolver validação humana para decisões críticas e mitigação de risco. |
-| **11. Integração Completa (Arquitetura Final)** | Visão integrada ponta a ponta com fluxos de dados, agentes e controles transversais. |
-| **12. Modelo Operacional** | Estrutura de papéis, governança, cadência e operação para sustentação em escala. |
-| **12.1. Confiabilidade Operacional (SLO/Versionamento/Rollback)** | SLOs, estratégia de versões, rollback e continuidade para operação segura em produção. |
-| **12.2. Matriz de Maturidade Multiagente (Níveis 1-5)** | Critérios objetivos para avaliar evolução de capacidades técnicas e de governança em ondas. |
-| **13. Mensagem Estratégica Final** | Síntese executiva para alinhamento de liderança e próximos passos. |
+3.2. Azure APIM for AI (AI Gateway and MCP)** | How to use APIM as a control layer for models and MCP servers, with usage scenarios and best practices. |
+| **4. Adoption Strategies (A vs B)** | Comparison between self-service and curated data, with a hybrid model recommendation. |
+| **5. Fabric Data Consumption by Multiple Agents** | Patterns for reusing governed data in Fabric by multiple agents. |
+| **5.1. Agent Access Methods to Fabric** | Technical access options and security and governance implications. |
+| **6. Consumption Examples** | Practical integration examples between agents, data and corporate tools. |
+| **7. Key Strategic Insight** | Key message for executive decision-making and target architecture direction. |
+| **8. Guard Rails (Control)** | Protection mechanisms and policies for safe agent operation. |
+| **8.1. Microsoft Entra ID (Agent ID)** | Agent identity, authentication, authorization and access controls. |
+| **8.2. Microsoft Purview** | Data classification, protection policies and compliance for corporate AI. |
+| **8.3. Microsoft Agent 365** | Agent control plane for operations, governance and scale. |
+| **8.4. Dynamic Agent Registry** | Agent registration, discovery, versioning and monitoring with onboarding governance. |
+| **8.5. Multi-Agent Memory (STM/LTM)** | Short and long-term memory strategy with privacy, retention and redaction. |
+| **8.6. Agent-to-Agent Communication** | Request-based, message-driven and hybrid patterns with selection criteria. |
+| **9. Evaluators (Quality and Evolution)** | Metrics and continuous evaluation process for agent quality, risk and improvement. |
+| **10. Human-in-the-Loop (HITL)** | When to involve human validation for critical decisions and risk mitigation. |
+| **11. Full Integration (Final Architecture)** | End-to-end integrated view with data flows, agents and cross-cutting controls. |
+| **12. Operating Model** | Role structure, governance, cadence and operations for scaled sustainability. |
+| **12.1. Operational Reliability (SLO/Versioning/Rollback)** | SLOs, versioning strategy, rollback and continuity for safe production operations. |
+| **12.2. Multi-Agent Maturity Matrix (Levels 1-5)** | Objective criteria for evaluating the evolution of technical and governance capabilities across waves. |
+| **13. Final Strategic Message** | Executive synthesis for leadership alignment and next steps. |
 
-> Dica de navegação: use a busca do editor (`Ctrl+F`) pelo número da seção (ex.: `8.2.`) para ir direto ao ponto desejado.
+> Navigation tip: use the editor search (`Ctrl+F`) with the section number (e.g., `8.2.`) to jump directly to the desired point.
 
 ## 📌 1. Visão Executiva
 

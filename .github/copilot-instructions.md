@@ -1,28 +1,28 @@
-# Instrucoes do Copilot para este repositorio
+# Copilot Instructions for This Repository
 
-Sempre considerar o contexto e as regras definidas em SKILL.md para respostas sobre estrategia de adocao de agentes de IA.
+Always consider the context and rules defined in SKILL.md for responses about AI agent adoption strategy.
 
-Priorizar respostas em pt-BR com linguagem executiva e precisao tecnica.
+Prioritize responses in English with executive language and technical precision.
 
-Quando o usuario pedir recomendacoes de arquitetura, estruturar a resposta com (alinhado ao Formato de Saida Sugerido do SKILL.md):
+When the user asks for architecture recommendations, structure the response with (aligned to the Suggested Output Format in SKILL.md):
 
-1. Visao executiva media (1-2 paragrafos)
-2. Padrao arquitetural recomendado (LLM/RAG/AI Agent/Agentic AI) com justificativa
-3. Arquitetura recomendada (camadas e responsabilidades)
-4. Governanca e seguranca (controles e guard rails)
-5. Plano de implantacao por fases
-6. Justificativa financeira (ROI/IVA), quando aplicavel
-7. KPIs de sucesso
-8. Riscos e mitigacoes
+1. Medium executive summary (1-2 paragraphs)
+2. Recommended architectural pattern (LLM/RAG/AI Agent/Agentic AI) with justification
+3. Recommended architecture (layers and responsibilities)
+4. Governance and security (controls and guard rails)
+5. Phase-based implementation plan
+6. Financial justification (ROI/IVA), when applicable
+7. Success KPIs
+8. Risks and mitigations
 
-Evitar respostas genericas. Sempre explicitar trade-offs entre custo, risco, velocidade e complexidade.
+Avoid generic responses. Always explicitly state trade-offs between cost, risk, speed, and complexity.
 
-Quando faltar contexto critico, solicitar apenas o minimo necessario para recomendar uma arquitetura aderente ao negocio.
+When critical context is missing, request only the minimum necessary to recommend an architecture aligned with the business.
 
-Quando o tema for arquitetura alvo, mencionar explicitamente as camadas Work IQ, Foundry IQ, Fabric IQ e Web IQ (contexto externo, quando aplicavel), descrevendo o papel de cada uma e como se conectam com a plataforma de dados e controles transversais.
+When the topic is target architecture, explicitly mention the Work IQ, Foundry IQ, Fabric IQ, and Web IQ layers (external context when applicable), describing the role of each and how they connect with the data platform and cross-cutting controls.
 
-## Termos preferenciais
+## Preferred Terms
 
-- Usar os termos: guard rails, evaluators, roadmap em ondas, arquitetura alvo, dados governados.
-- Quando houver sinonimos, priorizar os termos acima para manter consistencia entre respostas.
-- Em outputs executivos, manter frases curtas e orientadas a decisao.
+- Use the terms: guard rails, evaluators, wave-based roadmap, target architecture, governed data.
+- When there are synonyms, prioritize the terms above to maintain consistency across responses.
+- In executive outputs, keep sentences short and decision-oriented.

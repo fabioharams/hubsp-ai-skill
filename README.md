@@ -1,59 +1,59 @@
 # hubsp-ai-skill
 
-## O que e este projeto
+## What is this project
 
-Este repositorio organiza uma base pratica para orientar a adocao corporativa de agentes de IA no ecossistema Microsoft. O foco e apoiar decisoes de arquitetura alvo com integracao entre Work IQ, Foundry IQ, Fabric IQ e Web IQ, conectando estrategia de negocio, dados governados, contexto externo, seguranca, guard rails, evaluators e operacao em escala.
+This repository organizes a practical knowledge base to guide the corporate adoption of AI agents in the Microsoft ecosystem. The focus is on supporting target architecture decisions with integration across Work IQ, Foundry IQ, Fabric IQ and Web IQ, connecting business strategy, governed data, external context, security, guard rails, evaluators and operations at scale.
 
-O projeto foi estruturado para servir como referencia executiva e tecnica: ajuda times de negocio, arquitetura, dados e seguranca a alinharem uma visao comum de como planejar, pilotar e expandir iniciativas de IA agentica com menor risco e maior previsibilidade de valor.
+The project was structured to serve as both an executive and technical reference: it helps business, architecture, data and security teams align on a common vision for planning, piloting and expanding agentic AI initiatives with lower risk and greater value predictability.
 
-## Objetivo
+## Objective
 
-- Definir uma arquitetura de referencia para agentes de IA em contexto corporativo.
-- Padronizar recomendacoes com foco em governanca, compliance e observabilidade.
-- Apoiar um roadmap em ondas (piloto, expansao e escala) com criterios claros.
-- Explicitar trade-offs entre custo, risco, velocidade e complexidade.
+- Define a reference architecture for AI agents in a corporate context.
+- Standardize recommendations focused on governance, compliance and observability.
+- Support a wave-based roadmap (pilot, expansion and scale) with clear criteria.
+- Make trade-offs explicit across cost, risk, speed and complexity.
 
-## O que voce encontra neste repositorio
+## What you will find in this repository
 
-- SKILL.md: definicao unica da skill (roteador) que orienta respostas consistentes em contexto de arquitetura de adocao. Aponta para os arquivos de referencia sob demanda (progressive disclosure).
-- Estrategia_Adocao_Agentes_IA_Final_2.md: guia principal e documento-base, com visao executiva, indice e ponteiros para os arquivos de referencia.
-- referencias/: conteudo tematico fatiado para carregamento sob demanda:
-   - referencias/01-fundamentos-llm-rag-agentes.md: LLM x RAG x AI Agent x Agentic AI; espectro de complexidade e guia de decisao.
-   - referencias/02-arquitetura-referencia-camadas.md: Microsoft IQ (Work IQ, Foundry IQ, Fabric IQ, Web IQ), Microsoft Fabric e especificacoes tecnicas por camada.
-   - referencias/03-roi-ia-vs-homem-hora.md: modelo de ROI/IVA, HITL e multiplicador de escopo.
-   - referencias/04-governanca-guardrails-evaluators-hitl.md: Guard Rails, Evaluators e Human-in-the-Loop.
-   - referencias/05-decision-framework-bxt.md: Microsoft AI Decision Framework (Intake Filter, BXT, 9 perguntas criticas, Capability Model e selecao de tecnologia por cenario).
-   - referencias/06-pl-2338-2023-copilot-studio-foundry.md: analise do PL 2338/2023 e como Microsoft Copilot Studio, Microsoft Foundry e Purview respondem aos eixos de transparencia, governanca, risco, auditoria, supervisao humana e protecao de dados com fontes oficiais.
-- ROI-IA-Calculadora.xlsx: planilha operacional do modelo de ROI/IVA (referencias/03), com 5 abas (Calculadora, Sensibilidade HITL, Como usar, Capacidade e Grafico, Ampliacao). Preencha as celulas azuis com as premissas da operacao e obtenha IVA, ROI (%), veredito (USAR IA / MANTER HUMANO) e impacto na capacidade da equipe. Instrucoes de uso e interpretacao em referencias/03-roi-ia-vs-homem-hora.md.
+- SKILL.md: single skill definition (router) that guides consistent responses in an adoption architecture context. Points to reference files on demand (progressive disclosure).
+- AI_Agent_Adoption_Strategy_Final_2.md: main guide and base document, with executive overview, index and pointers to reference files.
+- referencias/: thematically sliced content for on-demand loading:
+   - referencias/01-llm-rag-ai-agent-fundamentals.md: LLM vs RAG vs AI Agent vs Agentic AI; complexity spectrum and decision guide.
+   - referencias/02-reference-architecture-layers.md: Microsoft IQ (Work IQ, Foundry IQ, Fabric IQ, Web IQ), Microsoft Fabric and technical specifications per layer.
+   - referencias/03-roi-ai-vs-man-hour.md: ROI/AAI model, HITL and scope multiplier.
+   - referencias/04-governance-guard-rails-evaluators-hitl.md: Guard Rails, Evaluators and Human-in-the-Loop.
+   - referencias/05-decision-framework-bxt.md: Microsoft AI Decision Framework (Intake Filter, BXT, 9 critical questions, Capability Model and technology selection by scenario).
+   - referencias/06-pl-2338-2023-copilot-studio-foundry.md: analysis of PL 2338/2023 and how Microsoft Copilot Studio, Microsoft Foundry and Purview address the axes of transparency, governance, risk, audit, human oversight and data protection with official sources.
+- ROI-IA-Calculadora.xlsx: operational spreadsheet for the ROI/AAI model (referencias/03), with 5 tabs (Calculator, HITL Sensitivity, How to Use, Capacity and Chart, Expansion). Fill in the blue cells with your operation's assumptions to obtain AAI, ROI (%), verdict (USE AI / KEEP HUMAN) and impact on team capacity. Usage and interpretation instructions in referencias/03-roi-ai-vs-man-hour.md.
 
-> Observacao: IVA (Indice de Vantagem da IA) e a razao entre o custo humano da tarefa e o custo total da IA por tarefa (IVA = Custo Humano / Custo IA). IVA > 1 indica que a IA e financeiramente vantajosa (um IVA de 4,0 significa que a tarefa via IA custa 1/4 do valor da mesma tarefa feita por uma pessoa); IVA = 1 e o ponto de equilibrio; IVA < 1 indica manter o trabalho humano. Nao confundir com o imposto IVA (Imposto sobre Valor Agregado).
-- Guias complementares de dinamicas e setup para facilitar colaboracao e uso no VS Code.
+> Note: AAI (AI Advantage Index) is the ratio between the human cost of the task and the total AI cost per task (AAI = Human Cost / AI Cost). AAI > 1 indicates that AI is financially advantageous (an AAI of 4.0 means the task via AI costs 1/4 of the same task done by a person); AAI = 1 is the break-even point; AAI < 1 indicates keeping human work. Not to be confused with VAT (Value Added Tax).
+- Supplementary guides for dynamics and setup to facilitate collaboration and use in VS Code.
 
-## Estrutura do repositorio (diagrama)
+## Repository structure (diagram)
 
-O diagrama abaixo mostra como os arquivos se relacionam. O SKILL.md e o ponto de entrada (roteador); o documento-base concentra o conteudo completo e aponta, sob demanda, para os arquivos tematicos em referencias/.
+The diagram below shows how the files relate to each other. SKILL.md is the entry point (router); the base document holds the complete content and points, on demand, to the thematic files in referencias/.
 
 ```mermaid
 graph TD
-    USER([Usuario / Agente faz uma pergunta]) --> SKILL[SKILL.md<br/>Skill roteadora - ponto de entrada]
-    SKILL --> CANON[Estrategia_Adocao_Agentes_IA_Final_2.md<br/>Documento-base - indice + ponteiros]
+    USER([User / Agent asks a question]) --> SKILL[SKILL.md<br/>Routing skill - entry point]
+    SKILL --> CANON[AI_Agent_Adoption_Strategy_Final_2.md<br/>Base document - index + pointers]
 
     SKILL -. progressive disclosure .-> REF{{referencias/}}
-    CANON -. ponteiros .-> REF
+    CANON -. pointers .-> REF
 
-      REF --> R1[01-fundamentos-llm-rag-agentes.md<br/>LLM x RAG x AI Agent x Agentic AI]
-      REF --> R2[02-arquitetura-referencia-camadas.md<br/>Work IQ - Foundry IQ - Fabric IQ - Web IQ - Fabric]
-      REF --> R3[03-roi-ia-vs-homem-hora.md<br/>ROI / IVA - HITL - escopo]
-      REF --> R4[04-governanca-guardrails-evaluators-hitl.md<br/>Guard Rails - Evaluators - HITL]
-      REF --> R5[05-decision-framework-bxt.md<br/>BXT - 9 perguntas - Capability Model]
-      REF --> R6[06-pl-2338-2023-copilot-studio-foundry.md<br/>PL 2338 - transparencia - governanca - risco - auditoria]
+      REF --> R1[01-llm-rag-ai-agent-fundamentals.md<br/>LLM vs RAG vs AI Agent vs Agentic AI]
+      REF --> R2[02-reference-architecture-layers.md<br/>Work IQ - Foundry IQ - Fabric IQ - Web IQ - Fabric]
+      REF --> R3[03-roi-ai-vs-man-hour.md<br/>ROI / AAI - HITL - scope]
+      REF --> R4[04-governance-guard-rails-evaluators-hitl.md<br/>Guard Rails - Evaluators - HITL]
+      REF --> R5[05-decision-framework-bxt.md<br/>BXT - 9 questions - Capability Model]
+      REF --> R6[06-pl-2338-2023-copilot-studio-foundry.md<br/>PL 2338 - transparency - governance - risk - audit]
 
-    SKILL --> README[README.md<br/>Visao geral do repositorio]
-   README --> DOC[doc/especificacoes-agente-projeto.md<br/>Especificacoes e necessidades do projeto]
-   SKILL -. contexto do projeto .-> DOC
-   README --> PROMPT[Prompt padrao reutilizavel<br/>geracao de resposta diagramada]
+    SKILL --> README[README.md<br/>Repository overview]
+   README --> DOC[doc/agent-project-specifications.md<br/>Project specifications and requirements]
+   SKILL -. project context .-> DOC
+   README --> PROMPT[Default reusable prompt<br/>diagrammed response generation]
    DOC --> PROMPT
-   PROMPT --> OUTMD[doc/resultado.md<br/>Saida em Markdown]
+   PROMPT --> OUTMD[doc/resultado.md<br/>Markdown output]
 
     classDef entry fill:#0078D4,stroke:#004578,color:#fff;
     classDef canon fill:#107C10,stroke:#0B5A0B,color:#fff;
@@ -69,38 +69,38 @@ graph TD
    class OUTMD output;
 ```
 
-## Como navegar (fluxograma de decisao)
+## How to navigate (decision flowchart)
 
-Use este fluxo para escolher qual arquivo abrir conforme a sua necessidade.
+Use this flow to choose which file to open based on your need.
 
 ```mermaid
 flowchart TD
-    START([Qual e a sua necessidade?]) --> Q1{Quer apenas a<br/>visao geral do repo?}
-    Q1 -- Sim --> README[Leia README.md]
-    Q1 -- Nao --> Q2{Vai pedir uma<br/>recomendacao a IA?}
+    START([What is your need?]) --> Q1{Do you just want<br/>the repo overview?}
+    Q1 -- Yes --> README[Read README.md]
+    Q1 -- No --> Q2{Will you ask AI<br/>for a recommendation?}
 
-    Q2 -- Sim --> SKILL[Use SKILL.md<br/>como contexto/skill]
-    Q2 -- Nao --> Q3{Que tema voce<br/>precisa aprofundar?}
+    Q2 -- Yes --> SKILL[Use SKILL.md<br/>as context/skill]
+    Q2 -- No --> Q3{What topic do you<br/>need to explore further?}
 
-   SKILL --> QDOC{Ja existe documento<br/>em doc/?}
-   QDOC -- Sim --> DOC[doc/especificacoes-agente-projeto.md]
-   QDOC -- Nao --> DOCNEW[Crie doc/especificacoes-agente-projeto.md]
-   DOC --> QOUT{Quer salvar resposta<br/>em arquivo Markdown?}
+   SKILL --> QDOC{Does a document<br/>already exist in doc/?}
+   QDOC -- Yes --> DOC[doc/agent-project-specifications.md]
+   QDOC -- No --> DOCNEW[Create doc/agent-project-specifications.md]
+   DOC --> QOUT{Do you want to save<br/>the response as Markdown?}
    DOCNEW --> QOUT
-   QOUT -- Sim --> PROMPT[Use o prompt padrao<br/>do README]
+   QOUT -- Yes --> PROMPT[Use the default<br/>README prompt]
    PROMPT --> OUTMD[doc/resultado.md]
-   QOUT -- Nao --> Q3
+   QOUT -- No --> Q3
    OUTMD --> Q3
 
-    Q3 -- Fundamentos<br/>LLM/RAG/Agentes --> R1[referencias/01-fundamentos-llm-rag-agentes.md]
-    Q3 -- Arquitetura<br/>por camadas --> R2[referencias/02-arquitetura-referencia-camadas.md]
-    Q3 -- Justificativa<br/>financeira / ROI --> R3[referencias/03-roi-ia-vs-homem-hora.md]
-    Q3 -- Governanca<br/>e seguranca --> R4[referencias/04-governanca-guardrails-evaluators-hitl.md]
-    Q3 -- Escolha de<br/>tecnologia Microsoft --> R5[referencias/05-decision-framework-bxt.md]
-   Q3 -- Analise regulatoria<br/>PL 2338/2023 --> R6[referencias/06-pl-2338-2023-copilot-studio-foundry.md]
-    Q3 -- Visao completa<br/>ou outras secoes --> CANON[Estrategia_Adocao_Agentes_IA_Final_2.md]
+    Q3 -- Fundamentals<br/>LLM/RAG/Agents --> R1[referencias/01-llm-rag-ai-agent-fundamentals.md]
+    Q3 -- Layered<br/>Architecture --> R2[referencias/02-reference-architecture-layers.md]
+    Q3 -- Financial<br/>Justification / ROI --> R3[referencias/03-roi-ai-vs-man-hour.md]
+    Q3 -- Governance<br/>and Security --> R4[referencias/04-governance-guard-rails-evaluators-hitl.md]
+    Q3 -- Microsoft<br/>Technology Selection --> R5[referencias/05-decision-framework-bxt.md]
+   Q3 -- Regulatory Analysis<br/>PL 2338/2023 --> R6[referencias/06-pl-2338-2023-copilot-studio-foundry.md]
+    Q3 -- Full view<br/>or other sections --> CANON[AI_Agent_Adoption_Strategy_Final_2.md]
 
-    R1 --> END([Aplique no seu caso de uso])
+    R1 --> END([Apply to your use case])
     R2 --> END
     R3 --> END
     R4 --> END
@@ -110,145 +110,91 @@ flowchart TD
     README --> END
 ```
 
-## Publico-alvo
+## Target audience
 
-- Liderancas de tecnologia e negocio.
-- Arquitetos corporativos, arquitetos de dados e equipes de plataforma.
-- Times de governanca, seguranca e compliance.
-- Squads que estao iniciando ou escalando agentes de IA.
+- Technology and business leaders.
+- Enterprise architects, data architects and platform teams.
+- Governance, security and compliance teams.
+- Squads starting or scaling AI agents.
 
-## Como usar no Visual Studio Code
+## How to use in Visual Studio Code
 
-Pre-requisitos: VS Code, a extensao GitHub Copilot Chat e uma assinatura ativa do GitHub Copilot.
+Prerequisites: VS Code, the GitHub Copilot Chat extension and an active GitHub Copilot subscription.
 
-1. Clonar e abrir o repositorio:
+1. Clone and open the repository:
 
    ```bash
-   git clone https://github.com/<sua-org>/hubsp-ai-skill.git
+   git clone https://github.com/<your-org>/hubsp-ai-skill.git
    code hubsp-ai-skill
    ```
 
-2. Abrir o Copilot Chat (icone de chat na barra lateral ou `Ctrl+Alt+I` / `Cmd+Alt+I`) e usar o modo Agent.
-3. O arquivo `.github/copilot-instructions.md` e carregado automaticamente como contexto do workspace, garantindo respostas em pt-BR e o formato executivo padrao.
-4. Trazer um arquivo para o contexto da conversa de uma destas formas:
-   - Digitar `#` e selecionar o arquivo (ex.: `#SKILL.md`).
-   - Arrastar o arquivo do Explorer para o painel de chat.
-   - Abrir o arquivo no editor e referenciar com `#file`.
-5. Fluxo recomendado: comece pelo `SKILL.md` e deixe o agente carregar os arquivos de `referencias/` sob demanda (progressive disclosure), conforme o tema da pergunta.
+2. Open Copilot Chat (chat icon in the sidebar or `Ctrl+Alt+I` / `Cmd+Alt+I`) and use Agent mode.
+3. The `.github/copilot-instructions.md` file is automatically loaded as workspace context, ensuring the executive response format is applied consistently.
+4. Bring a file into the conversation context in one of these ways:
+   - Type `#` and select the file (e.g., `#SKILL.md`).
+   - Drag the file from the Explorer into the chat panel.
+   - Open the file in the editor and reference it with `#file`.
+5. Recommended flow: start with `SKILL.md` and let the agent load files from `referencias/` on demand (progressive disclosure), based on the topic of the question.
 
-Exemplo de prompt:
+Example prompt:
 
-> Usando o #SKILL.md, recomende a arquitetura alvo para um copilot de atendimento com dados governados no Fabric.
+> Using #SKILL.md, recommend the target architecture for a support copilot with governed data in Fabric.
 
-Exemplo com documento de especificacoes do projeto:
+Example with project specifications document:
 
-> Usando o #SKILL.md e o #doc/especificacoes-agente-projeto.md, gere uma recomendacao executiva no formato completo: (1) visao executiva media (1-2 paragrafos) com pelo menos 1 diagrama ou fluxograma Mermaid para explicar a decisao recomendada, (2) padrao arquitetural recomendado (LLM/RAG/AI Agent/Agentic AI) com justificativas detalhadas, links oficiais da Microsoft e pelo menos 1 diagrama ou fluxograma Mermaid para explicar a escolha, (3) arquitetura alvo (Work IQ, Foundry IQ, Fabric IQ e Web IQ) com explicacao detalhada e 2 diagramas Mermaid obrigatorios (arquitetura e fluxograma de decisao), (4) governanca e seguranca com guard rails, evaluators, analise do PL 2338/2023 e explicacao de como as ferramentas e servicos selecionados na arquitetura respondem aos eixos de transparencia, governanca, risco, auditoria, supervisao humana e protecao de dados com fontes oficiais, e pelo menos 1 diagrama ou fluxograma Mermaid, (5) plano de implantacao por fases com detalhamento por fase (objetivo, escopo, integracoes, criterios de entrada/saida, KPI alvo e risco dominante) e pelo menos 1 diagrama ou fluxograma Mermaid, (6) premissas de ROI/IVA com pelo menos 1 diagrama ou fluxograma Mermaid para explicar a logica financeira, (7) KPIs de sucesso com pelo menos 1 diagrama ou fluxograma Mermaid, e (8) riscos e mitigacoes com clareza, links oficiais Microsoft e pelo menos 1 diagrama ou fluxograma Mermaid. A resposta devera ser entregue em um novo documento em markdown chamado doc/resultado.md.
+> Using #SKILL.md and #doc/agent-project-specifications.md, generate an executive recommendation in full format: (1) medium executive summary (1-2 paragraphs) with at least 1 Mermaid diagram or flowchart to explain the recommended decision, (2) recommended architectural pattern (LLM/RAG/AI Agent/Agentic AI) with detailed justifications, official Microsoft links and at least 1 Mermaid diagram or flowchart to explain the choice, (3) target architecture (Work IQ, Foundry IQ, Fabric IQ and Web IQ) with detailed explanation and 2 mandatory Mermaid diagrams (architecture and decision flowchart), (4) governance and security with guard rails, evaluators, PL 2338/2023 analysis and explanation of how the tools and services selected in the architecture address the axes of transparency, governance, risk, audit, human oversight and data protection with official sources, and at least 1 Mermaid diagram or flowchart, (5) phased deployment plan with per-phase detail (objective, scope, integrations, entry/exit criteria, target KPI and dominant risk) and at least 1 Mermaid diagram or flowchart, (6) ROI/AAI assumptions with at least 1 Mermaid diagram or flowchart to explain the financial logic, (7) success KPIs with at least 1 Mermaid diagram or flowchart, and (8) risks and mitigations with clarity, official Microsoft links and at least 1 Mermaid diagram or flowchart. The response must be delivered as a new markdown document called doc/resultado.md.
 
-Dica: para tratar o `SKILL.md` como uma skill reutilizavel no formato oficial do VS Code, copie-o (ou crie um link) para uma pasta como `.github/skills/hubsp-ai-skill/` ou `~/.copilot/skills/hubsp-ai-skill/`. Neste repositorio, o arquivo na raiz funciona como **fonte canonica/roteador** para uso por referencia direta em prompts, enquanto a instalacao formal da skill deve seguir a convencao de pasta em minusculas.
+Tip: to use `SKILL.md` as a reusable skill in the official VS Code format, copy it (or create a link) to a folder such as `.github/skills/hubsp-ai-skill/` or `~/.copilot/skills/hubsp-ai-skill/`. In this repository, the file at the root acts as the **canonical source/router** for direct reference in prompts, while the formal skill installation should follow the lowercase folder convention.
 
-## Observacao sobre documentos de projeto (pasta `doc`)
+## Note on project documents (`doc` folder)
 
-Para padronizar o uso da skill em qualquer canal (VS Code, GitHub Copilot App e CLI), crie uma pasta `doc/` na raiz do repositorio e adicione nela o documento com as especificacoes e necessidades do projeto que sera analisado.
+To standardize skill usage across any channel (VS Code, GitHub Copilot App and CLI), create a `doc/` folder at the repository root and add to it a document with the project's specifications and requirements to be analyzed.
 
-Exemplo de caminho recomendado:
+Recommended path example:
 
-`doc/especificacoes-agente-projeto.md`
+`doc/agent-project-specifications.md`
 
-Template pronto para uso:
+Ready-to-use template:
 
-`doc/especificacoes-agente-projeto.md` (preencha e anexe este arquivo ao chat junto com o `SKILL.md`).
+`doc/agent-project-specifications.md` (fill in and attach this file to the chat alongside `SKILL.md`).
 
-Recomendacao de estrutura minima do documento (ordem sugerida):
+Recommended minimum document structure (suggested order):
 
-1. Contexto de negocio e objetivo do agente.
-2. Escopo funcional (o que o agente faz e o que nao faz).
-3. Perfis de usuarios, jornadas e canais.
-4. Requisitos nao funcionais (SLA, latencia, disponibilidade, escala).
-5. Dados e integracoes (fontes, APIs, sistemas, classificacao de dados).
-6. Governanca e seguranca (guard rails, compliance, auditoria, HITL).
-7. Criterios de sucesso e KPIs.
-8. Restricoes, riscos e premissas.
-9. Roadmap em ondas (piloto, expansao, escala).
+1. Business context and agent objective.
+2. Functional scope (what the agent does and does not do).
+3. User profiles, journeys and channels.
+4. Non-functional requirements (SLA, latency, availability, scale).
+5. Data and integrations (sources, APIs, systems, data classification).
+6. Governance and security (guard rails, compliance, audit, HITL).
+7. Success criteria and KPIs.
+8. Constraints, risks and assumptions.
+9. Wave-based roadmap (pilot, expansion, scale).
 
-Extensoes de arquivo suportadas (pratica recomendada):
+Supported file extensions (recommended practice):
 
-- `.md`: melhor desempenho e maior previsibilidade de leitura pelo agente (recomendado).
-- `.txt`: desempenho alto, sem recursos de formatacao.
-- `.pdf`: suportado, mas pode perder estrutura em tabelas/diagramas e variar conforme a extracao de texto.
-- `.docx`: suportado, bom para autoria executiva, com possivel variacao de interpretacao em layouts complexos.
+- `.md`: best performance and highest reading predictability by the agent (recommended).
+- `.txt`: high performance, without formatting features.
+- `.pdf`: supported, but may lose structure in tables/diagrams and vary depending on text extraction.
+- `.docx`: supported, good for executive authoring, with possible interpretation variation in complex layouts.
 
-Melhor desempenho geral para analise pela skill: **`.md`** (texto simples, secoes claras e titulos objetivos).
+Best overall performance for skill analysis: **`.md`** (plain text, clear sections and objective headings).
 
-## Prompt padrao reutilizavel (gerar arquivo Markdown diagramado)
+## Default reusable prompt (generate a diagrammed Markdown file)
 
-Use este prompt em qualquer projeto com documento em `doc/especificacoes-agente-projeto.md`:
+Use this prompt in any project with a document at `doc/agent-project-specifications.md`:
 
-> Usando o #SKILL.md e o #doc/especificacoes-agente-projeto.md, gere uma recomendacao executiva no formato completo: (1) visao executiva media (1-2 paragrafos) com pelo menos 1 diagrama ou fluxograma Mermaid para explicar a decisao recomendada, (2) padrao arquitetural recomendado (LLM/RAG/AI Agent/Agentic AI) com justificativas detalhadas, links oficiais da Microsoft e pelo menos 1 diagrama ou fluxograma Mermaid para explicar a escolha, (3) arquitetura alvo (Work IQ, Foundry IQ, Fabric IQ e Web IQ) com explicacao detalhada e 2 diagramas Mermaid obrigatorios (arquitetura e fluxograma de decisao), (4) governanca e seguranca com guard rails, evaluators, analise do PL 2338/2023 e explicacao de como as ferramentas e servicos selecionados na arquitetura respondem aos eixos de transparencia, governanca, risco, auditoria, supervisao humana e protecao de dados com fontes oficiais, e pelo menos 1 diagrama ou fluxograma Mermaid, (5) plano de implantacao por fases com detalhamento por fase (objetivo, escopo, integracoes, criterios de entrada/saida, KPI alvo e risco dominante) e pelo menos 1 diagrama ou fluxograma Mermaid, (6) premissas de ROI/IVA com pelo menos 1 diagrama ou fluxograma Mermaid para explicar a logica financeira, (7) KPIs de sucesso com pelo menos 1 diagrama ou fluxograma Mermaid, e (8) riscos e mitigacoes com clareza, links oficiais Microsoft e pelo menos 1 diagrama ou fluxograma Mermaid. A resposta devera ser entregue em um novo documento em markdown chamado doc/resultado.md.
+> Using #SKILL.md and #doc/agent-project-specifications.md, generate an executive recommendation in full format: (1) medium executive summary (1-2 paragraphs) with at least 1 Mermaid diagram or flowchart to explain the recommended decision, (2) recommended architectural pattern (LLM/RAG/AI Agent/Agentic AI) with detailed justifications, official Microsoft links and at least 1 Mermaid diagram or flowchart to explain the choice, (3) target architecture (Work IQ, Foundry IQ, Fabric IQ and Web IQ) with detailed explanation and 2 mandatory Mermaid diagrams (architecture and decision flowchart), (4) governance and security with guard rails, evaluators, PL 2338/2023 analysis and explanation of how the tools and services selected in the architecture address the axes of transparency, governance, risk, audit, human oversight and data protection with official sources, and at least 1 Mermaid diagram or flowchart, (5) phased deployment plan with per-phase detail (objective, scope, integrations, entry/exit criteria, target KPI and dominant risk) and at least 1 Mermaid diagram or flowchart, (6) ROI/AAI assumptions with at least 1 Mermaid diagram or flowchart to explain the financial logic, (7) success KPIs with at least 1 Mermaid diagram or flowchart, and (8) risks and mitigations with clarity, official Microsoft links and at least 1 Mermaid diagram or flowchart. The response must be delivered as a new markdown document called doc/resultado.md.
 
-Variacao para GitHub Copilot CLI:
+Variation for GitHub Copilot CLI:
 
-> Leia SKILL.md e doc/especificacoes-agente-projeto.md e gere recomendacao executiva em formato avancado: visao executiva media com diagrama ou fluxograma Mermaid; padrao arquitetural com justificativas detalhadas, fontes Microsoft e diagrama ou fluxograma Mermaid; arquitetura Work IQ/Foundry IQ/Fabric IQ/Web IQ com diagrama Mermaid e fluxograma Mermaid; governanca e seguranca com analise do PL 2338/2023, explicacao de como as ferramentas e servicos selecionados na arquitetura respondem aos eixos de transparencia, governanca, risco, auditoria, supervisao humana e protecao de dados com fontes oficiais, e diagrama ou fluxograma Mermaid; plano em fases detalhado com diagrama ou fluxograma Mermaid; premissas de ROI/IVA com diagrama ou fluxograma Mermaid; KPIs com diagrama ou fluxograma Mermaid; riscos e mitigacoes com links oficiais da Microsoft e diagrama ou fluxograma Mermaid. A resposta devera ser entregue em um novo documento em markdown chamado doc/resultado.md.
+> Read SKILL.md and doc/agent-project-specifications.md and generate an executive recommendation in advanced format: medium executive summary with Mermaid diagram or flowchart; architectural pattern with detailed justifications, Microsoft sources and Mermaid diagram or flowchart; Work IQ/Foundry IQ/Fabric IQ/Web IQ architecture with Mermaid diagram and Mermaid flowchart; governance and security with PL 2338/2023 analysis, explanation of how the tools and services selected in the architecture address the axes of transparency, governance, risk, audit, human oversight and data protection with official sources, and Mermaid diagram or flowchart; detailed phased plan with Mermaid diagram or flowchart; ROI/AAI assumptions with Mermaid diagram or flowchart; KPIs with Mermaid diagram or flowchart; risks and mitigations with official Microsoft links and Mermaid diagram or flowchart. The response must be delivered as a new markdown document called doc/resultado.md.
 
-## Como usar no GitHub Copilot App
+## How to use in the GitHub Copilot App
 
-Pre-requisitos: app do GitHub Copilot com acesso ao repositorio e uma assinatura ativa do GitHub Copilot.
+Prerequisites: GitHub Copilot app with repository access and an active GitHub Copilot subscription.
 
-1. Abrir este repositorio no app como workspace/projeto.
-2. Iniciar um chat em modo Agent.
-3. Anexar o `SKILL.md` ao contexto (ou usar `#SKILL.md`) para aplicar as regras de resposta em pt-BR e o formato executivo.
-4. Quando precisar de profundidade, anexar tambem os arquivos de `referencias/` conforme o tema (arquitetura, ROI, governanca, decision framework).
-5. Fazer a pergunta com contexto de negocio e objetivo de decisao.
-
-Exemplo de prompt no app:
-
-> Usando o #SKILL.md e o referencias/02-arquitetura-referencia-camadas.md, recomende a arquitetura alvo para um agente de atendimento com dados governados no Fabric.
-
-Exemplo no app com documento de especificacoes do projeto:
-
-> Usando o #SKILL.md e o #doc/especificacoes-agente-projeto.md, gere uma recomendacao executiva no formato completo: (1) visao executiva media (1-2 paragrafos) com pelo menos 1 diagrama ou fluxograma Mermaid para explicar a decisao recomendada, (2) padrao arquitetural recomendado (LLM/RAG/AI Agent/Agentic AI) com justificativas detalhadas, links oficiais da Microsoft e pelo menos 1 diagrama ou fluxograma Mermaid para explicar a escolha, (3) arquitetura alvo (Work IQ, Foundry IQ, Fabric IQ e Web IQ) com explicacao detalhada e 2 diagramas Mermaid obrigatorios (arquitetura e fluxograma de decisao), (4) governanca e seguranca com guard rails, evaluators, analise do PL 2338/2023 e explicacao de como as ferramentas e servicos selecionados na arquitetura respondem aos eixos de transparencia, governanca, risco, auditoria, supervisao humana e protecao de dados com fontes oficiais, e pelo menos 1 diagrama ou fluxograma Mermaid, (5) plano de implantacao por fases com detalhamento por fase (objetivo, escopo, integracoes, criterios de entrada/saida, KPI alvo e risco dominante) e pelo menos 1 diagrama ou fluxograma Mermaid, (6) premissas de ROI/IVA com pelo menos 1 diagrama ou fluxograma Mermaid para explicar a logica financeira, (7) KPIs de sucesso com pelo menos 1 diagrama ou fluxograma Mermaid, e (8) riscos e mitigacoes com clareza, links oficiais Microsoft e pelo menos 1 diagrama ou fluxograma Mermaid. A resposta devera ser entregue em um novo documento em markdown chamado doc/resultado.md.
-
-## Como usar no GitHub Copilot CLI
-
-Pre-requisitos: Node.js 22 ou superior, uma assinatura ativa do GitHub Copilot e (no Windows) PowerShell 6+.
-
-1. Instalar o CLI (npm em qualquer plataforma):
-
-   ```bash
-   npm install -g @github/copilot
-   ```
-
-   Alternativas oficiais: `brew install copilot-cli` (macOS/Linux) ou `winget install GitHub.Copilot` (Windows).
-
-2. Entrar na pasta do repositorio e iniciar uma sessao interativa (o CLI usa o diretorio atual como contexto e pede confirmacao para confiar nele):
-
-   ```bash
-   cd hubsp-ai-skill
-   copilot
-   ```
-
-3. Autenticar na primeira execucao: se voce ainda nao estiver logado, use o comando `/login` na sessao e siga as instrucoes na tela.
-4. Referenciar os arquivos do repositorio diretamente no prompt. O CLI tem acesso de leitura aos arquivos do diretorio de trabalho:
-
-   > Leia o SKILL.md e o referencias/05-decision-framework-bxt.md e me ajude a escolher a tecnologia Microsoft para um agente proativo de monitoramento.
-
-5. Para um prompt unico e nao interativo, usar o modo programatico (`-p` / `--prompt`):
-
-   ```bash
-   copilot -p "Com base em SKILL.md, gere uma visao executiva da arquitetura alvo (Work IQ, Foundry IQ, Fabric IQ)."
-   ```
-
-Exemplo no CLI com documento de especificacoes do projeto (sessao interativa):
-
-   > Leia SKILL.md e doc/especificacoes-agente-projeto.md e gere recomendacao executiva em formato avancado: visao executiva media com diagrama ou fluxograma Mermaid; padrao arquitetural com justificativas detalhadas, fontes Microsoft e diagrama ou fluxograma Mermaid; arquitetura Work IQ/Foundry IQ/Fabric IQ/Web IQ com diagrama Mermaid e fluxograma Mermaid; governanca e seguranca com analise do PL 2338/2023, explicacao de como as ferramentas e servicos selecionados na arquitetura respondem aos eixos de transparencia, governanca, risco, auditoria, supervisao humana e protecao de dados com fontes oficiais, e diagrama ou fluxograma Mermaid; plano em fases detalhado com diagrama ou fluxograma Mermaid; premissas de ROI/IVA com diagrama ou fluxograma Mermaid; KPIs com diagrama ou fluxograma Mermaid; riscos e mitigacoes com links oficiais da Microsoft e diagrama ou fluxograma Mermaid. A resposta devera ser entregue em um novo documento em markdown chamado doc/resultado.md.
-
-Exemplo no CLI com documento de especificacoes do projeto (prompt unico):
-
-   ```bash
-   copilot -p "Leia SKILL.md e doc/especificacoes-agente-projeto.md e gere recomendacao executiva em formato avancado: visao executiva media com diagrama ou fluxograma Mermaid; padrao arquitetural com justificativas detalhadas, fontes Microsoft e diagrama ou fluxograma Mermaid; arquitetura Work IQ/Foundry IQ/Fabric IQ/Web IQ com diagrama Mermaid e fluxograma Mermaid; governanca e seguranca com analise do PL 2338/2023, explicacao de como as ferramentas e servicos selecionados na arquitetura respondem aos eixos de transparencia, governanca, risco, auditoria, supervisao humana e protecao de dados com fontes oficiais, e diagrama ou fluxograma Mermaid; plano em fases detalhado com diagrama ou fluxograma Mermaid; premissas de ROI/IVA com diagrama ou fluxograma Mermaid; KPIs com diagrama ou fluxograma Mermaid; riscos e mitigacoes com links oficiais da Microsoft e diagrama ou fluxograma Mermaid. A resposta devera ser entregue em um novo documento em markdown chamado doc/resultado.md."
-   ```
-
-Observacoes:
-
-- O CLI combina automaticamente arquivos de custom instructions, mas nao carrega `.github/copilot-instructions.md` exatamente como o VS Code. Para garantir o tom executivo em pt-BR, referencie o `SKILL.md` explicitamente no prompt.
-- Use caminhos relativos (ex.: `referencias/03-roi-ia-vs-homem-hora.md`) ao citar arquivos, para que a ferramenta os localize.
-- Inicie o CLI apenas em diretorios confiaveis; evite executa-lo a partir do seu diretorio pessoal.
+1. Open this repository in the app as a workspace/project.
+2. Start a chat in Agent mode.
+3. Attach `SKILL.md` to the context (or use `#SKILL.md`) to apply the response format rules.
+4. When depth is needed, also attach the relevant files from `referencias/` based on the topic (architecture, ROI, governance, decision framework).
+5. Ask the question with business context and decision objective.

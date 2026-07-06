@@ -1,93 +1,93 @@
-# PL 2338/2023 e aderencia de Microsoft Copilot Studio e Microsoft Foundry
+# PL 2338/2023 and the adherence of Microsoft Copilot Studio and Microsoft Foundry
 
-## Visao executiva
+## Executive overview
 
-O **PL 2338/2023** estabelece um marco baseado em direitos, classificacao de risco, transparencia, supervisao humana, governanca, rastreabilidade e prestacao de contas para sistemas de inteligencia artificial. A leitura das fontes oficiais indica que **Microsoft Copilot Studio** e **Microsoft Foundry** oferecem os blocos tecnicos e de governanca necessarios para atender grande parte dessas exigencias, especialmente quando combinados com **Microsoft Purview**, **Microsoft Entra**, **Microsoft Sentinel**, **Azure Monitor**, **Defender for Cloud** e **Azure AI Content Safety**.
+**PL 2338/2023** (Brazil's AI bill) establishes a framework based on rights, risk classification, transparency, human oversight, governance, traceability and accountability for artificial intelligence systems. A reading of the official sources indicates that **Microsoft Copilot Studio** and **Microsoft Foundry** provide the technical and governance building blocks needed to meet a large part of these requirements, especially when combined with **Microsoft Purview**, **Microsoft Entra**, **Microsoft Sentinel**, **Azure Monitor**, **Defender for Cloud** and **Azure AI Content Safety**.
 
-O ponto central e este: **as ferramentas da Microsoft nao geram conformidade juridica automaticamente**, mas entregam os controles tecnicos, operacionais e de governanca necessarios para implementar guard rails, evaluators, monitoramento, rastreabilidade, protecao de dados, retencao, auditoria e supervisao humana em linha com os eixos do PL.
+The central point is this: **Microsoft's tools do not automatically produce legal compliance**, but they deliver the technical, operational and governance controls needed to implement guard rails, evaluators, monitoring, traceability, data protection, retention, auditing and human oversight in line with the bill's pillars.
 
-> Observacao: o **PL 2338/2023 ainda nao foi aprovado em definitivo**. Como a tramitacao legislativa segue em curso, o texto, os artigos de referencia, o escopo regulatorio e as datas de publicacao ainda podem sofrer alteracoes ate a conclusao do processo legislativo e eventual sancao.
+> Note: **PL 2338/2023 has not yet been definitively approved**. Since the legislative process is still underway, the text, the reference articles, the regulatory scope and the publication dates may still change until the legislative process concludes and any potential sanction.
 
-## Fontes oficiais consideradas
+## Official sources considered
 
-### Fontes oficiais do PL 2338/2023
+### Official sources for PL 2338/2023
 
-- Senado Federal, pagina da materia: https://www25.senado.leg.br/web/atividade/materias/-/materia/157233
-- Senado Federal, autografo remetido a Camara: https://legis.senado.leg.br/sdleg-getter/documento?dm=9915448&ts=1774551291270&disposition=inline
-- Senado Federal, texto inicial oficial: https://legis.senado.leg.br/sdleg-getter/documento?dm=9347593&ts=1774551274647&disposition=inline
-- Senado Federal, consulta publica da materia: https://www12.senado.leg.br/ecidadania/visualizacaomateria?id=157233
-- Camara dos Deputados, registro oficial da proposicao: https://dadosabertos.camara.leg.br/api/v2/proposicoes/2487262
-- Camara dos Deputados, inteiro teor da proposicao na Camara: https://www.camara.leg.br/proposicoesWeb/prop_mostrarintegra?codteor=2868197
+- Federal Senate, matter page: https://www25.senado.leg.br/web/atividade/materias/-/materia/157233
+- Federal Senate, enrolled bill sent to the Chamber: https://legis.senado.leg.br/sdleg-getter/documento?dm=9915448&ts=1774551291270&disposition=inline
+- Federal Senate, official initial text: https://legis.senado.leg.br/sdleg-getter/documento?dm=9347593&ts=1774551274647&disposition=inline
+- Federal Senate, public consultation on the matter: https://www12.senado.leg.br/ecidadania/visualizacaomateria?id=157233
+- Chamber of Deputies, official record of the proposal: https://dadosabertos.camara.leg.br/api/v2/proposicoes/2487262
+- Chamber of Deputies, full text of the proposal in the Chamber: https://www.camara.leg.br/proposicoesWeb/prop_mostrarintegra?codteor=2868197
 
-### Fontes oficiais Microsoft
+### Official Microsoft sources
 
-- Copilot Studio, seguranca e governanca: https://learn.microsoft.com/microsoft-copilot-studio/security-and-governance
-- Copilot Studio, auditoria em Purview: https://learn.microsoft.com/microsoft-copilot-studio/admin-logging-copilot-studio
-- Purview para Copilot Studio: https://learn.microsoft.com/purview/ai-copilot-studio
+- Copilot Studio, security and governance: https://learn.microsoft.com/microsoft-copilot-studio/security-and-governance
+- Copilot Studio, auditing in Purview: https://learn.microsoft.com/microsoft-copilot-studio/admin-logging-copilot-studio
+- Purview for Copilot Studio: https://learn.microsoft.com/purview/ai-copilot-studio
 - Microsoft Foundry, Responsible AI: https://learn.microsoft.com/azure/foundry/responsible-use-of-ai-overview
 - Microsoft Foundry, observability: https://learn.microsoft.com/azure/foundry/concepts/observability
-- Purview para Microsoft Foundry: https://learn.microsoft.com/purview/ai-azure-foundry
-- Prompt Shields em Azure AI Content Safety: https://learn.microsoft.com/azure/ai-services/content-safety/concepts/jailbreak-detection
-- Gestao de compliance e seguranca no Foundry: https://learn.microsoft.com/azure/foundry/control-plane/how-to-manage-compliance-security
-- Governanca regulatoria de apps de IA: https://learn.microsoft.com/security/security-for-ai/govern
+- Purview for Microsoft Foundry: https://learn.microsoft.com/purview/ai-azure-foundry
+- Prompt Shields in Azure AI Content Safety: https://learn.microsoft.com/azure/ai-services/content-safety/concepts/jailbreak-detection
+- Compliance and security management in Foundry: https://learn.microsoft.com/azure/foundry/control-plane/how-to-manage-compliance-security
+- Regulatory governance of AI apps: https://learn.microsoft.com/security/security-for-ai/govern
 
-## Leitura objetiva do PL
+## Objective reading of the bill
 
-Para esta analise, a referencia juridica principal e o **autografo aprovado no Senado e remetido a Camara**, complementado pelo **texto inicial** para facilitar a identificacao dos artigos e da estrutura original da proposta. Pelas fontes oficiais do Senado, os eixos centrais do PL 2338/2023 incluem:
+For this analysis, the primary legal reference is the **enrolled bill approved in the Senate and sent to the Chamber**, complemented by the **initial text** to make it easier to identify the articles and the original structure of the proposal. According to the official Senate sources, the central pillars of PL 2338/2023 include:
 
-- **Direito a informacao previa sobre interacao com IA**.
-- **Direito a explicacao, contestacao e intervencao humana**.
-- **Nao discriminacao e correcao de vieses**.
-- **Classificacao de risco e avaliacao de impacto algoritmico para sistemas de alto risco**.
-- **Medidas de governanca, seguranca, confiabilidade e monitoramento continuo**.
-- **Rastreabilidade, auditabilidade, responsabilizacao e prestacao de contas**.
-- **Publicidade de informacoes e mecanismos de supervisao pela autoridade competente**.
+- **Right to prior information about interaction with AI**.
+- **Right to explanation, contestation and human intervention**.
+- **Non-discrimination and correction of biases**.
+- **Risk classification and algorithmic impact assessment for high-risk systems**.
+- **Measures for governance, security, reliability and continuous monitoring**.
+- **Traceability, auditability, liability and accountability**.
+- **Public disclosure of information and oversight mechanisms by the competent authority**.
 
-Trechos oficiais relevantes, consistentes entre o texto inicial e a versao aprovada no Senado, incluem:
+Relevant official excerpts, consistent between the initial text and the version approved in the Senate, include:
 
-- **Art. 5o**: direito a informacao previa, explicacao, contestacao, participacao humana, nao discriminacao, privacidade e protecao de dados.
-- **Art. 7o**: obrigacao de informar carater automatizado, operadores, medidas de governanca, papel de humanos, dados usados, medidas de seguranca, nao discriminacao e confiabilidade.
-- **Art. 8o e 9o**: direito a explicacao, revisao, contestacao e solicitacao de intervencao humana.
-- **Art. 12**: vedacao a discriminacao direta, indireta, ilegal ou abusiva.
-- **Arts. 23 e 24**: avaliacao de impacto algoritmico com independencia funcional, mitigacao, monitoramento e registro de riscos residuais.
-- **Art. 30**: codigos de boas praticas e governanca, mecanismos internos de supervisao, resposta a resultados prejudiciais e atualizacao com monitoramento continuo.
-- **Art. 32**: fiscalizacao, regulamentacao e exigencia de publicizacao de informacoes.
+- **Article 5**: right to prior information, explanation, contestation, human participation, non-discrimination, privacy and data protection.
+- **Article 7**: obligation to disclose the automated nature, the operators, governance measures, the role of humans, the data used, security measures, non-discrimination and reliability.
+- **Articles 8 and 9**: right to explanation, review, contestation and to request human intervention.
+- **Article 12**: prohibition of direct, indirect, illegal or abusive discrimination.
+- **Articles 23 and 24**: algorithmic impact assessment with functional independence, mitigation, monitoring and recording of residual risks.
+- **Article 30**: codes of good practice and governance, internal oversight mechanisms, response to harmful outcomes and updating with continuous monitoring.
+- **Article 32**: enforcement, regulation and the requirement to publicly disclose information.
 
-## Como Copilot Studio e Microsoft Foundry respondem aos requisitos do PL
+## How Copilot Studio and Microsoft Foundry address the bill's requirements
 
-| Eixo do PL 2338/2023 | Leitura do requisito na fonte oficial | Como Microsoft Copilot Studio responde | Como Microsoft Foundry responde | Links oficiais Microsoft |
+| PL 2338/2023 pillar | Reading of the requirement in the official source | How Microsoft Copilot Studio addresses it | How Microsoft Foundry addresses it | Official Microsoft links |
 |---|---|---|---|---|
-| **Transparencia e informacao previa** | Arts. 5o e 7o exigem informar interacao automatizada, operadores, dados usados, papel humano e medidas de governanca. | Copilot Studio permite governanca por ambiente, autenticacao, controles sobre knowledge sources, actions, connectors, skills, HTTP requests e publication to channels. Com Purview, tambem herda classificacao, trilha de auditoria e exibicao de sensibilidade em cenarios suportados. | Foundry permite documentar projeto, modelo, filtros e metricas; possui control plane, governanca centralizada e integracao com Purview para visibilidade sobre interacoes e classificacoes. | https://learn.microsoft.com/microsoft-copilot-studio/security-and-governance ; https://learn.microsoft.com/purview/ai-copilot-studio ; https://learn.microsoft.com/azure/foundry/control-plane/overview ; https://learn.microsoft.com/security/security-for-ai/govern |
-| **Explicabilidade, contestacao e supervisao humana** | Arts. 5o, 8o e 9o tratam de explicacao, revisao, contestacao e intervencao humana. | Copilot Studio ajuda no desenho de workflows com autenticacao, aprovacao administrativa e controle de publicacao. E adequado para processos com humano no loop, especialmente quando o agente apenas recomenda, coleta contexto ou aciona fluxos supervisionados. | Foundry oferece tracing, evaluation e monitoring para entender chamadas, decisoes do agente, tool invocations e cadeias de execucao. Isso facilita explicar comportamento do sistema e implementar revisao humana em cenarios de maior risco. | https://learn.microsoft.com/microsoft-copilot-studio/security-and-governance ; https://learn.microsoft.com/azure/foundry/concepts/observability ; https://learn.microsoft.com/azure/foundry/responsible-use-of-ai-overview |
-| **Nao discriminacao, seguranca e confiabilidade** | Art. 12 veda discriminacao; principios do PL incluem nao discriminacao, explicabilidade, auditabilidade, robustez e seguranca da informacao. | Copilot Studio se apoia em DLP, sensitivity labels, auditing, Sentinel e controles de autenticacao. Com Purview, permite monitorar interacoes, detectar comportamentos de risco e aplicar politicas para reduzir exposicao indevida. | Foundry traz built-in evaluators para safety and security, red teaming, prompt attack detection, content filters, Prompt Shields, monitoramento de riscos e integracao com Defender for Cloud. | https://learn.microsoft.com/purview/ai-copilot-studio ; https://learn.microsoft.com/azure/foundry/concepts/observability ; https://learn.microsoft.com/azure/ai-services/content-safety/concepts/jailbreak-detection ; https://learn.microsoft.com/azure/foundry/control-plane/how-to-manage-compliance-security |
-| **Classificacao de risco e avaliacao de impacto algoritmico** | Arts. 23 e 24 exigem avaliacao de impacto com preparacao, cognicao do risco, mitigacao e monitoramento, especialmente para alto risco. | Copilot Studio ajuda em casos de menor autonomia e maior controle operacional, mas nao substitui o processo formal de avaliacao de impacto. Ele contribui com trilhas de auditoria, telemetria, DLP, governance by environment e logs de alteracoes de configuracao e uso. | Foundry e mais aderente para cenarios que exigem evidence pack tecnico: evaluators, red teaming, tracing, dashboards, content safety filter configurations, monitoramento e documentacao exportavel para fluxos de GRC e auditoria. | https://learn.microsoft.com/microsoft-copilot-studio/admin-logging-copilot-studio ; https://learn.microsoft.com/azure/foundry/concepts/observability ; https://learn.microsoft.com/security/security-for-ai/govern ; https://learn.microsoft.com/azure/foundry/responsible-use-of-ai-overview |
-| **Governanca corporativa e monitoramento continuo** | Art. 30 fala em boas praticas, mecanismos internos de supervisao, resposta a resultados prejudiciais e atualizacao por monitoramento continuo. | Copilot Studio oferece data policy controls, bloqueio de publishing, environment routing, CMK, logs em Purview, integracao com Sentinel e administracao central no Power Platform admin center. | Foundry traz governanca em todo o lifecycle: Discover, Protect, Govern; integracao com Azure Monitor, Application Insights, Defender for Cloud, Purview e control plane para operacao em escala. | https://learn.microsoft.com/microsoft-copilot-studio/security-and-governance ; https://learn.microsoft.com/azure/foundry/responsible-use-of-ai-overview ; https://learn.microsoft.com/azure/foundry/control-plane/overview |
-| **Rastreabilidade, auditoria e prestacao de contas** | O PL explicita rastreabilidade, auditabilidade, responsabilizacao e prestacao de contas como principios e mecanismos de governanca. | Copilot Studio registra eventos de criacao, alteracao, publicacao, compartilhamento, configuracao e interacao do usuario. Esses eventos podem ser pesquisados no Purview e analisados no DSPM for AI; integracao com Sentinel reforca SOC e resposta a incidentes. | Foundry integra auditoria e classificacao via Purview, activity explorer, retention, eDiscovery e monitoramento operacional por traces, logs e dashboards. Isso suporta trilha de decisao e evidencia para auditoria. | https://learn.microsoft.com/microsoft-copilot-studio/admin-logging-copilot-studio ; https://learn.microsoft.com/purview/ai-copilot-studio ; https://learn.microsoft.com/purview/ai-azure-foundry ; https://learn.microsoft.com/azure/foundry/concepts/observability |
-| **Protecao de dados, retencao e investigacao** | O PL dialoga com privacidade, protecao de dados, responsabilizacao e fiscalizacao. | Com Purview, o Copilot Studio suporta auditing, classification, sensitivity labels, DLP, Insider Risk Management, Communication Compliance, eDiscovery, Data Lifecycle Management e Compliance Manager. | O mesmo conjunto e suportado para Foundry, desde que as configuracoes de Purview Data Security e collection policies sejam habilitadas. Isso e especialmente relevante para retencao de prompts, respostas e investigacao regulatoria. | https://learn.microsoft.com/purview/ai-copilot-studio ; https://learn.microsoft.com/purview/ai-azure-foundry |
-| **Seguranca contra abuso, prompt injection e uso indevido** | O PL exige mitigacao de riscos, seguranca e monitoramento, sobretudo em cenarios sensiveis ou de alto risco. | Em Copilot Studio, a camada principal de controle esta na politica de conectores, autenticacao, publicacao, DLP, labels, auditoria e restricao de capacidades do agente. | Em Foundry, Azure AI Content Safety e Prompt Shields detectam user prompt attacks e document attacks; Defender for Cloud complementa com deteccao de jailbreak e riscos de workload. | https://learn.microsoft.com/azure/ai-services/content-safety/concepts/jailbreak-detection ; https://learn.microsoft.com/azure/foundry/control-plane/how-to-manage-compliance-security |
+| **Transparency and prior information** | Articles 5 and 7 require disclosing automated interaction, operators, data used, the human role and governance measures. | Copilot Studio enables governance per environment, authentication, controls over knowledge sources, actions, connectors, skills, HTTP requests and publication to channels. With Purview, it also inherits classification, an audit trail and sensitivity display in supported scenarios. | Foundry enables documenting the project, model, filters and metrics; it has a control plane, centralized governance and integration with Purview for visibility into interactions and classifications. | https://learn.microsoft.com/microsoft-copilot-studio/security-and-governance ; https://learn.microsoft.com/purview/ai-copilot-studio ; https://learn.microsoft.com/azure/foundry/control-plane/overview ; https://learn.microsoft.com/security/security-for-ai/govern |
+| **Explainability, contestation and human oversight** | Articles 5, 8 and 9 deal with explanation, review, contestation and human intervention. | Copilot Studio helps in designing workflows with authentication, administrative approval and publication control. It is suitable for processes with a human in the loop, especially when the agent only recommends, collects context or triggers supervised flows. | Foundry offers tracing, evaluation and monitoring to understand calls, agent decisions, tool invocations and execution chains. This makes it easier to explain system behavior and implement human review in higher-risk scenarios. | https://learn.microsoft.com/microsoft-copilot-studio/security-and-governance ; https://learn.microsoft.com/azure/foundry/concepts/observability ; https://learn.microsoft.com/azure/foundry/responsible-use-of-ai-overview |
+| **Non-discrimination, security and reliability** | Article 12 prohibits discrimination; the bill's principles include non-discrimination, explainability, auditability, robustness and information security. | Copilot Studio relies on DLP, sensitivity labels, auditing, Sentinel and authentication controls. With Purview, it allows monitoring interactions, detecting risky behavior and applying policies to reduce improper exposure. | Foundry brings built-in evaluators for safety and security, red teaming, prompt attack detection, content filters, Prompt Shields, risk monitoring and integration with Defender for Cloud. | https://learn.microsoft.com/purview/ai-copilot-studio ; https://learn.microsoft.com/azure/foundry/concepts/observability ; https://learn.microsoft.com/azure/ai-services/content-safety/concepts/jailbreak-detection ; https://learn.microsoft.com/azure/foundry/control-plane/how-to-manage-compliance-security |
+| **Risk classification and algorithmic impact assessment** | Articles 23 and 24 require an impact assessment with preparation, risk awareness, mitigation and monitoring, especially for high risk. | Copilot Studio helps in cases of lower autonomy and greater operational control, but it does not replace the formal impact assessment process. It contributes with audit trails, telemetry, DLP, governance by environment and logs of configuration and usage changes. | Foundry is more suited to scenarios that require a technical evidence pack: evaluators, red teaming, tracing, dashboards, content safety filter configurations, monitoring and exportable documentation for GRC and audit flows. | https://learn.microsoft.com/microsoft-copilot-studio/admin-logging-copilot-studio ; https://learn.microsoft.com/azure/foundry/concepts/observability ; https://learn.microsoft.com/security/security-for-ai/govern ; https://learn.microsoft.com/azure/foundry/responsible-use-of-ai-overview |
+| **Corporate governance and continuous monitoring** | Article 30 speaks of good practices, internal oversight mechanisms, response to harmful outcomes and updating through continuous monitoring. | Copilot Studio offers data policy controls, publishing blocking, environment routing, CMK, logs in Purview, integration with Sentinel and central administration in the Power Platform admin center. | Foundry brings governance across the entire lifecycle: Discover, Protect, Govern; integration with Azure Monitor, Application Insights, Defender for Cloud, Purview and the control plane for operation at scale. | https://learn.microsoft.com/microsoft-copilot-studio/security-and-governance ; https://learn.microsoft.com/azure/foundry/responsible-use-of-ai-overview ; https://learn.microsoft.com/azure/foundry/control-plane/overview |
+| **Traceability, auditing and accountability** | The bill makes traceability, auditability, liability and accountability explicit as principles and governance mechanisms. | Copilot Studio records events for creation, change, publication, sharing, configuration and user interaction. These events can be searched in Purview and analyzed in DSPM for AI; integration with Sentinel reinforces the SOC and incident response. | Foundry integrates auditing and classification via Purview, activity explorer, retention, eDiscovery and operational monitoring through traces, logs and dashboards. This supports the decision trail and evidence for auditing. | https://learn.microsoft.com/microsoft-copilot-studio/admin-logging-copilot-studio ; https://learn.microsoft.com/purview/ai-copilot-studio ; https://learn.microsoft.com/purview/ai-azure-foundry ; https://learn.microsoft.com/azure/foundry/concepts/observability |
+| **Data protection, retention and investigation** | The bill relates to privacy, data protection, liability and enforcement. | With Purview, Copilot Studio supports auditing, classification, sensitivity labels, DLP, Insider Risk Management, Communication Compliance, eDiscovery, Data Lifecycle Management and Compliance Manager. | The same set is supported for Foundry, provided that the Purview Data Security configurations and collection policies are enabled. This is especially relevant for the retention of prompts, responses and regulatory investigation. | https://learn.microsoft.com/purview/ai-copilot-studio ; https://learn.microsoft.com/purview/ai-azure-foundry |
+| **Security against abuse, prompt injection and misuse** | The bill requires risk mitigation, security and monitoring, especially in sensitive or high-risk scenarios. | In Copilot Studio, the main control layer lies in connector policy, authentication, publication, DLP, labels, auditing and restriction of the agent's capabilities. | In Foundry, Azure AI Content Safety and Prompt Shields detect user prompt attacks and document attacks; Defender for Cloud complements this with jailbreak detection and workload risk detection. | https://learn.microsoft.com/azure/ai-services/content-safety/concepts/jailbreak-detection ; https://learn.microsoft.com/azure/foundry/control-plane/how-to-manage-compliance-security |
 
-## Sintese executiva
+## Executive synthesis
 
-Se a pergunta for se **Microsoft Copilot Studio** e **Microsoft Foundry** conseguem responder aos requisitos do PL 2338/2023, a resposta curta e **sim, em grande parte dos requisitos operacionais e de governanca**.
+If the question is whether **Microsoft Copilot Studio** and **Microsoft Foundry** can address the requirements of PL 2338/2023, the short answer is **yes, for a large part of the operational and governance requirements**.
 
-O racional e simples:
+The rationale is simple:
 
-- **Copilot Studio** atende bem o que o PL demanda em **governanca operacional, controle de acesso, trilha de auditoria, DLP, rotulagem de sensibilidade, publicacao controlada e supervisao administrativa**.
-- **Microsoft Foundry** atende melhor o que o PL demanda em **avaliacao de risco, evaluators, tracing, monitoramento continuo, evidencia tecnica, guard rails, content safety, red teaming e governanca de agentes em producao**.
-- **Microsoft Purview** fecha a lacuna regulatoria em **classificacao, auditoria, retencao, eDiscovery, compliance evidence e controles de dados**.
+- **Copilot Studio** meets well what the bill demands in **operational governance, access control, audit trail, DLP, sensitivity labeling, controlled publication and administrative oversight**.
+- **Microsoft Foundry** better meets what the bill demands in **risk assessment, evaluators, tracing, continuous monitoring, technical evidence, guard rails, content safety, red teaming and governance of agents in production**.
+- **Microsoft Purview** closes the regulatory gap in **classification, auditing, retention, eDiscovery, compliance evidence and data controls**.
 
-## Trade-offs importantes
+## Important trade-offs
 
-- **Copilot Studio** e mais forte para casos de uso com processo empresarial, canais Microsoft, conectores governados e menor complexidade tecnica.
-- **Microsoft Foundry** e mais forte para casos de uso com modelos customizados, multiagente, observability aprofundada, pipeline de avaliacao e maior exigencia de GRC tecnico.
-- Para cenarios de **alto risco**, a arquitetura alvo deveria combinar **Work IQ**, **Foundry IQ** e **Fabric IQ** com controles transversais de Purview, Entra, Sentinel e Defender, em vez de depender apenas de um builder de agente.
+- **Copilot Studio** is stronger for use cases with a business process, Microsoft channels, governed connectors and lower technical complexity.
+- **Microsoft Foundry** is stronger for use cases with custom models, multi-agent, deep observability, an evaluation pipeline and greater technical GRC requirements.
+- For **high-risk** scenarios, the target architecture should combine **Work IQ**, **Foundry IQ** and **Fabric IQ** with cross-cutting controls from Purview, Entra, Sentinel and Defender, rather than relying on an agent builder alone.
 
-## Conclusao pratica
+## Practical conclusion
 
-Para sustentar a afirmacao de que as ferramentas de IA da Microsoft conseguem atender as demandas do PL 2338/2023, a formulacao mais defensavel e esta:
+To support the claim that Microsoft's AI tools can meet the demands of PL 2338/2023, the most defensible formulation is this:
 
-> A Microsoft oferece, em fontes oficiais, os controles tecnicos e de governanca necessarios para implementar os principais requisitos operacionais associados ao PL 2338/2023, incluindo transparencia, supervisao humana, classificacao de risco, avaliacao e mitigacao de riscos, rastreabilidade, auditoria, protecao de dados, retencao, investigacao e monitoramento continuo. O atendimento juridico-material depende da configuracao correta desses controles, do desenho de processo, da documentacao de risco e da governanca corporativa da organizacao.
+> Microsoft offers, in official sources, the technical and governance controls needed to implement the main operational requirements associated with PL 2338/2023, including transparency, human oversight, risk classification, risk assessment and mitigation, traceability, auditing, data protection, retention, investigation and continuous monitoring. Legal-material compliance depends on the correct configuration of these controls, the process design, the risk documentation and the organization's corporate governance.
 
-## Frase pronta para uso executivo
+## Ready-to-use executive statement
 
-> Sob a otica de arquitetura e governanca, Microsoft Copilot Studio e Microsoft Foundry, combinados com Microsoft Purview, Entra, Sentinel, Defender for Cloud e Azure AI Content Safety, oferecem capacidade concreta para atender os eixos centrais do PL 2338/2023, com guard rails, evaluators, trilha de auditoria, supervisao humana, protecao de dados e monitoramento continuo em escala corporativa.
+> From an architecture and governance standpoint, Microsoft Copilot Studio and Microsoft Foundry, combined with Microsoft Purview, Entra, Sentinel, Defender for Cloud and Azure AI Content Safety, offer concrete capability to address the central pillars of PL 2338/2023, with guard rails, evaluators, an audit trail, human oversight, data protection and continuous monitoring at corporate scale.

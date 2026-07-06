@@ -1,232 +1,232 @@
-# Especificações do Projeto de Agente de IA — harafaz.ia
+# AI Agent Project Specifications — harafaz.ia
 
-> **Observação:** documento preenchido com base no material de ADS - harafaz.ia. Onde o conteúdo-fonte não traz valor fechado, o campo foi preenchido como **recomendação inicial** ou **a validar no discovery/piloto**.
+> **Note:** document filled out based on the ADS - harafaz.ia material. Where the source content does not provide a closed value, the field was filled as an **initial recommendation** or **to be validated in discovery/pilot**.
 
-## 1. Contexto de negócio e objetivo do agente
+## 1. Business context and agent objective
 
-- **Unidade de negócio:** Diretoria de Operações / Backoffice harafaz.ia, com atuação transversal nas jornadas de originação, manutenção e middle.
-- **Problema a resolver:** canais fragmentados, baixa rastreabilidade, ausência de case único padronizado, baixo reuso de dados/documentos e dificuldade para medir SLA, FCR, reincidência e produtividade.
-- **Objetivo principal (resultado esperado):** implantar um agente de IA para triagem e autosserviço assistido, integrado a case management, para reduzir tempo de atendimento/processamento, retrabalho e perda de contexto, preservando escalonamento humano em casos críticos.
-- **Objetivos secundários:**
-  - padronizar a entrada de solicitações em múltiplos canais;
-  - criar registro único de caso com histórico e trilha de auditoria;
-  - aumentar o reuso de dados, documentos e qualificações já realizadas;
-  - melhorar governança operacional e telemetria;
-  - apoiar handoff entre jornadas.
-- **Indicador executivo de sucesso:** redução do tempo médio de atendimento/processamento, aumento de FCR, redução de retrabalho/reincidência e melhora do NPS interno da rede.
+- **Business unit:** Operations Directorate / harafaz.ia Backoffice, with cross-cutting action across the origination, maintenance and middle journeys.
+- **Problem to solve:** fragmented channels, low traceability, absence of a single standardized case, low reuse of data/documents and difficulty measuring SLA, FCR, recurrence and productivity.
+- **Main objective (expected outcome):** deploy an AI agent for triage and assisted self-service, integrated with case management, to reduce service/processing time, rework and loss of context, while preserving human escalation in critical cases.
+- **Secondary objectives:**
+  - standardize the intake of requests across multiple channels;
+  - create a single case record with history and audit trail;
+  - increase the reuse of data, documents and qualifications already performed;
+  - improve operational governance and telemetry;
+  - support handoff between journeys.
+- **Executive success indicator:** reduction of the average service/processing time, increase in FCR, reduction of rework/recurrence and improvement of the network's internal NPS.
 
-## 2. Escopo funcional
+## 2. Functional scope
 
-### 2.1 O que o agente faz
+### 2.1 What the agent does
 
-1. Recebe demandas por canais prioritários, classifica tema/produto/risco/prioridade e abre ou atualiza um case único.
-2. Executa triagem, orienta o usuário, solicita dados faltantes, consulta base de conhecimento curada e aciona fluxos quando elegível.
-3. Escala para humano com contexto completo quando houver exceção, sensibilidade, risco ou baixa confiança.
-4. Registra evidências, status, tempos, motivo de escalonamento e resultado para analytics.
+1. Receives requests through priority channels, classifies topic/product/risk/priority and opens or updates a single case.
+2. Performs triage, guides the user, requests missing data, consults a curated knowledge base and triggers flows when eligible.
+3. Escalates to a human with full context whenever there is an exception, sensitivity, risk or low confidence.
+4. Records evidence, status, times, escalation reason and outcome for analytics.
 
-### 2.2 O que o agente não faz
+### 2.2 What the agent does not do
 
-1. Não toma decisão final autônoma em casos de conformidade, risco ou exceções críticas.
-2. Não substitui governança normativa, revisão humana de conhecimento ou processos formais de auditoria.
-3. Não elimina sistemas legados; orquestra sua utilização de forma progressiva.
-4. Não deve operar sobre fontes ou canais fora da política de dados e segurança definida.
+1. Does not make an autonomous final decision in cases of compliance, risk or critical exceptions.
+2. Does not replace normative governance, human review of knowledge or formal audit processes.
+3. Does not eliminate legacy systems; it orchestrates their use progressively.
+4. Must not operate on sources or channels outside the defined data and security policy.
 
-### 2.3 Decisões críticas do agente
+### 2.3 Critical agent decisions
 
-1. Determinar se a demanda é elegível para autosserviço/automação assistida ou precisa de escalonamento humano.
-2. Determinar se os dados mínimos estão completos e se a regra/checklist aplicável está vigente.
-3. Escolher o destino do handoff com base em tema, risco, produto e contexto.
-4. Decidir quando registrar bloqueio, pendência, ação corretiva ou encerramento com evidência.
+1. Determine whether the request is eligible for self-service/assisted automation or needs human escalation.
+2. Determine whether the minimum data is complete and whether the applicable rule/checklist is in effect.
+3. Choose the handoff destination based on topic, risk, product and context.
+4. Decide when to record a block, pending item, corrective action or closure with evidence.
 
-## 3. Perfis de usuários, jornadas e canais
+## 3. User profiles, journeys and channels
 
-### 3.1 Perfis de usuários
+### 3.1 User profiles
 
-- **Perfil 1:** gerentes e equipes da rede negocial / usuários internos.
-- **Perfil 2:** especialistas de middle, operação, conformidade e centralizadoras.
-- **Perfil 3:** gestores de produto e áreas definidoras de regra.
-- **Perfil 4:** cliente final, em evoluções futuras.
+- **Profile 1:** managers and teams of the business network / internal users.
+- **Profile 2:** middle, operations, compliance and centralizing-unit specialists.
+- **Profile 3:** product managers and rule-defining areas.
+- **Profile 4:** end customer, in future iterations.
 
-### 3.2 Jornadas principais
+### 3.2 Main journeys
 
-- **Jornada A:** triagem, orientação e abertura de case para demandas consultivas da rede.
-- **Jornada B:** qualificação de solicitação e coleta guiada de dados/documentos para originação.
-- **Jornada C:** handoff entre jornadas e áreas com contexto e rastreabilidade.
-- **Jornada D:** acompanhamento de status, resolução, evidências e mensuração de eficiência.
+- **Journey A:** triage, guidance and case opening for the network's advisory requests.
+- **Journey B:** request qualification and guided collection of data/documents for origination.
+- **Journey C:** handoff between journeys and areas with context and traceability.
+- **Journey D:** tracking of status, resolution, evidence and efficiency measurement.
 
-### 3.3 Canais de interação
+### 3.3 Interaction channels
 
 - [x] Web
 - [x] Teams
-- [ ] WhatsApp *(expansão controlada / quando aplicável)*
+- [ ] WhatsApp *(controlled expansion / when applicable)*
 - [x] Email
-- [x] Outro: esteiras por produto, portal/app, canais internos da rede
+- [x] Other: product-specific pipelines, portal/app, internal network channels
 
-## 4. Requisitos não funcionais
+## 4. Non-functional requirements
 
-- **SLA de atendimento:** a validar por jornada e categoria; recomendação de medição desde o piloto.
-- **Latência máxima aceitável:** recomendação inicial de até 5 segundos para resposta inicial e até 15 segundos para ações simples com consulta/orquestração.
-- **Disponibilidade alvo:** recomendação inicial de 99,5% no piloto e evolução para 99,9% em produção ampliada.
-- **Volume esperado (dia/mês):** a validar no discovery e assessment por app.
-- **Janela de pico:** picos comerciais, horários de atendimento da rede e períodos de campanha/produto; detalhamento a validar no discovery.
-- **Requisitos de escalabilidade:** expansão por ondas, inclusão progressiva de canais, produtos e hubs, mantendo case único, observabilidade e governança.
+- **Service SLA:** to be validated per journey and category; measurement recommended from the pilot onward.
+- **Maximum acceptable latency:** initial recommendation of up to 5 seconds for the initial response and up to 15 seconds for simple actions with query/orchestration.
+- **Target availability:** initial recommendation of 99.5% in the pilot and evolution to 99.9% in expanded production.
+- **Expected volume (day/month):** to be validated in the discovery and per-app assessment.
+- **Peak window:** commercial peaks, network service hours and campaign/product periods; details to be validated in discovery.
+- **Scalability requirements:** expansion in waves, progressive inclusion of channels, products and hubs, maintaining the single case, observability and governance.
 
-## 5. Dados e integrações
+## 5. Data and integrations
 
-### 5.1 Fontes de dados
+### 5.1 Data sources
 
-- **Fonte:** bases internas curadas / Chat harafaz.ia / SharePoint / bases normativas  
-  - **Tipo de dado:** normativos, FAQs, procedimentos, regras e conhecimento operacional  
-  - **Sensibilidade/classificação:** interna / sigilosa operacional
+- **Source:** curated internal databases / harafaz.ia Chat / SharePoint / normative databases  
+  - **Data type:** normative documents, FAQs, procedures, rules and operational knowledge  
+  - **Sensitivity/classification:** internal / operationally confidential
 
-- **Fonte:** Dataverse (case único)  
-  - **Tipo de dado:** casos, status, SLA, histórico, evidências, classificação, handoff, satisfação  
-  - **Sensibilidade/classificação:** dados operacionais e potencialmente sensíveis
+- **Source:** Dataverse (single case)  
+  - **Data type:** cases, status, SLA, history, evidence, classification, handoff, satisfaction  
+  - **Sensitivity/classification:** operational and potentially sensitive data
 
-- **Fonte:** sistemas legados (ex.: CXTD, CMTR e outros)  
-  - **Tipo de dado:** status de processamento, dados de negócio, validações e retorno de esteira  
-  - **Sensibilidade/classificação:** alta / regulada
+- **Source:** legacy systems (e.g., CXTD, CMTR and others)  
+  - **Data type:** processing status, business data, validations and pipeline feedback  
+  - **Sensitivity/classification:** high / regulated
 
-- **Fonte:** formulários/pesquisa (ex.: Forms)  
-  - **Tipo de dado:** NPS interno e feedback de atendimento  
-  - **Sensibilidade/classificação:** interna
+- **Source:** forms/survey (e.g., Forms)  
+  - **Data type:** internal NPS and service feedback  
+  - **Sensitivity/classification:** internal
 
-### 5.2 Integrações
+### 5.2 Integrations
 
-- **Sistema/API:** Dataverse  
-  - **Tipo (consulta, escrita, ambos):** ambos  
-  - **Criticidade:** crítica
+- **System/API:** Dataverse  
+  - **Type (read, write, both):** both  
+  - **Criticality:** critical
 
-- **Sistema/API:** Power Automate  
-  - **Tipo (consulta, escrita, ambos):** ambos  
-  - **Criticidade:** crítica
+- **System/API:** Power Automate  
+  - **Type (read, write, both):** both  
+  - **Criticality:** critical
 
-- **Sistema/API:** sistemas legados / esteiras por produto  
-  - **Tipo (consulta, escrita, ambos):** ambos  
-  - **Criticidade:** crítica
+- **System/API:** legacy systems / product-specific pipelines  
+  - **Type (read, write, both):** both  
+  - **Criticality:** critical
 
-- **Sistema/API:** SharePoint / base de conhecimento curada / Chat harafaz.ia  
-  - **Tipo (consulta, escrita, ambos):** consulta  
-  - **Criticidade:** alta
+- **System/API:** SharePoint / curated knowledge base / harafaz.ia Chat  
+  - **Type (read, write, both):** read  
+  - **Criticality:** high
 
-- **Sistema/API:** Teams / Email / Portal / Web channel  
-  - **Tipo (consulta, escrita, ambos):** ambos  
-  - **Criticidade:** alta
+- **System/API:** Teams / Email / Portal / Web channel  
+  - **Type (read, write, both):** both  
+  - **Criticality:** high
 
-- **Sistema/API:** Power BI / analytics  
-  - **Tipo (consulta, escrita, ambos):** consulta  
-  - **Criticidade:** alta
+- **System/API:** Power BI / analytics  
+  - **Type (read, write, both):** read  
+  - **Criticality:** high
 
-### 5.3 Qualidade e governança de dados
+### 5.3 Data quality and governance
 
-- **Dono do dado:** áreas operacionais da harafaz.ia por jornada, com corresponsabilidade de produto, backoffice e TI; base de conhecimento sob curadoria especializada.
-- **Políticas de retenção:** a definir conforme política corporativa, exigências regulatórias e auditoria.
-- **Regras de acesso:** menor privilégio por perfil; segregação por ambiente, hub, tema e jornada; autenticação Microsoft Entra ID.
+- **Data owner:** harafaz.ia operational areas per journey, with shared responsibility from product, backoffice and IT; the knowledge base under specialized curation.
+- **Retention policies:** to be defined according to corporate policy, regulatory requirements and auditing.
+- **Access rules:** least privilege per profile; segregation by environment, hub, topic and journey; Microsoft Entra ID authentication.
 
-## 6. Governança, segurança e compliance
+## 6. Governance, security and compliance
 
-- **Guard rails obrigatórios:**
-  - autenticação via Microsoft Entra ID;
-  - RBAC por papel e por ambiente;
-  - políticas DLP para conectores, ferramentas e canais;
-  - trilha de auditoria para criação, transferência, decisão e fechamento de case;
-  - bloqueio de fontes/canais fora da política de dados;
-  - versionamento de regras e checklists normativos;
-  - human-in-the-loop para decisões críticas;
-  - revisão periódica da base de conhecimento.
+- **Mandatory guard rails:**
+  - authentication via Microsoft Entra ID;
+  - RBAC by role and by environment;
+  - DLP policies for connectors, tools and channels;
+  - audit trail for case creation, transfer, decision and closure;
+  - blocking of sources/channels outside the data policy;
+  - versioning of normative rules and checklists;
+  - human-in-the-loop for critical decisions;
+  - periodic review of the knowledge base.
 
-- **Evaluators desejados:**
+- **Desired evaluators:**
   - groundedness;
-  - detecção de alucinação;
-  - precisão de classificação e roteamento;
-  - taxa de escalonamento indevido;
-  - completude de contexto no handoff;
-  - qualidade por tema;
-  - detecção de exposição de dado sensível.
+  - hallucination detection;
+  - classification and routing accuracy;
+  - improper escalation rate;
+  - context completeness at handoff;
+  - quality by topic;
+  - sensitive-data exposure detection.
 
-- **Human-in-the-Loop (quando e como):** obrigatório em exceções, risco alto, baixa confiança, conformidade, dados incompletos ou casos sensíveis; o agente transfere com resumo, regras aplicadas, evidências e histórico.
-- **Requisitos regulatórios aplicáveis:** LGPD e requisitos de auditoria/compliance levantados no discovery; demais regulações específicas da jornada/produto devem ser confirmadas com a harafaz.ia.
-- **Requisitos de auditoria e rastreabilidade:** logs de conversa, decisão, ação automática, usuário, data/hora, versão da regra/checklist, justificativa humana e trilha completa de handoff.
+- **Human-in-the-Loop (when and how):** mandatory in exceptions, high risk, low confidence, compliance, incomplete data or sensitive cases; the agent transfers with a summary, applied rules, evidence and history.
+- **Applicable regulatory requirements:** LGPD and audit/compliance requirements gathered in discovery; other requirements specific to the journey/product must be confirmed with harafaz.ia.
+- **Audit and traceability requirements:** logs of conversation, decision, automatic action, user, date/time, rule/checklist version, human justification and complete handoff trail.
 
-## 7. Critérios de sucesso e KPIs
+## 7. Success criteria and KPIs
 
-- **KPI 1 (valor atual -> meta):** tempo médio de atendimento/originação *(baseline a medir no piloto -> reduzir em 90 dias)*.
-- **KPI 2 (valor atual -> meta):** FCR / taxa de resolução no primeiro contato *(baseline a medir -> aumento progressivo para demandas elegíveis)*.
-- **KPI 3 (valor atual -> meta):** taxa de retrabalho / reincidência *(baseline a medir -> redução progressiva com base curada e automação assistida)*.
-- **KPI 4 (valor atual -> meta):** reuso de dados/documentos entre jornadas *(baseline a medir -> aumento progressivo)*.
-- **KPI 5 (valor atual -> meta):** NPS interno da rede *(baseline atual a confirmar -> aumento após implantação)*.
-- **Horizonte de medição (30/60/90 dias):**
-  - **30 dias:** adoção do canal/piloto, volume atendido, qualidade de classificação e baseline;
-  - **60 dias:** FCR, escalonamento, backlog e SLA;
-  - **90 dias:** redução de retrabalho/reincidência, NPS e evidência de valor.
+- **KPI 1 (current value -> target):** average service/origination time *(baseline to be measured in the pilot -> reduce within 90 days)*.
+- **KPI 2 (current value -> target):** FCR / first-contact resolution rate *(baseline to be measured -> progressive increase for eligible requests)*.
+- **KPI 3 (current value -> target):** rework / recurrence rate *(baseline to be measured -> progressive reduction with a curated base and assisted automation)*.
+- **KPI 4 (current value -> target):** reuse of data/documents across journeys *(baseline to be measured -> progressive increase)*.
+- **KPI 5 (current value -> target):** network internal NPS *(current baseline to be confirmed -> increase after deployment)*.
+- **Measurement horizon (30/60/90 days):**
+  - **30 days:** channel/pilot adoption, volume handled, classification quality and baseline;
+  - **60 days:** FCR, escalation, backlog and SLA;
+  - **90 days:** reduction of rework/recurrence, NPS and evidence of value.
 
-## 8. Restrições, riscos e premissas
+## 8. Constraints, risks and assumptions
 
-### 8.1 Restrições
+### 8.1 Constraints
 
-- **Orçamento:** não explicitado no material; recomendada abordagem incremental por ondas.
-- **Prazo:** roadmap sugerido entre 0 e 28 semanas, com piloto inicial em até 8 semanas e gestão de mudança estimada em 4–6 meses.
-- **Tecnologia:** uso prioritário de Copilot Studio, Dataverse, Power Automate, canais Microsoft e integração progressiva com legados existentes.
+- **Budget:** not stated in the material; an incremental, wave-based approach is recommended.
+- **Timeline:** suggested roadmap between 0 and 28 weeks, with an initial pilot within up to 8 weeks and change management estimated at 4–6 months.
+- **Technology:** priority use of Copilot Studio, Dataverse, Power Automate, Microsoft channels and progressive integration with existing legacy systems.
 
-### 8.2 Riscos
+### 8.2 Risks
 
-- **Risco:** manutenção do comportamento atual de contato direto na pessoa / duplicação de canais.  
-  - **Impacto:** baixa adoção e pouca rastreabilidade.  
-  - **Mitigação:** canal único mais simples, SLA visível, privacidade por caso e melhor experiência.
+- **Risk:** maintaining the current behavior of direct person-to-person contact / channel duplication.  
+  - **Impact:** low adoption and little traceability.  
+  - **Mitigation:** a simpler single channel, visible SLA, per-case privacy and a better experience.
 
-- **Risco:** qualidade e governança da base de conhecimento / normativos.  
-  - **Impacto:** respostas imprecisas e risco operacional.  
-  - **Mitigação:** curadoria contínua, versionamento e revisão periódica.
+- **Risk:** quality and governance of the knowledge base / normative documents.  
+  - **Impact:** inaccurate responses and operational risk.  
+  - **Mitigation:** continuous curation, versioning and periodic review.
 
-- **Risco:** integração com múltiplas esteiras e sistemas legados.  
-  - **Impacto:** atraso no rollout e aumento de complexidade.  
-  - **Mitigação:** piloto em 1–2 hubs/produtos prioritários e expansão por ondas.
+- **Risk:** integration with multiple pipelines and legacy systems.  
+  - **Impact:** rollout delay and increased complexity.  
+  - **Mitigation:** pilot in 1–2 priority hubs/products and expansion in waves.
 
-- **Risco:** privacidade e sensibilidade de atendimento.  
-  - **Impacto:** exposição indevida de dados e não conformidade.  
-  - **Mitigação:** RBAC, segregação por caso/hub, DLP, auditoria e HITL.
+- **Risk:** privacy and sensitivity of service interactions.  
+  - **Impact:** improper data exposure and non-compliance.  
+  - **Mitigation:** RBAC, per-case/hub segregation, DLP, auditing and HITL.
 
-- **Risco:** automação excessiva em decisões críticas.  
-  - **Impacto:** erro operacional e risco regulatório.  
-  - **Mitigação:** limites claros de autonomia e revisão humana obrigatória.
+- **Risk:** excessive automation in critical decisions.  
+  - **Impact:** operational error and regulatory risk.  
+  - **Mitigation:** clear autonomy limits and mandatory human review.
 
-### 8.3 Premissas
+### 8.3 Assumptions
 
-1. A harafaz.ia manterá uma base de conhecimento curada e atualizada.
-2. Haverá patrocínio operacional para impor registro único de case e reduzir uso de canais paralelos.
-3. Os sistemas legados prioritários terão integração viável por etapas.
-4. Haverá definição de donos de dados, SLAs e critérios de escalonamento por jornada.
+1. harafaz.ia will maintain a curated and up-to-date knowledge base.
+2. There will be operational sponsorship to enforce the single case record and reduce the use of parallel channels.
+3. The priority legacy systems will have feasible integration in stages.
+4. There will be a definition of data owners, SLAs and escalation criteria per journey.
 
-## 9. Roadmap em ondas
+## 9. Wave-based roadmap
 
-### Onda 1 - Piloto
+### Wave 1 - Pilot
 
-- **Escopo:** case único no Dataverse; agente no Copilot Studio para triagem e FAQ/coleta guiada; 1 jornada piloto e 1–2 canais prioritários; checklist/regras versionadas; dashboard inicial.
-- **Duração:** 0–8 semanas.
-- **Critério de saída:** piloto estabilizado, baseline medido, handoff funcional, telemetria ativa e evidência inicial de redução de esforço/retrabalho.
+- **Scope:** single case in Dataverse; agent in Copilot Studio for triage and FAQ/guided collection; 1 pilot journey and 1–2 priority channels; versioned checklist/rules; initial dashboard.
+- **Duration:** 0–8 weeks.
+- **Exit criterion:** stabilized pilot, measured baseline, functional handoff, active telemetry and initial evidence of reduced effort/rework.
 
-### Onda 2 - Expansão
+### Wave 2 - Expansion
 
-- **Escopo:** ampliação de canais; integração das principais esteiras/legados; handoff estruturado entre jornadas; automações para temas recorrentes; expansão para 2–3 produtos/hubs prioritários.
-- **Duração:** 9–16 semanas.
-- **Critério de saída:** ganho comprovado em FCR/SLA, redução de escalonamento indevido, adoção ampliada e governança operacional funcionando.
+- **Scope:** channel expansion; integration of the main pipelines/legacy systems; structured handoff between journeys; automations for recurring topics; expansion to 2–3 priority products/hubs.
+- **Duration:** 9–16 weeks.
+- **Exit criterion:** proven gain in FCR/SLA, reduction of improper escalation, broader adoption and operational governance in place.
 
-### Onda 3 - Escala
+### Wave 3 - Scale
 
-- **Escopo:** omnicanalidade ampliada; mais automações assistidas com guardrails; analytics avançado; consolidação de governança, conectores, observabilidade e rollout amplo.
-- **Duração:** 17–28 semanas.
-- **Critério de saída:** operação escalável com observabilidade, segurança e governança consolidadas, além de roadmap contínuo de melhoria.
+- **Scope:** expanded omnichannel; more assisted automations with guardrails; advanced analytics; consolidation of governance, connectors, observability and broad rollout.
+- **Duration:** 17–28 weeks.
+- **Exit criterion:** scalable operation with consolidated observability, security and governance, plus a continuous improvement roadmap.
 
-## 10. Perguntas para decisão de arquitetura alvo
+## 10. Questions for target-architecture decisions
 
-- **Qual parte da jornada depende de dados governados?** classificação de demanda, consulta a normativos e regras vigentes, dados/documentos de clientes e operações, status de case, SLA, histórico, evidências e decisões.
-- **Onde o contexto externo (Web IQ) é necessário?** em geral, baixo para o núcleo operacional; útil apenas para referências públicas regulatórias ou conteúdo externo controlado e aprovado.
-- **Quais fluxos exigem aprovação humana?** conformidade, exceções, alto risco, baixa confiança do modelo e decisões que impactem cliente, crédito, elegibilidade ou tratativas sensíveis.
-- **Quais componentes exigem maior observabilidade?** classificação/roteamento, handoff entre jornadas, integrações com legados, uso da base de conhecimento, latência/falhas de fluxo e auditoria de decisões.
+- **Which part of the journey depends on governed data?** request classification, consultation of normative documents and current rules, customer and operations data/documents, case status, SLA, history, evidence and decisions.
+- **Where is external context (Web IQ) needed?** in general, low for the operational core; useful only for public regulatory references or controlled and approved external content.
+- **Which flows require human approval?** compliance, exceptions, high risk, low model confidence and decisions that impact the customer, credit, eligibility or sensitive dealings.
+- **Which components require greater observability?** classification/routing, handoff between journeys, integrations with legacy systems, knowledge base usage, flow latency/failures and decision auditing.
 
-## 11. Anexos opcionais
+## 11. Optional appendices
 
-- **Diagrama de processo atual (AS-IS):** derivar do material de discovery e das entrevistas por jornada.
-- **Diagrama de arquitetura alvo (TO-BE):** usar como base as arquiteturas de referência de Originação e Middle em Copilot Studio.
-- **Políticas internas relevantes:** política de dados, identidade e acesso, LGPD, auditoria, governança de conectores, retenção e curadoria de conhecimento.
-- **Referências técnicas:** Copilot Studio, Dataverse, Power Automate, analytics, handoff e políticas DLP / segurança Power Platform.
+- **Current process diagram (AS-IS):** derive from the discovery material and the per-journey interviews.
+- **Target architecture diagram (TO-BE):** use the Origination and Middle reference architectures in Copilot Studio as a basis.
+- **Relevant internal policies:** data policy, identity and access, LGPD, auditing, connector governance, retention and knowledge curation.
+- **Technical references:** Copilot Studio, Dataverse, Power Automate, analytics, handoff and DLP policies / Power Platform security.
