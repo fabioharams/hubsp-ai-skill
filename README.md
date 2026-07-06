@@ -17,28 +17,28 @@ The project was structured to serve as both an executive and technical reference
 
 - SKILL.md: single skill definition (router) that guides consistent responses in an adoption architecture context. Points to reference files on demand (progressive disclosure).
 - AI_Agent_Adoption_Strategy_Final_2.md: main guide and base document, with executive overview, index and pointers to reference files.
-- referencias/: thematically sliced content for on-demand loading:
-   - referencias/01-llm-rag-ai-agent-fundamentals.md: LLM vs RAG vs AI Agent vs Agentic AI; complexity spectrum and decision guide.
-   - referencias/02-reference-architecture-layers.md: Microsoft IQ (Work IQ, Foundry IQ, Fabric IQ, Web IQ), Microsoft Fabric and technical specifications per layer.
-   - referencias/03-roi-ai-vs-man-hour.md: ROI/AAI model, HITL and scope multiplier.
-   - referencias/04-governance-guard-rails-evaluators-hitl.md: Guard Rails, Evaluators and Human-in-the-Loop.
-   - referencias/05-decision-framework-bxt.md: Microsoft AI Decision Framework (Intake Filter, BXT, 9 critical questions, Capability Model and technology selection by scenario).
-   - referencias/06-pl-2338-2023-copilot-studio-foundry.md: analysis of PL 2338/2023 and how Microsoft Copilot Studio, Microsoft Foundry and Purview address the axes of transparency, governance, risk, audit, human oversight and data protection with official sources.
-- ROI-IA-Calculadora.xlsx: operational spreadsheet for the ROI/AAI model (referencias/03), with 5 tabs (Calculator, HITL Sensitivity, How to Use, Capacity and Chart, Expansion). Fill in the blue cells with your operation's assumptions to obtain AAI, ROI (%), verdict (USE AI / KEEP HUMAN) and impact on team capacity. Usage and interpretation instructions in referencias/03-roi-ai-vs-man-hour.md.
+- references/: thematically sliced content for on-demand loading:
+   - references/01-llm-rag-ai-agent-fundamentals.md: LLM vs RAG vs AI Agent vs Agentic AI; complexity spectrum and decision guide.
+   - references/02-reference-architecture-layers.md: Microsoft IQ (Work IQ, Foundry IQ, Fabric IQ, Web IQ), Microsoft Fabric and technical specifications per layer.
+   - references/03-roi-ai-vs-man-hour.md: ROI/AAI model, HITL and scope multiplier.
+   - references/04-governance-guard-rails-evaluators-hitl.md: Guard Rails, Evaluators and Human-in-the-Loop.
+   - references/05-decision-framework-bxt.md: Microsoft AI Decision Framework (Intake Filter, BXT, 9 critical questions, Capability Model and technology selection by scenario).
+   - references/06-pl-2338-2023-copilot-studio-foundry.md: analysis of PL 2338/2023 and how Microsoft Copilot Studio, Microsoft Foundry and Purview address the axes of transparency, governance, risk, audit, human oversight and data protection with official sources.
+- ROI-IA-Calculadora.xlsx: operational spreadsheet for the ROI/AAI model (references/03), with 5 tabs (Calculator, HITL Sensitivity, How to Use, Capacity and Chart, Expansion). Fill in the blue cells with your operation's assumptions to obtain AAI, ROI (%), verdict (USE AI / KEEP HUMAN) and impact on team capacity. Usage and interpretation instructions in references/03-roi-ai-vs-man-hour.md.
 
 > Note: AAI (AI Advantage Index) is the ratio between the human cost of the task and the total AI cost per task (AAI = Human Cost / AI Cost). AAI > 1 indicates that AI is financially advantageous (an AAI of 4.0 means the task via AI costs 1/4 of the same task done by a person); AAI = 1 is the break-even point; AAI < 1 indicates keeping human work. Not to be confused with VAT (Value Added Tax).
 - Supplementary guides for dynamics and setup to facilitate collaboration and use in VS Code.
 
 ## Repository structure (diagram)
 
-The diagram below shows how the files relate to each other. SKILL.md is the entry point (router); the base document holds the complete content and points, on demand, to the thematic files in referencias/.
+The diagram below shows how the files relate to each other. SKILL.md is the entry point (router); the base document holds the complete content and points, on demand, to the thematic files in references/.
 
 ```mermaid
 graph TD
     USER([User / Agent asks a question]) --> SKILL[SKILL.md<br/>Routing skill - entry point]
     SKILL --> CANON[AI_Agent_Adoption_Strategy_Final_2.md<br/>Base document - index + pointers]
 
-    SKILL -. progressive disclosure .-> REF{{referencias/}}
+    SKILL -. progressive disclosure .-> REF{{references/}}
     CANON -. pointers .-> REF
 
       REF --> R1[01-llm-rag-ai-agent-fundamentals.md<br/>LLM vs RAG vs AI Agent vs Agentic AI]
@@ -53,7 +53,7 @@ graph TD
    SKILL -. project context .-> DOC
    README --> PROMPT[Default reusable prompt<br/>diagrammed response generation]
    DOC --> PROMPT
-   PROMPT --> OUTMD[doc/resultado.md<br/>Markdown output]
+   PROMPT --> OUTMD[doc/recommendation-output.md<br/>Markdown output]
 
     classDef entry fill:#0078D4,stroke:#004578,color:#fff;
     classDef canon fill:#107C10,stroke:#0B5A0B,color:#fff;
@@ -88,16 +88,16 @@ flowchart TD
    DOC --> QOUT{Do you want to save<br/>the response as Markdown?}
    DOCNEW --> QOUT
    QOUT -- Yes --> PROMPT[Use the default<br/>README prompt]
-   PROMPT --> OUTMD[doc/resultado.md]
+   PROMPT --> OUTMD[doc/recommendation-output.md]
    QOUT -- No --> Q3
    OUTMD --> Q3
 
-    Q3 -- Fundamentals<br/>LLM/RAG/Agents --> R1[referencias/01-llm-rag-ai-agent-fundamentals.md]
-    Q3 -- Layered<br/>Architecture --> R2[referencias/02-reference-architecture-layers.md]
-    Q3 -- Financial<br/>Justification / ROI --> R3[referencias/03-roi-ai-vs-man-hour.md]
-    Q3 -- Governance<br/>and Security --> R4[referencias/04-governance-guard-rails-evaluators-hitl.md]
-    Q3 -- Microsoft<br/>Technology Selection --> R5[referencias/05-decision-framework-bxt.md]
-   Q3 -- Regulatory Analysis<br/>PL 2338/2023 --> R6[referencias/06-pl-2338-2023-copilot-studio-foundry.md]
+    Q3 -- Fundamentals<br/>LLM/RAG/Agents --> R1[references/01-llm-rag-ai-agent-fundamentals.md]
+    Q3 -- Layered<br/>Architecture --> R2[references/02-reference-architecture-layers.md]
+    Q3 -- Financial<br/>Justification / ROI --> R3[references/03-roi-ai-vs-man-hour.md]
+    Q3 -- Governance<br/>and Security --> R4[references/04-governance-guard-rails-evaluators-hitl.md]
+    Q3 -- Microsoft<br/>Technology Selection --> R5[references/05-decision-framework-bxt.md]
+   Q3 -- Regulatory Analysis<br/>PL 2338/2023 --> R6[references/06-pl-2338-2023-copilot-studio-foundry.md]
     Q3 -- Full view<br/>or other sections --> CANON[AI_Agent_Adoption_Strategy_Final_2.md]
 
     R1 --> END([Apply to your use case])
@@ -134,7 +134,7 @@ Prerequisites: VS Code, the GitHub Copilot Chat extension and an active GitHub C
    - Type `#` and select the file (e.g., `#SKILL.md`).
    - Drag the file from the Explorer into the chat panel.
    - Open the file in the editor and reference it with `#file`.
-5. Recommended flow: start with `SKILL.md` and let the agent load files from `referencias/` on demand (progressive disclosure), based on the topic of the question.
+5. Recommended flow: start with `SKILL.md` and let the agent load files from `references/` on demand (progressive disclosure), based on the topic of the question.
 
 Example prompt:
 
@@ -142,7 +142,7 @@ Example prompt:
 
 Example with project specifications document:
 
-> Using #SKILL.md and #doc/agent-project-specifications.md, generate an executive recommendation in full format: (1) medium executive summary (1-2 paragraphs) with at least 1 Mermaid diagram or flowchart to explain the recommended decision, (2) recommended architectural pattern (LLM/RAG/AI Agent/Agentic AI) with detailed justifications, official Microsoft links and at least 1 Mermaid diagram or flowchart to explain the choice, (3) target architecture (Work IQ, Foundry IQ, Fabric IQ and Web IQ) with detailed explanation and 2 mandatory Mermaid diagrams (architecture and decision flowchart), (4) governance and security with guard rails, evaluators, PL 2338/2023 analysis and explanation of how the tools and services selected in the architecture address the axes of transparency, governance, risk, audit, human oversight and data protection with official sources, and at least 1 Mermaid diagram or flowchart, (5) phased deployment plan with per-phase detail (objective, scope, integrations, entry/exit criteria, target KPI and dominant risk) and at least 1 Mermaid diagram or flowchart, (6) ROI/AAI assumptions with at least 1 Mermaid diagram or flowchart to explain the financial logic, (7) success KPIs with at least 1 Mermaid diagram or flowchart, and (8) risks and mitigations with clarity, official Microsoft links and at least 1 Mermaid diagram or flowchart. The response must be delivered as a new markdown document called doc/resultado.md.
+> Using #SKILL.md and #doc/agent-project-specifications.md, generate an executive recommendation in full format: (1) medium executive summary (1-2 paragraphs) with at least 1 Mermaid diagram or flowchart to explain the recommended decision, (2) recommended architectural pattern (LLM/RAG/AI Agent/Agentic AI) with detailed justifications, official Microsoft links and at least 1 Mermaid diagram or flowchart to explain the choice, (3) target architecture (Work IQ, Foundry IQ, Fabric IQ and Web IQ) with detailed explanation and 2 mandatory Mermaid diagrams (architecture and decision flowchart), (4) governance and security with guard rails, evaluators, PL 2338/2023 analysis and explanation of how the tools and services selected in the architecture address the axes of transparency, governance, risk, audit, human oversight and data protection with official sources, and at least 1 Mermaid diagram or flowchart, (5) phased deployment plan with per-phase detail (objective, scope, integrations, entry/exit criteria, target KPI and dominant risk) and at least 1 Mermaid diagram or flowchart, (6) ROI/AAI assumptions with at least 1 Mermaid diagram or flowchart to explain the financial logic, (7) success KPIs with at least 1 Mermaid diagram or flowchart, and (8) risks and mitigations with clarity, official Microsoft links and at least 1 Mermaid diagram or flowchart. The response must be delivered as a new markdown document called doc/recommendation-output.md.
 
 Tip: to use `SKILL.md` as a reusable skill in the official VS Code format, copy it (or create a link) to a folder such as `.github/skills/hubsp-ai-skill/` or `~/.copilot/skills/hubsp-ai-skill/`. In this repository, the file at the root acts as the **canonical source/router** for direct reference in prompts, while the formal skill installation should follow the lowercase folder convention.
 
@@ -183,11 +183,11 @@ Best overall performance for skill analysis: **`.md`** (plain text, clear sectio
 
 Use this prompt in any project with a document at `doc/agent-project-specifications.md`:
 
-> Using #SKILL.md and #doc/agent-project-specifications.md, generate an executive recommendation in full format: (1) medium executive summary (1-2 paragraphs) with at least 1 Mermaid diagram or flowchart to explain the recommended decision, (2) recommended architectural pattern (LLM/RAG/AI Agent/Agentic AI) with detailed justifications, official Microsoft links and at least 1 Mermaid diagram or flowchart to explain the choice, (3) target architecture (Work IQ, Foundry IQ, Fabric IQ and Web IQ) with detailed explanation and 2 mandatory Mermaid diagrams (architecture and decision flowchart), (4) governance and security with guard rails, evaluators, PL 2338/2023 analysis and explanation of how the tools and services selected in the architecture address the axes of transparency, governance, risk, audit, human oversight and data protection with official sources, and at least 1 Mermaid diagram or flowchart, (5) phased deployment plan with per-phase detail (objective, scope, integrations, entry/exit criteria, target KPI and dominant risk) and at least 1 Mermaid diagram or flowchart, (6) ROI/AAI assumptions with at least 1 Mermaid diagram or flowchart to explain the financial logic, (7) success KPIs with at least 1 Mermaid diagram or flowchart, and (8) risks and mitigations with clarity, official Microsoft links and at least 1 Mermaid diagram or flowchart. The response must be delivered as a new markdown document called doc/resultado.md.
+> Using #SKILL.md and #doc/agent-project-specifications.md, generate an executive recommendation in full format: (1) medium executive summary (1-2 paragraphs) with at least 1 Mermaid diagram or flowchart to explain the recommended decision, (2) recommended architectural pattern (LLM/RAG/AI Agent/Agentic AI) with detailed justifications, official Microsoft links and at least 1 Mermaid diagram or flowchart to explain the choice, (3) target architecture (Work IQ, Foundry IQ, Fabric IQ and Web IQ) with detailed explanation and 2 mandatory Mermaid diagrams (architecture and decision flowchart), (4) governance and security with guard rails, evaluators, PL 2338/2023 analysis and explanation of how the tools and services selected in the architecture address the axes of transparency, governance, risk, audit, human oversight and data protection with official sources, and at least 1 Mermaid diagram or flowchart, (5) phased deployment plan with per-phase detail (objective, scope, integrations, entry/exit criteria, target KPI and dominant risk) and at least 1 Mermaid diagram or flowchart, (6) ROI/AAI assumptions with at least 1 Mermaid diagram or flowchart to explain the financial logic, (7) success KPIs with at least 1 Mermaid diagram or flowchart, and (8) risks and mitigations with clarity, official Microsoft links and at least 1 Mermaid diagram or flowchart. The response must be delivered as a new markdown document called doc/recommendation-output.md.
 
 Variation for GitHub Copilot CLI:
 
-> Read SKILL.md and doc/agent-project-specifications.md and generate an executive recommendation in advanced format: medium executive summary with Mermaid diagram or flowchart; architectural pattern with detailed justifications, Microsoft sources and Mermaid diagram or flowchart; Work IQ/Foundry IQ/Fabric IQ/Web IQ architecture with Mermaid diagram and Mermaid flowchart; governance and security with PL 2338/2023 analysis, explanation of how the tools and services selected in the architecture address the axes of transparency, governance, risk, audit, human oversight and data protection with official sources, and Mermaid diagram or flowchart; detailed phased plan with Mermaid diagram or flowchart; ROI/AAI assumptions with Mermaid diagram or flowchart; KPIs with Mermaid diagram or flowchart; risks and mitigations with official Microsoft links and Mermaid diagram or flowchart. The response must be delivered as a new markdown document called doc/resultado.md.
+> Read SKILL.md and doc/agent-project-specifications.md and generate an executive recommendation in advanced format: medium executive summary with Mermaid diagram or flowchart; architectural pattern with detailed justifications, Microsoft sources and Mermaid diagram or flowchart; Work IQ/Foundry IQ/Fabric IQ/Web IQ architecture with Mermaid diagram and Mermaid flowchart; governance and security with PL 2338/2023 analysis, explanation of how the tools and services selected in the architecture address the axes of transparency, governance, risk, audit, human oversight and data protection with official sources, and Mermaid diagram or flowchart; detailed phased plan with Mermaid diagram or flowchart; ROI/AAI assumptions with Mermaid diagram or flowchart; KPIs with Mermaid diagram or flowchart; risks and mitigations with official Microsoft links and Mermaid diagram or flowchart. The response must be delivered as a new markdown document called doc/recommendation-output.md.
 
 ## How to use in the GitHub Copilot App
 
@@ -196,5 +196,5 @@ Prerequisites: GitHub Copilot app with repository access and an active GitHub Co
 1. Open this repository in the app as a workspace/project.
 2. Start a chat in Agent mode.
 3. Attach `SKILL.md` to the context (or use `#SKILL.md`) to apply the response format rules.
-4. When depth is needed, also attach the relevant files from `referencias/` based on the topic (architecture, ROI, governance, decision framework).
+4. When depth is needed, also attach the relevant files from `references/` based on the topic (architecture, ROI, governance, decision framework).
 5. Ask the question with business context and decision objective.

@@ -55,7 +55,7 @@ If critical information is missing, ask only for the minimum necessary before re
 
 1. Understand the business problem and expected outcome.
 2. Choose the architectural pattern by the lowest level of complexity that reliably solves it: LLM (text, one step), RAG (data-grounded response), single AI Agent (multi-step task, one domain) or Agentic AI multi-agent (crosses security boundaries, multiple teams or expected growth).
-2.1. When the request involves choosing a Microsoft technology/product, apply the Microsoft AI Decision Framework (referencias/05-decision-framework-bxt.md): Intake Filter, BXT (Business/Experience/Technology), the 9 critical questions and scenario-based selection.
+2.1. When the request involves choosing a Microsoft technology/product, apply the Microsoft AI Decision Framework (references/05-decision-framework-bxt.md): Intake Filter, BXT (Business/Experience/Technology), the 9 critical questions and scenario-based selection.
 3. Map data sources and current governance level.
 4. Define layer separation: experience (Work IQ), agents (Foundry IQ), data intelligence (Fabric IQ), external context (Web IQ, when necessary) and platform (Microsoft Fabric).
 4.1. When the case requires it, recommend a **mixed solution**: Copilot Studio for the conversational/business flow layer and Microsoft Foundry for the reasoning/advanced orchestration layer.
@@ -165,11 +165,11 @@ If critical information is missing, ask only for the minimum necessary before re
 
 Load only the reference file needed for the question (progressive disclosure):
 
-- referencias/01-llm-rag-ai-agent-fundamentals.md — LLM vs RAG vs AI Agent vs Agentic AI; complexity spectrum and decision guide.
-- referencias/02-reference-architecture-layers.md — Microsoft IQ (Work IQ, Foundry IQ, Fabric IQ, Web IQ) and Microsoft Fabric; technical specifications per layer.
-- referencias/03-roi-ai-vs-man-hour.md — ROI/AAI model, HITL, scope multiplier.
-- referencias/04-governance-guard-rails-evaluators-hitl.md — Guard Rails, Evaluators and Human-in-the-Loop.
-- referencias/05-decision-framework-bxt.md — Microsoft AI Decision Framework: Intake Filter, BXT, 9 critical questions, Capability Model and technology selection by scenario.
-- referencias/06-pl-2338-2023-copilot-studio-foundry.md — analysis of PL 2338/2023, focusing on transparency, governance, risk, audit, human oversight and data protection with official sources.
+- references/01-llm-rag-ai-agent-fundamentals.md — LLM vs RAG vs AI Agent vs Agentic AI; complexity spectrum and decision guide.
+- references/02-reference-architecture-layers.md — Microsoft IQ (Work IQ, Foundry IQ, Fabric IQ, Web IQ) and Microsoft Fabric; technical specifications per layer.
+- references/03-roi-ai-vs-man-hour.md — ROI/AAI model, HITL, scope multiplier.
+- references/04-governance-guard-rails-evaluators-hitl.md — Guard Rails, Evaluators and Human-in-the-Loop.
+- references/05-decision-framework-bxt.md — Microsoft AI Decision Framework: Intake Filter, BXT, 9 critical questions, Capability Model and technology selection by scenario.
+- references/06-pl-2338-2023-copilot-studio-foundry.md — analysis of PL 2338/2023, focusing on transparency, governance, risk, audit, human oversight and data protection with official sources.
 
 Full index and additional sections: AI_Agent_Adoption_Strategy_Final_2.md (canonical source, with pointers to the files above).

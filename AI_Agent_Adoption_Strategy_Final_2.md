@@ -38,11 +38,11 @@ Corporate architecture transforms AI from experiment into operational capability
 
 ---
 
-> Content moved to [referencias/01-llm-rag-ai-agent-fundamentals.md](referencias/01-llm-rag-ai-agent-fundamentals.md) — AI Architecture Fundamentals — LLM vs RAG vs AI Agent vs Agentic AI.
+> Content moved to [references/01-llm-rag-ai-agent-fundamentals.md](references/01-llm-rag-ai-agent-fundamentals.md) — AI Architecture Fundamentals — LLM vs RAG vs AI Agent vs Agentic AI.
 
-> Content moved to [referencias/02-reference-architecture-layers.md](referencias/02-reference-architecture-layers.md) — Reference Architecture and Technical Specifications by Layer (Microsoft IQ: Work IQ, Foundry IQ, Fabric IQ, Web IQ + Microsoft Fabric).
+> Content moved to [references/02-reference-architecture-layers.md](references/02-reference-architecture-layers.md) — Reference Architecture and Technical Specifications by Layer (Microsoft IQ: Work IQ, Foundry IQ, Fabric IQ, Web IQ + Microsoft Fabric).
 
-> Content moved to [referencias/06-pl-2338-2023-copilot-studio-foundry.md](referencias/06-pl-2338-2023-copilot-studio-foundry.md) — Analysis of PL 2338/2023 and how Microsoft Copilot Studio and Microsoft Foundry can meet the requirements of transparency, governance, risk, audit and data protection with official sources.
+> Content moved to [references/06-pl-2338-2023-copilot-studio-foundry.md](references/06-pl-2338-2023-copilot-studio-foundry.md) — Analysis of PL 2338/2023 and how Microsoft Copilot Studio and Microsoft Foundry can meet the requirements of transparency, governance, risk, audit and data protection with official sources.
 
 ## ⏱️ 3. Adoption Strategy (Short and Medium Term)
 
@@ -750,7 +750,7 @@ The ideal model is **hybrid and evolutionary**:
 
 ---
 
-> Content moved to [referencias/03-roi-ai-vs-man-hour.md](referencias/03-roi-ai-vs-man-hour.md) — ROI Model — AI vs. Person-Hour Cost.
+> Content moved to [references/03-roi-ai-vs-man-hour.md](references/03-roi-ai-vs-man-hour.md) — ROI Model — AI vs. Person-Hour Cost.
 
 ## 🔗 5. Fabric Data Consumption by Multiple Agents
 
@@ -1106,7 +1106,7 @@ graph TB
 
 ---
 
-> Content moved to [referencias/04-governance-guard-rails-evaluators-hitl.md](referencias/04-governance-guard-rails-evaluators-hitl.md) — Guard Rails, Evaluators and Human-in-the-Loop (governance and security).
+> Content moved to [references/04-governance-guard-rails-evaluators-hitl.md](references/04-governance-guard-rails-evaluators-hitl.md) — Guard Rails, Evaluators and Human-in-the-Loop (governance and security).
 
 ## 🔗 11. Full Integration (Final Architecture)
 
@@ -1333,7 +1333,7 @@ This section summarizes how the content of this document connects to Microsoft's
 | **Microsoft Entra + Purview + Agent 365** | Ensure identity, access, compliance and centralized agent control. | Sections 8.1, 8.2 and 8.3 detail agent identity, data classification/protection and the central control plane, focused on traceability and consistent policies. |
 | **Microsoft Foundry Observability and Evaluations** | Measure quality and security throughout the lifecycle (pre-production and production). | Section 9 defines the evaluator taxonomy, continuous evaluation pipeline and observability integration for the operational feedback loop. |
 | **Build 2026 Open Trust Stack (ASSERT + Agent Control Specification)** | Standardize policy-driven evaluation and deterministic security controls in the agent loop, with interoperability across frameworks. | This guide's architecture already separates continuous evaluation (evaluators) and enforcement (guard rails); ASSERT and ACS strengthen this design and allow evolution with more evidence, portability and governance. |
-| **Microsoft AI Decision Framework (BXT + 9 questions + Capability Model)** | Select the right technology in a repeatable way: Intake Filter, BXT (Business/Experience/Technology), 9 critical questions and scenario-based selection. | The selection method is detailed in referencias/05-decision-framework-bxt.md, connecting the complexity spectrum (LLM→Agentic), the ROI/AAI and the Work IQ, Foundry IQ, Fabric IQ and Web IQ layers to the framework phases. |
+| **Microsoft AI Decision Framework (BXT + 9 questions + Capability Model)** | Select the right technology in a repeatable way: Intake Filter, BXT (Business/Experience/Technology), 9 critical questions and scenario-based selection. | The selection method is detailed in references/05-decision-framework-bxt.md, connecting the complexity spectrum (LLM→Agentic), the ROI/AAI and the Work IQ, Foundry IQ, Fabric IQ and Web IQ layers to the framework phases. |
 
 ### 🧩 Visual Alignment Map (Mermaid)
 
