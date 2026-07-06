@@ -6,6 +6,8 @@
 
 The central point is this: **Microsoft's tools do not automatically produce legal compliance**, but they deliver the technical, operational and governance controls needed to implement guard rails, evaluators, monitoring, traceability, data protection, retention, auditing and human oversight in line with the bill's pillars.
 
+Because PL 2338/2023 was strongly inspired by the European framework, this document also maps it to its direct counterpart — the **EU Artificial Intelligence Act (Regulation (EU) 2024/1689)** — since both share the same risk-based backbone and the same Microsoft control set addresses both (see the section "European counterpart: the EU AI Act").
+
 > Note: **PL 2338/2023 has not yet been definitively approved**. Since the legislative process is still underway, the text, the reference articles, the regulatory scope and the publication dates may still change until the legislative process concludes and any potential sanction.
 
 ## Official sources considered
@@ -18,6 +20,15 @@ The central point is this: **Microsoft's tools do not automatically produce lega
 - Federal Senate, public consultation on the matter: https://www12.senado.leg.br/ecidadania/visualizacaomateria?id=157233
 - Chamber of Deputies, official record of the proposal: https://dadosabertos.camara.leg.br/api/v2/proposicoes/2487262
 - Chamber of Deputies, full text of the proposal in the Chamber: https://www.camara.leg.br/proposicoesWeb/prop_mostrarintegra?codteor=2868197
+
+### Official sources for the EU AI Act (Regulation (EU) 2024/1689)
+
+- EUR-Lex, Regulation (EU) 2024/1689, full official text: https://eur-lex.europa.eu/eli/reg/2024/1689/oj
+- European Commission, AI Act regulatory framework overview: https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai
+- European Commission, AI Act application timeline: https://digital-strategy.ec.europa.eu/en/policies/ai-act-timeline
+- European AI Office: https://digital-strategy.ec.europa.eu/en/policies/ai-office
+- EU General Data Protection Regulation (GDPR), Regulation (EU) 2016/679: https://eur-lex.europa.eu/eli/reg/2016/679/oj
+- Council of Europe, Framework Convention on Artificial Intelligence (2024): https://www.coe.int/en/web/artificial-intelligence/the-framework-convention-on-artificial-intelligence
 
 ### Official Microsoft sources
 
@@ -65,6 +76,105 @@ Relevant official excerpts, consistent between the initial text and the version 
 | **Traceability, auditing and accountability** | The bill makes traceability, auditability, liability and accountability explicit as principles and governance mechanisms. | Copilot Studio records events for creation, change, publication, sharing, configuration and user interaction. These events can be searched in Purview and analyzed in DSPM for AI; integration with Sentinel reinforces the SOC and incident response. | Foundry integrates auditing and classification via Purview, activity explorer, retention, eDiscovery and operational monitoring through traces, logs and dashboards. This supports the decision trail and evidence for auditing. | https://learn.microsoft.com/microsoft-copilot-studio/admin-logging-copilot-studio ; https://learn.microsoft.com/purview/ai-copilot-studio ; https://learn.microsoft.com/purview/ai-azure-foundry ; https://learn.microsoft.com/azure/foundry/concepts/observability |
 | **Data protection, retention and investigation** | The bill relates to privacy, data protection, liability and enforcement. | With Purview, Copilot Studio supports auditing, classification, sensitivity labels, DLP, Insider Risk Management, Communication Compliance, eDiscovery, Data Lifecycle Management and Compliance Manager. | The same set is supported for Foundry, provided that the Purview Data Security configurations and collection policies are enabled. This is especially relevant for the retention of prompts, responses and regulatory investigation. | https://learn.microsoft.com/purview/ai-copilot-studio ; https://learn.microsoft.com/purview/ai-azure-foundry |
 | **Security against abuse, prompt injection and misuse** | The bill requires risk mitigation, security and monitoring, especially in sensitive or high-risk scenarios. | In Copilot Studio, the main control layer lies in connector policy, authentication, publication, DLP, labels, auditing and restriction of the agent's capabilities. | In Foundry, Azure AI Content Safety and Prompt Shields detect user prompt attacks and document attacks; Defender for Cloud complements this with jailbreak detection and workload risk detection. | https://learn.microsoft.com/azure/ai-services/content-safety/concepts/jailbreak-detection ; https://learn.microsoft.com/azure/foundry/control-plane/how-to-manage-compliance-security |
+
+## European counterpart: the EU AI Act (Regulation (EU) 2024/1689)
+
+PL 2338/2023 was strongly inspired by the European framework. Its direct counterpart is the **EU Artificial Intelligence Act (Regulation (EU) 2024/1689)**, the first comprehensive, horizontal AI law in the world. It entered into force on **1 August 2024**, with a phased application timeline: prohibited-practice rules from **February 2025**, general-purpose AI (GPAI) model obligations from **August 2025**, and the bulk of the high-risk obligations from **August 2026**, with certain embedded high-risk systems extending to **August 2027**.
+
+### Shared logic: a risk-based approach
+
+Both texts organize AI governance around the same tiered classification of risk, which is the core mechanism of the EU AI Act and was largely imported into the Brazilian bill:
+
+- **Unacceptable / excessive risk → prohibited.** Practices such as government social scoring, manipulation exploiting vulnerabilities, untargeted scraping of facial images and certain biometric categorization are banned. PL 2338 mirrors this with its category of "excessive risk".
+- **High risk → permitted with strong governance.** Systems in areas such as health, biometrics, critical infrastructure, education, employment/HR, access to essential services, credit, law enforcement and justice require risk management, data governance, technical documentation, logging, human oversight, transparency, accuracy, robustness and cybersecurity. This maps directly to PL 2338's algorithmic impact assessment for high-risk systems (Articles 23 and 24).
+- **Limited risk → transparency obligations.** Users must be informed when they interact with an AI system, and AI-generated or manipulated content (deepfakes) must be labeled. This aligns with PL 2338's right to prior information (Articles 5 and 7).
+- **Minimal risk → largely unregulated.**
+
+### Key differences from PL 2338/2023
+
+- **Individual rights.** The Brazilian bill is more robust on the rights of affected persons (explanation, contestation and human review of automated decisions), inheriting the tradition of the LGPD. The EU AI Act focuses more on the product/system and leaves individual data rights to the **GDPR (Regulation (EU) 2016/679)**.
+- **General-purpose AI (GPAI).** The EU AI Act adds a dedicated regime for GPAI and foundation models, including transparency, technical documentation, copyright-compliance policies and, for models with systemic risk, model evaluation, adversarial testing and incident reporting. PL 2338 addresses generative AI mainly through transparency and copyright-remuneration provisions.
+- **Copyright.** PL 2338 contains specific provisions on remuneration of rights holders for use of protected works in training; the EU AI Act handles this more narrowly, via a duty to disclose a summary of training content and to respect text-and-data-mining opt-outs.
+- **Governance and enforcement.** The EU relies on the **European AI Office** and national competent authorities, with fines up to **EUR 35 million or 7% of global annual turnover** for prohibited practices. Brazil's PL 2338 foresees a national AI governance and regulation system (SIA) coordinated by the ANPD.
+
+### Related European instruments
+
+- **GDPR (Regulation (EU) 2016/679)** — complements the AI Act on personal-data processing, much as the LGPD complements PL 2338 in Brazil.
+- **Council of Europe Framework Convention on AI (2024)** — the first binding international treaty on AI and human rights, democracy and the rule of law.
+
+### Relevance for Copilot Studio and Microsoft Foundry
+
+Because the two frameworks share the same risk-based backbone, the same Microsoft control set that addresses PL 2338/2023 also supports EU AI Act obligations: Copilot Studio and Microsoft Foundry, combined with **Microsoft Purview**, **Microsoft Entra**, **Microsoft Sentinel**, **Azure Monitor**, **Defender for Cloud** and **Azure AI Content Safety**, provide transparency, human oversight, risk assessment, evaluators, red teaming, content safety, logging, traceability, data governance and continuous monitoring — the technical and governance building blocks required for high-risk systems and GPAI transparency under Regulation (EU) 2024/1689. As with PL 2338, these tools do not by themselves produce legal compliance; they enable the controls, documentation and evidence that compliance depends on.
+
+### Visual overview: how the two frameworks relate
+
+```mermaid
+flowchart TB
+    subgraph SHARED["Shared risk-based backbone"]
+        direction TB
+        R1["Unacceptable / Excessive risk --> PROHIBITED"]
+        R2["High risk --> impact assessment, human oversight, documentation, monitoring"]
+        R3["Limited risk --> transparency & labeling"]
+        R4["Minimal risk --> largely unregulated"]
+        R1 --> R2 --> R3 --> R4
+    end
+
+    BR["PL 2338/2023 (Brazil)<br/>Status: approved in Senate, under review in Chamber<br/>Governance: SIA / ANPD<br/>Complementary law: LGPD"]
+    EU["EU AI Act - Reg. (EU) 2024/1689<br/>Status: in force since Aug 2024, phased to 2026-2027<br/>Governance: European AI Office<br/>Complementary law: GDPR"]
+
+    BR --> SHARED
+    EU --> SHARED
+
+    subgraph BR_ONLY["PL 2338 emphasis"]
+        B1["Stronger individual rights:<br/>explanation, contestation, human review"]
+        B2["Copyright remuneration of rights holders"]
+    end
+
+    subgraph EU_ONLY["EU AI Act emphasis"]
+        E1["Dedicated GPAI / foundation-model regime"]
+        E2["Fines up to EUR 35M or 7% of global turnover"]
+    end
+
+    BR --> BR_ONLY
+    EU --> EU_ONLY
+
+    subgraph MS["Microsoft control set addressing BOTH"]
+        M1["Copilot Studio + Microsoft Foundry"]
+        M2["Purview, Entra, Sentinel, Defender, Azure Monitor, AI Content Safety"]
+        M1 --- M2
+    end
+
+    SHARED --> MS
+
+    classDef prohibited fill:#f8d7da,stroke:#c00,color:#000;
+    classDef high fill:#fff3cd,stroke:#e0a800,color:#000;
+    classDef ms fill:#d1e7dd,stroke:#0f5132,color:#000;
+    class R1 prohibited;
+    class R2 high;
+    class M1,M2 ms;
+```
+
+### Side-by-side comparison: PL 2338/2023 vs. EU AI Act
+
+| Dimension | PL 2338/2023 (Brazil) | EU AI Act — Regulation (EU) 2024/1689 |
+|---|---|---|
+| **Status** | Approved in the Senate (Dec 2024), under review in the Chamber of Deputies; not yet definitively enacted | In force since 1 Aug 2024; phased application through 2026-2027 |
+| **Legal nature** | National bill (federal law once enacted) | Directly applicable EU regulation across all member states |
+| **Regulatory approach** | Hybrid: risk-based **and** fundamental-rights-based | Predominantly risk-based (product/system safety) |
+| **Risk tiers** | Excessive risk (prohibited), high risk, and general provisions | Unacceptable (prohibited), high, limited (transparency), minimal |
+| **Prohibited practices** | Excessive-risk systems (e.g., social scoring, exploitation of vulnerabilities, autonomous lethal weapons) | Social scoring, manipulative/exploitative AI, untargeted facial scraping, certain biometric categorization and real-time remote biometric ID (with exceptions) |
+| **High-risk obligations** | Algorithmic impact assessment, mitigation, monitoring, documentation (Arts. 23-24) | Risk management, data governance, technical documentation, logging, human oversight, accuracy, robustness, cybersecurity (Arts. 8-15) |
+| **Individual rights** | Strong: prior information, explanation, contestation, human review (Arts. 5, 7, 8, 9) | Lighter within the Act; individual data rights mainly via GDPR |
+| **Generative / GPAI** | Transparency plus copyright-remuneration provisions | Dedicated GPAI regime: transparency, technical docs, copyright policy; extra duties for systemic-risk models |
+| **Copyright** | Explicit remuneration of rights holders for training use | Duty to disclose a training-content summary and respect TDM opt-outs |
+| **Transparency to users** | Right to prior information about AI interaction (Arts. 5, 7) | Duty to inform on AI interaction and to label AI-generated content / deepfakes |
+| **Governance body** | National AI governance and regulation system (SIA), coordinated by ANPD | European AI Office plus national competent authorities |
+| **Penalties** | To be defined in the final text/regulation | Up to EUR 35M or 7% of global annual turnover for prohibited practices |
+| **Complementary law** | LGPD (data protection) | GDPR (Regulation (EU) 2016/679) |
+
+### Official sources for the EU AI Act
+
+See the consolidated list under **"Official sources considered → Official sources for the EU AI Act (Regulation (EU) 2024/1689)"** at the top of this document, which includes the full EUR-Lex text, the European Commission overview and application timeline, the European AI Office, the GDPR and the Council of Europe Framework Convention on AI.
 
 ## Executive synthesis
 
