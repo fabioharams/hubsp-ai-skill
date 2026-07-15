@@ -164,9 +164,13 @@ For topics beyond the six curated references, open `AI_Agent_Adoption_Strategy_F
 
 Example prompt:
 
+> **Applicability disclaimer:** PL 2338/2023 applies only to Brazilian clients and companies. For scenarios outside Brazil, omit the PL 2338/2023 analysis from the prompt or explicitly instruct the agent to state that PL 2338/2023 is not applicable to the scenario being analyzed.
+
 > Using #SKILL.md, recommend the target architecture for a support copilot with governed data in Fabric.
 
 Example with project specifications document:
+
+> **Applicability disclaimer:** PL 2338/2023 applies only to Brazilian clients and companies. For scenarios outside Brazil, omit the PL 2338/2023 analysis from the prompt or explicitly instruct the agent to state that PL 2338/2023 is not applicable to the scenario being analyzed.
 
 > Using #SKILL.md and #doc/agent-project-specifications.md, generate an executive recommendation in full format: (1) medium executive summary (1-2 paragraphs) with at least 1 Mermaid diagram or flowchart to explain the recommended decision, (2) recommended architectural pattern (LLM/RAG/AI Agent/Agentic AI) with detailed justifications, official Microsoft links and at least 1 Mermaid diagram or flowchart to explain the choice, (3) target architecture (Work IQ, Foundry IQ, Fabric IQ and Web IQ) with detailed explanation and 2 mandatory Mermaid diagrams (architecture and decision flowchart), (4) governance and security with guard rails, evaluators, PL 2338/2023 analysis and explanation of how the tools and services selected in the architecture address the axes of transparency, governance, risk, audit, human oversight and data protection with official sources, and at least 1 Mermaid diagram or flowchart, (5) phased deployment plan with per-phase detail (objective, scope, integrations, entry/exit criteria, target KPI and dominant risk) and at least 1 Mermaid diagram or flowchart, (6) ROI/AAI assumptions with at least 1 Mermaid diagram or flowchart to explain the financial logic, (7) success KPIs with at least 1 Mermaid diagram or flowchart, and (8) risks and mitigations with clarity, official Microsoft links and at least 1 Mermaid diagram or flowchart. The response must be delivered as a new markdown document called doc/recommendation-output.md.
 
@@ -209,9 +213,13 @@ Best overall performance for skill analysis: **`.md`** (plain text, clear sectio
 
 Use this prompt in any project with a document at `doc/agent-project-specifications.md`:
 
+> **Applicability disclaimer:** PL 2338/2023 applies only to Brazilian clients and companies. For scenarios outside Brazil, omit the PL 2338/2023 analysis from the prompt or explicitly instruct the agent to state that PL 2338/2023 is not applicable to the scenario being analyzed.
+
 > Using #SKILL.md and #doc/agent-project-specifications.md, generate an executive recommendation in full format: (1) medium executive summary (1-2 paragraphs) with at least 1 Mermaid diagram or flowchart to explain the recommended decision, (2) recommended architectural pattern (LLM/RAG/AI Agent/Agentic AI) with detailed justifications, official Microsoft links and at least 1 Mermaid diagram or flowchart to explain the choice, (3) target architecture (Work IQ, Foundry IQ, Fabric IQ and Web IQ) with detailed explanation and 2 mandatory Mermaid diagrams (architecture and decision flowchart), (4) governance and security with guard rails, evaluators, PL 2338/2023 analysis and explanation of how the tools and services selected in the architecture address the axes of transparency, governance, risk, audit, human oversight and data protection with official sources, and at least 1 Mermaid diagram or flowchart, (5) phased deployment plan with per-phase detail (objective, scope, integrations, entry/exit criteria, target KPI and dominant risk) and at least 1 Mermaid diagram or flowchart, (6) ROI/AAI assumptions with at least 1 Mermaid diagram or flowchart to explain the financial logic, (7) success KPIs with at least 1 Mermaid diagram or flowchart, and (8) risks and mitigations with clarity, official Microsoft links and at least 1 Mermaid diagram or flowchart. The response must be delivered as a new markdown document called doc/recommendation-output.md.
 
 Variation for GitHub Copilot CLI:
+
+> **Applicability disclaimer:** PL 2338/2023 applies only to Brazilian clients and companies. For scenarios outside Brazil, omit the PL 2338/2023 analysis from the prompt or explicitly instruct the agent to state that PL 2338/2023 is not applicable to the scenario being analyzed.
 
 > Read SKILL.md and doc/agent-project-specifications.md and generate an executive recommendation in advanced format: medium executive summary with Mermaid diagram or flowchart; architectural pattern with detailed justifications, Microsoft sources and Mermaid diagram or flowchart; Work IQ/Foundry IQ/Fabric IQ/Web IQ architecture with Mermaid diagram and Mermaid flowchart; governance and security with PL 2338/2023 analysis, explanation of how the tools and services selected in the architecture address the axes of transparency, governance, risk, audit, human oversight and data protection with official sources, and Mermaid diagram or flowchart; detailed phased plan with Mermaid diagram or flowchart; ROI/AAI assumptions with Mermaid diagram or flowchart; KPIs with Mermaid diagram or flowchart; risks and mitigations with official Microsoft links and Mermaid diagram or flowchart. The response must be delivered as a new markdown document called doc/recommendation-output.md.
 
