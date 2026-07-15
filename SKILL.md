@@ -172,4 +172,4 @@ Load only the reference file needed for the question (progressive disclosure):
 - references/05-decision-framework-bxt.md — Microsoft AI Decision Framework: Intake Filter, BXT, 9 critical questions, Capability Model and technology selection by scenario.
 - references/06-pl-2338-2023-copilot-studio-foundry.md — analysis of PL 2338/2023, focusing on transparency, governance, risk, audit, human oversight and data protection with official sources.
 
-Full index and additional sections: AI_Agent_Adoption_Strategy_Final_2.md (canonical source, with pointers to the files above).
+For topics not covered by these curated references, read only the lightweight index in AI_Agent_Adoption_Strategy_Final_2.md, select the relevant file from `chapters/`, and load that chapter only. Do not load all chapter files by default.

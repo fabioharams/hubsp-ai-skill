@@ -16,7 +16,8 @@ The project was structured to serve as both an executive and technical reference
 ## What you will find in this repository
 
 - SKILL.md: single skill definition (router) that guides consistent responses in an adoption architecture context. Points to reference files on demand (progressive disclosure).
-- AI_Agent_Adoption_Strategy_Final_2.md: main guide and base document, with executive overview, index and pointers to reference files.
+- AI_Agent_Adoption_Strategy_Final_2.md: lightweight index that routes to thematic references and individual guide chapters.
+- chapters/: complete guide content split by chapter for selective, on-demand loading.
 - section_3_2.txt: extracted plain-text section used as a lightweight source for quick copy, review and prompt experiments without markdown formatting overhead.
 - references/: thematically sliced content for on-demand loading:
    - references/01-llm-rag-ai-agent-fundamentals.md: LLM vs RAG vs AI Agent vs Agentic AI; complexity spectrum and decision guide.
@@ -35,15 +36,16 @@ The project was structured to serve as both an executive and technical reference
 
 ## Repository structure (diagram)
 
-The diagram below shows how the files relate to each other. SKILL.md is the entry point (router); the base document holds the complete content and points, on demand, to the thematic files in references/.
+The diagram below shows how the files relate to each other. SKILL.md is the entry point (router); the lightweight index points to thematic references and individual chapters that are loaded on demand.
 
 ```mermaid
 graph TD
     USER([User / Agent asks a question]) --> SKILL[SKILL.md<br/>Routing skill - entry point]
-    SKILL --> CANON[AI_Agent_Adoption_Strategy_Final_2.md<br/>Base document - index + pointers]
+   SKILL --> CANON[AI_Agent_Adoption_Strategy_Final_2.md<br/>Lightweight chapter index]
 
     SKILL -. progressive disclosure .-> REF{{references/}}
     CANON -. pointers .-> REF
+   CANON -. chapter selection .-> CHAPTERS{{chapters/}}
 
       REF --> R1[01-llm-rag-ai-agent-fundamentals.md<br/>LLM vs RAG vs AI Agent vs Agentic AI]
       REF --> R2[02-reference-architecture-layers.md<br/>Work IQ - Foundry IQ - Fabric IQ - Web IQ - Fabric]
@@ -61,7 +63,7 @@ graph TD
    DOC --> PROMPT
    PROMPT --> OUTMD[doc/recommendation-output.md<br/>Markdown output]
    R3 --> XLSX[ROI-IA-Calculadora.xlsx<br/>Operational ROI/AAI calculator]
-   CANON --> TXT[section_3_2.txt<br/>Plain-text extracted section]
+   CHAPTERS --> TXT[section_3_2.txt<br/>Plain-text extracted section]
 
     classDef entry fill:#0078D4,stroke:#004578,color:#fff;
     classDef canon fill:#107C10,stroke:#0B5A0B,color:#fff;
@@ -72,7 +74,7 @@ graph TD
    classDef artifact fill:#FFF3E0,stroke:#EF6C00,color:#1a1a1a;
     class SKILL entry;
     class CANON canon;
-   class R1,R2,R3,R4,R5,R6 ref;
+   class R1,R2,R3,R4,R5,R6,CHAPTERS ref;
    class DOC,DOCEX doc;
    class PROMPT prompt;
    class OUTMD output;
@@ -108,7 +110,7 @@ flowchart TD
     Q3 -- Governance<br/>and Security --> R4[references/04-governance-guard-rails-evaluators-hitl.md]
     Q3 -- Microsoft<br/>Technology Selection --> R5[references/05-decision-framework-bxt.md]
    Q3 -- Regulatory Analysis<br/>PL 2338/2023 --> R6[references/06-pl-2338-2023-copilot-studio-foundry.md]
-    Q3 -- Full view<br/>or other sections --> CANON[AI_Agent_Adoption_Strategy_Final_2.md]
+   Q3 -- Other sections --> CANON[Open the lightweight index<br/>and select one chapter]
 
     R1 --> END([Apply to your use case])
     R2 --> END
@@ -144,7 +146,7 @@ Prerequisites: VS Code, the GitHub Copilot Chat extension and an active GitHub C
    - Type `#` and select the file (e.g., `#SKILL.md`).
    - Drag the file from the Explorer into the chat panel.
    - Open the file in the editor and reference it with `#file`.
-5. Recommended flow: start with `SKILL.md` and let the agent load files from `references/` on demand (progressive disclosure), based on the topic of the question.
+5. Recommended flow: start with `SKILL.md` and let the agent load one file from `references/` or `chapters/` on demand, based on the topic of the question. Do not attach the complete `chapters/` folder.
 
 Example prompt:
 
@@ -206,5 +208,5 @@ Prerequisites: GitHub Copilot app with repository access and an active GitHub Co
 1. Open this repository in the app as a workspace/project.
 2. Start a chat in Agent mode.
 3. Attach `SKILL.md` to the context (or use `#SKILL.md`) to apply the response format rules.
-4. When depth is needed, also attach the relevant files from `references/` based on the topic (architecture, ROI, governance, decision framework).
+4. When depth is needed, also attach the relevant file from `references/` or one selected file from `chapters/` based on the topic. Avoid attaching all chapters at once.
 5. Ask the question with business context and decision objective.
