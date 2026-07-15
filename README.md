@@ -16,8 +16,13 @@ The project was structured to serve as both an executive and technical reference
 ## What you will find in this repository
 
 - SKILL.md: single skill definition (router) that guides consistent responses in an adoption architecture context. Points to reference files on demand (progressive disclosure).
-- AI_Agent_Adoption_Strategy_Final_2.md: lightweight index that routes to thematic references and individual guide chapters.
-- chapters/: complete guide content split by chapter for selective, on-demand loading.
+- AI_Agent_Adoption_Strategy_Final_2.md: lightweight index that routes to thematic references and the 24 individual guide chapters.
+- chapters/: complete guide content split for selective, on-demand loading and organized into five groups:
+   - Strategy and Adoption: chapters 01-04 (executive overview, adoption strategy, tools and approaches).
+   - Data and Agent Consumption: chapters 05-08 (Fabric consumption, agent access and usage examples).
+   - Architecture and Operating Model: chapters 09-14 (integration, operating model, Microsoft architecture alignment, instructions and skills).
+   - Advanced Agent Capabilities: chapters 15-17 (orchestration, memory and operational implementation).
+   - Appendices: chapters 18-24 (code examples, templates, tool decision tree, OpenTelemetry, dataset curation and consolidated references).
 - section_3_2.txt: extracted plain-text section used as a lightweight source for quick copy, review and prompt experiments without markdown formatting overhead.
 - references/: thematically sliced content for on-demand loading:
    - references/01-llm-rag-ai-agent-fundamentals.md: LLM vs RAG vs AI Agent vs Agentic AI; complexity spectrum and decision guide.
@@ -26,7 +31,6 @@ The project was structured to serve as both an executive and technical reference
    - references/04-governance-guard-rails-evaluators-hitl.md: Guard Rails, Evaluators and Human-in-the-Loop.
    - references/05-decision-framework-bxt.md: Microsoft AI Decision Framework (Intake Filter, BXT, 9 critical questions, Capability Model and technology selection by scenario).
    - references/06-pl-2338-2023-copilot-studio-foundry.md: analysis of PL 2338/2023 and how Microsoft Copilot Studio, Microsoft Foundry and Purview address the axes of transparency, governance, risk, audit, human oversight and data protection with official sources.
-- ROI-IA-Calculadora.xlsx: operational spreadsheet for the ROI/AAI model (references/03), with 5 tabs (Calculator, HITL Sensitivity, How to Use, Capacity and Chart, Expansion). Fill in the blue cells with your operation's assumptions to obtain AAI, ROI (%), verdict (USE AI / KEEP HUMAN) and impact on team capacity. Usage and interpretation instructions in references/03-roi-ai-vs-man-hour.md.
 - doc/agent-project-specifications-example.md: starter example of a project specification document to accelerate onboarding before creating or customizing doc/agent-project-specifications.md.
 - doc/agent-project-specifications.md: working specification used as primary project input in recommendation prompts.
 - doc/recommendation-output.md: generated output artifact where the executive recommendation is persisted in markdown format.
@@ -62,7 +66,6 @@ graph TD
    README --> PROMPT[Default reusable prompt<br/>diagrammed response generation]
    DOC --> PROMPT
    PROMPT --> OUTMD[doc/recommendation-output.md<br/>Markdown output]
-   R3 --> XLSX[ROI-IA-Calculadora.xlsx<br/>Operational ROI/AAI calculator]
    CHAPTERS --> TXT[section_3_2.txt<br/>Plain-text extracted section]
 
     classDef entry fill:#0078D4,stroke:#004578,color:#fff;
@@ -78,7 +81,7 @@ graph TD
    class DOC,DOCEX doc;
    class PROMPT prompt;
    class OUTMD output;
-   class XLSX,TXT artifact;
+   class TXT artifact;
 ```
 
 ## How to navigate (decision flowchart)
@@ -110,7 +113,12 @@ flowchart TD
     Q3 -- Governance<br/>and Security --> R4[references/04-governance-guard-rails-evaluators-hitl.md]
     Q3 -- Microsoft<br/>Technology Selection --> R5[references/05-decision-framework-bxt.md]
    Q3 -- Regulatory Analysis<br/>PL 2338/2023 --> R6[references/06-pl-2338-2023-copilot-studio-foundry.md]
-   Q3 -- Other sections --> CANON[Open the lightweight index<br/>and select one chapter]
+   Q3 -- Other sections --> CANON[Open the lightweight index<br/>and select one chapter group]
+   CANON --> C1[Strategy and Adoption<br/>chapters 01-04]
+   CANON --> C2[Data and Agent Consumption<br/>chapters 05-08]
+   CANON --> C3[Architecture and Operating Model<br/>chapters 09-14]
+   CANON --> C4[Advanced Agent Capabilities<br/>chapters 15-17]
+   CANON --> C5[Appendices<br/>chapters 18-24]
 
     R1 --> END([Apply to your use case])
     R2 --> END
@@ -118,7 +126,11 @@ flowchart TD
     R4 --> END
     R5 --> END
    R6 --> END
-    CANON --> END
+   C1 --> END
+   C2 --> END
+   C3 --> END
+   C4 --> END
+   C5 --> END
     README --> END
 ```
 
@@ -147,6 +159,8 @@ Prerequisites: VS Code, the GitHub Copilot Chat extension and an active GitHub C
    - Drag the file from the Explorer into the chat panel.
    - Open the file in the editor and reference it with `#file`.
 5. Recommended flow: start with `SKILL.md` and let the agent load one file from `references/` or `chapters/` on demand, based on the topic of the question. Do not attach the complete `chapters/` folder.
+
+For topics beyond the six curated references, open `AI_Agent_Adoption_Strategy_Final_2.md`, choose the relevant chapter group and load only the chapter or chapters required by the request. This progressive-disclosure approach keeps the context focused and avoids loading the full knowledge base.
 
 Example prompt:
 
