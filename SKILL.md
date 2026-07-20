@@ -5,7 +5,7 @@ description: "Use when selecting the simplest viable Microsoft AI architecture o
 license: MIT
 metadata:
   author: Fabio
-  version: "1.5.0"
+  version: "1.9.0"
   language: en-US
 ---
 
@@ -44,17 +44,11 @@ This skill helps structure practical recommendations for adopting AI agents in c
 
 ## Expected Inputs
 
-- business objective
-- current process and existing Microsoft/SaaS capabilities
-- impacted area(s)
-- data maturity
-- required actions, autonomy and orchestration
-- user population, adoption forecast, workload volume, peak concurrency and growth horizon
-- SLA, latency, availability, data-size and geographic requirements
-- security/compliance requirements
-- timeline and priority
+- One attached scenario input document containing the available business and technical facts. The preferred discovery input is a completed `doc/business-architecture-questionnaire.md`, but an equivalent Markdown, text, Word or PDF document is valid.
+- The document should cover, when known: business objective and measures; current process and existing capabilities; users and channels; data and actions; risk and compliance; demand and economics; identity and integrations; runtime and network; capacity and reliability; security, operations and delivery.
 
 If critical information is missing, ask only for the minimum necessary before recommending the architecture.
+Treat the attached document as the case context and normalize it against `doc/business-architecture-questionnaire.md`; do not require the same headings, question order or filename. Reuse facts already present and do not ask the respondent to re-enter them in the questionnaire. Treat answers as observations and requirements, not a respondent-selected architecture. If only business information is available, provide an initial conditional recommendation and list only the missing technical facts that could change the decision. Unresolved identity, data-access, integration, network, regional, capacity, reliability, security or operational constraints must remain explicit pre-production validation gates.
 
 ## Recommended Process
 
@@ -150,7 +144,7 @@ If critical information is missing, ask only for the minimum necessary before re
 - Governance and security (controls)
   - Detail technical and operational guard rails: Entra ID, RBAC, DLP, audit trail, rules/checklist versioning, evaluators and HITL.
   - Relate each control to the risk it mitigates (e.g., hallucination, unauthorized access, critical decision without oversight).
-  - Include explicit analysis of PL 2338/2023, connecting the recommended architecture to the axes of transparency, governance, risk, audit, human oversight and data protection.
+  - Include explicit analysis of PL 2338/2023 only when the scenario involves Brazilian clients, operations or companies, connecting the recommended architecture to the axes of transparency, governance, risk, audit, human oversight and data protection. Otherwise state that it is outside the scenario scope and assess only the applicable regulations identified in the input.
   - Explain how the tools and services selected in the architecture address each regulatory axis, indicating limits, dependencies and any implementation gaps.
   - Prioritize official Microsoft sources and, when relevant, mention the repository's regulatory reference file to support the analysis.
   - Include at least 1 Mermaid diagram or flowchart showing the sequence of controls, validations and blocking/approval points.
@@ -208,5 +202,7 @@ Load only the reference file needed for the question (progressive disclosure):
 - references/05-decision-framework-bxt.md — Microsoft AI Decision Framework: Intake Filter, BXT, 9 critical questions, Capability Model and technology selection by scenario.
 - references/06-pl-2338-2023-copilot-studio-foundry.md — analysis of PL 2338/2023, focusing on transparency, governance, risk, audit, human oversight and data protection with official sources.
 - references/07-capacity-and-scale-assessment.md — demand model, product-specific capacity checks, fit verdict, headroom, pilot/load validation and official Microsoft capacity references.
+
+For a new use case, use the attached scenario input document as the case context and load `doc/business-architecture-questionnaire.md` only as the normalization checklist. A completed copy of the questionnaire is preferred but not mandatory. Use `doc/agent-project-specifications.md` when implementation requirements are already formalized or after discovery converts the available scenario into an approved implementation specification.
 
 For topics not covered by these curated references, read only the lightweight index in AI_Agent_Adoption_Strategy_Final_2.md, select the relevant file from `chapters/`, and load that chapter only. Do not load all chapter files by default.
