@@ -20,7 +20,7 @@ The higher the AAI, the greater the return. An AAI of $4.0$ means that the task 
 
 > **Two ways to evaluate ROI.**
 > 1. **Efficiency/replacement mode:** *"does AI do this task cheaper than a human?"* — uses the AAI above.
-> 2. **Amplification mode:** *"how much does AI increase the productivity of the employee who stays in charge?"* — AI does not replace the person; it amplifies the throughput of whoever is already there (see the end of this section). Consistent with the *amplification* mode of the Work IQ and Foundry IQ layers in this guide.
+> 2. **Amplification mode:** *"how much does AI increase the productivity of the employee who stays in charge?"* — AI does not replace the person; it amplifies the throughput of whoever is already there (see the end of this section). In this guide, the runtime performs the work while Work IQ and Foundry IQ can supply permission-aware context.
 
 ### 🧮 The two halves of the equation
 
@@ -348,7 +348,7 @@ In hours: the analyst "gives back" $168 \times 20\% = 33.6$ h/month; with 70% re
 | ROI concept | In efficiency mode | In amplification mode | Related layer/section |
 |---|---|---|---|
 | Numerator | Human cost of the task | Value of freed time | Business cases (sections 3–4) |
-| Denominator | Total AI cost per task | AI cost per employee | Foundry IQ + Fabric (section 2) |
+| Denominator | Total AI cost per task | AI cost per employee | Agent runtime + model + context/data services (section 2) |
 | Reality factor | Scope multiplier | Realization factor | Adoption KPIs (sections 3, 19) |
 | HITL | Cost to subtract | Not applicable (human in charge) | Human-in-the-Loop (section 10) |
 | Key question | "Is replacing cheaper?" | "Does amplifying generate more value than it costs?" | Strategic message (section 13) |

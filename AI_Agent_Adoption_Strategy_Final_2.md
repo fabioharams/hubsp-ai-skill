@@ -7,7 +7,7 @@ This file is the lightweight index for the guide. Load only the chapter or thema
 Use these curated references first when the request matches a core decision topic:
 
 - [AI architecture fundamentals](references/01-llm-rag-ai-agent-fundamentals.md) - LLM, RAG, single AI Agent and Agentic AI.
-- [Reference architecture layers](references/02-reference-architecture-layers.md) - Work IQ, Foundry IQ, Fabric IQ, Web IQ and Microsoft Fabric.
+- [Reference architecture](references/02-reference-architecture-layers.md) - Microsoft IQ context workloads, agent runtimes and Microsoft Fabric.
 - [ROI and AAI](references/03-roi-ai-vs-man-hour.md) - financial model, HITL and scope multiplier.
 - [Governance and security](references/04-governance-guard-rails-evaluators-hitl.md) - guard rails, evaluators and HITL.
 - [Microsoft AI Decision Framework](references/05-decision-framework-bxt.md) - Intake Filter, BXT, critical questions and technology selection.

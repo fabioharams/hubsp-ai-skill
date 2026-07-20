@@ -38,7 +38,7 @@ Corporate architecture transforms AI from experiment into operational capability
 
 > Content moved to [references/01-llm-rag-ai-agent-fundamentals.md](references/01-llm-rag-ai-agent-fundamentals.md) — AI Architecture Fundamentals — LLM vs RAG vs AI Agent vs Agentic AI.
 
-> Content moved to [references/02-reference-architecture-layers.md](references/02-reference-architecture-layers.md) — Reference Architecture and Technical Specifications by Layer (Microsoft IQ: Work IQ, Foundry IQ, Fabric IQ, Web IQ + Microsoft Fabric).
+> Content moved to [references/02-reference-architecture-layers.md](references/02-reference-architecture-layers.md) — Reference Architecture for Microsoft IQ context workloads, agent runtimes and Microsoft Fabric.
 
 > Content moved to [references/06-pl-2338-2023-copilot-studio-foundry.md](references/06-pl-2338-2023-copilot-studio-foundry.md) — Analysis of PL 2338/2023 and how Microsoft Copilot Studio and Microsoft Foundry can meet the requirements of transparency, governance, risk, audit and data protection with official sources.
 

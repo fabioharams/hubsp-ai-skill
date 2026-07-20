@@ -529,12 +529,9 @@ If an agent stores history, how to guarantee the "right to be forgotten"?
 #### **Multi-Layer Configuration:**
 
 ```python
-from azure.ai.projects import AIProjectClient
 from azure.cosmos import CosmosClient
 from azure.search.documents import SearchClient
 from datetime import datetime, timedelta
-
-project_client = AIProjectClient.from_connection_string(connection_string)
 
 class AgentMemoryManager:
     def __init__(self, user_id: str, agent_id: str):
@@ -1128,11 +1125,11 @@ Need relationship graph?                → Cosmos DB Gremlin or Neo4j
 
 ### 📚 References — Agent Memory
 
-- [Conversation History & Context Management in Agent Framework](https://learn.microsoft.com/azure/foundry/agents/concepts/conversation-history)
+- [Conversations and responses in Foundry Agent Service](https://learn.microsoft.com/azure/foundry/agents/concepts/runtime-components)
 - [Semantic Search with Azure AI Search](https://learn.microsoft.com/azure/search/semantic-search-overview)
-- [Fabric Medallion Architecture patterns](https://learn.microsoft.com/fabric/onelake/medallion-lakehouse-architecture)
+- [Fabric Medallion Architecture patterns](https://learn.microsoft.com/fabric/onelake/onelake-medallion-lakehouse-architecture)
 - [Purview Data Classification for agent data](https://learn.microsoft.com/purview/data-classification-overview)
-- [Row-Level Security in Fabric](https://learn.microsoft.com/fabric/security/row-level-security)
+- [Row-Level Security in Fabric](https://learn.microsoft.com/fabric/data-warehouse/row-level-security)
 
 ---
 

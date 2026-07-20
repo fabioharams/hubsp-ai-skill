@@ -232,78 +232,56 @@ flowchart TD
 ### 🔧 Foundry Implementation
 
 ```python
+import json
+import os
+from datetime import datetime
+
 from azure.ai.projects import AIProjectClient
-from azure.ai.projects.models import MessageDeltaChunk
+from azure.identity import DefaultAzureCredential
 
-project_client = AIProjectClient.from_connection_string(
-    connection_string=os.getenv("PROJECT_CONNECTION_STRING")
+project_client = AIProjectClient(
+    endpoint=os.environ["FOUNDRY_PROJECT_ENDPOINT"],
+    credential=DefaultAzureCredential(),
 )
+openai_client = project_client.get_openai_client()
 
-# Define specialized agents
-triager_agent = project_client.agents.create_agent(
-    name="Support Triager",
-    model="gpt-4-turbo",
-    instructions="""You are a ticket triage specialist.
-    
-    RESPONSIBILITIES:
-    - Extract urgency: Low/Medium/High/Critical
-    - Identify category: Bug/Feature/Performance/Other
-    - Assess impact: number of affected users
-    
-    ALWAYS respond in JSON: {"urgency": "...", "category": "...", "impact": "..."}
-    """
-)
+# These versioned prompt agents are created and governed in the Foundry project.
+TRIAGER_AGENT = "support-triager"
+FAQ_AGENT = "support-faq"
+EXPERT_AGENT = "support-expert"
 
-faq_agent = project_client.agents.create_agent(
-    name="FAQ Bot",
-    model="gpt-4-turbo",
-    instructions="""You are a FAQ bot.
-    
-    RESPONSIBILITIES:
-    - Search solutions in knowledge base
-    - Adapt to user context
-    - If not found: respond 'ESCALATE'
-    """
-)
-
-expert_agent = project_client.agents.create_agent(
-    name="Technical Expert",
-    model="gpt-4-turbo",
-    instructions="""You are a senior technical expert.
-    
-    RESPONSIBILITIES:
-    - Deep investigation of the problem
-    - Debugging and root cause analysis
-    - Provide solution or action plan
-    """
-)
+def invoke_agent(agent_name: str, user_message: str) -> str:
+    response = openai_client.responses.create(
+        input=user_message,
+        extra_body={
+            "agent_reference": {
+                "name": agent_name,
+                "type": "agent_reference",
+            }
+        },
+    )
+    return response.output_text
 
 # Orchestration logic
 def handle_support_ticket(ticket_text: str):
     # Step 1: Classify with Triager
-    triage_response = project_client.agents.invoke(
-        agent_id=triager_agent.id,
-        user_message=ticket_text
+    triage_response = invoke_agent(
+        TRIAGER_AGENT,
+        f"Classify this ticket as JSON with urgency, category and impact: {ticket_text}",
     )
-    
-    triage_result = json.loads(triage_response.content)
+
+    triage_result = json.loads(triage_response)
     urgency = triage_result["urgency"]
-    
+
     # Step 2: Route based on urgency
     if urgency == "Low":
-        resolution = project_client.agents.invoke(
-            agent_id=faq_agent.id,
-            user_message=ticket_text
-        )
+        resolution = invoke_agent(FAQ_AGENT, ticket_text)
     elif urgency in ["Medium", "High"]:
-        resolution = project_client.agents.invoke(
-            agent_id=expert_agent.id,
-            user_message=ticket_text
-        )
+        resolution = invoke_agent(EXPERT_AGENT, ticket_text)
     else:  # Critical
         # Escalate to human
         resolution = "HUMAN_ESCALATION"
-    
+
     return {
         "urgency": urgency,
         "resolution": resolution,
@@ -314,6 +292,8 @@ def handle_support_ticket(ticket_text: str):
 result = handle_support_ticket("My server has been offline for 2 hours")
 print(result)
 ```
+
+This example uses `azure-ai-projects` 2.x and the Responses API. For a production multi-agent system, enforce structured outputs, timeouts, retries, per-agent authorization and trace correlation rather than parsing unconstrained text.
 
 ### 🛡️ Challenges and Best Practices
 
@@ -377,10 +357,10 @@ Before launching a multi-agent workflow:
 
 ### 📚 References — Orchestration in Foundry
 
-- [Multi-agent systems concept in Copilot Studio](https://learn.microsoft.com/copilotstudio/concepts/agents)
-- [Agent-to-Agent Protocol (A2A) specification](https://learn.microsoft.com/azure/foundry/concepts/agents)
-- [Foundry Agent Service — Orchestration patterns](https://learn.microsoft.com/azure/foundry/agents/concepts)
-- [Tool calling and orchestration in Agent Framework](https://learn.microsoft.com/azure/foundry/agents/how-to/tools)
+- [Add other agents in Copilot Studio](https://learn.microsoft.com/microsoft-copilot-studio/authoring-add-other-agents)
+- [Connect to an A2A agent from Foundry Agent Service](https://learn.microsoft.com/azure/foundry/agents/how-to/tools/agent-to-agent)
+- [AI agent orchestration patterns](https://learn.microsoft.com/azure/architecture/ai-ml/guide/ai-agent-design-patterns)
+- [Foundry Agent Service tool catalog](https://learn.microsoft.com/azure/foundry/agents/concepts/tool-catalog)
 
 ---
 

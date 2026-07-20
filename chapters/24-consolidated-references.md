@@ -30,20 +30,20 @@
 - [Learn about Data Loss Prevention (DLP)](https://learn.microsoft.com/purview/dlp-learn-about-dlp)
 - [Audit solutions overview](https://learn.microsoft.com/purview/audit-solutions-overview)
 - [Microsoft Purview in Fabric](https://learn.microsoft.com/fabric/governance/microsoft-purview-fabric)
-- [Compliance portal](https://learn.microsoft.com/purview/compliance-portal)
+- [Microsoft Purview portal](https://learn.microsoft.com/purview/purview-portal)
 - [Security for AI - Agent 365 security](https://learn.microsoft.com/security/security-for-ai/agent-365-security)
-- [Azure AI Safety Guardrails](https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/safety-guardrails)
+- [Default Guardrail policies for Azure OpenAI](https://learn.microsoft.com/azure/foundry/openai/concepts/default-safety-policies)
 
 #### Agent 365
 - [Microsoft Agent 365 overview](https://learn.microsoft.com/microsoft-agent-365/overview)
 - [Agent registry (Microsoft 365 admin)](https://learn.microsoft.com/microsoft-365/admin/manage/agent-registry)
-- [Agent template (Microsoft Agent 365)](https://learn.microsoft.com/microsoft-agent-365/admin/agent-template)
+- [Agent management overview](https://learn.microsoft.com/microsoft-365/admin/manage/agent-365-overview)
 
 #### Foundry and continuous evaluation
-- [Azure AI Foundry observability](https://learn.microsoft.com/azure/ai-foundry/concepts/observability)
-- [Built-in evaluators in Azure AI Foundry](https://learn.microsoft.com/azure/ai-foundry/concepts/built-in-evaluators)
-- [Evaluate with SDK](https://learn.microsoft.com/azure/ai-foundry/how-to/develop/evaluate-sdk)
-- [Evaluate generative AI app](https://learn.microsoft.com/azure/ai-foundry/how-to/evaluate-generative-ai-app)
+- [Microsoft Foundry observability](https://learn.microsoft.com/azure/foundry/concepts/observability)
+- [Built-in evaluators in Microsoft Foundry](https://learn.microsoft.com/azure/foundry/concepts/built-in-evaluators)
+- [Run cloud evaluations with the Microsoft Foundry SDK](https://learn.microsoft.com/azure/foundry/how-to/develop/cloud-evaluation)
+- [Evaluate a generative AI app](https://learn.microsoft.com/azure/foundry/how-to/evaluate-generative-ai-app)
 - [Set up continuous evaluation (Microsoft Foundry - new portal)](https://learn.microsoft.com/azure/foundry/observability/how-to/how-to-monitor-agents-dashboard#set-up-continuous-evaluation)
 - [Continuous evaluation for agents (Foundry classic, preview)](https://learn.microsoft.com/azure/foundry-classic/how-to/continuous-evaluation-agents)
 

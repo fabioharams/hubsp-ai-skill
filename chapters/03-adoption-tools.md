@@ -43,7 +43,7 @@ Map the three main tools to the adoption framework and short/medium-term scenari
 - fine-tuning, evaluation and model deployment at scale
 
 **✅ Capabilities**
-- prompt flows, tool calls and chained reasoning (chain-of-thought)
+- versioned agents, conversations, Responses API, tool calls and governed multi-step execution
 - support for multiple models: GPT-4o, Claude, Mistral, Phi
 - integration with Fabric OneLake, Purview, Entra ID and external APIs
 
@@ -52,7 +52,7 @@ Map the three main tools to the adoption framework and short/medium-term scenari
 
 ### 🧠 Available models in Microsoft Foundry
 
-Build 2026 consolidated the **MAI** family as a new Microsoft AI model line within the Foundry ecosystem. The consistent reading for this guide is to treat MAI as a **model portfolio** rather than a new architectural layer: they reinforce the model/reasoning layer, while **Work IQ, Foundry IQ and Fabric IQ remain the experience, orchestration and data layers**.
+Build 2026 consolidated the **MAI** family as a new Microsoft AI model line within the Foundry ecosystem. The consistent reading for this guide is to treat MAI as a **model portfolio** rather than a new architectural layer: models power the reasoning runtime, while **Work IQ, Foundry IQ and Fabric IQ remain complementary context workloads**.
 
 **Executive reading of the MAI family**
 
@@ -82,7 +82,7 @@ Build 2026 consolidated the **MAI** family as a new Microsoft AI model line with
 
 **OpenAI Responses API:** standard Foundry Agent Service protocol for tool call orchestration, conversation state and streaming — supported by Claude via Anthropic SDK with Entra ID authentication
 
-**Unified SDK (azure-ai-projects):** Python/TypeScript/C# package that consolidates agents, inference, evaluations and memory — base endpoint: `https://<resource>.services.ai.azure.com/anthropic`
+**Current SDK and API:** use `azure-ai-projects` 2.x for Foundry project and agent-definition operations, and the project-bound OpenAI client for conversations and Responses API calls. A current project endpoint follows `https://<resource>.ai.azure.com/api/projects/<project>`; provider-specific endpoints such as Anthropic are not the general project endpoint.
 
 ### 🔗 How They Work Together
 
@@ -130,7 +130,7 @@ flowchart TD
 #### Official Microsoft references for the decision
 
 - Microsoft Copilot Studio documentation: https://learn.microsoft.com/microsoft-copilot-studio/
-- Azure AI Foundry documentation: https://learn.microsoft.com/azure/ai-foundry/
+- Microsoft Foundry documentation: https://learn.microsoft.com/azure/foundry/
 - Microsoft 365 Copilot documentation: https://learn.microsoft.com/microsoft-365-copilot/
 - Microsoft Fabric documentation: https://learn.microsoft.com/fabric/
 - Microsoft Purview governance overview: https://learn.microsoft.com/purview/governance-solutions-overview
@@ -146,7 +146,7 @@ flowchart TD
 #### Official Microsoft sources for architecture justification
 
 - Microsoft Copilot Studio documentation: https://learn.microsoft.com/microsoft-copilot-studio/
-- Azure AI Foundry documentation: https://learn.microsoft.com/azure/ai-foundry/
+- Microsoft Foundry documentation: https://learn.microsoft.com/azure/foundry/
 - Microsoft 365 Copilot documentation: https://learn.microsoft.com/microsoft-365-copilot/
 - Microsoft Fabric documentation: https://learn.microsoft.com/fabric/
 - Microsoft Purview governance overview: https://learn.microsoft.com/purview/governance-solutions-overview

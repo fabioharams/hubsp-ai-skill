@@ -2,25 +2,28 @@
 
 ### 🎯 How the layers connect
 
-This architecture connects experience, orchestration, data semantics, web context and analytics platform in a single, governed flow.
+This architecture connects channels, complementary Microsoft IQ context workloads, agent orchestration and the analytics platform in a single, governed flow.
 
-1. **Work IQ** receives user intent in work interfaces (Copilot, Teams, M365 apps).
-2. **Foundry IQ** interprets the intent, plans execution and coordinates agents, tools and workflows.
-3. **Fabric IQ** translates the question into the corporate semantic context (metrics, entities and business rules).
-4. **Web IQ** supplements grounding with up-to-date external evidence (web, news and multimedia) when the case requires market context.
-5. **Microsoft Fabric** delivers governed data for analytical execution and response grounding.
-6. **Guard Rails** and **Evaluators** act cross-cuttingly: one controls risk and access, the other measures quality and feeds continuous improvement.
+1. **Copilot, Teams and business apps** receive user intent through familiar channels.
+2. **Work IQ** supplies Microsoft 365 work context such as emails, chats, files, meetings and workflows.
+3. **Foundry IQ** supplies permission-aware enterprise knowledge through knowledge bases and agentic retrieval.
+4. **Fabric IQ** translates the question into corporate semantic context such as metrics, entities and business rules.
+5. **Web IQ** supplements grounding with current external evidence when the case requires public context.
+6. **Microsoft Foundry Agent Service, Copilot Studio or Microsoft Agent Framework** plans and executes the agent flow.
+7. **Microsoft Fabric** delivers governed analytical data.
+8. **Guard Rails** and **Evaluators** act cross-cuttingly: one controls risk and access, the other measures quality and feeds continuous improvement.
 
 ### 🧩 Consolidated diagram (Mermaid)
 
 ```mermaid
 flowchart TD
-    U[Usuario e Copilot\nWork IQ] --> A[Orquestracao de agentes\nFoundry IQ]
-    A --> B[Semantica e contexto\nFabric IQ]
-    A --> W[Grounding web externo\nWeb IQ]
+    U[Usuario\nCopilot Teams Apps] --> A[Agent runtime\nFoundry Agent Service\nCopilot Studio]
+    Q[Work IQ\nContexto de trabalho] --> A
+    K[Foundry IQ\nConhecimento corporativo] --> A
+    B[Fabric IQ\nSemantica de negocio] --> A
+    W[Web IQ\nContexto web externo] --> A
     B --> C[Dados governados\nMicrosoft Fabric]
-    C --> A
-    W --> A
+    C --> B
     A --> R[Resposta ao usuario]
 
     G[Guard Rails\nidentidade acesso seguranca] --> A

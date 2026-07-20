@@ -5,22 +5,22 @@ Standardize how each AI interaction happens in production, with predictability o
 
 ### 🔄 Detailed operational flow
 
-1. **Intent input (Work IQ)**
+1. **Intent input (channels and experiences)**
 The user asks a question, requests an analysis or triggers a task in channels such as Copilot, Teams or M365 apps.
 
-2. **Interpretation and planning (Foundry IQ)**
+2. **Interpretation and planning (agent runtime)**
 The agent identifies intent, context and task scope. At this step, it decides whether to respond directly or invoke tools and data.
 
 3. **Policy validation (Guard Rails + Entra + Purview)**
 Before any sensitive access, the flow applies identity, authorization and classification controls.
 
-4. **Corporate grounding (Fabric IQ + Microsoft Fabric)**
-The agent queries governed data and corporate semantics to produce a response anchored in reliable information.
+4. **Organizational grounding (Microsoft IQ + Microsoft Fabric)**
+The agent selects Work IQ for work context, Foundry IQ for permission-aware enterprise knowledge and Fabric IQ + Microsoft Fabric for semantic and analytical business data.
 
 5. **Complementary external grounding (Web IQ, when applicable)**
 When the task requires market signals or recent public context, the flow incorporates web evidence with source traceability and a clear separation between internal and external data.
 
-6. **Reasoning and response composition (Foundry IQ)**
+6. **Reasoning and response composition (agent runtime)**
 With data and context, the agent synthesizes the final response in the format expected by the user.
 
 7. **Quality and security validation (Evaluators)**
@@ -36,14 +36,15 @@ Evaluation results and incidents feed the improvement backlog for prompts, tools
 
 ```mermaid
 flowchart TD
-    A[Usuario solicita acao\nWork IQ] --> B[Foundry IQ interpreta\ne planeja execucao]
+    A[Usuario solicita acao\nCopilot Teams Apps] --> B[Agent runtime interpreta\ne planeja execucao]
     B --> C{Precisa de dados\nou tools externas}
 
     C -->|nao| F[Gerar resposta direta]
     C -->|sim| D[Guard Rails validam\nidentidade acesso classificacao]
-    D --> E[Fabric IQ e Fabric\nfornecem contexto e dados]
+    D --> Q[Microsoft IQ seleciona\ncontexto autorizado]
+    Q --> E[Fabric IQ e Fabric\nfornecem contexto e dados]
     E --> W{Precisa contexto\nweb externo atualizado}
-    W -->|nao| F[Foundry IQ compoe\nresposta final]
+    W -->|nao| F[Agent runtime compoe\nresposta final]
     W -->|sim| X[Web IQ fornece\nevidencias externas]
     X --> F
 
@@ -60,10 +61,12 @@ flowchart TD
 
 ### 📌 Responsibilities by layer
 
-- **Work IQ**: end-user experience and productivity.
-- **Foundry IQ**: orchestration, decision and agent execution.
+- **Channels and experiences**: Copilot, Teams and apps through which users request and receive work.
+- **Work IQ**: contextual intelligence from Microsoft 365 work signals.
+- **Foundry IQ**: managed, permission-aware enterprise knowledge and agentic retrieval.
 - **Fabric IQ/Fabric**: semantic context and governed data.
 - **Web IQ**: near-real-time external context for complementary grounding.
+- **Agent runtime**: orchestration, reasoning, tool use, state and execution.
 - **Guard Rails**: identity, access and data risk protection.
 - **Evaluators**: objective measurement for continuous evolution.
 

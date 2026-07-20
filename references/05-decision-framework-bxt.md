@@ -77,8 +77,8 @@ Given the Phase 2 grouping, apply the criteria in order to choose the technology
 | Predominant scenario | Suggested choice | Rationale |
 |---|---|---|
 | Conversational business experience, low/medium complexity, low-code team | **Copilot Studio** | Lower time-to-market and native integration with Microsoft channels |
-| Advanced reasoning, complex integrations, pro-code engineering, multi-step/multi-agent | **Azure AI Foundry** | Greater technical control, evaluation and advanced orchestration |
-| Combined need for business UX + advanced intelligence/orchestration | **Mixed solution (Copilot Studio + Azure AI Foundry)** | Best balance between delivery speed and technical depth |
+| Advanced reasoning, complex integrations, pro-code engineering, multi-step/multi-agent | **Microsoft Foundry** | Greater technical control, evaluation and advanced orchestration |
+| Combined need for business UX + advanced intelligence/orchestration | **Mixed solution (Copilot Studio + Microsoft Foundry)** | Best balance between delivery speed and technical depth |
 
 **Triggers for adopting a mixed solution:**
 1. The case requires fast publication to business channels and also advanced reasoning/tool calling.
@@ -87,7 +87,7 @@ Given the Phase 2 grouping, apply the criteria in order to choose the technology
 
 **Official Microsoft sources:**
 - Microsoft Copilot Studio documentation: https://learn.microsoft.com/microsoft-copilot-studio/
-- Azure AI Foundry documentation: https://learn.microsoft.com/azure/ai-foundry/
+- Microsoft Foundry documentation: https://learn.microsoft.com/azure/foundry/
 - Microsoft 365 Copilot documentation: https://learn.microsoft.com/microsoft-365-copilot/
 - Cloud Adoption Framework for AI: https://learn.microsoft.com/azure/cloud-adoption-framework/scenarios/ai/
 

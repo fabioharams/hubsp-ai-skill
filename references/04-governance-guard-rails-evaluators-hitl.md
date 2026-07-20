@@ -11,7 +11,7 @@ Ensure safe, consistent and compliant agent behavior through layers of control t
 3. **After agent execution** (Output Validation) — analyzes the response before returning it to the user
 4. **Integrated with the data** (RLS + Purview Labels) — the data layer itself rejects unauthorized access
 
-**Official source:** [Azure AI Safety Guardrails](https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/safety-guardrails)
+**Official source:** [Default Guardrail policies for Azure OpenAI](https://learn.microsoft.com/azure/foundry/openai/concepts/default-safety-policies)
 
 ### ⚠️ Without Guard Rails
 
@@ -33,19 +33,19 @@ Ensure safe, consistent and compliant agent behavior through layers of control t
 | **RLS + Purview** | Data denies improper access at the source | ✓ Exfiltration significantly reduced (defense in depth) |
 | **Audit & Feedback Loop** | Every request/response recorded | ✓ Complete traceability |
 
-### 🧩 Guard Rails in a mixed solution (Copilot Studio + Azure AI Foundry)
+### 🧩 Guard Rails in a mixed solution (Copilot Studio + Microsoft Foundry)
 
 To stay consistent with this repository's target architecture, apply controls in both runtimes:
 
 1. **Business layer (Copilot Studio):** connector policies, Entra authentication, DLP and publishing governance per environment.
-2. **Advanced orchestration layer (Azure AI Foundry):** content safety, prompt shields, continuous evaluation, tracing and technical observability.
+2. **Advanced orchestration layer (Microsoft Foundry):** content safety, prompt shields, continuous evaluation, tracing and technical observability.
 3. **Data layer (Fabric/Purview):** classification, access control, retention and end-to-end auditing.
 
 **Rule of thumb:** in a mixed solution, no agent should access sensitive data without a combination of identity (Entra), policy (Purview/DLP) and output validation (guard rails + evaluators).
 
 **Official Microsoft sources:**
 - Microsoft Copilot Studio security and governance: https://learn.microsoft.com/microsoft-copilot-studio/security-and-governance
-- Azure AI Foundry responsible AI: https://learn.microsoft.com/azure/ai-foundry/responsible-ai/overview
+- Microsoft Foundry responsible AI: https://learn.microsoft.com/azure/foundry/responsible-use-of-ai-overview
 - Azure AI Content Safety: https://learn.microsoft.com/azure/ai-services/content-safety/
 - Microsoft Purview governance overview: https://learn.microsoft.com/purview/governance-solutions-overview
 
@@ -205,7 +205,7 @@ According to Microsoft's official documentation, **Microsoft Entra Agent ID** is
 
 In practice, each agent gains its own corporate identity, with authentication, authorization, governance and auditing, instead of relying on shared credentials.
 
-> Important note: at this time, Entra Agent ID is in **Preview**.
+> Availability note (July 2026): the **Microsoft Entra Agent ID platform is generally available**. Individual capabilities under Conditional Access, Identity Protection, identity governance and network controls can have different availability states. Verify each required capability before approving a production design.
 
 ### 🧱 Key concepts (based on Microsoft Learn)
 
@@ -266,7 +266,7 @@ flowchart LR
 ### 🔗 Microsoft sources (official)
 
 - https://learn.microsoft.com/entra/agent-id/what-is-microsoft-entra-agent-id
-- https://learn.microsoft.com/entra/agent-id/agent-identities
+- https://learn.microsoft.com/entra/agent-id/what-are-agent-identities
 - https://learn.microsoft.com/entra/identity/conditional-access/agent-id
 
 ### 📣 Insight
@@ -394,6 +394,7 @@ Observe, govern and protect all of the organization's agents from a single centr
 
 ### 🔎 What it is
 - According to Microsoft, **Agent 365** is the corporate control plane for AI agents.
+- Microsoft Agent 365 became generally available for commercial customers on **May 1, 2026** and is licensed per user.
 - The focus is not on building the agent, but on **operating at scale**: observing, governing and protecting.
 - It unifies the agent inventory in the Microsoft 365 admin center (Registry), while Entra remains the identity foundation (Agent ID).
 - It covers Microsoft agents, partner agents and custom agents connected to the ecosystem.
@@ -453,17 +454,15 @@ flowchart LR
 
 ### 📦 Required components (and how they connect)
 
-Microsoft indicates that Agent 365 can be enabled without a specific mandatory technical prerequisite, but to get full governance and security value the following components are necessary/recommended:
+At least one user needs a qualifying Agent 365 license to enable Agent 365. Microsoft positions Microsoft 365 E5 as the preferred prerequisite; Microsoft 365 E7 includes Agent 365 and Microsoft Entra Suite. The following components determine the effective governance and security coverage:
 
 1. **Agent 365 base licensing**
 1.1. Agent 365 is licensed per user.
-1.2. Entra Agent ID is part of Agent 365; agents do not require their own separate license when acting on behalf of a licensed user.
+1.2. As of **July 1, 2026**, Agent 365-eligible licensing is required for the covered security capabilities for Copilot Studio and Microsoft Foundry agents that were previously provided through Defender products.
 
 2. **Microsoft Entra Agent ID (agent identity)**
-2.1. Necessary for strong identity, an authentication trail and access policies.
-2.2. For advanced features, additional licenses per capability come into play:
-2.2.1. Conditional Access for agents: Entra ID P1 / M365 E3.
-2.2.2. ID Protection and ID Governance for agents: Entra ID P2 / M365 E5 / Entra Suite.
+2.1. Agent ID is the distinct identity foundation and is available to Microsoft Entra customers; it is not merely an Agent 365 subfeature.
+2.2. Extending Entra security features to agents requires Microsoft 365 E7, or Microsoft 365 E5 paired with Agent 365. With Agent 365, standalone capability requirements include Entra ID P1 for Conditional Access and identity governance, Entra ID P2 for Identity Protection, and Microsoft Entra Internet Access for network controls.
 
 3. **Microsoft Purview (data and compliance)**
 3.1. Recommended for classification, labels, DLP and auditing.
@@ -473,7 +472,7 @@ Microsoft indicates that Agent 365 can be enabled without a specific mandatory t
 4.1. Necessary to detect and respond to suspicious behavior of running agents.
 
 5. **Administrative roles (RBAC)**
-5.1. For broad visibility in Agent 365 and Entra Agent ID, use appropriate read/manage roles (e.g., AI Reader for viewing and Agent ID Administrator for identity administration).
+5.1. Use the least-privilege roles documented for each administrative surface; use Agent ID Administrator for agent identity administration and the relevant Microsoft 365, Purview, Defender or Conditional Access role for each control.
 5.2. For specific policies, dedicated roles are required (e.g., Conditional Access Administrator).
 
 6. **Entra authentication on the agents**
@@ -504,10 +503,9 @@ Microsoft indicates that Agent 365 can be enabled without a specific mandatory t
 - https://learn.microsoft.com/microsoft-agent-365/overview
 - https://learn.microsoft.com/microsoft-365/admin/manage/agent-registry
 - https://learn.microsoft.com/entra/agent-id/agent-registry-convergence
-- https://learn.microsoft.com/entra/agent-id/manage-agent-identities-admin
 - https://learn.microsoft.com/entra/agent-id/what-is-microsoft-entra-agent-id
-- https://learn.microsoft.com/security/security-for-ai/agent-365-security
-- https://learn.microsoft.com/microsoft-agent-365/admin/agent-template
+- https://learn.microsoft.com/defender-xdr/security-for-ai/transition-agent-security-to-agent-365
+- https://learn.microsoft.com/purview/ai-agent-365
 
 ### 📣 Insight
 > "You can't govern what you can't see. Agent 365 is what makes the agent ecosystem visible, controlled and secure at scale"
@@ -596,7 +594,7 @@ flowchart TD
 
 1. A test dataset in CSV or JSONL, or a target (model/agent) to evaluate.
 2. An Azure OpenAI connection with a GPT deployment for AI-assisted quality evaluations.
-3. The **Azure AI User** role on the Foundry project.
+3. The **Foundry User** role on the Foundry project.
 4. For continuous monitoring in production: integration with Azure Monitor/Application Insights.
 5. For production, prioritize the continuous evaluation flow in the new Microsoft Foundry portal; when using classic/documentation, consider the preview resource limitations.
 
@@ -613,10 +611,9 @@ flowchart TD
 
 ### 🔗 Microsoft sources (official)
 
-- https://learn.microsoft.com/azure/ai-foundry/concepts/observability
-- https://learn.microsoft.com/azure/ai-foundry/concepts/built-in-evaluators
-- https://learn.microsoft.com/azure/ai-foundry/how-to/develop/evaluate-sdk
-- https://learn.microsoft.com/azure/ai-foundry/how-to/evaluate-generative-ai-app
+- https://learn.microsoft.com/azure/foundry/concepts/observability
+- https://learn.microsoft.com/azure/foundry/responsible-use-of-ai-overview
+- https://learn.microsoft.com/azure/foundry/observability/how-to/how-to-monitor-agents-dashboard
 - https://learn.microsoft.com/azure/foundry/observability/how-to/how-to-monitor-agents-dashboard#set-up-continuous-evaluation
 - https://learn.microsoft.com/azure/foundry-classic/how-to/continuous-evaluation-agents (preview/classic)
 
@@ -766,7 +763,7 @@ flowchart LR
 
 | Tool | Role in HITL |
 |------------|--------------|
-| **Azure AI Foundry** | Define breakpoints in the agent's workflow; integrate human approval via a custom tool call |
+| **Microsoft Foundry** | Define breakpoints in the agent's workflow; integrate human approval via a custom tool call |
 | **Power Automate** | Orchestrate human approvals with a notification flow and an approve/reject button |
 | **Microsoft Teams** | Notification channel for the human reviewer; Adaptive Cards with approve/reject/edit actions |
 | **Azure Logic Apps** | Pause/resume webhook for the agent awaiting a human response |

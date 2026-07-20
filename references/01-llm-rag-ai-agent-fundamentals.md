@@ -136,7 +136,7 @@ flowchart TB
 
 ### 🧠 LLM — the language model
 
-**What it is.** A model trained on a large volume of text that generates natural language by predicting the most likely continuation. It is the foundation ("brain") of all subsequent patterns — and, in this architecture, the reasoning engine hosted in the **Foundry IQ** layer.
+**What it is.** A model trained on a large volume of text that generates natural language by predicting the most likely continuation. It is the reasoning engine used by the selected agent runtime or direct model application. **Foundry IQ is a knowledge workload, not the model runtime.**
 
 **Characteristics.** Knowledge frozen at training time (*knowledge cutoff*); no persistent memory between conversations; can **hallucinate** (plausible but incorrect statements); does not access external tools or systems on its own.
 
@@ -144,7 +144,7 @@ flowchart TB
 
 ### 📚 RAG — retrieval-augmented generation
 
-**What it is.** A technique that **grounds** the LLM's responses in proprietary data, rather than relying solely on what the model learned in training. In this architecture, RAG is enabled by the **Fabric IQ** + **Microsoft Fabric** layer, which provides governed data and the searchable index.
+**What it is.** A technique that **grounds** the LLM's responses in proprietary data, rather than relying solely on what the model learned in training. In this architecture, RAG can use **Foundry IQ** knowledge bases for managed agentic retrieval, **Fabric IQ + Microsoft Fabric** for semantic and analytical business context, and other governed indexes when appropriate.
 
 **The three steps (Microsoft definition).**
 
@@ -152,13 +152,13 @@ flowchart TB
 2. **Augmentation:** the supporting data is combined with the user's request, typically via an instructions *template*, forming the *prompt*.
 3. **Generation:** the *prompt* is sent to the LLM, which generates the grounded response.
 
-**Microsoft-validated benefits.** Incorporates **proprietary knowledge**; delivers **up-to-date information** (bypasses *knowledge cutoff*); allows **citing sources** (factual verification); and retrieval can respect **access controls (ACL)** by user credential — exactly what Purview labels and Fabric RLS guarantee in this architecture.
+**Microsoft-validated benefits.** Incorporates **proprietary knowledge**; delivers **up-to-date information** (bypasses *knowledge cutoff*); allows **citing sources** (factual verification); and retrieval can enforce user permissions for supported sources. ACL synchronization, Purview label handling and Fabric RLS are capability-specific controls, not a universal guarantee across every source.
 
 **RAG vs. Fine-tuning.** Choose **RAG** for dynamic content, broad topic coverage and limited training resources. Choose **fine-tuning** for performance on a very specific task, control over proprietary data and stable content.
 
 ### 🤖 AI Agent — single agent with tools
 
-**Definition (Microsoft).** An agent is an AI application that uses a generative model to **reason** about requests and **take autonomous actions** to fulfill them. Unlike a chatbot that only generates text, the agent calls tools, accesses external data and makes decisions across **multiple steps** — the role of the **Foundry IQ** layer.
+**Definition (Microsoft).** An agent is an AI application that uses a generative model to **reason** about requests and **take autonomous actions** to fulfill them. Unlike a chatbot that only generates text, the agent calls tools, accesses external data and makes decisions across **multiple steps**. This behavior belongs to an agent runtime such as Microsoft Foundry Agent Service, Copilot Studio or Microsoft Agent Framework.
 
 **The 5 components (Cloud Adoption Framework).** (1) Generative model — reasoning engine; (2) Instructions — scope, limits and rules; (3) Retrieval/Knowledge — *grounding* data; (4) Actions/Tools — functions, APIs and systems; (5) Memory — history and state (see section 18).
 
@@ -224,15 +224,16 @@ flowchart TD
 |---|---|---|
 | Personal and assistive productivity in the workflow | Lightweight LLM/RAG | Microsoft 365 Copilot |
 | Domain conversational automation with low/medium complexity | Single AI Agent | Copilot Studio |
-| Advanced reasoning, complex tool calling, multi-step and pro-code engineering | Advanced AI Agent / Agentic AI | Azure AI Foundry |
-| Business experience + advanced technical reasoning in the same case | Hybrid architecture | Copilot Studio + Azure AI Foundry |
+| Advanced reasoning, complex tool calling, multi-step and pro-code engineering | Advanced AI Agent / Agentic AI | Microsoft Foundry Agent Service / Microsoft Agent Framework |
+| Business experience + advanced technical reasoning in the same case | Hybrid architecture | Copilot Studio + Microsoft Foundry |
 
 **Practical rule:** when there is simultaneously a need for a business channel (Teams/web, low-code, fast cycle) and advanced technical orchestration (reasoning, complex tools, multi-agent), prioritize a **mixed solution**.
 
 **Official Microsoft sources:**
 - Microsoft 365 Copilot documentation: https://learn.microsoft.com/microsoft-365-copilot/
 - Microsoft Copilot Studio documentation: https://learn.microsoft.com/microsoft-copilot-studio/
-- Azure AI Foundry documentation: https://learn.microsoft.com/azure/ai-foundry/
+- Microsoft Foundry documentation: https://learn.microsoft.com/azure/foundry/
+- Foundry IQ documentation: https://learn.microsoft.com/azure/foundry/agents/concepts/what-is-foundry-iq
 
 ### ✅ Validation with official Microsoft sources
 
@@ -271,7 +272,7 @@ flowchart TD
 - **Knowledge cutoff:** the date limit of knowledge learned by the model during training.
 - **Fan-out/Fan-in:** concurrent pattern — distributes (fan-out) and aggregates (fan-in) results.
 
-> **Connection to this guide's layers:** the **LLM** is the reasoning engine in **Foundry IQ**; **RAG** materializes in the consumption of governed data from **Fabric IQ + Microsoft Fabric**; **AI Agent** and **Agentic AI** operate in **Foundry IQ**, with the experience delivered by **Work IQ** and controls applied by **Guard Rails** and **Evaluators**. The official sources underpinning this section are consolidated in section 15 and section 20.
+> **Connection to this guide's layers:** the **LLM** is the reasoning engine used by the application or agent runtime; **RAG** can consume Foundry IQ knowledge, Fabric IQ business context and governed data from Microsoft Fabric; **AI Agent** and **Agentic AI** execute in Foundry Agent Service, Copilot Studio or Agent Framework; Work IQ supplies Microsoft 365 context, while guard rails and evaluators apply cross-cutting controls.
 
 ---
 

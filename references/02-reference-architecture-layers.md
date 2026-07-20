@@ -4,19 +4,24 @@
 
 ```mermaid
 graph TD
-    A["<b>Work IQ</b><br/>(User Layer)<br/>─────────────────<br/>Copilot, Teams, Apps<br/>Consumption Interfaces"] 
-    B["<b>Foundry IQ</b><br/>(Agents Layer)<br/>─────────────────<br/>Agent Orchestration<br/>workflows, reasoning"]
+    X["<b>Experiences</b><br/>─────────────────<br/>Copilot, Teams, Apps<br/>Business channels"]
+    A["<b>Work IQ</b><br/>(Work Context)<br/>─────────────────<br/>Emails, chats, files<br/>meetings, workflows"]
+    B["<b>Foundry IQ</b><br/>(Enterprise Knowledge)<br/>─────────────────<br/>Knowledge bases<br/>agentic retrieval"]
     C["<b>Fabric IQ</b><br/>(Data Intelligence)<br/>─────────────────<br/>Semantics, ontology<br/>unified metrics"]
     W["<b>Web IQ</b><br/>(Web Context Layer)<br/>─────────────────<br/>Near-real-time web grounding<br/>external evidence"]
+    R["<b>Agent Runtime</b><br/>─────────────────<br/>Foundry Agent Service<br/>Copilot Studio / Agent Framework"]
     D["<b>Microsoft Fabric</b><br/>(Data Platform)<br/>─────────────────<br/>OneLake, Data Products<br/>Lakehouse, Warehouse"]
     
     E["🛡️ Guard Rails<br/>Control"]
     F["✅ Evaluators<br/>Quality"]
     
-    A --> B
-    B --> C
+    X --> R
+    A --> R
+    B --> R
+    C --> R
+    W --> R
     C --> D
-    W --> B
+    D --> C
     
     D -.-> E
     D -.-> F
@@ -25,6 +30,7 @@ graph TD
     style B fill:#7B68EE,stroke:#5A4DB0,color:#fff,stroke-width:2px
     style C fill:#50C878,stroke:#3A9B5C,color:#fff,stroke-width:2px
     style W fill:#00A3A3,stroke:#006D6D,color:#fff,stroke-width:2px
+    style R fill:#E85D04,stroke:#A33F00,color:#fff,stroke-width:2px
     style D fill:#FF6B6B,stroke:#CC5555,color:#fff,stroke-width:2px
     style E fill:#FFD93D,stroke:#CCB030,color:#333,stroke-width:2px
     style F fill:#6BCB77,stroke:#54A05F,color:#fff,stroke-width:2px
@@ -32,26 +38,36 @@ graph TD
 
 ### 🧠 Role of each layer
 
-#### 💼 **Work IQ (User Layer)**
-The end-user interface layer. Integrates **Microsoft 365 Copilot** into tools already used daily (Teams, Word, Outlook, Excel, PowerPoint). Its role is to:
-- Make AI invisible: users see results, not complexity
-- Provide user context: grounding with Microsoft Graph and SharePoint data
-- Initiate orchestration: routes complex requests to lower layers when necessary
-- Maintain a familiar experience: no new interfaces to train users on
+#### 💼 **Work IQ (Work Context)**
+The contextual intelligence workload for Microsoft 365. It captures how work happens across emails, chats, meetings, documents, people and workflows, subject to the user's identity and permissions. Its role is to:
+- Supply current work context to agents and copilots
+- Connect collaboration signals across Microsoft 365
+- Support knowledge and actions through Microsoft 365 tools
+- Preserve user-context and permission boundaries
 
 **Example:** An executive types "summarize this meeting" in Word — Copilot (Work IQ) fetches the transcript from OneDrive, summarizes it and inserts it into the document.
 
 ---
 
-#### 🤖 **Foundry IQ (Agents Layer)**
-The **agentic intelligence** layer — where decision logic, reasoning and orchestration happen. Hosted in **Microsoft Foundry** and **Copilot Studio**, its role is to:
+#### 📚 **Foundry IQ (Enterprise Knowledge)**
+The managed, permission-aware enterprise knowledge workload. It is backed by Azure AI Search knowledge bases and agentic retrieval. Its role is to:
 - Operate a permission-aware corporate knowledge base with structured and unstructured sources
 - Execute agentic retrieval: decomposes questions into sub-queries, parallel search and re-ranks evidence with citations
 - Sync ACLs and sensitivity labels (Purview) for enforcement at query time
-- Apply business logic and orchestrate tools/workflows in Foundry and Copilot Studio agents
 - Connect Azure, SharePoint, OneLake and web in the same enterprise grounding plane
 
-**Example:** An agent receives "analyze why the margin dropped" → executes tool call 1 (fetches financial data from Fabric) → tool call 2 (fetches industry benchmarks via MCP) → reasons over context → generates structured analysis.
+**Example:** An agent asks a shared knowledge base for the policies and authoritative documents relevant to a margin investigation. Foundry IQ plans retrieval, enforces supported source permissions and returns grounded evidence with citations.
+
+---
+
+#### 🤖 **Agent Runtime and Orchestration**
+The execution layer is separate from the IQ context workloads. Use **Microsoft Foundry Agent Service**, **Microsoft Copilot Studio** or **Microsoft Agent Framework** to:
+- Interpret intent and plan multi-step execution
+- Invoke models, knowledge sources, tools, MCP servers and other agents
+- Maintain conversation state and apply approval checkpoints
+- Trace, evaluate, version and operate agents
+
+**Example:** A Foundry agent receives "analyze why the margin dropped," retrieves policies through Foundry IQ, obtains governed metrics through Fabric IQ/Fabric, optionally adds external evidence through Web IQ, and composes a controlled response.
 
 ---
 
@@ -119,8 +135,9 @@ The **continuous measurement** layer that validates whether agents are operating
 
 ```mermaid
 flowchart TD
-    A["👤 User<br/><b>Work IQ Layer</b><br/>Requests natural action"]
-    B["🤖 Agent (Foundry IQ)<br/>Interprets and plans"]
+    A["👤 User<br/><b>Copilot / Teams / App</b><br/>Requests natural action"]
+    B["🤖 Agent Runtime<br/>Interprets and plans"]
+    K["📚 Microsoft IQ Context<br/>Work IQ | Foundry IQ<br/>Fabric IQ | Web IQ"]
     C{"🛡️ Guard Rails<br/>Validate permissions<br/>and security"}
     D["📞 Tool Call<br/>Agent fetches data"]
     E["📊 Fabric IQ<br/>Semantics: translates<br/>question → query"]
@@ -130,6 +147,8 @@ flowchart TD
     I["📤 Response<br/><b>Work IQ</b><br/>Delivered to user"]
     
     A -->|"requests"| B
+    B -->|"retrieves context"| K
+    K -->|"permission-aware evidence"| B
     B -->|"plans"| C
     C -->|"✅ approve"| D
     C -->|"❌ block"| Z["🚫 Access Denied<br/>+ Audit Log"]
@@ -155,25 +174,28 @@ flowchart TD
     style W fill:#FF9800,stroke:#E65100,color:#fff,stroke-width:2px
 ```
 
-**Insight:** Fabric provides the data truth foundation. Guard Rails help ensure only the right agents access the appropriate data. Evaluators reinforce response reliability. Foundry IQ and Work IQ enable the user to receive actionable value.
+**Insight:** Fabric provides the governed data foundation. Microsoft IQ supplies complementary work, knowledge, business and web context. The agent runtime plans and executes. Guard rails constrain behavior, and evaluators reinforce response reliability.
 
 ### 🧭 Adoption criteria: Copilot Studio, Foundry or mixed solution
 
 | Option | When to prioritize | Main limitation |
 |---|---|---|
 | **Copilot Studio** | Business domain with well-defined conversational flow, low/medium technical effort and fast delivery in channels like Teams/web | Less control for advanced reasoning scenarios and complex engineering |
-| **Azure AI Foundry** | Cases with deep technical integration, advanced tool calling, multi-step/multi-agent and need for pro-code control | Higher engineering and operational governance effort |
+| **Microsoft Foundry** | Cases with deep technical integration, advanced tool calling, multi-step/multi-agent and need for pro-code control | Higher engineering and operational governance effort |
 | **Mixed solution (Studio + Foundry)** | Corporate cases with simultaneous need for business experience + advanced orchestration | Requires more disciplined architecture and observability |
 
 **Recommended pattern for corporate target architecture:**
-1. Work IQ and channels at the front (experience).
+1. Copilot, Teams and business apps at the front (experience), with Work IQ supplying Microsoft 365 context.
 2. Copilot Studio in the conversational/domain orchestration layer.
-3. Azure AI Foundry at the reasoning core and complex integrations.
-4. Fabric IQ + Microsoft Fabric for governed data.
+3. Microsoft Foundry Agent Service or Microsoft Agent Framework at the reasoning and execution core.
+4. Work IQ, Foundry IQ, Fabric IQ and Web IQ as context workloads selected by need.
+5. Microsoft Fabric as the governed data platform.
 
 **Official Microsoft sources:**
 - Microsoft Copilot Studio documentation: https://learn.microsoft.com/microsoft-copilot-studio/
-- Azure AI Foundry documentation: https://learn.microsoft.com/azure/ai-foundry/
+- Microsoft Foundry documentation: https://learn.microsoft.com/azure/foundry/
+- Foundry IQ documentation: https://learn.microsoft.com/azure/foundry/agents/concepts/what-is-foundry-iq
+- Fabric IQ documentation: https://learn.microsoft.com/fabric/iq/overview
 - Microsoft 365 Copilot documentation: https://learn.microsoft.com/microsoft-365-copilot/
 - Microsoft Fabric documentation: https://learn.microsoft.com/fabric/
 
@@ -1691,7 +1713,7 @@ flowchart TD
 - [**Sensitivity Labels in Fabric**](https://learn.microsoft.com/fabric/governance/protected-sensitivity-labels) - Data classification with automatic protection
 - [**Row-Level Security in Fabric**](https://learn.microsoft.com/fabric/security/service-admin-row-level-security) - Data filtering by user/agent context
 - [**Data Governance with Purview**](https://learn.microsoft.com/azure/cloud-adoption-framework/data/governance-security-baselines-purview-data-estate-unify-data-platform) - Classification, governance and compliance
-- [**Audit Logging in Purview**](https://learn.microsoft.com/purview/compliance-portal) - Tracking and regulatory compliance
+- [**Audit Logging in Purview**](https://learn.microsoft.com/purview/audit-solutions-overview) - Tracking and regulatory compliance
 - ⏹️ **Conditional Access:** Approvals for sensitive data
 
 ### 📋 Technical Summary — From Raw Data to AI Insights

@@ -4,14 +4,14 @@
 
 The recommendation for harafaz.ia is to adopt a wave-based target architecture with a **single AI Agent with RAG grounding** as the initial pattern, evolving to **multi-agent Agentic AI** only in the flows that cross security boundaries, multiple domains or high orchestration complexity. This decision maximizes the speed of value capture in the short term (pilot in 8 weeks) and reduces operational risk by keeping HITL for sensitive cases, compliance and low confidence.
 
-Over the 12-18 month horizon, the combination **Work IQ + Foundry IQ + Fabric IQ + Web IQ** creates a scalable target architecture, with governed data, an audit trail and an objective basis for ROI/AAI. The explicit trade-off is: lower initial complexity (faster and cheaper) versus controlled expansion of autonomy (more potential value, greater demand for guard rails and evaluators).
+Over the 12-18 month horizon, the combination of **Microsoft IQ context workloads + an explicit agent runtime + Microsoft Fabric** creates a scalable target architecture, with governed data, an audit trail and an objective basis for ROI/AAI. The explicit trade-off is: lower initial complexity (faster and cheaper) versus controlled expansion of autonomy (more potential value, greater demand for guard rails and evaluators).
 
 ```mermaid
 flowchart LR
     A[Current problem<br/>fragmented channels and rework] --> B[Decision<br/>single AI Agent + RAG + HITL]
     B --> C[Short term<br/>pilot with SLA and FCR gains]
     C --> D[Medium term<br/>scaling via wave-based roadmap]
-    D --> E[Target architecture<br/>Work IQ + Foundry IQ + Fabric IQ + Web IQ]
+    D --> E[Target architecture<br/>Microsoft IQ + agent runtime + Fabric]
 
     style B fill:#0B6E4F,color:#fff
     style E fill:#1F4E79,color:#fff
@@ -64,38 +64,42 @@ Official Microsoft sources:
 
 - Azure OpenAI overview: https://learn.microsoft.com/azure/ai-services/openai/overview
 - RAG in Azure AI Search: https://learn.microsoft.com/azure/search/retrieval-augmented-generation-overview
-- Azure AI Foundry Agents: https://learn.microsoft.com/azure/ai-foundry/agents/overview
+- Microsoft Foundry Agent Service: https://learn.microsoft.com/azure/foundry/agents/overview
 - Microsoft AI Decision Framework (CAF AI): https://learn.microsoft.com/azure/cloud-adoption-framework/scenarios/ai/
 
 ---
 
-## 3) Target architecture (Work IQ, Foundry IQ, Fabric IQ and Web IQ)
+## 3) Target architecture (Microsoft IQ context, agent runtime and Fabric)
 
 ### 3.1 Layers and responsibilities
 
-- **Work IQ (experience):** business channels (Web, Teams, Email), conversational UX and assisted productivity.
-- **Foundry IQ (agents):** AI Agent orchestration, decision rules, tool calling, working memory and confidence assessment.
+- **Channels and experiences:** Copilot, Teams, web and business apps where users request and receive work.
+- **Work IQ (work context):** permission-aware Microsoft 365 context from emails, chats, files, meetings and workflows.
+- **Foundry IQ (enterprise knowledge):** reusable knowledge bases and permission-aware agentic retrieval over authoritative content.
 - **Fabric IQ (data intelligence):** corporate semantics, unified metrics, ontology, governed data and analytics.
 - **Web IQ (external context):** controlled enrichment with current public context when needed (e.g., public regulatory references and market signals).
+- **Agent runtime:** reasoning, orchestration, tool calling, state and execution through Foundry Agent Service, Copilot Studio or Agent Framework.
 - **Cross-cutting controls:** guard rails, evaluators, Entra ID, Purview, DLP, auditing, HITL.
 
 ### 3.2 Architecture diagram (mandatory)
 
 ```mermaid
 flowchart TB
-    U[Internal users / network] --> WQ[Work IQ<br/>Teams Web Email]
-    WQ --> FQ[Foundry IQ<br/>AI Agent + Orchestration]
-    FQ --> FBQ[Fabric IQ<br/>Semantics + Governed data]
+    U[Internal users / network] --> CH[Copilot Teams Web Apps]
+    CH --> RT[Agent runtime<br/>Foundry Agent Service / Copilot Studio]
+    WQ[Work IQ<br/>Work context] --> RT
+    FQ[Foundry IQ<br/>Enterprise knowledge] --> RT
+    FBQ[Fabric IQ<br/>Semantics + Governed data] --> RT
     FBQ --> FAB[Microsoft Fabric<br/>OneLake Lakehouse Warehouse]
-    WEB[Web IQ<br/>Controlled external context] --> FQ
+    WEB[Web IQ<br/>Controlled external context] --> RT
 
-    GR[Guard rails<br/>Entra RBAC DLP Purview] -.-> WQ
+    GR[Guard rails<br/>Entra RBAC DLP Purview] -.-> RT
     GR -.-> FQ
     GR -.-> FBQ
-    EV[Evaluators<br/>groundedness quality risk] -.-> FQ
-    HITL[HITL<br/>human approval] -.-> FQ
+    EV[Evaluators<br/>groundedness quality risk] -.-> RT
+    HITL[HITL<br/>human approval] -.-> RT
 
-    style FQ fill:#0B6E4F,color:#fff
+    style RT fill:#0B6E4F,color:#fff
     style FBQ fill:#1F4E79,color:#fff
     style WEB fill:#6B4F9B,color:#fff
 ```
@@ -126,7 +130,9 @@ flowchart TD
 Official Microsoft sources:
 
 - Microsoft 365 Copilot: https://learn.microsoft.com/microsoft-365-copilot/
-- Azure AI Foundry: https://learn.microsoft.com/azure/ai-foundry/
+- Microsoft Foundry: https://learn.microsoft.com/azure/foundry/
+- Foundry IQ: https://learn.microsoft.com/azure/foundry/agents/concepts/what-is-foundry-iq
+- Fabric IQ: https://learn.microsoft.com/fabric/iq/overview
 - Microsoft Fabric: https://learn.microsoft.com/fabric/
 
 ---
@@ -164,7 +170,7 @@ Official Microsoft sources:
 
 - Microsoft Entra: https://learn.microsoft.com/entra/identity/
 - Microsoft Purview governance: https://learn.microsoft.com/purview/governance-solutions-overview
-- Responsible AI in Azure AI Foundry: https://learn.microsoft.com/azure/ai-foundry/responsible-ai/overview
+- Responsible AI in Microsoft Foundry: https://learn.microsoft.com/azure/foundry/responsible-use-of-ai-overview
 - Azure AI Content Safety: https://learn.microsoft.com/azure/ai-services/content-safety/
 
 ---
@@ -282,7 +288,7 @@ Official Microsoft sources:
 
 | Risk | Impact | Probability | Warning sign | Recommended mitigation | Microsoft reference |
 |---|---|---|---|---|---|
-| Insufficient knowledge base quality | Wrong answer and rework | Medium/High | Drop in groundedness and increase in reopenings | Continuous curation, versioning and per-topic evaluator | https://learn.microsoft.com/azure/ai-foundry/responsible-ai/overview |
+| Insufficient knowledge base quality | Wrong answer and rework | Medium/High | Drop in groundedness and increase in reopenings | Continuous curation, versioning and per-topic evaluator | https://learn.microsoft.com/azure/foundry/responsible-use-of-ai-overview |
 | Improper access to sensitive data | Security/compliance incident | Medium | Access attempts outside the profile | Entra ID, RBAC, Purview labels, DLP and auditing | https://learn.microsoft.com/entra/identity/ |
 | Unstable legacy integrations | Delay and operational unavailability | Medium | High timeout and sync failure | Wave-based strategy, fallback, observability and SLO | https://learn.microsoft.com/azure/well-architected/operational-excellence/ |
 | Excessive automation without HITL | Incorrect critical decision | Low/Medium | Late escalation in risk cases | Mandatory HITL for exceptions and low confidence | https://learn.microsoft.com/azure/well-architected/security/ |

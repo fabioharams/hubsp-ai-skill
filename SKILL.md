@@ -1,11 +1,11 @@
 ---
 name: hubsp-ai-skill
-summary: "Guides the definition of corporate architecture for AI agent adoption with Microsoft IQ, Fabric and Foundry, including Work IQ, Foundry IQ, Fabric IQ and Web IQ, architecture fundamentals (LLM, RAG, AI Agent, Agentic AI), ROI model (AI vs. person-hour), governance, security, guard rails and continuous evaluation."
-description: "Skill for guiding AI agent adoption strategy in the Microsoft ecosystem, including target architecture, governance, ROI, security and regulatory compliance."
+summary: "Guides corporate AI agent adoption with Microsoft IQ context workloads, Microsoft Foundry and Fabric, including Work IQ, Foundry IQ, Fabric IQ and Web IQ, agent runtimes, architecture fundamentals, ROI, governance, security, guard rails and continuous evaluation."
+description: "Skill for guiding AI agent adoption strategy in the Microsoft ecosystem, including context architecture, agent runtime selection, governance, ROI, security and regulatory compliance."
 license: MIT
 metadata:
   author: Fabio
-  version: "1.2.0"
+  version: "1.3.0"
   language: en-US
 ---
 
@@ -26,7 +26,7 @@ This skill helps structure practical recommendations for adopting AI agents in c
 ## Use When
 
 - The user asks for an AI agent adoption strategy.
-- The user wants to design architecture with Work IQ, Foundry IQ and Fabric IQ, including external context via Web IQ when applicable.
+- The user wants to design architecture with Work IQ, Foundry IQ and Fabric IQ, including external context via Web IQ and an explicit agent runtime when applicable.
 - The user needs to understand or compare LLM, RAG, AI Agent and Agentic AI patterns.
 - The user wants to decide the minimum level of complexity for a use case.
 - The user needs to connect AI with data governance and security.
@@ -57,8 +57,9 @@ If critical information is missing, ask only for the minimum necessary before re
 2. Choose the architectural pattern by the lowest level of complexity that reliably solves it: LLM (text, one step), RAG (data-grounded response), single AI Agent (multi-step task, one domain) or Agentic AI multi-agent (crosses security boundaries, multiple teams or expected growth).
 2.1. When the request involves choosing a Microsoft technology/product, apply the Microsoft AI Decision Framework (references/05-decision-framework-bxt.md): Intake Filter, BXT (Business/Experience/Technology), the 9 critical questions and scenario-based selection.
 3. Map data sources and current governance level.
-4. Define layer separation: experience (Work IQ), agents (Foundry IQ), data intelligence (Fabric IQ), external context (Web IQ, when necessary) and platform (Microsoft Fabric).
-4.1. When the case requires it, recommend a **mixed solution**: Copilot Studio for the conversational/business flow layer and Microsoft Foundry for the reasoning/advanced orchestration layer.
+4. Define layer separation: channels and experiences; context workloads (Work IQ, Foundry IQ, Fabric IQ and Web IQ when necessary); agent runtime (Microsoft Foundry Agent Service, Copilot Studio or Microsoft Agent Framework); and data platform (Microsoft Fabric).
+4.1. Treat the IQs as complementary context sources, not interchangeable execution layers: Work IQ supplies Microsoft 365 work context; Foundry IQ supplies permission-aware enterprise knowledge through knowledge bases and agentic retrieval; Fabric IQ supplies semantic business context; Web IQ supplies current external web context.
+4.2. When the case requires it, recommend a **mixed solution**: Copilot Studio for low-code business orchestration and channels, Microsoft Foundry Agent Service or Microsoft Agent Framework for pro-code reasoning and advanced orchestration, and the appropriate IQ workloads for grounding.
 5. Define cross-cutting controls: Guard Rails and Evaluators.
 5.1. When the request involves regulation, compliance or adherence to legal requirements, map the regulatory axes to Microsoft's technical and governance capabilities, without asserting automatic legal compliance.
 6. Validate financial viability with the ROI model (AAI = human cost / AI cost per task), including HITL, amortized setup and scope multiplier; evaluate over a 12-18 month horizon.
@@ -99,19 +100,24 @@ If critical information is missing, ask only for the minimum necessary before re
   - Microsoft references:
     - Azure OpenAI: https://learn.microsoft.com/azure/ai-services/openai/overview
     - RAG on Azure AI Search: https://learn.microsoft.com/azure/search/retrieval-augmented-generation-overview
-    - Azure AI Foundry Agent Service: https://learn.microsoft.com/azure/ai-foundry/agents/overview
+    - Microsoft Foundry Agent Service: https://learn.microsoft.com/azure/foundry/agents/overview
     - Microsoft AI Decision Framework: https://learn.microsoft.com/azure/cloud-adoption-framework/scenarios/ai/
 
 - Recommended architecture (layers and responsibilities) with detailed explanation
-  - Describe roles and boundaries of Work IQ, Foundry IQ, Fabric IQ and Web IQ, including how they connect to governed data and cross-cutting controls.
-  - Explain responsibilities per layer (experience/channels, agent orchestration, data/analytics, external context).
+  - Describe roles and boundaries of Work IQ, Foundry IQ, Fabric IQ and Web IQ, including how they connect to governed data, the selected agent runtime and cross-cutting controls.
+  - Explain responsibilities per layer (experience/channels, context sources, agent runtime/orchestration, data platform and cross-cutting controls).
+  - Do not describe Foundry IQ as the agent runtime. Foundry IQ is the managed enterprise knowledge layer; Microsoft Foundry Agent Service, Copilot Studio or Microsoft Agent Framework performs orchestration and execution.
   - Required to include:
     - 1 Mermaid architecture diagram (layers and main flows).
     - 1 Mermaid flowchart (routing decision: self-service, escalation, HITL).
   - Diagrams must be simple, readable and decision-oriented for executive audiences.
   - Microsoft references:
     - Microsoft 365 Copilot: https://learn.microsoft.com/microsoft-365-copilot/
-    - Azure AI Foundry: https://learn.microsoft.com/azure/ai-foundry/
+    - Microsoft Foundry: https://learn.microsoft.com/azure/foundry/
+    - Microsoft Foundry Agent Service: https://learn.microsoft.com/azure/foundry/agents/overview
+    - Microsoft IQ: https://learn.microsoft.com/microsoft-iq/
+    - Foundry IQ: https://learn.microsoft.com/azure/foundry/agents/concepts/what-is-foundry-iq
+    - Fabric IQ: https://learn.microsoft.com/fabric/iq/overview
     - Microsoft Fabric: https://learn.microsoft.com/fabric/
 
 - Governance and security (controls)
@@ -124,7 +130,9 @@ If critical information is missing, ask only for the minimum necessary before re
   - Microsoft references:
     - Microsoft Entra: https://learn.microsoft.com/entra/identity/
     - Microsoft Purview: https://learn.microsoft.com/purview/governance-solutions-overview
-    - Responsible AI in Azure AI Foundry: https://learn.microsoft.com/azure/ai-foundry/responsible-ai/overview
+    - Responsible AI in Microsoft Foundry: https://learn.microsoft.com/azure/foundry/responsible-use-of-ai-overview
+    - Microsoft Agent 365: https://learn.microsoft.com/microsoft-agent-365/overview
+    - Microsoft Entra Agent ID: https://learn.microsoft.com/entra/agent-id/what-is-microsoft-entra-agent-id
     - Microsoft Security: https://learn.microsoft.com/security/
     - Well-Architected Framework - Security: https://learn.microsoft.com/azure/well-architected/security/
 
@@ -166,7 +174,7 @@ If critical information is missing, ask only for the minimum necessary before re
 Load only the reference file needed for the question (progressive disclosure):
 
 - references/01-llm-rag-ai-agent-fundamentals.md — LLM vs RAG vs AI Agent vs Agentic AI; complexity spectrum and decision guide.
-- references/02-reference-architecture-layers.md — Microsoft IQ (Work IQ, Foundry IQ, Fabric IQ, Web IQ) and Microsoft Fabric; technical specifications per layer.
+- references/02-reference-architecture-layers.md — Microsoft IQ context workloads (Work IQ, Foundry IQ, Fabric IQ and Web IQ), agent runtimes and Microsoft Fabric; technical specifications per layer.
 - references/03-roi-ai-vs-man-hour.md — ROI/AAI model, HITL, scope multiplier.
 - references/04-governance-guard-rails-evaluators-hitl.md — Guard Rails, Evaluators and Human-in-the-Loop.
 - references/05-decision-framework-bxt.md — Microsoft AI Decision Framework: Intake Filter, BXT, 9 critical questions, Capability Model and technology selection by scenario.
