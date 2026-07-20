@@ -33,9 +33,9 @@ Ensure safe, consistent and compliant agent behavior through layers of control t
 | **RLS + Purview** | Data denies improper access at the source | ✓ Exfiltration significantly reduced (defense in depth) |
 | **Audit & Feedback Loop** | Every request/response recorded | ✓ Complete traceability |
 
-### 🧩 Guard Rails in a mixed solution (Copilot Studio + Microsoft Foundry)
+### 🧩 Guard Rails across the selected runtime boundary
 
-To stay consistent with this repository's target architecture, apply controls in both runtimes:
+Apply controls in the platform or hosted application selected by the low-complexity-first assessment. If a mixed Copilot Studio + Microsoft Foundry architecture is independently justified, apply controls at both runtime boundaries:
 
 1. **Business layer (Copilot Studio):** connector policies, Entra authentication, DLP and publishing governance per environment.
 2. **Advanced orchestration layer (Microsoft Foundry):** content safety, prompt shields, continuous evaluation, tracing and technical observability.
@@ -175,10 +175,10 @@ sequenceDiagram
 > **"Fabric sustains the truth of the data, Guard Rails guide behavior"**
 
 **Translation:**
-- Fabric stores governed and consistent data (sections 5, 7)
-- Guard Rails help ensure that agents use this truth in a safe, legal and auditable way
-- Without Fabric: Guard Rails need to block many requests (false positives)
-- With Fabric: Guard Rails work in tandem with clean data (fewer blocks, more efficiency)
+- The selected governed authority supplies authorized, quality-controlled data; Fabric is optional when analytical consolidation or shared semantics is required
+- Guard rails help agents use authorized data in a policy-compliant and auditable way
+- Data quality and source authorization reduce unsafe or unreliable context regardless of the selected data platform
+- Guard rails complement source controls; they do not compensate for missing data governance
 
 ---
 
@@ -199,7 +199,7 @@ In practice, each agent gains its own corporate identity, with authentication, a
 
 1. **Agent identity**: the identity used by the agent to authenticate and receive tokens.
 2. **Agent identity blueprint**: a reusable template that defines security standards and metadata for multiple agent identities.
-3. **No local credential on the agent**: the agent's identity does not store its own password/secret; the blueprint acquires the token on the agent's behalf.
+3. **Managed token acquisition**: use the supported blueprint/agent identity token flow and prefer managed credentials or workload identity federation. Avoid long-lived secrets; exact credential behavior depends on the hosting and integration pattern.
 4. **Scale and consistency**: policies can be applied per blueprint, reducing manual operation across hundreds of agents.
 5. **Native auditing**: authentications and activities are recorded in Entra logs for compliance and investigation.
 
@@ -351,7 +351,7 @@ With Purview, the organization can demonstrate controls for frameworks like LGPD
 1. Define a corporate label taxonomy before scaling agents (Public, Internal, Confidential, Highly Confidential).
 2. Prioritize automatic classification for critical sources and review false positives with data governance.
 3. Tie DLP policies to labels to block exfiltration (email, chat, endpoints and cloud apps).
-4. Integrate Purview audit signals into the Evaluators (section 9) to measure safe agent behavior.
+4. Integrate applicable Purview audit signals into [Evaluators](#-9-evaluators-quality-and-evolution) to measure safe agent behavior.
 5. Adopt periodic review of policies and permissions to avoid compliance drift.
 6. For highly sensitive data, combine default blocking + HITL for any agent flow.
 
@@ -378,7 +378,7 @@ With Purview, the organization can demonstrate controls for frameworks like LGPD
 ## 🎛️ 8.3. Microsoft Agent 365 — The Agent Control Plane
 
 ### 🎯 Objective
-Observe, govern and protect all of the organization's agents from a single centralized control plane
+Observe, govern and protect supported, discovered or onboarded agents through a centralized control plane, with coverage validated by agent type and integration
 
 ### 🔎 What it is
 - According to Microsoft, **Agent 365** is the corporate control plane for AI agents.
@@ -469,7 +469,7 @@ At least one user needs a qualifying Agent 365 license to enable Agent 365. Micr
 
 ### ✅ Minimum checklist for organizational deployment
 
-1. Enable Agent 365 on the tenant and validate the Registry view.
+1. Confirm the qualifying license, supported agent coverage and administrative prerequisites; record a **Fit**, **Conditional fit** or **Not fit** verdict before enabling Agent 365 for the target scope.
 2. Ensure that new agents receive an Agent ID during onboarding.
 3. Apply a standard template with Entra + Purview + Defender controls.
 4. Enable DLP/auditing for workloads with sensitive data.
@@ -640,7 +640,7 @@ Use HITL when one or more of the conditions below apply:
 - **Highly confidential data**: PII, sensitive financial data, industrial secrets
 - **High regulatory-risk domain**: healthcare, legal, financial, HR — where errors create legal liability
 - **High semantic ambiguity**: the user's intent can be interpreted in multiple ways and the wrong choice has consequences
-- **Model confidence below the threshold**: the agent returns a low confidence score or expresses uncertainty
+- **Quality or risk signal below an evaluated threshold**: use calibrated task evidence, policy checks or explicit uncertainty; do not treat a model-generated confidence number as inherently reliable
 - **New action or no history**: the first time the agent executes a type of task in production
 - **Organizational approval required**: a business workflow that requires a signature or formal authorization
 
@@ -662,9 +662,9 @@ Avoid HITL when:
 
 | | HITL active | HITL absent (full autonomy) |
 |---|---|---|
-| **Security** | ✅ High — human intercepts critical errors | ⚠️ Depends 100% on the model's robustness |
+| **Security** | ✅ Adds human control at selected decision points | ⚠️ Depends on identity, authorization, guard rails, tool boundaries, monitoring and tested model behavior |
 | **Speed** | ⚠️ Reduced — human latency in the loop | ✅ High — no friction |
-| **Scalability** | ⚠️ Limited by human time and availability | ✅ Unlimited |
+| **Scalability** | ⚠️ Limited by human time and availability | ✅ Removes the human-review bottleneck, but remains bounded by quotas, downstream capacity, latency, reliability and cost |
 | **Traceability** | ✅ Auditable human decision | ⚠️ Only automated logs |
 | **Organizational trust** | ✅ Greater adoption by conservative stakeholders | ⚠️ Greater initial resistance |
 | **Operational cost** | ⚠️ Higher — requires people's time | ✅ Lower — low marginal cost |
@@ -782,12 +782,14 @@ flowchart TD
 
 1. **Phase 1 (Pilot)**: use broad HITL — every write or external-send action requires human approval
 2. **Phase 2 (Expansion)**: progressively reduce HITL as confidence is validated by evaluators in production
-3. **Phase 3 (Maturity)**: HITL reserved for high-risk cases configured via Guard Rails + dynamic thresholds
+3. **Phase 3 (Scale)**: HITL reserved for high-risk cases configured through guard rails and evaluated thresholds
 4. Log **100% of HITL events** (triggered, who approved, time, decision) for auditing and model improvement
 5. Define a **human response SLA** so as not to block critical workflows (e.g., the reviewer has up to 2h to respond)
 
 ### 📌 Insight
 > "HITL is not an agent weakness — it is intelligent governance. The goal is to eliminate HITL where it is safe, not where it is convenient."
+
+> **Source status:** Microsoft governance, Agent ID, Agent 365, Purview and Foundry sources in this reference were rechecked on **2026-07-20**. Agent 365 is generally available for the Commercial segment, while effective coverage and individual Entra, Purview and Defender capabilities remain licensing-, agent-type- and configuration-dependent.
 
 ---
 

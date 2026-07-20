@@ -51,8 +51,8 @@ The 9 questions generate **technology groups** (not the final choice):
 | 3 | **Data grounding pattern** | RAG (Graph, AI Search, Cosmos, SQL, Fabric Data Agents) + memory + analytics |
 | 4 | **Orchestration complexity (The Coin)** | Soloist (single agent) → Orchestra (multi-agent hub-and-spoke) → Mesh (A2A/connected) |
 | 5 | **Compliance and trust boundary** | Trust boundary M365 / Power Platform / Azure landing zone / hybrid |
-| 6 | **Scale and cost** | Predictable vs. variable spend vs. unified pre-purchase (ACUs) vs. zero marginal cost (edge) |
-| 7 | **Destructive actions? (action safety)** | Draft-only → configurable execution (HITL) → autonomous execution (with its own guardrails) |
+| 6 | **Scale and cost** | Predictable vs. variable spend vs. prepaid capacity vs. edge infrastructure with hardware, power, operations and lifecycle cost |
+| 7 | **Destructive actions? (action safety)** | Draft-only → configurable execution (HITL) → autonomous execution with explicit guard rails |
 | 8 | **Team skills and ownership** | Makers/fusion vs. pro-code devs vs. AI/ML engineers vs. integrators |
 | 9 | **Initiates actions? (proactivity)** | Reactive (prompt) vs. proactive (triggers, schedules, webhooks) |
 
@@ -179,3 +179,5 @@ flowchart TD
 5. Close with **CAF + Responsible AI** and the controls from reference 04 (Guard Rails, Evaluators, HITL).
 
 > Official sources: Microsoft AI Decision Framework; BXT / Business Envisioning; Capability Envisioning; CAF AI agent adoption (plan, govern & secure, build, operate); Responsible AI Standard v2.
+
+> **Source status:** Framework and product-selection sources were rechecked on **2026-07-20**. Treat the Microsoft AI Decision Framework GitHub content as official Microsoft guidance, while using Microsoft Learn for current product capabilities, lifecycle and limits.

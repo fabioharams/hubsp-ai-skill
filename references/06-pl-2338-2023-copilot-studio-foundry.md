@@ -8,7 +8,7 @@ The central point is this: **Microsoft's tools do not automatically produce lega
 
 Because PL 2338/2023 was strongly inspired by the European framework, this document also maps it to its direct counterpart — the **EU Artificial Intelligence Act (Regulation (EU) 2024/1689)** — since both share the same risk-based backbone and the same Microsoft control set addresses both (see the section "European counterpart: the EU AI Act").
 
-> Note: **PL 2338/2023 has not yet been definitively approved**. Since the legislative process is still underway, the text, the reference articles, the regulatory scope and the publication dates may still change until the legislative process concludes and any potential sanction.
+> Status checked **2026-07-20**: **PL 2338/2023 has not yet been definitively enacted**. The Senate-approved substitute is awaiting the rapporteur's opinion in the Chamber of Deputies' special committee. The text, article references and regulatory scope can still change before final approval and any sanction.
 
 ## Official sources considered
 
@@ -178,7 +178,7 @@ See the consolidated list under **"Official sources considered → Official sour
 
 ## Executive synthesis
 
-If the question is whether **Microsoft Copilot Studio** and **Microsoft Foundry** can address the requirements of PL 2338/2023, the short answer is **yes, for a large part of the operational and governance requirements**.
+If the question is whether **Microsoft Copilot Studio** or **Microsoft Foundry** can contribute controls relevant to PL 2338/2023, the answer is **conditionally yes for specific operational and governance requirements**, subject to the selected architecture, licensing, supported integrations, configuration, evidence and legal interpretation.
 
 The rationale is simple:
 
@@ -200,4 +200,4 @@ To support the claim that Microsoft's AI tools can meet the demands of PL 2338/2
 
 ## Ready-to-use executive statement
 
-> From an architecture and governance standpoint, Microsoft Copilot Studio and Microsoft Foundry, combined with Microsoft Purview, Entra, Sentinel, Defender for Cloud and Azure AI Content Safety, offer concrete capability to address the central pillars of PL 2338/2023, with guard rails, evaluators, an audit trail, human oversight, data protection and continuous monitoring at corporate scale.
+> From an architecture and governance standpoint, the simplest viable Microsoft platform can be configured with applicable Entra, Purview, monitoring, security, guard rail, evaluator and human-oversight controls to support selected PL 2338/2023 obligations. Use Copilot Studio, Microsoft Foundry and additional services only where the scenario independently requires them, and validate legal adequacy, product coverage and capacity before production approval.

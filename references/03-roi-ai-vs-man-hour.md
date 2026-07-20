@@ -1,6 +1,4 @@
-## 💰 4.1. ROI Model — AI vs. Man-Hour Cost
-
-> **Objective:** give managers a **financial and auditable** decision model to answer, in each adoption scenario, the central question: *"is it worth more to use AI or to pay for human work?"* — and to justify, in numbers, the roadmap decisions in sections 3 and 4.
+## 💰 ROI Model — AI vs. Loaded Person-Hour Cost
 
 ### 📌 Executive summary
 
@@ -24,15 +22,21 @@ The higher the AAI, the greater the return. An AAI of $4.0$ means that the task 
 
 ### 🧮 The two halves of the equation
 
-**Human Cost of the Task (numerator):**
+**Human cost per task (numerator):**
 
 $$
-\text{Cost}_{\text{Human}} = \text{Value}_{\text{Man-Hour}} \times \text{Hours}_{\text{per Task}} \times \text{N}^\circ_{\text{Tasks}}
+\operatorname{Cost}_{\text{Human Task}} = \text{Loaded Person-Hour Cost} \times \text{Hours}_{\text{per Task}}
+$$
+
+For period-level ROI, calculate total human cost separately:
+
+$$
+\operatorname{Cost}_{\text{Human Period}} = \text{Cost}_{\text{Human Task}} \times \text{Number of Tasks}
 $$
 
 | Variable | Description | How to obtain |
 |---|---|---|
-| `Man_Hour_Value` | **Fully loaded** cost (salary + charges + overhead), **not** the base salary | Hourly wage × loading factor |
+| `Loaded_Person_Hour_Cost` | **Fully loaded** cost (salary + charges + overhead), **not** the base salary | Organization-approved loaded hourly cost |
 | `Hours_per_Task` | Average time a human takes on the task | Sampling / ticketing system |
 | `Num_Tasks` | Volume of tasks in the period | Operational history |
 
@@ -70,7 +74,7 @@ Illustrative market ranges per **million tokens** captured in 2026. They are not
 ### 📈 The complete ROI formula
 
 $$
-\text{ROI}\,(\%) = \frac{\text{Cost}_{\text{Human}} - \text{Cost}_{\text{AI Total}}}{\text{Cost}_{\text{AI Total}}} \times 100
+\operatorname{ROI}\,(\%) = \frac{\text{Cost}_{\text{Human Period}} - \text{Cost}_{\text{AI Total}}}{\text{Cost}_{\text{AI Total}}} \times 100
 $$
 
 Where, over the evaluated horizon:
@@ -79,7 +83,7 @@ $$
 \text{Cost}_{\text{AI Total}} = \text{Costs}_{\text{One-time}} + (\text{Costs}_{\text{Recurring}} \times \text{Periods}) + \text{Cost}_{\text{HITL}}
 $$
 
-> 📌 **Time horizon.** Many projects have **negative ROI in year 1** (setup) and only turn positive in year 2. MIT's *Project NANDA* found that **95% of companies see no bottom-line impact within 6 months** — often by measuring too early. **Evaluate over a 12–18 month window** (consistent with the wave-based roadmap in sections 3 and 19).
+> 📌 **Time horizon.** A project can have **negative ROI in year 1** because of setup and become positive later. The cited MIT *Project NANDA* observation that **95% of companies saw no bottom-line impact within 6 months** is an external benchmark, not a Microsoft finding or universal forecast. Evaluate the scenario over the skill's **12–18 month horizon** and validate value at each Pilot, Expansion and Scale gate.
 
 ### 🌐 The scope multiplier (the most decisive factor)
 
@@ -95,7 +99,7 @@ McKinsey (2025) points to the paradox: **88% declared adoption, but only 6% real
 flowchart TD
     A["🎯 Start: task<br/>candidate for AI"] --> B{"Is the task repetitive<br/>and measurable?"}
     B -- No --> Z["⛔ Keep human<br/>(low predictability<br/>of gain)"]
-    B -- Yes --> C["📏 Measure human baseline:<br/>hours/task × man-hour value"]
+    B -- Yes --> C["📏 Measure human baseline:<br/>hours/task × loaded person-hour cost"]
     C --> D["🧮 Estimate AI cost/task:<br/>inference + infra + HITL + amortization"]
     D --> E["➗ Calculate AAI =<br/>Human Cost ÷ AI Cost"]
     E --> F{"AAI > 1?"}
@@ -125,7 +129,7 @@ graph LR
         H1["Base salary"]
         H2["Charges +42% to +100%"]
         H3["Overhead / benefits"]
-        H1 --> HT["Loaded<br/>Man-Hour Value"]
+        H1 --> HT["Loaded<br/>Person-Hour Cost"]
         H2 --> HT
         H3 --> HT
     end
@@ -187,7 +191,7 @@ graph LR
 
 ### ✅ Manager's checklist before deciding
 
-1. Did I use the **loaded** man-hour cost (with charges), not the gross salary?
+1. Did I use the **loaded person-hour cost** (with charges and overhead), not the gross salary?
 2. Did I include **HITL** (human review time) in the AI cost?
 3. Did I **amortize the setup** (integration, prompt engineering) over the real volume?
 4. Did I establish a human **baseline** *before* the project?
@@ -283,7 +287,7 @@ The agent does the **extraction and consolidation of the documents**, calculates
 | Analysts for 40 clients/month | ~3 | ~1 (with slack) | Frees 2 for higher-value work |
 | Monthly operation cost (year 2+) | R$ 30,864 | R$ 5,404 | **−82%** |
 
-> HITL **is not optional** here — AI accelerates triage and consolidation, but the **risk decision remains human**. This connects to the Human-in-the-Loop in section 10 and the guard rails in section 8.
+> HITL **is not optional** in this illustrative design — AI accelerates triage and consolidation, but the **risk decision remains human**. See [Guard Rails, Evaluators and Human-in-the-Loop](04-governance-guard-rails-evaluators-hitl.md).
 
 ### 🚀 Amplification mode — how much AI increases employee productivity
 
@@ -294,7 +298,7 @@ $$
 $$
 
 $$
-\text{Value}_{\text{Freed Time}} = \text{Value}_{\text{Man-Hour}} \times \text{Hours}_{\text{Worked}} \times \text{Gain}_{\text{Productivity}}
+\operatorname{Value}_{\text{Freed Time}} = \text{Loaded Person-Hour Cost} \times \text{Hours}_{\text{Worked}} \times \text{Gain}_{\text{Productivity}}
 $$
 
 > ⚠️ **The gross-gain trap.** An employee does not spend 100% of the day on tasks that AI accelerates. If AI saves 50% of the time, but only **40% of the work** is "automatable", the **effective** gain is $50\% \times 40\% = 20\%$, not 50%:
@@ -348,17 +352,19 @@ In hours: the analyst "gives back" $168 \times 20\% = 33.6$ h/month; with 70% re
 
 | ROI concept | In efficiency mode | In amplification mode | Related layer/section |
 |---|---|---|---|
-| Numerator | Human cost of the task | Value of freed time | Business cases (sections 3–4) |
-| Denominator | Total AI cost per task | AI cost per employee | Agent runtime + model + context/data services (section 2) |
-| Reality factor | Scope multiplier | Realization factor | Adoption KPIs (sections 3, 19) |
-| HITL | Cost to subtract | Not applicable (human in charge) | Human-in-the-Loop (section 10) |
-| Key question | "Is replacing cheaper?" | "Does amplifying generate more value than it costs?" | Strategic message (section 13) |
+| Numerator | Human cost of the task | Value of freed time | Business baseline and approved scenario input |
+| Denominator | Total AI cost per task | AI cost per employee | [Reference architecture](02-reference-architecture-layers.md) |
+| Reality factor | Scope multiplier | Realization factor | Adoption and value-realization KPIs |
+| HITL | Cost to include | Human remains in charge | [Guard rails, evaluators and HITL](04-governance-guard-rails-evaluators-hitl.md) |
+| Key question | "Is replacing cheaper?" | "Does expanding capacity generate more value than it costs?" | [Final strategic message](../chapters/11-final-strategic-message.md) |
 
 > **Explicit trade-offs:** the model makes measurable the balance between **cost, risk, speed and complexity** — high-volume, low-criticality tasks favor automation (high AAI, low HITL); high-risk tasks keep the human in charge (HITL as a necessary cost, not optional). Always use the **lowest level of automation** that delivers the desired ROI within the guard rails.
 
 **Sources:** Anthropic — *Estimating AI Productivity Gains* (Nov/2025), *Economic Index Report* (Jan/2026); CloudZero — *State of AI Costs* (2026); McKinsey *State of AI* (2025); MIT *Project NANDA* (2025); Kalliamvakou et al. — *GitHub Copilot RCT* (2022); US BLS *Employment Cost Index*; Portal Salário/CAGED, Glassdoor, Indeed (2025–2026).
 
 > *Note: decision-support model; does not constitute financial advice. Calibrate the variables with the operation's real data.*
+
+> **Source status:** Microsoft architecture dependencies and the external benchmark status in this reference were rechecked on **2026-07-20**. Prices, compensation data and productivity studies are dated inputs; replace them with approved scenario data before a financial decision.
 
 ### 🧮 ROI Calculator (spreadsheet `ROI-IA-Calculadora.xlsx`)
 
@@ -376,14 +382,14 @@ The workbook has **5 tabs**:
 | **HITL Sensitivity** | Varies the human review time (0 to 4 h) over Scenario 2 and shows how HITL changes the AAI and the decision. |
 | **How to use** | Instructions, fill-in tips and market assumptions (2025–2026). |
 | **Capacity and Chart** | Converts the numbers into team impact: human × AI cost, tasks/person, analysts needed, people freed and capacity multiplier. |
-| **Amplification (productivity)** | Amplification mode: calculates the ROI when AI increases the employee's throughput (copilot), without replacing them. Employee 1 inherits the man-hour from the Calculator tab. |
+| **Amplification (productivity)** | Amplification mode: calculates the ROI when AI increases the employee's throughput (copilot), without replacing them. Employee 1 inherits the loaded person-hour cost from the Calculator tab. |
 
 #### How to use
 
 1. **Open in Excel** and go to the **Calculator** tab.
 2. **Edit only the blue cells (yellow background)** — everything in black is calculated by formula and must not be changed.
 3. **Choose the scenario** (each column is independent): **Scenario 1** = email triage (high volume, cheap task); **Scenario 2** = investment/credit analysis (mid-level analyst, ~1.5 days/client); **Scenario 3** = free, for your own case.
-4. **Fill in the human side:** monthly base salary, **loading factor** (charges+benefits+overhead; CLT ~1.8), business hours/month, hours per task and number of tasks/month. The spreadsheet calculates the **loaded man-hour value** and the human cost per task.
+4. **Fill in the human side:** monthly base salary, an organization-approved **loading factor** (charges, benefits and overhead), business hours/month, hours per task and number of tasks/month. The spreadsheet calculates the **loaded person-hour cost** and the human cost per task.
 5. **Fill in the AI side:** inference cost (tokens) per task, infra/RAG per task, **human review time (HITL)** in hours, one-time setup and the amortization horizon (number of tasks in the period). The spreadsheet separates **AI Cost Year 1** (with setup) from **Year 2+** (setup paid off).
 6. **Adjust scope:** adoption multiplier (% that actually uses it) — corrects the monthly savings to reality.
 7. **Read the results** (AAI, ROI %, monthly savings and VERDICT rows). For copilot productivity, use the **Amplification** tab; for headcount impact, the **Capacity and Chart** tab.

@@ -6,9 +6,9 @@
 
 ```mermaid
 flowchart LR
-    A["<b>LLM</b><br/>generates text"] --> B["<b>RAG</b><br/>aterra a resposta<br/>em dados"]
-    B --> C["<b>AI Agent</b><br/>planeja e age<br/>com ferramentas"]
-    C --> D["<b>Agentic AI</b><br/>coordena vários<br/>agentes especializados"]
+    A["<b>LLM</b><br/>generates text"] --> B["<b>RAG</b><br/>grounds responses<br/>in retrieved data"]
+    B --> C["<b>AI Agent</b><br/>plans and acts<br/>with tools"]
+    C --> D["<b>Agentic AI</b><br/>coordinates multiple<br/>specialized agents"]
 
     style A fill:#4A90E2,stroke:#2E5C8A,color:#fff,stroke-width:2px
     style B fill:#50C878,stroke:#3A9B5C,color:#fff,stroke-width:2px
@@ -18,7 +18,7 @@ flowchart LR
 
 Microsoft describes this progression as a **complexity spectrum** and recommends, as an architecture principle, using **the lowest level of complexity that reliably solves the problem** — each additional step introduces latency, cost and new failure modes.
 
-> ⚠️ **Terminology note.** The industry uses "AI Agent" and "Agentic AI" in varied ways. In Microsoft's documentation, the main distinction is between a **single agent with tools** (single agent) and **multi-agent orchestration** (multi-agent), and there is no rigid boundary — it is a continuum. In this guide we treat "Agentic AI" as the **multi-agent orchestration** level (detailed in section 17).
+> ⚠️ **Terminology note.** The industry uses "AI Agent" and "Agentic AI" in varied ways. In Microsoft's documentation, the main distinction is between a **single agent with tools** (single agent) and **multi-agent orchestration** (multi-agent), and there is no rigid boundary — it is a continuum. In this guide we treat "Agentic AI" as the **multi-agent orchestration** level; see [Multi-Agent Orchestration](../chapters/15-agent-orchestration.md).
 
 ### 📊 Comparison table
 
@@ -59,13 +59,13 @@ flowchart LR
 
 ```mermaid
 flowchart LR
-    U["👤 User question"] --> Q["🔎 Consulta ao índice"]
-    Q --> IDX["🗂️ Índice / Vector Store"]
-    IDX --> C["📄 Trechos relevantes<br/>(grounding)"]
-    C --> P["🧩 Prompt aumentado"]
+    U["👤 User question"] --> Q["🔎 Query the index"]
+    Q --> IDX["🗂️ Index / Vector Store"]
+    IDX --> C["📄 Relevant passages<br/>(grounding)"]
+    C --> P["🧩 Augmented prompt"]
     U --> P
     P --> M["🧠 LLM"]
-    M --> A["📤 Resposta fundamentada<br/>+ citações"]
+    M --> A["📤 Grounded response<br/>+ citations"]
 
     style U fill:#4A90E2,stroke:#2E5C8A,color:#fff,stroke-width:2px
     style Q fill:#50C878,stroke:#3A9B5C,color:#fff,stroke-width:2px
@@ -114,7 +114,7 @@ Microsoft defines the agent on five components: **model** (reasoning engine), **
 
 ```mermaid
 flowchart TB
-    G["🎯 Objective"] --> O["🧭 Orquestrador / Manager"]
+    G["🎯 Objective"] --> O["🧭 Orchestrator / Manager"]
     O --> A1["🔍 Research Agent"]
     O --> A2["✍️ Writer Agent"]
     O --> A3["🔎 Reviewer Agent"]
@@ -160,9 +160,9 @@ flowchart TB
 
 **Definition (Microsoft).** An agent is an AI application that uses a generative model to **reason** about requests and **take autonomous actions** to fulfill them. Unlike a chatbot that only generates text, the agent calls tools, accesses external data and makes decisions across **multiple steps**. This behavior can run on a managed platform such as Microsoft Foundry Agent Service or Copilot Studio, or in an explicitly hosted application built with Microsoft Agent Framework.
 
-**The 5 components (Cloud Adoption Framework).** (1) Generative model — reasoning engine; (2) Instructions — scope, limits and rules; (3) Retrieval/Knowledge — *grounding* data; (4) Actions/Tools — functions, APIs and systems; (5) Memory — history and state (see section 18).
+**The 5 components (Cloud Adoption Framework).** (1) Generative model — reasoning engine; (2) Instructions — scope, limits and rules; (3) Retrieval/Knowledge — *grounding* data; (4) Actions/Tools — functions, APIs and systems; (5) Memory — history and state. Retrieval and persistent memory remain optional unless the requirement needs them; see [Agent Memory](../chapters/16-agent-memory.md).
 
-**Essential difference between RAG and Agent.** RAG follows a **deterministic** retrieval process. The agent uses the generative model to **decide, at each step**, which knowledge and tools to use — **adaptive and non-deterministic** behavior that requires testing, evaluators (section 9) and robust governance (section 8).
+**Essential difference between RAG and Agent.** A classic RAG pipeline can use a fixed retrieval sequence, while agentic retrieval can use a model to decompose queries, select sources and rerank evidence. An agent additionally uses the generative model to **decide, at each step**, which knowledge or action tools to use. This adaptive behavior requires testing, [evaluators, guard rails and governance](04-governance-guard-rails-evaluators-hitl.md).
 
 **Reasoning and planning.** Agent frameworks incorporate methods such as **ReAct** (interleaves reasoning and action), **Chain-of-Thought**, **Plan-and-Solve** (divides the task into subtasks) and **Reflexion/self-critique** (self-reflection on feedback).
 
@@ -170,7 +170,7 @@ flowchart TB
 
 ### 🕸️ Agentic AI — multi-agent orchestration
 
-**What it is.** Multiple specialized agents that **coordinate** to solve problems, with an orchestrator (or peer-to-peer protocol) managing work distribution, context sharing and result aggregation. The detailed Foundry implementation — with Sequential, Parallel, Conditional and Feedback Loop patterns — is in **section 17**.
+**What it is.** Multiple specialized agents that **coordinate** to solve problems, with an orchestrator (or peer-to-peer protocol) managing work distribution, context sharing and result aggregation. See [Multi-Agent Orchestration](../chapters/15-agent-orchestration.md) for implementation and governance patterns.
 
 **Advantages (Azure Architecture Center).** Specialization (each agent focuses on a domain); scalability (add/change agents without redesigning everything); maintainability (test agent by agent); optimization (each agent uses different models and tools).
 
@@ -186,7 +186,7 @@ flowchart TB
 | **Agents-as-Tools** | A main agent invokes others as if they were tools (via *function calling*). | Direct requests, with 2–3 agents and well-defined scopes. |
 | **Magentic** | Dynamic orchestration for open-ended problems, with no predefined flow. | Creative/exploratory domains where subtasks are not known in advance. |
 
-**Tool integration and governance.** Microsoft recommends **MCP (Model Context Protocol)** for secure and authenticated access to tools/data, and the **A2A (Agent2Agent, Linux Foundation)** protocol for integration between agents from different platforms. Cross-cutting principles: **least privilege**, simplicity, auditability, robust governance and **HITL (human-in-the-loop)** at approval points (see section 10).
+**Tool integration and governance.** **MCP (Model Context Protocol)** can standardize tool/data integration, and **A2A (Agent2Agent, Linux Foundation)** can support interoperability between agents from different platforms. Protocol adoption does not provide security by itself. Apply authentication, authorization, least privilege, auditability, explicit trust boundaries and [HITL](04-governance-guard-rails-evaluators-hitl.md) where risk requires approval.
 
 ### 🧭 Architectural decision guide
 
@@ -194,9 +194,11 @@ Use the **lowest level of complexity** that reliably meets the current requireme
 
 ```mermaid
 flowchart TD
-    A["❓ What is the problem?"] --> P{"Existing product or<br/>predictable rules solve it?"}
-    P -- Yes --> SIMPLE["⚙️ SaaS, configuration or<br/>deterministic automation"]
-    P -- No --> B{"Needs proprietary/<br/>up-to-date data?"}
+    A["❓ What is the problem?"] --> P{"Existing product, SaaS or<br/>configuration solves it?"}
+    P -- Yes --> SAAS["📦 Use the existing<br/>capability"]
+    P -- No --> P2{"Predictable rules or<br/>API workflow solve it?"}
+    P2 -- Yes --> AUTO["⚙️ Deterministic<br/>automation"]
+    P2 -- No --> B{"Needs proprietary/<br/>up-to-date data?"}
     B -- No --> C{"Single-step<br/>task?"}
     C -- Yes --> LLM["🧠 Direct LLM call"]
     C -- No --> D{"Needs to act /<br/>use tools?"}
@@ -209,7 +211,8 @@ flowchart TD
     F -- Yes --> MULTI["🕸️ Agentic AI (multi-agent)"]
 
     style A fill:#FF6B6B,stroke:#CC5555,color:#fff,stroke-width:2px
-    style SIMPLE fill:#607D8B,stroke:#455A64,color:#fff,stroke-width:2px
+    style SAAS fill:#607D8B,stroke:#455A64,color:#fff,stroke-width:2px
+    style AUTO fill:#607D8B,stroke:#455A64,color:#fff,stroke-width:2px
     style LLM fill:#4A90E2,stroke:#2E5C8A,color:#fff,stroke-width:2px
     style RAG fill:#50C878,stroke:#3A9B5C,color:#fff,stroke-width:2px
     style AGENT fill:#7B68EE,stroke:#5A4DB0,color:#fff,stroke-width:2px
@@ -218,7 +221,8 @@ flowchart TD
 
 **Practical summary.**
 
-- **Existing product or predictable process →** SaaS, configuration or deterministic automation.
+- **Existing product, SaaS or configuration meets the outcome →** Use it before building.
+- **Predictable process with explicit rules →** Deterministic automation.
 - **Text response, one step →** LLM.
 - **Response grounded in documents →** RAG.
 - **Multi-step task, with actions, in one domain →** Single AI Agent (corporate default).
@@ -276,11 +280,13 @@ Security boundaries do not by themselves require multiple agents. First isolate 
 - **Chain-of-Thought (CoT):** step-by-step reasoning before the response.
 - **Plan-and-Solve:** divides the task into subtasks and executes them according to a plan.
 - **Reflexion / self-critique:** the agent verbally reflects on feedback to improve future decisions.
-- **HITL (Human-in-the-Loop):** human review/approval points in the flow (section 10).
+- **HITL (Human-in-the-Loop):** human review or approval points in the flow; see [Governance and HITL](04-governance-guard-rails-evaluators-hitl.md).
 - **Knowledge cutoff:** the date limit of knowledge learned by the model during training.
 - **Fan-out/Fan-in:** concurrent pattern — distributes (fan-out) and aggregates (fan-in) results.
 
 > **Connection to this guide's layers:** the **LLM** is the reasoning engine used by the application or managed agent platform; **RAG** can consume Foundry IQ knowledge, Fabric IQ business context and governed data from Microsoft Fabric; **AI Agent** and **Agentic AI** can execute in Foundry Agent Service, Copilot Studio or an explicitly hosted Agent Framework application; Work IQ supplies Microsoft 365 context, while guard rails and evaluators apply cross-cutting controls.
+
+> **Source status:** Microsoft product and architecture sources in this reference were rechecked on **2026-07-20**. Foundry IQ includes both generally available and preview capabilities; verify the API version, source connector, region and permission model before production use.
 
 ---
 

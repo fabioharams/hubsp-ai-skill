@@ -346,8 +346,8 @@ Shortcuts are **virtual references** (like symbolic links) to external data. Age
 **Benefits:**
 - 💰 **Zero copy:** Does not duplicate data, saves storage
 - ⚡ **Fresh data:** Agents tend to see the most current version from the source
-- 🔐 **Integrated security:** Purview labels are automatically inherited
-- 📍 **Centralized governance:** One data mask serves all consumers
+- 🔐 **Explicit security:** Access is the intersection of permissions on the shortcut path and target path; identity passthrough or delegated authentication depends on shortcut type and query engine
+- 📍 **Governed access:** Configure OneLake roles, source permissions, connection identity, labels and downstream SQL/semantic-model controls for the selected path
 
 **Example:**
 ```
@@ -398,7 +398,7 @@ ORDER BY TotalSales DESC
 ```
 
 **Performance considerations:**
-- Automatic sync between Lakehouse (Spark) and SQL Analytics Endpoint: typically **< 1 minute**
+- Metadata synchronization between a Lakehouse and its SQL analytics endpoint is asynchronous; measure propagation delay for the selected workload instead of assuming a fixed interval
 - Uses **V-Order optimization:** Spark writes optimized Parquet for fast SQL reads
 - Automatic indexes: Fabric maintains statistics and histograms without user action
 
@@ -555,7 +555,7 @@ graph TD
 | **Validation** | ✅ Yes — referential integrity, types, ranges |
 | **Duplication** | ❌ Removed (distinct keys guaranteed) |
 | **Schema** | Strict (schema enforcement — rejects invalid data) |
-| **Retention** | Indefinite (production data) |
+| **Retention** | Policy-defined from legal, recovery, cost and operational requirements |
 | **Workspace** | Semi-private (Silver-Workspace, controlled access) |
 | **Owner** | Data Engineers (ELT transformation) |
 | **Technology** | Spark (Python, SQL, Scala), Synapse notebooks |
@@ -687,8 +687,8 @@ graph TD
 | **Aggregation** | ✅ Yes — facts aggregated by business dimensions |
 | **Calculations** | ✅ Pre-calculated corporate metrics |
 | **Schema** | Semantic — business names (not technical) |
-| **Retention** | Indefinite (complete historical data) |
-| **Workspace** | Public/Semi-public (Gold-Workspace, broad access) |
+| **Retention** | Policy-defined; retain only the history required by the scenario |
+| **Workspace** | Controlled consumer access with least privilege |
 | **Owner** | Analytics Engineers / Business Analysts |
 | **Exposure** | SQL Analytics Endpoint, Power BI, APIs for agents |
 | **Technology** | Spark (aggregations), SQL (views, stored procs), Power BI (semantic models) |
@@ -809,10 +809,10 @@ graph TD
 | **Profitability** | `fct_Margins` | Gross, operating, net margins | 3 AM UTC | 🟡 Confidential (RLS) |
 | **Customer 360** | `dim_Customer` | Customer + lifetime value + churn risk | 4 AM UTC | 🔴 Confidential (PII + RLS) |
 
-**Guarantees per Data Product:**
+**Required service commitments per Data Product:**
 - ✅ **Documentation:** Data dictionary, formulas, lineage
-- ✅ **SLA:** Guaranteed daily update time
-- ✅ **Security:** Sensitivity labels + automatic Row-level security
+- ✅ **Freshness objective:** Defined update target with measured evidence and an accountable owner
+- ✅ **Security:** Sensitivity labels plus explicitly configured identity, item, OneLake, SQL, RLS/CLS and sharing controls as applicable
 - ✅ **Discovery:** Indexed in Data Catalog (Purview)
 - ✅ **Audit:** Access recorded in Audit Logs
 
@@ -924,12 +924,12 @@ graph TD
 | **Scalability** | ⭐⭐⭐⭐⭐ Excellent for data lakes |
 | **Governance** | ⭐⭐⭐⭐ Workspace isolation |
 | **Complexity** | Medium (3 lakehouses to maintain) |
-| **Cost** | 💰 3 capacities = 3x costs |
+| **Cost** | Workspace count does not determine capacity count; assign workspaces to capacity based on measured isolation, performance and governance needs |
 
 **Real use cases:**
 - Big Data agencies serving multiple clients
 - Organizations with Data Science culture (Python/R dominant)
-- Petabyte-scale processing with Spark
+- Large-scale processing where representative workload tests validate the selected Fabric capacity
 - Exploratory analyses and machine learning
 
 ---
@@ -1023,7 +1023,7 @@ graph TD
 | **Scalability** | ⭐⭐⭐⭐ Good for enterprise BI |
 | **Governance** | ⭐⭐⭐⭐ Bronze/Silver vs Gold isolation |
 | **Complexity** | Medium (1 Lakehouse + 1 DW) |
-| **Cost** | 💰💰 2 capacities (more efficient) |
+| **Cost** | Lakehouse and warehouse can share or use separate capacities; validate CUs, concurrency, isolation and cost with the Capacity Metrics app |
 
 **Real use cases:**
 - Organizations with mature BI (Power BI at scale)
@@ -1038,7 +1038,7 @@ graph TD
 ###### **OPTION 3️⃣ — Medallion + Data Mesh** (For large organizations)
 
 **When to use:**
-- ✅ **Very large** organizations (200+ data engineers)
+- ✅ **Large federated organizations** with independently owned data domains
 - ✅ **Multiple autonomous domains** (Finance, Sales, Operations, HR, etc.)
 - ✅ Need for **data federation** (each domain owns its data)
 - ✅ Each domain operates its own **complete Medallion**
@@ -1132,7 +1132,7 @@ graph TB
 | **Ownership** | Each domain = autonomous team |
 | **Integration** | Shortcuts + OneLake cross-workspace |
 | **Governance** | Centralized hub (Purview) |
-| **Scalability** | ⭐⭐⭐⭐⭐ Petabyte-scale |
+| **Scalability** | High potential, subject to selected capacity, data layout, concurrency and representative load validation |
 | **Autonomy** | ⭐⭐⭐⭐⭐ Maximum independence |
 | **Complexity** | High (requires discipline) |
 | **Cost** | 💰💰💰 Multiple capacities |
@@ -1146,7 +1146,7 @@ graph TB
 **Real use cases:**
 - Large conglomerates (multiple subsidiaries, geographies)
 - Fintech organizations (each service = independent domain)
-- Companies scaling up (100+ data engineers)
+- Organizations with multiple autonomous data-product teams and federated governance
 - Media industry (multiple studios/platforms)
 
 ---
@@ -1193,6 +1193,8 @@ graph TD
 ---
 
 **Microsoft References:**
+
+> **Source status:** Microsoft architecture, Fabric, Microsoft IQ, Agent Framework, Agent ID and security sources in this reference were rechecked on **2026-07-20**. Preview status, regional availability, licensing, authentication behavior and limits must be revalidated for each production design.
 - [Understand medallion lakehouse architecture for Microsoft Fabric with OneLake](https://learn.microsoft.com/fabric/onelake/onelake-medallion-lakehouse-architecture)
 - [Lakehouse end-to-end scenario: overview and architecture](https://learn.microsoft.com/fabric/data-engineering/tutorial-lakehouse-introduction)
 - [Data Platform end-to-end with Microsoft Fabric](https://learn.microsoft.com/azure/architecture/example-scenario/dataplate2e/data-platform-end-to-end)
@@ -1207,7 +1209,7 @@ A **Data Product** is a curated set of Gold tables with clear semantics, documen
 **Characteristics:**
 - 📖 **Documented:** Data dictionary, lineage, clear business rules
 - 🎯 **Semantically clear:** "Revenue = Sales Price × Quantity", unambiguous
-- 🔐 **Secure:** Row-level security applied automatically via Purview labels
+- 🔐 **Secure:** Sensitivity labels classify data; explicitly configured OneLake, item, SQL, RLS/CLS and sharing controls enforce access
 - ⚙️ **Operationalized:** Refresh pipelines help keep data fresh, with an update SLA
 - 📈 **Versioned:** Schema changes are controlled, compatibility maintained
 - 📣 **Discoverable:** The catalog (Data Catalog in Purview) indexes and describes it
@@ -1298,7 +1300,7 @@ conn = pyodbc.connect(
     'Authentication=ActiveDirectoryMSI'
 )
 
-# Query the Gold Data Product (automatic RLS)
+# Query the Gold Data Product (RLS must be configured and validated)
 cursor = conn.cursor()
 cursor.execute('''
     SELECT OrderAmount, CustomerSegment, OrderDate
@@ -1319,29 +1321,28 @@ The integration between **Microsoft Entra Agent ID**, **Microsoft Purview** and 
 
 ##### 🪪 **Entra ID Agent Identity - Identities for AI**
 
-Microsoft Entra Agent ID is a security framework purpose-built for autonomous AI agents. Unlike a traditional service principal, Agent ID offers:
+Microsoft Entra Agent ID is an identity and security framework for AI agents. Agent identities are specialized Entra identity constructs; the effective controls depend on the identity type, token flow, licensing and configured security capabilities.
 
 | Aspect | Service Principal (Legacy) | Entra Agent ID (New) |
 |---------|-------------------------|---------------------|
-| **Purpose** | Generic application | Specific AI agent |
-| **Context** | No real identity | Zero Trust identity with context |
-| **Authentication** | Username/password or certificate | JWT + risk context |
-| **Authorization** | Role-based (RBAC) | Role + risk + context based |
-| **Audit** | Basic logs | Structured agent logs with intent |
-| **Governance** | Manual by group | Automatic via lifecycle policy |
-| **Conditional Access** | Limited | Supports per-agent policies |
+| **Purpose** | General workload/application identity | Agent identity created from an agent identity blueprint |
+| **Authentication** | Supported workload credential or federation | OAuth 2.0 token flow through the supported blueprint/agent identity pattern |
+| **Authorization** | Resource permissions and application roles | The same resource authorization remains required; agent-specific security can add risk and lifecycle controls |
+| **Audit** | Entra sign-in and audit signals | Agent sign-in and audit signals for supported identity flows |
+| **Governance** | Workload lifecycle controls | Blueprint and agent lifecycle controls when configured and licensed |
+| **Conditional Access** | Workload identity controls vary | Agent Conditional Access requires supported identity flows, configuration and licensing |
 
 **How Agent ID works:**
 
 1. **Creation:** Each agent receives a unique identity in Entra ID (e.g., `eng-sales-agent-001`)
-2. **Authentication:** The agent requests a JWT token using `ClientSecret` or `Certificate`
+2. **Authentication:** The application obtains an OAuth token through the supported agent identity flow; prefer managed credentials or workload identity federation over long-lived secrets
 3. **The JWT contains:**
    - `app_displayname`: "Eng Sales Agent"
    - `appid`: unique GUID of the agent
    - `roles`: ["Data Explorer", "Contributor"] 
    - `oid`: object ID of the agent
-4. **Zero Trust:** The token is sent with every request along with risk context
-5. **Renewal:** The token expires (1h default) and the agent must re-authenticate
+4. **Zero Trust:** The target resource validates the token and enforces its own permissions; configured Entra security capabilities can add risk-based controls
+5. **Renewal:** Token lifetime follows the effective Entra policy and token flow; do not assume a universal one-hour lifetime
 
 **JWT Payload example:**
 ```json
