@@ -54,7 +54,6 @@ When evidence is incomplete, the skill recommends the lower-complexity pilot and
    - Architecture and Operating Model: chapters 09-14 (integration, operating model, Microsoft architecture alignment, instructions and skills).
    - Advanced Agent Capabilities: chapters 15-17 (orchestration, memory and operational implementation).
    - Appendices: chapters 18-24 (code examples, templates, tool decision tree, OpenTelemetry, dataset curation and consolidated references).
-- section_3_2.txt: extracted plain-text section used as a lightweight source for quick copy, review and prompt experiments without markdown formatting overhead.
 - references/: thematically sliced content for on-demand loading:
    - references/01-llm-rag-ai-agent-fundamentals.md: existing/deterministic alternatives, LLM, RAG, AI Agent and Agentic AI; complexity spectrum and escalation decision guide.
    - references/02-reference-architecture-layers.md: Microsoft IQ context workloads, agent runtimes, Microsoft Fabric and technical specifications per layer.
@@ -97,7 +96,6 @@ graph TD
    README --> PROMPT[Default reusable prompt<br/>diagrammed response generation]
    DOC --> PROMPT
    PROMPT --> OUTMD[doc/recommendation-output.md<br/>Markdown output]
-   CHAPTERS --> TXT[section_3_2.txt<br/>Plain-text extracted section]
 
     classDef entry fill:#0078D4,stroke:#004578,color:#fff;
     classDef canon fill:#107C10,stroke:#0B5A0B,color:#fff;
@@ -105,14 +103,12 @@ graph TD
    classDef doc fill:#FFF4CE,stroke:#C19C00,color:#1a1a1a;
    classDef prompt fill:#EDE7F6,stroke:#5E35B1,color:#1a1a1a;
    classDef output fill:#E8F5E9,stroke:#2E7D32,color:#1a1a1a;
-   classDef artifact fill:#FFF3E0,stroke:#EF6C00,color:#1a1a1a;
     class SKILL entry;
     class CANON canon;
    class R1,R2,R3,R4,R5,R6,CHAPTERS ref;
    class DOC,DOCEX doc;
    class PROMPT prompt;
    class OUTMD output;
-   class TXT artifact;
 ```
 
 ## How to navigate (decision flowchart)
