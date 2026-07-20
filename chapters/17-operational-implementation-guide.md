@@ -1,16 +1,18 @@
-## 🧪 19. Operational Implementation Guide (90 days)
+## 🧪 19. Operational Implementation Guide
 
 ### 🎯 Objective
 
 Transform the architectural framework into practical execution, with delivery cadence, quality criteria, operational governance and continuous improvement process.
 
-### 📆 90-day plan (executable)
+### 📆 Illustrative 90-day pilot cadence
+
+The windows below are planning examples, not guaranteed phase transitions. Start with the lowest-complexity option that meets the requirement, which might be SaaS configuration or deterministic automation rather than an agent. Progress only when exit evidence is met; unresolved production capacity, security or operational ownership keeps the recommendation conditional.
 
 | Window | Focus | Minimum deliverables |
 |---|---|---|
-| **Days 0-30** | Technical foundation and governance | 1) prioritized backlog of 2-3 agents, 2) baseline instructions per agent, 3) initial skills catalogue, 4) evaluation dataset (normal + edge cases), 5) telemetry enabled |
+| **Days 0-30** | Outcome, baseline and governance | 1) prioritized use cases, 2) simplest viable baseline, 3) rejected alternatives and assumptions, 4) evaluation dataset where AI is used, 5) demand and telemetry plan |
 | **Days 31-60** | Controlled validation | 1) pilot with real users, 2) batch quality and security evaluators, 3) active guardrails by risk, 4) incident runbook tested in tabletop |
-| **Days 61-90** | Production with gates | 1) deploy with go-live checklist, 2) continuous monitoring, 3) biweekly instructions/skills tuning routine, 4) cost and reliability baseline |
+| **Days 61-90** | Production decision with gates | 1) approve, revise or stop based on evidence, 2) continuous monitoring plan, 3) change-management routine, 4) measured cost, reliability and capacity baseline |
 
 ### 🚦 Quality gates for production
 
@@ -35,6 +37,8 @@ Use objective gates to reduce approval subjectivity. Values below are initial re
 6. Logs and tracing enabled (input, decision, tool call, output).
 7. Agent owner defined and operational SLA agreed.
 8. Rollback plan documented and tested.
+9. Every production component and material dependency has a **Fit**, **Conditional fit** or **Not fit** verdict based on peak demand, entitlement, quota, region, headroom, downstream limits and production-like load evidence.
+10. No unresolved **Conditional fit** item can affect production safety, availability or required throughput without an approved mitigation and owner.
 
 ### 🚨 Minimum incident runbook
 
@@ -79,12 +83,12 @@ Recommended pipeline:
 3. **Biweekly**: review quality metrics by domain.
 4. **Monthly**: governance committee for risk, ROI and prioritization.
 
-### ✅ Expected outcome after 90 days
+### ✅ Expected decision after the illustrative pilot
 
-1. Agents in production with risk control and measured quality.
-2. Repeatable evolution process (not dependent on ad hoc effort).
-3. Less response variability and higher operational confidence.
-4. Foundation ready to scale new agents with consistent governance.
+1. A go, revise or stop decision backed by business, quality, risk, cost and capacity evidence.
+2. The simplest proven capability in production only when every gate is met.
+3. A repeatable evolution process that is not dependent on ad hoc effort.
+4. Measurable triggers for expansion or architectural escalation.
 
 ---
 

@@ -21,7 +21,7 @@ Evaluate architectures from lowest to highest complexity: existing product/SaaS,
 
 When critical context is missing, request only the minimum necessary to recommend an architecture aligned with the business.
 
-When the topic is target architecture, explicitly distinguish the Microsoft IQ context workloads (Work IQ, Foundry IQ, Fabric IQ and Web IQ when applicable) from the agent runtime (Microsoft Foundry Agent Service, Copilot Studio or Microsoft Agent Framework). Describe how both connect with the data platform and cross-cutting controls. Never describe Foundry IQ as the orchestration runtime.
+When the topic is target architecture, explicitly distinguish Microsoft IQ context capabilities (Work IQ, Foundry IQ, Fabric IQ and Web IQ when applicable), managed agent platforms (Microsoft Foundry Agent Service or Copilot Studio), and Microsoft Agent Framework as a development framework that requires an explicit hosting choice unless deployed as a hosted agent. Describe how they connect with the data platform and cross-cutting controls. Never describe Foundry IQ as the orchestration runtime.
 
 ## Preferred Terms
 

@@ -1,4 +1,4 @@
-## 🛠️ 3.1. Adoption Tools — M365 Copilot, Copilot Studio and Microsoft Foundry
+## 🛠️ 3.1. Adoption Tools — Microsoft 365 Copilot, Copilot Studio and Microsoft Foundry
 
 ### 🎯 Objective
 Map the three main tools to the adoption framework and short/medium-term scenarios
@@ -18,7 +18,7 @@ Map the three main tools to the adoption framework and short/medium-term scenari
 - semantic search over corporate data via Microsoft Graph
 
 **⚙️ Usage scenario**
-`User → M365 Copilot → Graph / SharePoint → Immediate insight`
+`User → Microsoft 365 Copilot → Graph / SharePoint → Immediate insight`
 
 #### 🤖 Microsoft Copilot Studio
 
@@ -54,25 +54,28 @@ Map the three main tools to the adoption framework and short/medium-term scenari
 
 Build 2026 consolidated the **MAI** family as a new Microsoft AI model line within the Foundry ecosystem. The consistent reading for this guide is to treat MAI as a **model portfolio** rather than a new architectural layer: models power the reasoning runtime, while **Work IQ, Foundry IQ and Fabric IQ remain complementary context workloads**.
 
-**Executive reading of the MAI family**
+**Executive reading of the MAI family as of July 20, 2026**
 
-| Model / family | Main use | Practical maturity | Adoption risk | Architecture fit |
+| Model / family | Main use | Documented availability | Architecture fit |
 | --- | --- | --- | --- | --- |
-| MAI-Thinking-1 | Reasoning, planning and complex tasks | High value for advanced analysis | Medium | Reasoning layer in Foundry |
-| MAI-Code-1-Flash | Agentic coding and efficient tool calling | Strong for development flows | Medium | Foundry for automation and build |
-| MAI-Image-2.5 / Flash | Image generation and editing | Good for multimodal experiences | High when preview | Product extension and rich automation |
-| MAI-Transcribe-1.5 | Transcription and voice input | Strong for speech scenarios | Medium | Multimodal input for agents |
-| MAI-Voice-2 | Natural voice synthesis | Good for conversational experiences | High when preview | Experience layer / channels |
+| MAI-Thinking-1 | Reasoning, mathematics and software-engineering tasks | Private preview in Microsoft Foundry at announcement | Reasoning option subject to catalog, region, quota, quality and support validation |
+| MAI-Code-1-Flash | Agentic coding and efficient inference | Channel-specific rollout; verify current Foundry catalog availability | Coding workflows subject to channel and service validation |
+| MAI-Image-2.5 / MAI-Image-2.5-Flash | Image generation and editing | Preview in Microsoft Foundry | Multimodal experiences under approved preview controls |
+| MAI-Transcribe-1.5 | Multilingual transcription and domain phrase lists | Public preview through the LLM Speech API; no SLA | Speech input under approved preview controls |
+| MAI-Voice-2 | Expressive multilingual speech generation | Public preview; voice prompting also requires gated access | Voice experience under consent and preview controls |
+| MAI-Voice-2-Flash | Low-latency voice synthesis | Announced as coming soon; verify current availability before selection | Deferred until catalog and production terms are confirmed |
 
 **Executive guideline for production**
 - Prioritize MAI use by **capability and use case**, not by announcement novelty.
-- Treat **preview** variants as a controlled innovation track, with guard rails and clear exit criteria.
-- Maintain the guide's standard: governed data in Fabric, orchestration in Foundry, and evaluators/guard rails as cross-cutting controls.
+- Treat **preview** variants as exception-based pilots. Guard rails do not convert a preview capability into a supported production dependency.
+- Maintain the guide's standard: use the approved governed authority for each domain; introduce Microsoft Fabric for analytical consolidation or semantic reuse and a Foundry runtime only when current requirements justify them; apply evaluators and guard rails as cross-cutting controls.
 
 **Official reference sources**
 - [Microsoft AI: Building a hill-climbing machine: Launching seven new MAI models](https://microsoft.ai/news/building-a-hillclimbing-machine-launching-seven-new-mai-models/)
 - [Foundry Models from partners and community — Microsoft](https://learn.microsoft.com/azure/foundry/foundry-models/concepts/models-from-partners#microsoft)
-- [Deploy and use MAI image models in Microsoft Foundry (preview)](https://learn.microsoft.com/azure/foundry/foundry-models/how-to/use-foundry-models-mai)
+- [Deploy and use MAI image models in Microsoft Foundry](https://learn.microsoft.com/azure/foundry/foundry-models/how-to/use-foundry-models-mai-image)
+- [MAI-Transcribe in the LLM Speech API](https://learn.microsoft.com/azure/ai-services/speech-service/mai-transcribe)
+- [What is MAI-Voice?](https://learn.microsoft.com/azure/ai-services/speech-service/mai-voices)
 
 ### 🔌 Integration protocols in Microsoft Foundry
 
@@ -80,13 +83,13 @@ Build 2026 consolidated the **MAI** family as a new Microsoft AI model line with
 
 **A2A (Agent-to-Agent):** protocol for communication between agents from different runtimes (Foundry, Copilot Studio, external platforms) — foundation for multi-agent systems in the medium term
 
-**OpenAI Responses API:** standard Foundry Agent Service protocol for tool call orchestration, conversation state and streaming — supported by Claude via Anthropic SDK with Entra ID authentication
+**Responses API and provider APIs:** Foundry Agent Service uses the Responses API for agent conversations and tool orchestration. Claude deployments use the Anthropic Messages API at the provider-specific `/anthropic/v1/messages` endpoint through the Anthropic SDK, with supported Entra ID or API-key authentication. Do not treat the Anthropic Messages API as the Responses API.
 
 **Current SDK and API:** use `azure-ai-projects` 2.x for Foundry project and agent-definition operations, and the project-bound OpenAI client for conversations and Responses API calls. A current project endpoint follows `https://<resource>.ai.azure.com/api/projects/<project>`; provider-specific endpoints such as Anthropic are not the general project endpoint.
 
 ### 🔗 How They Work Together
 
-An illustrative mixed pattern is `M365 Copilot (user interface) → Copilot Studio (domain agent) → Microsoft Foundry (advanced reasoning and orchestration) → Fabric (governed data)`. Use this full chain only when both runtimes have independently justified responsibilities.
+An illustrative mixed pattern is `Microsoft 365 Copilot (user interface) → Copilot Studio (domain agent) → Microsoft Foundry (advanced reasoning and orchestration) → Fabric (governed data)`. Use this full chain only when both runtimes have independently justified responsibilities.
 
 ### 🧭 When to use Copilot Studio, Foundry or a Mixed Solution
 
@@ -158,10 +161,10 @@ flowchart TD
 - Microsoft Purview governance overview: https://learn.microsoft.com/purview/governance-solutions-overview
 - Microsoft Entra ID documentation: https://learn.microsoft.com/entra/identity/
 
-### 🚀 Mapping by Adoption Timeline
+### 🚀 Conditional Product Selection
 
 📣 **Insight**
-> "M365 Copilot starts the value — Copilot Studio scales the agents — Microsoft Foundry enables the depth"
+> "Use Microsoft 365 Copilot, Copilot Studio or Microsoft Foundry only when its current capabilities, controls, capacity and operating model fit the requirement. Product adoption is not a mandatory progression."
 
 ---
 

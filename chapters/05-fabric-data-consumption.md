@@ -1,22 +1,109 @@
-## 🔗 5. Fabric Data Consumption by Multiple Agents
+## 5. Data Consumption Strategies for AI Agents
 
-### 🧠 Central Insight — OneLake as a Shared Corporate Asset
+> Reviewed against official Microsoft Learn architecture and product documentation on **2026-07-20**.
 
-**Fonte oficial:** [Microsoft Fabric - OneLake Overview](https://learn.microsoft.com/fabric/onelake/onelake-overview)
+### Executive decision
 
-> **"OneLake is a unified, enterprise-level data lake integrated with Microsoft Fabric that serves as the centralized storage layer for all of the organization's data workloads"**
+There is no single data-access pattern for every agent. Microsoft recommends establishing a retrieval strategy per data domain, prioritizing built-in Microsoft capabilities and documenting whether the agent uses **search**, **semantic analytics**, a **live API or MCP tool**, or a combination. OneLake can provide the unified governed data foundation, but it is not the only source and Shortcuts are a data virtualization mechanism, not an agent retrieval interface.
 
-#### Why this matters for agents:
-- **A single source of truth:** All agents query the same data, reducing inconsistencies and conflicts
-- **No duplication:** OneLake uses Zero-Copy Access — data remains in a single location while multiple agents access via **Shortcuts** (virtual references) and **SQL Analytics Endpoint**
-- **Reuse by design:** Each agent (Copilot, Claude, AgentA, AgentB) leverages the same data asset, reducing ETL and complexity
-- **Centralized governance:** Policies (sensitivity labels, RLS, audit) are applied once in OneLake and inherited by all consumers
+Use the least complex pattern that meets freshness, grounding, permission, action and latency requirements:
 
-**Consequence:** From "data in silos per agent" to "agents as consumers of governed data".
+1. Keep collaborative content in Microsoft 365 and use Work IQ or Microsoft Graph-based retrieval.
+2. Use Foundry IQ for permission-aware enterprise knowledge and citations.
+3. Use Fabric IQ or a Fabric data agent for business semantics and governed analytical data.
+4. Use a deterministic SQL, DAX, KQL or governed API tool when the query contract is known and tightly controlled.
+5. Use MCP when live operational data or actions are required.
+6. Use Real-Time Intelligence and an operations agent when the system must continuously monitor events and trigger governed responses.
+
+Escalate to custom indexing, retrieval code or compound patterns only when a documented requirement cannot be met by a built-in option.
+
+Official architecture source: [Data architecture for AI agents](https://learn.microsoft.com/azure/cloud-adoption-framework/ai-agents/data-architecture-plan).
+
+### Strategy selection matrix
+
+| Strategy | Select when | Typical Microsoft capability | Freshness and behavior | Important constraints |
+|---|---|---|---|---|
+| **Work context retrieval** | The answer depends on the signed-in user's emails, meetings, chats, files, people or collaboration context | Work IQ API, Microsoft Graph, Microsoft 365 Copilot | Current Microsoft 365 context, permission-trimmed to the user | Preserve user identity, sensitivity labels and the Microsoft 365 trust boundary |
+| **External content in Microsoft 365** | Third-party knowledge must appear in Microsoft 365 search, Copilot or agents | Microsoft 365 Copilot connectors | Synced connectors index content in Microsoft Graph; federated connectors retrieve from the source at query time | Validate connector availability, ACL mapping, sync delay, preview status and source limits |
+| **Managed enterprise knowledge retrieval** | Agents need grounded answers over structured or unstructured enterprise content with citations | Foundry IQ knowledge bases and agentic retrieval | Multi-source keyword, vector or hybrid retrieval; indexed sources refresh on an indexer schedule | Supported ACL and Purview enforcement varies by source and feature status; Azure AI Search capacity and cost apply |
+| **Custom RAG/search** | Built-in knowledge retrieval cannot meet ranking, schema, lifecycle, network or regulatory requirements | Azure AI Search or OneLake indexers with custom application logic | Application-controlled indexing and query pipeline | Higher engineering, evaluation, index security and operations burden; require evidence before selecting it over Foundry IQ |
+| **Semantic business context** | Agents must use consistent business terms, KPIs, entities and relationships | Fabric IQ semantic models, ontology and Graph | Governed semantic context over OneLake analytical, operational and real-time data | Ontology and some IQ items are preview; verify region, capacity, feature and production support |
+| **Conversational analytics** | Users or an orchestrating agent need natural-language, read-only answers over Fabric data | Fabric data agent | Generates and executes SQL, DAX, KQL or Microsoft Graph queries using the requesting user's permissions | Read-only; no unstructured files; up to five sources; regional co-location and response-size limits apply |
+| **Deterministic query tool** | The required query is predictable and a controlled contract is safer than open-ended retrieval | SQL analytics endpoint, semantic-model/DAX query, KQL endpoint or governed API/function | Live query against the serving layer | The application owns query allow-listing, parameter validation, connection limits, result shaping and identity propagation |
+| **Live operational access or action** | The agent needs current system-of-record data or must create/update records | Built-in connector, API tool or MCP server | Real-time read or transaction at tool-call time | Separate read from write tools; require authentication, least privilege, policy, audit, idempotency and human approval for high-impact actions |
+| **Streaming monitoring and response** | The workload must watch events continuously, detect conditions and initiate governed action | Fabric Eventstream, Eventhouse, Fabric IQ ontology, operations agent and Activator | Continuous event processing over live and historical data | Use agent-triggered action only where deterministic rules alone are insufficient; verify preview status and degraded behavior |
+
+### Reference architecture
+
+```mermaid
+flowchart LR
+    S[Authoritative sources] --> M365[Microsoft 365 and Work IQ]
+    S --> OL[OneLake governed data products]
+    S --> LIVE[Operational systems and APIs]
+    S --> EVT[Eventstream and Eventhouse]
+
+    M365 --> R1[Work IQ or Copilot connectors]
+    OL --> R2[Foundry IQ knowledge retrieval]
+    OL --> R3[Fabric IQ and Fabric data agent]
+    OL --> R4[Controlled SQL DAX or KQL tool]
+    LIVE --> R5[API connector or MCP]
+    EVT --> R6[Operations agent and Activator]
+
+    R1 --> AR[Agent runtime]
+    R2 --> AR
+    R3 --> AR
+    R4 --> AR
+    R5 --> AR
+    R6 --> AR
+
+    GOV[Entra identity, source permissions, Purview, policy, audit and evaluators] -.-> R1
+    GOV -.-> R2
+    GOV -.-> R3
+    GOV -.-> R4
+    GOV -.-> R5
+    GOV -.-> R6
+```
+
+Microsoft Foundry Agent Service or Copilot Studio can provide the managed agent platform. Microsoft Agent Framework can implement application-managed orchestration but requires explicit hosting unless deployed as a Foundry hosted agent. Work IQ, Foundry IQ and Fabric IQ supply context; they are not interchangeable orchestration runtimes.
+
+### Selection questions
+
+1. **What kind of data is authoritative?** Collaboration content, documents, analytical tables, semantic metrics, events or an operational system of record.
+2. **How fresh must it be?** Indexed on a schedule, queried live, streamed continuously or retrieved within a bounded cache interval.
+3. **Is the task read-only or transactional?** Prefer retrieval for evidence and a separate, tightly scoped tool for actions.
+4. **Whose permissions apply?** Preserve user identity when answers depend on user-level access; use a workload identity only for explicitly approved service-level scope.
+5. **Does the answer require citations or exact calculations?** Use knowledge retrieval for evidence and semantic or deterministic query tools for trusted metrics.
+6. **Can a built-in capability meet the need?** Use Foundry IQ, Fabric IQ, Fabric data agents, Work IQ or supported connectors before custom retrieval code.
+7. **What is the effective capacity?** Validate the lowest limit across source APIs, connector sync, indexes, model calls, Fabric capacity, query endpoints and downstream tools.
+
+### Compound pattern: retrieve, calculate, then act
+
+Many enterprise scenarios need more than one strategy, but each data domain should still have one clear authority:
+
+```mermaid
+flowchart LR
+    Q[Business question] --> K[Foundry IQ retrieves policy with citations]
+    Q --> D[Fabric IQ or data agent returns governed metric]
+    K --> A[Agent runtime reconciles evidence]
+    D --> A
+    A --> H{Action requires approval?}
+    H -- Yes --> P[Human approval]
+    H -- No --> T[Scoped API or MCP tool]
+    P --> T
+    T --> L[Audit result and evaluate outcome]
+```
+
+Example: retrieve the return policy through Foundry IQ, calculate order eligibility through a controlled Fabric semantic query, then create the return through a separately authorized MCP or API tool.
+
+### OneLake as a governed data foundation
+
+OneLake supports shared data products for analytics and AI. Use **Shortcuts** to reference supported external or cross-workspace data without copying, **Mirroring** when a replicated analytical copy and low-latency change capture are required, and ingestion pipelines when transformation, history or quality controls require materialization. These are data-supply choices; agents consume the resulting data through a supported retrieval or tool interface.
+
+Governance is path-specific. Verify the caller identity, source permissions, workspace/item permissions, RLS/CLS or ACL behavior, Purview policy support, audit coverage and output controls for the selected interface. Do not assume that every source policy is inherited automatically by every agent, connector or custom tool.
 
 ---
 
-### 🏗️ Architecture — Three Consumption Layers
+### Supporting OneLake data-supply pattern
 
 #### **Layer 1: Unified Storage (OneLake)**
 
@@ -66,130 +153,105 @@ graph TD
 **Technical characteristics** (Microsoft Fabric official):
 - **Unique hierarchy:** One OneLake per tenant, multiple workspaces, multiple lakehouses
 - **Delta Lake standard:** All table data is stored in Delta Parquet format (ACID transactions, schema enforcement, time-travel)
-- **Shortcuts (zero-copy):** Data in external ADLS Gen2 or other workspaces appears as local tables — no ETL, no duplication
+- **Shortcuts:** Supported external or cross-workspace data can be referenced without copying it into the consuming item; source compatibility, caching and permission behavior must be validated
 - **Automatic provisioning:** Each lakehouse automatically creates /Tables and /Files, without infrastructure complexity
 
-#### **Layer 2: Multiple Access Interfaces**
+#### **Serving paths over OneLake**
 ```mermaid
-graph TB
-    subgraph OL["☁️ ONELAKE (Unified Tenant Data Lake)"]
-        BRONZE["🟤 Bronze<br/>Raw Data<br/>As-is Format"]
-        SILVER["🟡 Silver<br/>Clean Data<br/>Delta Tables"]
-        GOLD["🟢 Gold<br/>Business Data<br/>Ready-to-consume"]
-    end
-    
-    SAE["📊 SQL Analytics<br/>Endpoint<br/>─────────────<br/>T-SQL Interface<br/>RLS-enabled"]
-    
-    SC["🔗 Shortcuts<br/>─────────────<br/>Zero-copy<br/>Virtual refs<br/>Cross-workspace"]
-    
-    COPILOT["🤖 M365 Copilot<br/>Teams/Word/Excel"]
-    AGENTA["🤖 Agent A<br/>Microsoft Foundry<br/>Claude/GPT"]
-    AGENTB["🤖 Agent B<br/>Copilot Studio<br/>Low-code"]
-    BI["📈 Power BI<br/>Visualização"]
-    
-    BRONZE --> SILVER
-    SILVER --> GOLD
-    GOLD --> SAE
-    GOLD --> SC
-    GOLD --> BI
-    
-    SAE --> COPILOT
-    SAE --> AGENTA
-    SAE --> AGENTB
-    SC --> AGENTA
-    SC --> AGENTB
-    
-    style OL fill:#E8F4F8,stroke:#4A90E2,color:#000,stroke-width:3px
-    style BRONZE fill:#8B6F47,stroke:#664D2A,color:#fff,stroke-width:2px
-    style SILVER fill:#C9A961,stroke:#9B7E48,color:#fff,stroke-width:2px
-    style GOLD fill:#50C878,stroke:#3A9B5C,color:#fff,stroke-width:2px
-    style SAE fill:#4A90E2,stroke:#2E5C8A,color:#fff,stroke-width:2px
-    style SC fill:#7B68EE,stroke:#5A4DB0,color:#fff,stroke-width:2px
-    style COPILOT fill:#FF9999,stroke:#CC6666,color:#fff
-    style AGENTA fill:#FF9999,stroke:#CC6666,color:#fff
-    style AGENTB fill:#FF9999,stroke:#CC6666,color:#fff
-    style BI fill:#FFD93D,stroke:#CCB030,color:#000
+flowchart LR
+    EXT[External or cross-workspace data] -->|Shortcut, mirroring or ingestion| OL[OneLake governed data product]
+    OL --> SQL[SQL analytics endpoint]
+    OL --> SEM[Semantic model or Fabric IQ]
+    OL --> FDA[Fabric data agent]
+    OL --> FIQ[Foundry IQ knowledge source or search index]
+    SQL --> TOOL[Controlled query tool]
+    SEM --> AGENT[Agent runtime]
+    FDA --> AGENT
+    FIQ --> AGENT
+    TOOL --> AGENT
 ```
 
-**Interfaces de acesso:**
-1. **SQL Analytics Endpoint (recomendado para agentes)**
-   - Interface T-SQL nativa (SELECT, JOINs, stored procs)
-   - Row-Level Security integrada (filtra por identidade do agente)
-   - Automatic sync with Delta tables
-   - Native Entra ID authentication
+**Important distinction:** SQL endpoints, semantic models, data agents and knowledge indexes are serving or retrieval interfaces. Shortcuts, mirroring and ingestion determine how data becomes available to those interfaces.
 
-2. **Shortcuts (for cross-workspace references)**
-   - Data in another lakehouse/workspace appears as local tables
-   - No ETL, no COPY — direct fetch from ADLS Gen2
-   - Centralized governance maintained at source
-   - Ideal for data mesh and cross-domain sharing
+#### **Example runtime mappings**
 
-3. **Microsoft Graph API (for Work IQ)**
-   - Access to SharePoint, OneDrive, Exchange data
-   - Authentication via OAuth 2.0 Entra ID
-   - Contextual data for each user
-
-#### **Layer 3: Per-Agent Consumption Pattern**
-
-| Agent Type | Interface | Data Consumed | Authentication | Governance |
-|---|---|---|---|---|
-| **M365 Copilot (Work IQ)** | Microsoft Graph API | SharePoint, OneDrive, Teams | User context (Entra) | Purview labels |
-| **Claude via Microsoft Foundry** | SQL Analytics Endpoint | OneLake Gold (Delta) | Managed Identity | RLS + Labels |
-| **Copilot Studio** | SQL Analytics Endpoint or Connectors | OneLake Gold or SaaS APIs | User token or MI | RLS + Labels |
-| **Custom Agent (Python/Node)** | SQL driver (pyodbc, mssql) | OneLake Gold (Delta) | Entra ID auth | RLS + Labels |
+| Runtime or experience | Preferred starting path | Add another path when |
+|---|---|---|
+| **Microsoft 365 Copilot or declarative agent** | Work IQ and Microsoft 365 content; Copilot connectors for external knowledge | Governed Fabric metrics or transactional tools are required |
+| **Microsoft Foundry Agent Service** | Foundry IQ for enterprise knowledge; Fabric data agent or a controlled query tool for analytics | Live operational data or actions require API/MCP tools |
+| **Copilot Studio** | Built-in knowledge sources, Copilot connectors or Fabric data agent | A bounded action requires a connector, flow, API or MCP tool |
+| **Microsoft Agent Framework or custom application** | Built-in IQ endpoint or narrow governed API first | Custom RAG or direct query is justified by a requirement the built-in path cannot meet |
 
 ---
 
-### ✅ Benefits — Why This Architecture Works
+### Potential benefits and required validation
 
-#### **1. Data Consistency (Single Source of Truth)**
-- All 3 areas (Copilot, Agent A, Agent B) query the **same Gold layer** in OneLake
+#### **1. Data Consistency (Shared Governed Authority and Semantics)**
+- Agents can reuse the same certified data products and semantic definitions
 - Reduction of "conflicting versions" of the same data
-- Decisions based on a single corporate truth
+- Decisions can use a shared corporate definition when the selected retrieval paths point to the same governed authority
 
 **Impact:** Reduces errors, conflicts and rework
 
 #### **2. Reuse without Duplication (Zero-Copy)**
-- Data ingested **once** into OneLake
-- Agents, BI, Data Science access via SQL Analytics Endpoint or Shortcuts
-- **No COPY, no replication, no duplication** — saves 40-60% in storage vs data silos
+- Shortcuts can reference supported source data without creating another analytical copy
+- Semantic models, data agents and query tools can reuse the same governed data product
+- Foundry IQ indexes, synced Copilot connectors, mirroring and materialized transformations can create managed copies; include them in cost, freshness and retention decisions
 
-**Impact:** Reduces cost (less storage), reduces latency (fresher data)
+**Impact:** Can reduce redundant pipelines and improve freshness, subject to the chosen supply and retrieval pattern
 
-#### **3. Automatically Inherited Governance**
-- Sensitivity labels applied in Purview once
-- Row-Level Security (RLS) configured in SQL Analytics Endpoint once
-- All agents inherit these policies — no repeated reconfigurations
+#### **3. Path-Specific Governance**
+- Source, workspace, item and semantic-model permissions can constrain access
+- RLS, CLS, ACLs, sensitivity labels and Purview policies apply only where the selected product and source combination supports them
+- Custom APIs, query tools and MCP servers must enforce identity, authorization, result filtering and audit explicitly
 
-**Impact:** Compliance, security, audit "for free" for each new agent
+**Impact:** Consistent controls are achievable, but must be tested end to end for each consumption path
 
 #### **4. Horizontal Scalability**
-- Adding 10 new agents **does not require** copying data 10 times
-- Each agent is a consumer, not an isolated producer
-- OneLake scales automatically (ADLS Gen2 as backbone)
+- New agents can reuse approved knowledge bases, semantic models, data agents and data products
+- Reuse avoids one bespoke data pipeline per agent when domains and permissions align
+- Every added workload still consumes model, search, Fabric, API and connector capacity
 
-**Impact:** Viable Data Mesh — domains can collaborate without complex infrastructure
+**Impact:** Supports domain reuse while keeping capacity and ownership visible
 
 ---
 
-### 📍 Real Reuse Example
+### 📍 Analytical Consolidation Example
 
 **Scenario:** Tim from Sales wants "customer ranking by revenue"; Finance wants "margin analysis by customer"; Marketing wants "segmentation by lifetime value"
 
-**Without Fabric (data silos):**
-- Tim creates Sales table with 5M records
-- Finance creates Margins table with same 5M records (DUPLICATES)
-- Marketing creates LTV table with same 5M records (TRIPLICATES)
-- 3x storage, 3x ETL, inconsistent security policies
+**Without analytical consolidation:**
+- Sales, Finance and Marketing can continue using separate authoritative systems and governed APIs when their ownership, latency or regulatory boundaries differ
+- each domain retains its own metric contract, access controls, freshness target and audit evidence
+- cross-domain analysis requires an approved composition layer and reconciliation rules
 
-**With Fabric (OneLake unified):**
+**When Fabric is justified for shared analytics:**
 - Bronze: ingest customer data once
 - Silver: validate once → single Delta table
 - Gold: create dim_Customer once
-- Tim, Finance, Marketing query the same dim_Customer via SQL or Shortcuts
-- Automatic RLS: Tim sees only his region, Finance sees consolidated, etc.
+- Tim, Finance and Marketing consume the same certified data product through the interface suited to each experience
+- If user-level access is required, configure and test RLS, CLS or source ACL enforcement on every selected path
 
-**Result:** -60% storage, -40% ETL time, elevated consistency
+**Decision gate:** Select Fabric when the measurable benefit of analytical consolidation or semantic reuse exceeds migration, capacity, governance and operating cost. Do not classify every non-Fabric architecture as a silo.
+
+**Result to validate:** appropriate reuse, consistent metric definitions where required, acceptable freshness, sufficient capacity and no unauthorized cross-domain exposure
+
+### Official Microsoft sources
+
+Accessed **2026-07-20**:
+
+- [Data architecture for AI agents](https://learn.microsoft.com/azure/cloud-adoption-framework/ai-agents/data-architecture-plan)
+- [Work IQ overview](https://learn.microsoft.com/microsoft-365/copilot/extensibility/work-iq)
+- [Work IQ API overview](https://learn.microsoft.com/microsoft-365/copilot/extensibility/work-iq/api-overview)
+- [Microsoft 365 Copilot connectors overview](https://learn.microsoft.com/microsoft-365/copilot/connectors/overview)
+- [What is Foundry IQ?](https://learn.microsoft.com/azure/foundry/agents/concepts/what-is-foundry-iq)
+- [What is Fabric IQ?](https://learn.microsoft.com/fabric/iq/overview)
+- [Fabric data agent concepts](https://learn.microsoft.com/fabric/data-science/concept-data-agent)
+- [Retrieval-augmented generation with Azure AI Search](https://learn.microsoft.com/azure/search/retrieval-augmented-generation-overview)
+- [Model Context Protocol tool for Foundry Agent Service](https://learn.microsoft.com/azure/foundry/agents/how-to/tools/model-context-protocol)
+- [MCP in Fabric Real-Time Intelligence](https://learn.microsoft.com/fabric/real-time-intelligence/mcp-overview)
+- [OneLake shortcuts](https://learn.microsoft.com/fabric/onelake/onelake-shortcuts)
+- [Mirroring in Microsoft Fabric](https://learn.microsoft.com/fabric/database/mirrored-database/overview)
 
 ---
 

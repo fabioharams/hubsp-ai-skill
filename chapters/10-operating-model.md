@@ -14,8 +14,8 @@ The agent identifies intent, context and task scope. At this step, it decides wh
 3. **Policy validation (Guard Rails + Entra + Purview)**
 Before any sensitive access, the flow applies identity, authorization and classification controls.
 
-4. **Organizational grounding (Microsoft IQ + Microsoft Fabric)**
-The agent selects Work IQ for work context, Foundry IQ for permission-aware enterprise knowledge and Fabric IQ + Microsoft Fabric for semantic and analytical business data.
+4. **Organizational grounding (only the required governed paths)**
+The solution selects Work IQ for Microsoft 365 work context, Foundry IQ for managed enterprise knowledge, Fabric IQ and Microsoft Fabric for shared semantics and analytics, or another governed authority only when that path is required. A direct answer or deterministic tool path can omit agent orchestration and unused context capabilities.
 
 5. **Complementary external grounding (Web IQ, when applicable)**
 When the task requires market signals or recent public context, the flow incorporates web evidence with source traceability and a clear separation between internal and external data.
@@ -41,11 +41,13 @@ flowchart TD
 
     C -->|nao| F[Gerar resposta direta]
     C -->|sim| D[Guard Rails validam\nidentidade acesso classificacao]
-    D --> Q[Microsoft IQ seleciona\ncontexto autorizado]
-    Q --> E[Fabric IQ e Fabric\nfornecem contexto e dados]
-    E --> W{Precisa contexto\nweb externo atualizado}
+    D --> Q[Selecionar somente\ncontexto governado necessario]
+    Q --> E{Analitica compartilhada\nou semantica exigida}
+    E -->|sim| P[Fabric IQ e Fabric]
+    E -->|nao| W{Precisa contexto\nweb externo atualizado}
+    P --> W
     W -->|nao| F[Agent runtime compoe\nresposta final]
-    W -->|sim| X[Web IQ fornece\nevidencias externas]
+    W -->|sim e disponivel| X[Web IQ fornece\nevidencias externas]
     X --> F
 
     F --> G[Evaluators avaliam\nqualidade e seguranca]
@@ -65,8 +67,8 @@ flowchart TD
 - **Work IQ**: contextual intelligence from Microsoft 365 work signals.
 - **Foundry IQ**: managed, permission-aware enterprise knowledge and agentic retrieval.
 - **Fabric IQ/Fabric**: semantic context and governed data.
-- **Web IQ**: near-real-time external context for complementary grounding.
-- **Agent runtime**: orchestration, reasoning, tool use, state and execution.
+- **Web IQ**: limited-access external context for complementary grounding when availability and terms fit.
+- **Managed agent platform or hosted application**: orchestration, reasoning, tool use, state and execution. Microsoft Agent Framework requires explicit hosting unless deployed as a Foundry hosted agent.
 - **Guard Rails**: identity, access and data risk protection.
 - **Evaluators**: objective measurement for continuous evolution.
 

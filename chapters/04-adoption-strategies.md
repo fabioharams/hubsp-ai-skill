@@ -1,4 +1,6 @@
-## ⚖️ 4. Adoption Strategies (A vs B)
+## ⚖️ 4. Adoption Strategies — Governance Spectrum
+
+The following scenarios are illustrative extremes, not the only choices. Self-service can be governed, and governed data can remain in Microsoft 365, operational systems, domain platforms, approved APIs or search indexes without requiring Fabric. Select controls and data paths by risk and authority, then choose Fabric only when analytical consolidation, shared semantics or reusable data products are required.
 
 ### 🅰️ Scenario A — Self-Service Agents
 
@@ -27,7 +29,7 @@
 
 ```mermaid
 graph TB
-    subgraph ScenarioA ["🅰️ CENÁRIO A - Self-Service (Shadow AI)"]
+    subgraph ScenarioA ["🅰️ EXTREMO A - Self-Service sem governanca"]
         A1["📂 Dados Variados<br/>─────────────────<br/>ERP, CRM, Planilhas<br/>APIs públicas"]
         A2["⚡ Sem Classificação<br/>─────────────────<br/>Busca rápida<br/>Sem workflow"]
         A3["🤖 Agentes Livres<br/>─────────────────<br/>Acessam dados<br/>brutos direto"]
@@ -40,7 +42,7 @@ graph TB
         A3 --> A5
     end
     
-    subgraph ScenarioB ["🅱️ CENÁRIO B - Dados Tratados (Governed)"]
+    subgraph ScenarioB ["🅱️ EXTREMO B - Plataforma analitica centralizada"]
         B1["📊 Dados Estruturados<br/>─────────────────<br/>Fabric Lakehouse<br/>Medallion Pattern"]
         B2["🏷️ Classificação<br/>Purview + Entra<br/>─────────────────<br/>Public/Confidential<br/>Row-Level Security"]
         B3["🔐 Agentes Controlados<br/>─────────────────<br/>Acessam dados<br/>Gold via SQL Endpoint"]
@@ -67,14 +69,14 @@ graph TB
 ```
 
 ### 🎯 Conclusion
-The ideal model is **hybrid and evolutionary**:
-- **Short term (0-4 months)**: Start with **Scenario B** (M365 Copilot + curated data) to establish guardrails
-- **Medium term (4-10 months)**: Evolve to **controlled Scenario A** (Self-service with governance)
-- **Long term (10+ months)**: **Mature hybrid** (some free agents, but in sandbox; majority governed)
+The ideal model is **evidence-based and evolutionary**:
+- **Pilot:** Start with the lowest-complexity option that meets the current requirement and establish guard rails, evaluators and a measurable baseline.
+- **Expansion:** Add users, data domains, tools or a more capable runtime only after the pilot proves value, permissions, capacity and operational ownership.
+- **Scale:** Operate the proven mix of SaaS capabilities, deterministic workflows, RAG solutions and agents as a governed portfolio. A hybrid or multi-agent architecture remains conditional on requirements that simpler options cannot satisfy.
 
-**Rule**: Security and consistency first, fast innovation within established guardrails.
+**Rule**: Security and shared governed authority first; add complexity only with evidence and measurable escalation triggers.
 
 ---
 
-> Content moved to [references/03-roi-ai-vs-man-hour.md](references/03-roi-ai-vs-man-hour.md) — ROI Model — AI vs. Person-Hour Cost.
+> Content moved to [ROI Model — AI vs. Person-Hour Cost](../references/03-roi-ai-vs-man-hour.md).
 

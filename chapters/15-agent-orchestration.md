@@ -1,8 +1,8 @@
-## 🔀 17. Agent Orchestration — Patterns, Implementation and Governance
+## 🔀 17. Multi-Agent Orchestration — Patterns, Implementation and Governance
 
 ### 📌 Definition
 
-**Agent orchestration** is the process of coordinating multiple specialized AI agents to solve complex problems that no single agent can solve completely. Each agent executes its task within its domain, passes the result to the next, and a **central orchestrator** manages the flow, routing decisions, error handling and final response composition.
+This chapter focuses on **multi-agent orchestration**: coordinating specialized AI agents when independent responsibilities cannot be met reliably by one bounded agent. Intra-agent orchestration is different; a single agent can plan steps, call tools and manage state without becoming a multi-agent system. The repository uses single-agent first as a conservative default, while documented hard requirements for independently isolated ownership or runtime boundaries can justify direct multi-agent evaluation.
 
 **Differentiation:**
 - **Single agent**: Responds to a request with an LLM + tools. Fast, low latency, but limited to one domain.

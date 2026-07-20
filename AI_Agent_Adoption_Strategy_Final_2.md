@@ -12,6 +12,7 @@ Use these curated references first when the request matches a core decision topi
 - [Governance and security](references/04-governance-guard-rails-evaluators-hitl.md) - guard rails, evaluators and HITL.
 - [Microsoft AI Decision Framework](references/05-decision-framework-bxt.md) - Intake Filter, BXT, critical questions and technology selection.
 - [PL 2338/2023](references/06-pl-2338-2023-copilot-studio-foundry.md) - regulatory analysis and Microsoft control mapping.
+- [Capacity and scale assessment](references/07-capacity-and-scale-assessment.md) - demand, entitlement, quota, headroom, load validation and production-fit verdicts.
 
 ## Chapters
 

@@ -45,7 +45,7 @@ flowchart TD
 **Characteristics:**
 - Scope: Single session (minutes to hours)
 - Storage: In-memory or cache (Redis, Cosmos DB session store)
-- Governance: None (not persistent)
+- Governance: Controls proportional to sensitivity, including namespace isolation, encryption, TTL, logging policy and deletion behavior even when state is ephemeral
 - Cost: Low
 
 **Ideal use:** Interactive conversations, turn-to-turn context.
@@ -54,7 +54,7 @@ flowchart TD
 
 #### **2. Long-Term Knowledge Base Memory**
 
-Persistent facts, policies and procedures that the agent has learned or been configured with.
+Persistent facts, policies and procedures that the solution has been configured to retrieve. The diagram shows one conditional Fabric implementation; a selected governed search, database or knowledge service can be used instead.
 
 ```mermaid
 flowchart TD
@@ -82,8 +82,8 @@ flowchart TD
 
 **Characteristics:**
 - Scope: Corporate, permanent
-- Storage: Fabric Gold Layer (semantic layer, embedding vectors)
-- Governance: Purview labels, RLS, versioning
+- Storage: Selected governed knowledge store; Fabric plus Azure AI Search is one option
+- Governance: Source permissions, classification, versioning, retention and retrieval-time authorization appropriate to the selected store
 - Cost: Medium (indexing, storage)
 
 **Ideal use:** Access to procedures, policies, corporate knowledge.
@@ -92,7 +92,7 @@ flowchart TD
 
 #### **3. Episodic Memory (Task History)**
 
-Record of the agent's past actions — which tasks it executed, results, patterns.
+Record of the agent's past actions — which tasks it executed, results and patterns. The diagram shows one conditional Fabric analytics implementation rather than a universal memory architecture.
 
 ```mermaid
 flowchart TD
@@ -120,8 +120,8 @@ flowchart TD
 
 **Characteristics:**
 - Scope: Execution history (days to months)
-- Storage: Fabric Bronze/Silver (raw logs + transformed)
-- Governance: Audit trail, RLS by user/department
+- Storage: Selected governed telemetry or analytical store; Fabric Bronze/Silver is one option
+- Governance: Audit trail, access control, purpose limitation, retention and deletion by user, tenant or domain
 - Cost: High (retention)
 
 **Ideal use:** Pattern learning, route optimization, anomaly detection.
@@ -130,7 +130,7 @@ flowchart TD
 
 #### **4. Semantic Memory (Relationship Graph)**
 
-Conceptual structure — how entities relate to each other (customers ↔ products ↔ transactions).
+Conceptual structure — how entities relate to each other (customers ↔ products ↔ transactions). Fabric semantic models are one implementation; another governed graph or semantic authority can be selected when it better fits the domain.
 
 ```mermaid
 flowchart TD
@@ -164,10 +164,10 @@ flowchart TD
 
 | Type | Scope | Latency | Persistence | Governance | Use |
 |------|--------|----------|---|---|---|
-| **Conversation** | Session | ms | No (minutes) | None | Turn-to-turn context |
-| **Long-Term KB** | Corporate | 100ms-1s | Yes (permanent) | Purview labels, RLS | Policies, procedures |
-| **Episodic** | History | 1-10s | Yes (logs) | Audit trail, RLS | Patterns, optimization |
-| **Semantic** | Corporate | ms-100ms | Yes (permanent) | Lineage, RLS | Recommendations, insights |
+| **Conversation** | Session | Measure | Usually minutes or hours | Isolation, TTL, encryption and logging policy | Turn-to-turn context |
+| **Long-Term KB** | Corporate | Measure | Policy-defined | Source permissions, classification, versioning and retention | Policies, procedures |
+| **Episodic** | History | Measure | Policy-defined | Audit, access control, purpose limitation and deletion | Patterns, optimization |
+| **Semantic** | Corporate | Measure | Policy-defined | Lineage, authorization and semantic ownership | Recommendations, insights |
 
 ### 🧭 Usage Scenarios — When and How to Use Memory
 
@@ -244,7 +244,7 @@ Sem memória:
 |---------|-----------|
 | **Quality** | ✅ Contextualized responses, reduced hallucinations |
 | **UX Experience** | ✅ Natural conversation, no need to repeat context |
-| **Efficiency** | ✅ Reuses successful patterns, 30-50% less time |
+| **Efficiency** | ✅ Can reuse relevant context; quantify time saved in the scenario pilot |
 | **Insights** | ✅ Patterns emerge from history (anomalies, trends) |
 | **Audit** | ✅ Complete decision traceability |
 | **Governance** | ✅ RLS, compliance labels applied |
@@ -254,7 +254,7 @@ Sem memória:
 | Aspecto | Custo |
 |---------|-------|
 | **Storage** | 💰 Medium-High (log retention, embeddings) |
-| **Latency** | ⏱️ +100-500ms per search (retrieval) |
+| **Latency** | ⏱️ Additional retrieval latency; measure with the selected store, region and query pattern |
 | **Complexity** | 🛠️ More complex implementation (RLS, TTL, cleanup) |
 | **Governance** | 📋 Mandatory compliance (LGPD, CCPA) |
 | **Debugging** | 🔍 Harder to debug (multiple correlated data) |
@@ -270,7 +270,7 @@ Sem memória:
 | **Cost** | ✅ Very low (no storage) |
 | **Security** | ✅ No leakage risk (retains no data) |
 | **Compliance** | ✅ Easier (LGPD: data deleted immediately) |
-| **Scalability** | ✅ Infinitely scalable (stateless) |
+| **Scalability** | ✅ Easier horizontal scaling because application state is externalized or absent |
 
 **Custos:**
 | Aspecto | Custo |
@@ -384,15 +384,17 @@ Responda SIM a 2+ itens → **SEM MEMÓRIA**
 - User enters value, agent calculates → done
 - Sem contexto anterior
 - Data: temporary, disposable
-- Scale: very high (100K requests/minute)
+- Scale assumption: 100K requests/minute, unvalidated
 
 **Decision:** ❌ **NO MEMORY**
 
 **Implementation:**
 - Stateless Azure Function
 - Nenhum storage
-- Latency < 50ms
+- Latency target < 50ms, subject to end-to-end load validation
 - Cost: minimal
+
+**Capacity verdict:** **Conditional fit** until the compute plan, regional quota, concurrency, downstream limits, headroom and production-like load test demonstrate the stated throughput and latency.
 
 ---
 
@@ -935,7 +937,7 @@ context = json.loads(r.get(f"session:{user_id}:{session_id}") or "{}")
 
 | Atributo | Valor |
 |----------|-------|
-| Latency | 5–15ms (SLA 99%) |
+| Latency | Measure for the selected region, consistency level, partitioning and request pattern; do not treat an illustrative figure as an SLA |
 | Persistence | ✅ Always |
 | TTL nativo | ✅ Por documento (campo `ttl`) |
 | RLS | Via partition key + middleware |
@@ -968,7 +970,7 @@ container.upsert_item(item)
 
 | Atributo | Valor |
 |----------|-------|
-| Latency | 50–300ms (vector search) |
+| Latency | Measure for the selected tier, index size, query type, replicas, partitions and peak concurrency |
 | Persistence | ✅ Always |
 | Native TTL | ❌ Requires expiration field + indexer job |
 | RLS | ✅ Via security filters (OData filter) |
@@ -1056,7 +1058,7 @@ patterns = spark.sql("""
 
 | Atributo | Valor |
 |----------|-------|
-| Latency | 10–100ms |
+| Latency | Measure under the selected hosting topology, index size, query plan, concurrency and network path |
 | Persistence | ✅ Full ACID |
 | TTL nativo | ❌ Via scheduled DELETE |
 | RLS | ✅ Row-Level Security nativo (PostgreSQL) |

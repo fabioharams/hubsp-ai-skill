@@ -1,6 +1,8 @@
 ## 📝 A. Executable Code Examples
 
-### A.1 Python — Agent Framework for Foundry
+### A.1 Python — Microsoft Agent Framework Using a Foundry Model
+
+> This example constructs an Agent Framework application that calls a model through Foundry. Agent Framework does not supply managed hosting; the application remains responsible for hosting, scaling, identity, state and operations unless it is separately deployed as a Foundry hosted agent.
 
 ```python
 # agent_framework_foundry_example.py
@@ -98,7 +100,7 @@ static string GetTopProductByMargin(string quarter, string region)
 
 ### A.3 Node.js — Channel integration (outside the MAF core)
 
-> Executive note: the **Microsoft Agent Framework (MAF)** has its main SDK in **Python and .NET**. In Node.js, the standard is to use channel/orchestration SDKs (e.g., Teams AI) and integrate with governed corporate services/agents.
+> Executive note: **Microsoft Agent Framework** supports Python and .NET, with Go in public preview as of July 20, 2026. This Node.js example uses a channel-specific SDK and integrates with governed corporate services or separately hosted agents.
 
 ```javascript
 const { ConversationBot } = require("@microsoft/teams-ai");

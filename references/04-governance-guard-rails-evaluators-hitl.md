@@ -41,7 +41,7 @@ To stay consistent with this repository's target architecture, apply controls in
 2. **Advanced orchestration layer (Microsoft Foundry):** content safety, prompt shields, continuous evaluation, tracing and technical observability.
 3. **Data layer (Fabric/Purview):** classification, access control, retention and end-to-end auditing.
 
-**Rule of thumb:** in a mixed solution, no agent should access sensitive data without a combination of identity (Entra), policy (Purview/DLP) and output validation (guard rails + evaluators).
+**Rule of thumb:** before any sensitive retrieval or action, enforce identity, least-privilege source authorization and deterministic application/runtime policy. Apply output guard rails before delivery. Use evaluators separately to test and measure whether the complete path behaves as intended; evaluators do not authorize data access.
 
 **Official Microsoft sources:**
 - Microsoft Copilot Studio security and governance: https://learn.microsoft.com/microsoft-copilot-studio/security-and-governance
@@ -57,17 +57,14 @@ graph LR
     
     B -->|"✅ Clean prompt"| C["🛡️ Layer 2<br/>Content Filter<br/>─────────────<br/>Classification<br/>Spam/Hate/Violence"]
     
-    C -->|"✅ Safe intent"| D["🤖 AGENT<br/>─────────────<br/>Tool calls<br/>Reasoning"]
-    
-    D -->|"Raw output"| E["🛡️ Layer 3<br/>Output Validation<br/>─────────────<br/>PII Detection<br/>Hallucination Check"]
-    
-    E -->|"✅ Safe response"| F["📊 FABRIC<br/>─────────────<br/>RLS + Data<br/>Classification"]
-    
-    F -->|"Authorized access"| G["✅ RESPONSE<br/>Delivered to<br/>the User"]
+    C -->|"✅ Safe intent"| F["🔐 Layer 3<br/>Selected Governed Resource<br/>─────────────<br/>Identity + source authorization<br/>classification + policy"]
+    F -->|"Authorized access"| D["🤖 AGENT OR WORKFLOW<br/>─────────────<br/>Tool calls<br/>Reasoning"]
+    D -->|"Raw output"| E["🛡️ Layer 4<br/>Output Validation<br/>─────────────<br/>PII and safety policy"]
+    E -->|"✅ Safe response"| G["✅ RESPONSE<br/>Delivered to<br/>the User"]
     
     B -->|"❌ Injection detected"| H["🚫 BLOCKED<br/>Log + Alert"]
     C -->|"❌ Dangerous category"| H
-    E -->|"❌ PII or hallucination"| H
+    E -->|"❌ PII or policy violation"| H
     F -->|"❌ Access denied"| H
     
     style A fill:#FFB347,stroke:#FF8C00,color:#000,stroke-width:2px
@@ -103,11 +100,16 @@ graph LR
   - "What is the Q3 revenue?" → BUSINESS_QUERY (allowed)
 - **Action:** ✅ If score < threshold → process; ❌ Otherwise, reject
 
-#### **Layer 3: Output Validation (Response Analysis)**
+#### **Layer 3: Data and Tool Authorization**
+- **What:** Enforces identity, least privilege, source permissions, classification and allowed tool/action scope before data enters model context or an action executes.
+- **Mechanism:** Entra identity plus the selected resource's RBAC, ACL, RLS, CLS or connector authorization, reinforced by deterministic application/runtime policy.
+- **Benefit:** Unauthorized data is denied at the source instead of being generated and filtered afterward.
+
+#### **Layer 4: Output Validation (Response Analysis)**
 - **What:** Validates the generated response before returning it to the user
 - **Subcomponents:**
   - **PII Detection:** Analyzes the response for personal data (CPF, email, phone, SSN)
-  - **Groundedness Check:** Validates whether the response is grounded in data (vs. hallucination)
+    - **Groundedness Check:** Measures whether the response is grounded in retrieved evidence and can inform a release or deliberately implemented response gate
   - **Consistency Check:** Compares the response with history to detect contradictions
 - **Examples:**
   - Agent replies: "Customer João Silva (CPF 123.456.789-00) has a balance of R$ 50k"
@@ -135,8 +137,9 @@ sequenceDiagram
     participant Prompt as 🛡️ Prompt Shields
     participant Content as 🛡️ Content Filter
     participant Agent as 🤖 Agent
-    participant Output as 🛡️ Output Validation
-    participant Fabric as 📊 Fabric/RLS
+    participant Resource as 🔐 Governed Resource
+    participant Output as 🛡️ Output Guard Rail
+    participant Eval as ✅ Evaluator
     participant Response as ✅ Response
     participant Log as 📋 Audit Log
     
@@ -147,39 +150,24 @@ sequenceDiagram
     
     Content->>Content: Classify intent
     Note over Content: ✓ BUSINESS_QUERY (safe)
-    Content->>Agent: 3. Allow processing
-    
-    Agent->>Agent: Execute reasoning
-    Agent->>Agent: Tool call 1: query Fabric
-    Agent->>Agent: Tool call 2: aggregate data
+    Content->>Resource: 3. Request approved data/tool scope
+    Resource->>Resource: Enforce identity + RBAC/ACL/RLS/labels
+    Resource->>Agent: 4. Return only authorized data
+    Agent->>Agent: Execute reasoning and allowed tools
     Note over Agent: Agent generates raw output
-    Agent->>Output: 4. Response: "Q3 = R$ 48M"
+    Agent->>Output: 5. Response: "Q3 = R$ 48M"
     
     Output->>Output: PII Detection?
     Note over Output: ✓ No CPF/email/etc
-    Output->>Output: Groundedness Check?
-    Note over Output: ✓ Data found in Gold
-    Output->>Output: Hallucination?
-    Note over Output: ✓ Consistent response
-    Output->>Fabric: 5. Validate data access
-    
-    Fabric->>Fabric: Check RLS + Labels
-    Note over Fabric: ✓ Agent has a valid role
-    Fabric->>Response: 6. ✅ Return Q3 = R$ 48M
-    
+    Output->>Response: 6. Return policy-compliant response
     Response->>User: 7. User receives the response
+    Response->>Eval: Measure groundedness and quality
     
     Response->>Log: 8. Record the event
     Log->>Log: timestamp, user_id, agent_id,<br/>prompt, response, guardrails_applied
 ```
 
-**Typical times per layer:**
-- Prompt Shields: ~50ms (fast detection)
-- Content Filter: ~100ms (classification)
-- Agent reasoning: ~1-5s (depends on tools and context)
-- Output Validation: ~200ms (PII + groundedness)
-- RLS check: ~50ms (SQL server-side)
-- **Total end-to-end: ~2-6 seconds** (imperceptible to the user)
+**Performance rule:** do not treat layer latency as fixed or guaranteed. Measure prompt checks, authorization, retrieval, model calls, tools, output controls and evaluation under representative peak load for the selected products, regions and configurations. Set an end-to-end target from the user journey and record a **Conditional fit** verdict until load evidence confirms it.
 
 ---
 
@@ -493,10 +481,10 @@ At least one user needs a qualifying Agent 365 license to enable Agent 365. Micr
 - shadow AI — agents created outside IT control operate without policies
 - operational risk at scale — compromised agents without detection or response
 
-### ✅ With Agent 365
-- unified registry — real-time inventory of all the organization's agents
-- automatically applied policies — every agent is born governed via Policy Templates
-- end-to-end protection — Entra + Purview + Defender integrated into a single control plane
+### ✅ With supported Agent 365 onboarding and configured controls
+- unified registry — centralized inventory for supported and onboarded agents
+- standardized policies — supported agents can receive policy templates when licensing, identities and enforcement surfaces are configured
+- integrated protection — Entra, Purview and Defender controls can contribute to a coordinated control plane; coverage must be validated by agent type and integration
 
 ### 🔗 Microsoft sources (official)
 

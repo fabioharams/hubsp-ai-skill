@@ -1,6 +1,6 @@
 ## 🏗️ 2. Reference Architecture (Overview)
 
-> Context update: this section incorporates recent announcements from **Microsoft IQ**, including **Web IQ**, and the latest official positioning of **Work IQ**, **Foundry IQ** and **Fabric IQ**.
+> This is a capability map, not a mandatory product stack. Select only the context, runtime, framework, hosting and data components that a documented current requirement justifies. Start with an existing SaaS capability or deterministic automation and escalate through direct LLM, RAG, single agent and multi-agent only when the preceding option cannot reliably meet the requirement.
 
 ```mermaid
 graph TD
@@ -9,17 +9,23 @@ graph TD
     B["<b>Foundry IQ</b><br/>(Enterprise Knowledge)<br/>─────────────────<br/>Knowledge bases<br/>agentic retrieval"]
     C["<b>Fabric IQ</b><br/>(Data Intelligence)<br/>─────────────────<br/>Semantics, ontology<br/>unified metrics"]
     W["<b>Web IQ</b><br/>(Web Context Layer)<br/>─────────────────<br/>Near-real-time web grounding<br/>external evidence"]
-    R["<b>Agent Runtime</b><br/>─────────────────<br/>Foundry Agent Service<br/>Copilot Studio / Agent Framework"]
+    R["<b>Managed Agent Platform</b><br/>─────────────────<br/>Foundry Agent Service<br/>or Copilot Studio"]
+    H["<b>Application Hosting</b><br/>─────────────────<br/>Required for Agent Framework<br/>unless deployed as a hosted agent"]
     D["<b>Microsoft Fabric</b><br/>(Data Platform)<br/>─────────────────<br/>OneLake, Data Products<br/>Lakehouse, Warehouse"]
     
     E["🛡️ Guard Rails<br/>Control"]
     F["✅ Evaluators<br/>Quality"]
     
     X --> R
+    X --> H
     A --> R
     B --> R
     C --> R
     W --> R
+    A --> H
+    B --> H
+    C --> H
+    W --> H
     C --> D
     D --> C
     
@@ -31,6 +37,7 @@ graph TD
     style C fill:#50C878,stroke:#3A9B5C,color:#fff,stroke-width:2px
     style W fill:#00A3A3,stroke:#006D6D,color:#fff,stroke-width:2px
     style R fill:#E85D04,stroke:#A33F00,color:#fff,stroke-width:2px
+    style H fill:#E85D04,stroke:#A33F00,color:#fff,stroke-width:2px
     style D fill:#FF6B6B,stroke:#CC5555,color:#fff,stroke-width:2px
     style E fill:#FFD93D,stroke:#CCB030,color:#333,stroke-width:2px
     style F fill:#6BCB77,stroke:#54A05F,color:#fff,stroke-width:2px
@@ -53,15 +60,15 @@ The contextual intelligence workload for Microsoft 365. It captures how work hap
 The managed, permission-aware enterprise knowledge workload. It is backed by Azure AI Search knowledge bases and agentic retrieval. Its role is to:
 - Operate a permission-aware corporate knowledge base with structured and unstructured sources
 - Execute agentic retrieval: decomposes questions into sub-queries, parallel search and re-ranks evidence with citations
-- Sync ACLs and sensitivity labels (Purview) for enforcement at query time
+- Enforce permissions and labels for supported sources and configurations; support varies by connector, API, region and feature status
 - Connect Azure, SharePoint, OneLake and web in the same enterprise grounding plane
 
 **Example:** An agent asks a shared knowledge base for the policies and authoritative documents relevant to a margin investigation. Foundry IQ plans retrieval, enforces supported source permissions and returns grounded evidence with citations.
 
 ---
 
-#### 🤖 **Agent Runtime and Orchestration**
-The execution layer is separate from the IQ context workloads. Use **Microsoft Foundry Agent Service**, **Microsoft Copilot Studio** or **Microsoft Agent Framework** to:
+#### 🤖 **Agent Platform, Framework and Hosting**
+The execution layer is separate from the IQ context workloads. **Microsoft Foundry Agent Service** and **Microsoft Copilot Studio** provide managed agent platforms. **Microsoft Agent Framework** is a development framework, not a hosting service; its application requires an explicit hosting and scaling choice unless it is deployed as a Foundry hosted agent. The selected platform or hosted application can:
 - Interpret intent and plan multi-step execution
 - Invoke models, knowledge sources, tools, MCP servers and other agents
 - Maintain conversation state and apply approval checkpoints
@@ -72,7 +79,7 @@ The execution layer is separate from the IQ context workloads. Use **Microsoft F
 ---
 
 #### 🌐 **Web IQ (Web Context Layer)**
-The **external grounding** layer of Microsoft IQ for up-to-date public web context. Its role is to:
+The **external grounding** layer of Microsoft IQ for up-to-date public web context. Access is currently limited and should be treated as a conditional dependency with an availability check and fallback. Its role is to:
 - Bring web evidence (pages, news, images and videos) into agentic flows
 - Operate with a focus on grounding quality, low latency and token efficiency
 - Deliver denser passages/evidence to improve multi-step reasoning precision
@@ -84,7 +91,7 @@ The **external grounding** layer of Microsoft IQ for up-to-date public web conte
 ---
 
 #### 📊 **Fabric IQ (Data Intelligence)**
-The **semantics and context** layer that enriches data with corporate meaning. Builds the single source of truth for metrics, dimensions and relationships. Its role is to:
+The **semantics and context** layer that enriches data with corporate meaning when shared analytical definitions are required. It can provide governed definitions for metrics, dimensions and relationships without replacing authoritative operational or domain systems. Its role is to:
 - Create semantic models: define metrics (revenue, margin, COGS) once and only once
 - Map ontology: relationships between entities (products, customers, regions, periods)
 - Ensure consistency: all agents use the same definition of "margin", "customer", "Q3"
@@ -96,7 +103,7 @@ The **semantics and context** layer that enriches data with corporate meaning. B
 ---
 
 #### 🗄️ **Microsoft Fabric (Data Platform)**
-The foundation — a unified platform that stores, governs and delivers data to all layers above. Its role is to:
+An optional unified analytics platform for scenarios that require analytical consolidation, shared semantics or reusable data products. Other scenarios can retain governed Microsoft 365, operational, domain, API or search authorities. When selected, Fabric can:
 - Store (OneLake): single logical repository per tenant, built on ADLS Gen2
 - Transform (Spark, Python, SQL): ETL pipelines feeding Bronze → Silver → Gold
 - Serve (SQL Analytics Endpoint): exposes data via T-SQL endpoint for agents to run queries
@@ -111,11 +118,11 @@ The foundation — a unified platform that stores, governs and delivers data to 
 The **control and security** layer that permeates all agent operations. Its role is to:
 - Detect attacks: Prompt Shields blocks prompt injection
 - Filter content: Content Safety checks risk categories (violence, NSFW, etc.)
-- Validate data access: Purview labels control which agent accesses which data
+- Enforce explicit application and runtime policies in addition to source authorization
 - Sanitize responses: PII Detection removes sensitive information before returning
 - Auditability: every action is recorded in Audit Logs for compliance
 
-**Example:** An agent attempts to access data labelled "Highly Confidential" → Guard Rail intercepts, records the attempt, blocks access → log sent to Purview for audit.
+**Example:** Entra identity, resource authorization and source permissions deny an unauthorized request. A deterministic guard rail can additionally block a disallowed tool or action, and the audit path records the decision.
 
 ---
 
@@ -127,7 +134,7 @@ The **continuous measurement** layer that validates whether agents are operating
 - Support decisions: quality data justifies promoting to production or rolling back
 - Integrate compliance: Purview logs of access to sensitive data become quality metrics
 
-**Example:** Evaluator validates that the margin response used correct data (groundedness = 95%), explanation was clear (task adherence = 98%), no data leakage detected in the test (security = high) → response approved for the user.
+**Example:** Evaluators measure whether margin responses use the correct evidence and meet release thresholds. Runtime blocking occurs only when the architecture deliberately implements a deterministic policy or evaluated-response gate; evaluators do not replace source authorization.
 
 ---
 
@@ -138,12 +145,12 @@ flowchart TD
     A["👤 User<br/><b>Copilot / Teams / App</b><br/>Requests natural action"]
     B["🤖 Agent Runtime<br/>Interprets and plans"]
     K["📚 Microsoft IQ Context<br/>Work IQ | Foundry IQ<br/>Fabric IQ | Web IQ"]
-    C{"🛡️ Guard Rails<br/>Validate permissions<br/>and security"}
+    C{"🔐 Authorization + Guard Rails<br/>Validate identity, permissions<br/>policy and action risk"}
     D["📞 Tool Call<br/>Agent fetches data"]
     E["📊 Fabric IQ<br/>Semantics: translates<br/>question → query"]
     F["🗄️ Microsoft Fabric<br/>Serves data with<br/>Row-Level Security"]
     G["🧠 Reasoning<br/>Agent combines<br/>contexts"]
-    H{"✅ Evaluators<br/>Validate:<br/>Quality | Security<br/>Compliance"}
+    H["✅ Evaluators<br/>Measure quality, security<br/>and release readiness"]
     I["📤 Response<br/><b>Work IQ</b><br/>Delivered to user"]
     
     A -->|"requests"| B
@@ -156,8 +163,8 @@ flowchart TD
     E -->|"optimized SQL"| F
     F -->|"data + metadata"| G
     G -->|"analysis + context"| H
-    H -->|"✅ quality OK"| I
-    H -->|"⚠️ reject"| W["🔄 Feedback Loop<br/>Improve Prompts"]
+    H --> I
+    H --> W["🔄 Feedback Loop<br/>Improve Prompts"]
     W -->|"retrain"| B
     I -->|"ready insight"| A
     
@@ -174,7 +181,7 @@ flowchart TD
     style W fill:#FF9800,stroke:#E65100,color:#fff,stroke-width:2px
 ```
 
-**Insight:** Fabric provides the governed data foundation. Microsoft IQ supplies complementary work, knowledge, business and web context. The agent runtime plans and executes. Guard rails constrain behavior, and evaluators reinforce response reliability.
+**Insight:** The selected governed authority supplies data. Microsoft IQ capabilities add complementary work, knowledge, business or web context only when needed. A managed agent platform or hosted Agent Framework application plans and executes when an agent is justified. Authorization and guard rails constrain behavior; evaluators measure reliability and inform release decisions.
 
 ### 🧭 Adoption criteria: Copilot Studio, Foundry or mixed solution
 
@@ -182,14 +189,15 @@ flowchart TD
 |---|---|---|
 | **Copilot Studio** | Business domain with well-defined conversational flow, low/medium technical effort and fast delivery in channels like Teams/web | Less control for advanced reasoning scenarios and complex engineering |
 | **Microsoft Foundry** | Cases with deep technical integration, advanced tool calling, multi-step/multi-agent and need for pro-code control | Higher engineering and operational governance effort |
-| **Mixed solution (Studio + Foundry)** | Corporate cases with simultaneous need for business experience + advanced orchestration | Requires more disciplined architecture and observability |
+| **Mixed solution (Studio + Foundry)** | A measured requirement needs both a Copilot Studio experience boundary and Foundry capabilities that one platform cannot satisfy | Highest integration, identity, latency, cost and observability burden |
 
-**Recommended pattern for corporate target architecture:**
-1. Copilot, Teams and business apps at the front (experience), with Work IQ supplying Microsoft 365 context.
-2. Copilot Studio in the conversational/domain orchestration layer.
-3. Microsoft Foundry Agent Service or Microsoft Agent Framework at the reasoning and execution core.
-4. Work IQ, Foundry IQ, Fabric IQ and Web IQ as context workloads selected by need.
-5. Microsoft Fabric as the governed data platform.
+**Conditional target-architecture selection:**
+1. Use an existing Microsoft/SaaS capability or deterministic workflow when it meets the outcome.
+2. Add only the required context workload: Work IQ for Microsoft 365 work context, Foundry IQ for managed enterprise knowledge, Fabric IQ for shared business semantics, or Web IQ for approved external context.
+3. When an agent is required, select one managed platform: Copilot Studio for low-code business experiences or Foundry Agent Service for managed pro-code agents.
+4. Use Microsoft Agent Framework only with an explicit application-hosting choice or as a Foundry hosted agent.
+5. Add Microsoft Fabric only for an analytical consolidation, semantic reuse or governed data-product requirement.
+6. Combine platforms or agents only when evaluation proves that one bounded platform cannot meet independently justified requirements.
 
 **Official Microsoft sources:**
 - Microsoft Copilot Studio documentation: https://learn.microsoft.com/microsoft-copilot-studio/
@@ -202,10 +210,10 @@ flowchart TD
 ### 📰 Recent Microsoft IQ updates (2025-2026)
 
 - **Microsoft IQ** is now explicitly described as the corporate intelligence layer with **Work IQ, Foundry IQ, Fabric IQ and Web IQ**.
-- **Work IQ** reinforces the 3-layer architecture (data, context, skills/tools), with extensibility via MCP tools and evolution of the Work IQ CLI (preview).
-- **Foundry IQ** consolidates the knowledge base + agentic retrieval pattern with ACL/Purview enforcement and citations for traceability.
-- **Fabric IQ (preview)** evolves with new items and semantic operationalization capabilities (e.g., ontology/plan/rules) and integrations for agents.
-- **Web IQ** is announced as a web grounding API suite for the agentic era, expanding near-real-time external context for agents.
+- **Work IQ** exposes work intelligence through chat, context, tools and workspaces; availability can differ by integration.
+- **Foundry IQ** consolidates knowledge bases and agentic retrieval with citations and supported source permissions; capability status varies between GA and preview.
+- **Fabric IQ** includes an IQ workload and items whose status varies; ontology, Plan and Graph capabilities require current preview and regional checks.
+- **Web IQ** expands external grounding for agents but remains a limited-access dependency that requires an availability check and fallback.
 
 ---
 
@@ -537,7 +545,7 @@ graph TD
 - ✅ **Clean** data: standardize formats, remove invalid values
 - ✅ **Structure** for analysis: denormalizations, lightweight aggregations
 - ✅ **Integrate** multiple sources: invoices + customers + products into coherent tables
-- ✅ Serve as **single source of truth** for analysts and agents
+- ✅ Serve as a governed, reusable analytical authority for analysts and agents within the defined domain and scope
 
 **Characteristics:**
 
@@ -1620,11 +1628,11 @@ Purview and Entra record everything:
 }
 ```
 
-**Log Retention:**
+**Log retention requirements:**
 
-- Entra ID Sign-in logs: 30 days (default) → 90 days with Azure Log Analytics
-- Fabric Audit logs: 90 days (default) → Unlimited retention with Long Term Retention
-- Purview DLP logs: 1 year (default) → Configurable up to 10 years
+- Verify each Entra, Fabric, Purview and Azure Monitor retention setting against the tenant's current license, region, workspace configuration and official service documentation.
+- Record the required investigation and regulatory period, current configured retention, archive or export path, deletion behavior, owner and source access date.
+- Do not assume that a default retention period or an external archive provides complete evidence until retrieval and access controls are tested.
 
 ---
 
@@ -1707,7 +1715,7 @@ flowchart TD
 
 ##### 🔗 **Microsoft References**
 
-- [**Microsoft Entra Agent ID**](https://learn.microsoft.com/entra/agent-id/what-is-microsoft-entra-agent-id) - Security framework for AI agents (Preview)
+- [**Microsoft Entra Agent ID**](https://learn.microsoft.com/entra/agent-id/what-is-microsoft-entra-agent-id) - Identity foundation for AI agents; licensing and individual feature status vary
 - [**Conditional Access for Agents**](https://learn.microsoft.com/entra/identity/conditional-access/agent-id) - Adaptive policies for agent identities
 - [**Microsoft Entra Authentication in Fabric**](https://learn.microsoft.com/fabric/data-warehouse/entra-id-authentication) - Zero Trust authentication for SQL Analytics Endpoint
 - [**Sensitivity Labels in Fabric**](https://learn.microsoft.com/fabric/governance/protected-sensitivity-labels) - Data classification with automatic protection

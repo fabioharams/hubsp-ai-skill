@@ -1,6 +1,6 @@
 ## 🧬 1.1. AI Architecture Fundamentals — LLM × RAG × AI Agent × Agentic AI
 
-> This section establishes the conceptual foundation of the guide. Before detailing the corporate layers (Work IQ, Foundry IQ, Fabric IQ and the data platform), it is essential to understand the four patterns that form the **autonomy and complexity spectrum** of generative AI applications. They are not competing technologies: each level **incorporates** the previous one and adds a new capability.
+> This section establishes the conceptual foundation of the guide. Before detailing optional corporate capabilities, it is essential to understand the four patterns in the **autonomy and complexity spectrum** of generative AI applications. They can be composed, but they are independently selectable: an agent does not inherently require RAG, persistent memory, Fabric or multiple agents.
 
 ### 📈 Overview — the complexity spectrum
 
@@ -26,11 +26,11 @@ Microsoft describes this progression as a **complexity spectrum** and recommends
 |---|---|---|---|---|
 | **Definition** | Text generator: you ask, it responds based on what it learned in training. | LLM that retrieves information from a database *before* responding. | AI that plans steps, uses tools and executes complete tasks. | Set of specialized agents that collaborate, coordinated by an orchestrator. |
 | **Architecture** | `question → model → response` | `question → index search → retrieves chunks → generates grounded response` | `objective → plan → tool use → evaluate → adjust → conclude` | `objective → orchestrator distributes → agents execute → review → delivery` |
-| **Components** | A model trained on a large volume of text. | Model + searchable index (vector/keyword/hybrid) + *embeddings*. | Model + instructions + retrieval + tools + memory. | Multiple agents + shared memory/state + orchestration layer. |
+| **Components** | A model trained on a large volume of text. | Model + searchable index (vector/keyword/hybrid); embeddings are optional for keyword-only retrieval. | Model + instructions + required tools; retrieval and memory are optional. | Multiple agents + orchestration; shared state or memory is optional and requirement-driven. |
 | **Functionality** | Predicts the next token; generates natural language. | Responds grounded in proprietary and up-to-date data (*grounding*). | Decomposes the objective, chooses tools and iterates until completion. | Specialists distribute work, exchange context and coordinate like a team. |
 | **Typical use case** | Writing, summarization, translation, classification. | Q&A on internal policies, manuals, knowledge base. | Multi-step research, data collection, workflow automation. | Campaigns, large projects, end-to-end business processes. |
 | **Tools** | None. Operates in isolation. | Reads data via index, but does not execute actions. | Uses search, APIs, code etc. (via *function calling* / MCP). | Each agent uses the tools of its domain; integration via MCP / A2A. |
-| **Memory** | No memory between sessions (context window only). | Fetches fresh information with each query, but does not remember previous questions. | Maintains state across steps (working memory). | State/memory shared among the agents on the team. |
+| **Memory** | No persistent memory unless the application adds it. | Retrieval does not inherently remember previous questions. | Can maintain ephemeral or persistent state when required. | Can use isolated or shared state when required by the orchestration pattern. |
 | **Planning** | Responds immediately, without planning. | Retrieves and responds; does not plan ahead. | Reasons and self-corrects (ReAct, CoT, Plan-and-Solve, Reflexion). | Agents decide jointly; serial, concurrent or dynamic orchestration. |
 | **Autonomy** | Reactive: requires a *prompt* for each interaction. | Retrieves documents automatically, but only responds when asked. | Executes the task on its own after receiving the objective. | Runs entire projects with minimal human supervision. |
 | **Relative cost** *(illustrative)* | Lowest — pay only for generation. | Medium — model + index. | Higher — multiple calls and tools. | Highest of all — multiple agents running. |
@@ -158,7 +158,7 @@ flowchart TB
 
 ### 🤖 AI Agent — single agent with tools
 
-**Definition (Microsoft).** An agent is an AI application that uses a generative model to **reason** about requests and **take autonomous actions** to fulfill them. Unlike a chatbot that only generates text, the agent calls tools, accesses external data and makes decisions across **multiple steps**. This behavior belongs to an agent runtime such as Microsoft Foundry Agent Service, Copilot Studio or Microsoft Agent Framework.
+**Definition (Microsoft).** An agent is an AI application that uses a generative model to **reason** about requests and **take autonomous actions** to fulfill them. Unlike a chatbot that only generates text, the agent calls tools, accesses external data and makes decisions across **multiple steps**. This behavior can run on a managed platform such as Microsoft Foundry Agent Service or Copilot Studio, or in an explicitly hosted application built with Microsoft Agent Framework.
 
 **The 5 components (Cloud Adoption Framework).** (1) Generative model — reasoning engine; (2) Instructions — scope, limits and rules; (3) Retrieval/Knowledge — *grounding* data; (4) Actions/Tools — functions, APIs and systems; (5) Memory — history and state (see section 18).
 
@@ -232,10 +232,10 @@ Security boundaries do not by themselves require multiple agents. First isolate 
 |---|---|---|
 | Personal and assistive productivity in the workflow | Lightweight LLM/RAG | Microsoft 365 Copilot |
 | Domain conversational automation with low/medium complexity | Single AI Agent | Copilot Studio |
-| Advanced reasoning, complex tool calling, multi-step and pro-code engineering | Advanced AI Agent / Agentic AI | Microsoft Foundry Agent Service / Microsoft Agent Framework |
-| Business experience + advanced technical reasoning in the same case | Hybrid architecture | Copilot Studio + Microsoft Foundry |
+| Advanced reasoning, complex tool calling, multi-step and pro-code engineering | Single AI Agent | Microsoft Foundry Agent Service or an explicitly hosted Microsoft Agent Framework application |
+| Business experience and advanced technical reasoning that one platform demonstrably cannot satisfy | Mixed architecture exception | Copilot Studio + Microsoft Foundry |
 
-**Practical rule:** when there is simultaneously a need for a business channel (Teams/web, low-code, fast cycle) and advanced technical orchestration (reasoning, complex tools, multi-agent), prioritize a **mixed solution**.
+**Practical rule:** first test whether Copilot Studio or Microsoft Foundry can satisfy the complete current requirement alone. Use a **mixed solution** only when measured requirements need both a Copilot Studio experience boundary and Foundry capabilities that one platform cannot reliably provide. Document the added identity, latency, cost and operational burden.
 
 **Official Microsoft sources:**
 - Microsoft 365 Copilot documentation: https://learn.microsoft.com/microsoft-365-copilot/
@@ -280,7 +280,7 @@ Security boundaries do not by themselves require multiple agents. First isolate 
 - **Knowledge cutoff:** the date limit of knowledge learned by the model during training.
 - **Fan-out/Fan-in:** concurrent pattern — distributes (fan-out) and aggregates (fan-in) results.
 
-> **Connection to this guide's layers:** the **LLM** is the reasoning engine used by the application or agent runtime; **RAG** can consume Foundry IQ knowledge, Fabric IQ business context and governed data from Microsoft Fabric; **AI Agent** and **Agentic AI** execute in Foundry Agent Service, Copilot Studio or Agent Framework; Work IQ supplies Microsoft 365 context, while guard rails and evaluators apply cross-cutting controls.
+> **Connection to this guide's layers:** the **LLM** is the reasoning engine used by the application or managed agent platform; **RAG** can consume Foundry IQ knowledge, Fabric IQ business context and governed data from Microsoft Fabric; **AI Agent** and **Agentic AI** can execute in Foundry Agent Service, Copilot Studio or an explicitly hosted Agent Framework application; Work IQ supplies Microsoft 365 context, while guard rails and evaluators apply cross-cutting controls.
 
 ---
 

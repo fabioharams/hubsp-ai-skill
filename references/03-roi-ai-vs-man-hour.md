@@ -36,7 +36,7 @@ $$
 | `Hours_per_Task` | Average time a human takes on the task | Sampling / ticketing system |
 | `Num_Tasks` | Volume of tasks in the period | Operational history |
 
-> ⚠️ **Most common mistake:** using the gross salary. The BLS (US) *Employment Cost Index* points to an additional load of **~42% over the salary**. In Brazil, CLT charges raise the cost by **+70% to +100%** over the base salary. **Always use the loaded cost.** Example (Brazil/CLT): base salary R$ 8,000 × loading factor 1.8 = R$ 14,400/month ÷ ~160 h ≈ **R$ 90/hour**.
+> ⚠️ **Most common mistake:** using only gross salary. Use the organization's measured loaded person-hour cost, including the benefits, taxes and overhead that Finance approves. Any country-level loading factor is a dated external benchmark, not a universal rule. The example below is illustrative and must be replaced with scenario data before a recommendation.
 
 **Total AI Cost per Task (denominator):**
 
@@ -46,10 +46,10 @@ $$
 
 | Component | What it includes | Critical note |
 |---|---|---|
-| `Inference_Cost` | Input + output tokens × model price | **Output** tokens cost **3× to 10× more** than input |
+| `Inference_Cost` | Input + output tokens × current model price | Input/output ratios vary by model, deployment and date; use the current official price sheet |
 | `Infra_Cost` | GPUs/cloud, agent orchestration, vector databases (RAG), APIs | Diluted per task |
 | `HITL_Cost` | Human time for **reviewing, correcting and approving** AI outputs | This is where the *"phantom productivity"* lives |
-| `Amortized_Cost` | One-time setup (integration, *prompt engineering*, data cleaning) ÷ total volume | Legacy integration usually takes **2× to 3×** the estimate |
+| `Amortized_Cost` | One-time setup (integration, *prompt engineering*, data cleaning) ÷ total volume | Use an evidence-based estimate and track actual delivery variance |
 
 Inference cost detail:
 
@@ -57,7 +57,7 @@ $$
 \text{Cost}_{\text{Inference}} = (\text{Tokens}_{\text{Input}} \times \text{Price}_{\text{Input}}) + (\text{Tokens}_{\text{Output}} \times \text{Price}_{\text{Output}})
 $$
 
-Reference prices per **million tokens** (market, 2026 — input / output):
+Illustrative market ranges per **million tokens** captured in 2026. They are not a pricing source and must not be used for approval; replace them with the current official product price, selected deployment type and region:
 
 | Tier / Model | Input (US$/1M) | Output (US$/1M) | Typical use |
 |---|---|---|---|
@@ -65,7 +65,7 @@ Reference prices per **million tokens** (market, 2026 — input / output):
 | Intermediate (Sonnet, GPT-5) | ~2.50 – 3.00 | ~15.00 | Production reasoning, code |
 | Premium (Opus, o3) | ~5.00 – 15.00 | ~25.00 – 75.00 | Critical analysis, multi-step agents |
 
-> 💡 **Inference reduction levers:** **Prompt caching** reduces *input* cost by **30–60%** when the system prompt repeats; **Batch API** cuts input and output in half when latency is not critical; **context window** — filling 80% of 128K can cost **4–6×** more than a 16K context for the same task.
+> 💡 **Inference reduction levers:** prompt caching, batch processing, model routing and context reduction can reduce cost when supported. Quantify savings with the selected model's current pricing and measured token profile; do not assume a fixed percentage.
 
 ### 📈 The complete ROI formula
 
@@ -195,13 +195,14 @@ graph LR
 6. Did I apply the **scope multiplier** (how many will really use it)?
 7. Did I consider **levers** (caching, batch, the right model for the right task)?
 
-### 📊 Market benchmarks to calibrate expectations
+### 📊 External benchmarks to frame hypotheses
+
+The ranges below are dated external observations with different populations and methods. They are not Microsoft architecture facts or default ROI assumptions. Keep a direct claim-level source and access date when using one, and replace it with the scenario's measured baseline before approval.
 
 - **Value per task:** Anthropic estimates the median task at **US$ 54** of human work, with tasks **80% faster** with AI (study of 100,000 conversations, Nov/2025).
-- **Operational gains:** **15–35%** operating cost reduction, **20–40%** efficiency gain and **30–60%** error reduction in repetitive processes.
+- **Operational gains:** broad published ranges vary materially by process and study; do not use a generic percentage without a direct source and comparable workload.
 - **Coding productivity:** the GitHub Copilot RCT (Kalliamvakou et al., 2022) showed developers **55% faster**.
-- **Agentic ROI:** typical reported returns of **250–600%**.
-- **Abandonment rate:** **46% of pilots** were abandoned before production in 2025 — usually due to change management and integration, not technological failure.
+- **Agentic ROI and pilot survival:** reported figures vary by vendor, sample and definition. Treat them as discovery hypotheses only when a direct source and comparable scope are documented.
 
 ### 🔎 Discovery guide with the client (from discovery to the number)
 
@@ -341,7 +342,7 @@ In hours: the analyst "gives back" $168 \times 20\% = 33.6$ h/month; with 70% re
 | 20% | 33.6 | R$ 1,512 | +404% | ✅ Strong |
 | 35% | 58.8 | R$ 2,647 | +782% | ✅ Excellent |
 
-> Break-even point: for R$ 64.30/h, AI at R$ 300/month and 70% realization, an effective gain of just **~4%** (≈ 4.7 h/month reused) is enough for the tool to pay for itself. **This is why low-cost copilots almost always have positive ROI for skilled work** — the loaded salary makes each freed hour far more valuable than the subscription.
+> Break-even point for this illustrative case: with R$ 64.30/h, AI at R$ 300/month and 70% realization, an effective gain of approximately **4%** (about 4.7 h/month reused) covers the subscription. This does not generalize to other roles or products; adoption, realized reuse, setup, support, licensing and opportunity cost can reverse the result.
 
 ### 🔗 How the ROI model connects to this guide's architecture
 

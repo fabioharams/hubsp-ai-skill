@@ -47,7 +47,7 @@ The 9 questions generate **technology groups** (not the final choice):
 | # | Question | Decision it guides |
 |---|---|---|
 | 1 | **Location of the experience** | M365 (Copilot Chat/Teams/Word) vs. custom/multichannel vs. API/headless |
-| 2 | **Control spectrum (build style)** | SaaS (M365 Copilot) → Orchestration/low-code (Copilot Studio) → Foundation/pro-code (Foundry / Agent SDK) |
+| 2 | **Control spectrum (build style)** | SaaS (Microsoft 365 Copilot) → Orchestration/low-code (Copilot Studio) → Managed pro-code (Foundry Agent Service) or Microsoft Agent Framework with explicit hosting |
 | 3 | **Data grounding pattern** | RAG (Graph, AI Search, Cosmos, SQL, Fabric Data Agents) + memory + analytics |
 | 4 | **Orchestration complexity (The Coin)** | Soloist (single agent) → Orchestra (multi-agent hub-and-spoke) → Mesh (A2A/connected) |
 | 5 | **Compliance and trust boundary** | Trust boundary M365 / Power Platform / Azure landing zone / hybrid |
@@ -78,7 +78,7 @@ Given the Phase 2 grouping, apply the criteria in order to choose the technology
 |---|---|---|
 | Conversational business experience, low/medium complexity, low-code team | **Copilot Studio** | Lower time-to-market and native integration with Microsoft channels |
 | Advanced reasoning, complex integrations, pro-code engineering, multi-step/multi-agent | **Microsoft Foundry** | Greater technical control, evaluation and advanced orchestration |
-| Combined need for business UX + advanced intelligence/orchestration | **Mixed solution (Copilot Studio + Microsoft Foundry)** | Best balance between delivery speed and technical depth |
+| Measured business UX and advanced orchestration requirements that one platform cannot satisfy | **Mixed solution exception (Copilot Studio + Microsoft Foundry)** | Accept only when the additional runtime boundary is independently justified |
 
 **Triggers for adopting a mixed solution:**
 1. The case requires a business experience or channel capability best served by Copilot Studio and advanced pro-code reasoning or orchestration that it cannot reliably satisfy.
@@ -124,7 +124,7 @@ Licensing or total monthly capacity alone does not prove throughput. If peak dem
 - Microsoft Copilot Studio documentation: https://learn.microsoft.com/microsoft-copilot-studio/
 - Microsoft Foundry documentation: https://learn.microsoft.com/azure/foundry/
 - Microsoft 365 Copilot documentation: https://learn.microsoft.com/microsoft-365-copilot/
-- Cloud Adoption Framework for AI: https://learn.microsoft.com/azure/cloud-adoption-framework/scenarios/ai/
+- Cloud Adoption Framework AI strategy: https://learn.microsoft.com/azure/cloud-adoption-framework/ai/strategy
 
 **Decision output template:** Simplest viable baseline · Simpler options assessed · Unmet requirements and evidence · Selected technology · Capacity and scale fit matrix · Fit verdict and open validation gates · Deferred capabilities · Escalation triggers · Time-to-market · Managed vs. self-managed · Complexity · Budget · Integrations · Orchestration · Accepted trade-offs · Next steps (pilot/POC/deploy).
 
@@ -137,13 +137,13 @@ Licensing or total monthly capacity alone does not prove throughput. If peak dem
 **5 Capability Groupings** (building blocks, not a maturity ladder):
 1. End-user copilots (ready-made UI)
 2. Extensibility in existing copilots (plugins, Graph connectors)
-3. Build apps and agents (hybrid by default)
+3. Build apps and agents (one managed platform or explicitly hosted application by default; mixed only with evidence)
 4. AI services and building blocks (Foundry: models, retrieval, evaluations, governance)
 5. Specialized agents (do not rebuild what already exists)
 
 **The IQ layers** (how agents understand the organization) — anchor directly to this guide's architecture (reference 02):
-- **Foundry IQ = Memory** (knowledge bases / agentic retrieval, citations, ACL + Purview)
-- **Work IQ = Awareness** (the same intelligence as M365 Copilot; Mail, Calendar, Teams, 1,500+ connectors via MCP)
+- **Foundry IQ = Enterprise knowledge** (knowledge bases, agentic retrieval, citations and supported source permissions)
+- **Work IQ = Work context** (Microsoft 365 mail, calendar, meetings, files, people and workflows within supported permission boundaries)
 - **Fabric IQ = Understanding** (ontologies, semantic models, business rules, governed actions)
 - **Web IQ = External Grounding** (up-to-date web evidence for market context and public facts)
 

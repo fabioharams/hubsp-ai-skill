@@ -190,7 +190,7 @@ The rationale is simple:
 
 - **Copilot Studio** is stronger for use cases with a business process, Microsoft channels, governed connectors and lower technical complexity.
 - **Microsoft Foundry** is stronger for use cases with custom models, multi-agent, deep observability, an evaluation pipeline and greater technical GRC requirements.
-- For **high-risk** scenarios, the target architecture should combine **Work IQ**, **Foundry IQ** and **Fabric IQ** with cross-cutting controls from Purview, Entra, Sentinel and Defender, rather than relying on an agent builder alone.
+- For **high-risk** scenarios, strengthen identity, authorization, data protection, audit, HITL, guard rails, evaluators, incident response and legal governance. Select Work IQ, Foundry IQ, Fabric IQ, Web IQ, Fabric or multiple runtimes only when the scenario independently requires each capability. Risk classification alone does not justify a larger product stack or multi-agent architecture.
 
 ## Practical conclusion
 

@@ -76,7 +76,7 @@ Part A alone is sufficient for an initial architecture direction. Part B improve
 
 ## What you will find in this repository
 
-- SKILL.md: version 1.9.0 skill definition and router. Normalizes a completed questionnaire or equivalent scenario document, enforces the low-complexity-first ladder, evidence-based escalation, capacity and scale validation, and consistent adoption architecture responses while loading reference files on demand.
+- SKILL.md: version 1.10.0 skill definition and router. Normalizes a completed questionnaire or equivalent scenario document, enforces the low-complexity-first ladder, evidence-based escalation, capacity and scale validation, and consistent adoption architecture responses while loading reference files on demand.
 - AI_Agent_Adoption_Strategy_Final_2.md: lightweight index that routes to thematic references and the 24 individual guide chapters.
 - chapters/: complete guide content split for selective, on-demand loading and organized into five groups:
    - Strategy and Adoption: chapters 01-04 (executive overview, adoption strategy, tools and approaches).
@@ -86,7 +86,7 @@ Part A alone is sufficient for an initial architecture direction. Part B improve
    - Appendices: chapters 18-24 (code examples, templates, tool decision tree, OpenTelemetry, dataset curation and consolidated references).
 - references/: thematically sliced content for on-demand loading:
    - references/01-llm-rag-ai-agent-fundamentals.md: existing/deterministic alternatives, LLM, RAG, AI Agent and Agentic AI; complexity spectrum and escalation decision guide.
-   - references/02-reference-architecture-layers.md: Microsoft IQ context workloads, agent runtimes, Microsoft Fabric and technical specifications per layer.
+   - references/02-reference-architecture-layers.md: conditional Microsoft IQ context capabilities, managed agent platforms, Agent Framework hosting boundaries, Microsoft Fabric and technical specifications per layer.
    - references/03-roi-ai-vs-man-hour.md: ROI/AAI model, HITL and scope multiplier.
    - references/04-governance-guard-rails-evaluators-hitl.md: Guard Rails, Evaluators and Human-in-the-Loop.
    - references/05-decision-framework-bxt.md: Microsoft AI Decision Framework (Intake Filter, BXT, 9 critical questions, Capability Model, mandatory complexity-escalation gate and technology selection by scenario).

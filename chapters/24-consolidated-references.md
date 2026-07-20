@@ -54,7 +54,7 @@
 - [Augment large language models with RAG or fine-tuning](https://learn.microsoft.com/azure/developer/ai/augment-llm-rag-fine-tuning)
 - [AI agents in Azure Cosmos DB (ReAct, Reflexion)](https://learn.microsoft.com/azure/cosmos-db/ai-agents)
 - [Multi-agent patterns (MCP, A2A, magentic) - Microsoft Agents](https://learn.microsoft.com/agents/architecture/multi-agent-patterns)
-- [Microsoft Agent Framework overview (MS Learn)](https://learn.microsoft.com/agent-framework/overview/agent-framework-overview)
+- [Microsoft Agent Framework overview (Microsoft Learn)](https://learn.microsoft.com/agent-framework/overview/)
 - [Microsoft Agent Framework documentation hub](https://learn.microsoft.com/agent-framework/)
 - [Microsoft Agent Framework GitHub repository](https://github.com/microsoft/agent-framework)
 - [Migration from Semantic Kernel to Microsoft Agent Framework](https://learn.microsoft.com/agent-framework/migration-guide/from-semantic-kernel)
