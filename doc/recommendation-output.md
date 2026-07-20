@@ -2,7 +2,7 @@
 
 ## 1) Medium executive overview
 
-The recommendation for harafaz.ia is to adopt a wave-based target architecture with a **single AI Agent with RAG grounding** as the initial pattern, evolving to **multi-agent Agentic AI** only in the flows that cross security boundaries, multiple domains or high orchestration complexity. This decision maximizes the speed of value capture in the short term (pilot in 8 weeks) and reduces operational risk by keeping HITL for sensitive cases, compliance and low confidence.
+The recommendation for harafaz.ia is to adopt a wave-based target architecture with a **single AI Agent with RAG grounding** as the initial pattern. Multi-agent Agentic AI remains deferred unless pilot evidence shows that independent specialists or runtimes are required and that the single-agent baseline cannot meet a measured reliability, ownership or orchestration requirement. Security boundaries should first be enforced through identity, least privilege, isolated tools, data controls, audit and HITL. This decision maximizes the speed of value capture in the short term (pilot in 8 weeks) while limiting operational risk and unnecessary complexity.
 
 Over the 12-18 month horizon, the combination of **Microsoft IQ context workloads + an explicit agent runtime + Microsoft Fabric** creates a scalable target architecture, with governed data, an audit trail and an objective basis for ROI/AAI. The explicit trade-off is: lower initial complexity (faster and cheaper) versus controlled expansion of autonomy (more potential value, greater demand for guard rails and evaluators).
 

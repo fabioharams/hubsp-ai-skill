@@ -2,20 +2,51 @@
 
 ## What is this project
 
-This repository organizes a practical knowledge base to guide the corporate adoption of AI agents in the Microsoft ecosystem. The focus is on target architecture decisions that combine Microsoft IQ context workloads (Work IQ, Foundry IQ, Fabric IQ and Web IQ), explicit agent runtimes, governed data, security, guard rails, evaluators and operations at scale.
+This repository organizes a practical knowledge base to guide the corporate adoption of AI in the Microsoft ecosystem. The focus is on selecting the **simplest viable architecture first**, then combining Microsoft IQ context workloads (Work IQ, Foundry IQ, Fabric IQ and Web IQ), explicit agent runtimes, governed data, security, guard rails, evaluators and operations only where the current requirements justify them.
 
-The project was structured to serve as both an executive and technical reference: it helps business, architecture, data and security teams align on a common vision for planning, piloting and expanding agentic AI initiatives with lower risk and greater value predictability.
+The project was structured to serve as both an executive and technical reference: it helps business, architecture, data and security teams align on a common vision for planning, piloting and expanding AI initiatives with lower risk and greater value predictability. Skill version **1.4.0** makes low-complexity-first selection mandatory and requires evidence before escalating to agentic, multi-agent or mixed-runtime solutions.
 
 ## Objective
 
 - Define a reference architecture for AI agents in a corporate context.
+- Evaluate existing products, deterministic automation, LLM, RAG, single-agent and multi-agent options in ascending complexity.
+- Stop at the first option that reliably satisfies current requirements and require evidence before every escalation.
 - Standardize recommendations focused on governance, compliance and observability.
 - Support a wave-based roadmap (pilot, expansion and scale) with clear criteria.
 - Make trade-offs explicit across cost, risk, speed and complexity.
 
+## Low-complexity-first decision policy
+
+The skill evaluates options in this mandatory order:
+
+```mermaid
+flowchart LR
+   A[Existing product<br/>or SaaS] --> B[Deterministic automation<br/>rules, APIs, Power Automate]
+   B --> C[Direct LLM<br/>one-step generation]
+   C --> D[RAG<br/>grounded response]
+   D --> E[Single AI Agent<br/>bounded tool use]
+   E --> F[Multi-agent or mixed<br/>independently justified]
+
+   A -. stop when requirements are met .-> G[Selected baseline]
+   B -. stop when requirements are met .-> G
+   C -. stop when requirements are met .-> G
+   D -. stop when requirements are met .-> G
+   E -. stop when requirements are met .-> G
+   F -. only with escalation evidence .-> G
+```
+
+For every escalation, the recommendation must identify:
+
+1. The current requirement the preceding option cannot satisfy.
+2. The test result, pilot evidence or explicit assumption supporting that conclusion.
+3. The additional cost, latency, failure modes, operational ownership and governance burden.
+4. The measurable trigger that would justify adding deferred complexity later.
+
+When evidence is incomplete, the skill recommends the lower-complexity pilot and turns the uncertainty into a validation objective. Security, compliance, multiple teams or expected growth do not automatically justify multi-agent or mixed architecture. Apply identity, least privilege, isolated tools, data controls, audit, evaluators and HITL to the simpler baseline first.
+
 ## What you will find in this repository
 
-- SKILL.md: single skill definition (router) that guides consistent responses in an adoption architecture context. Points to reference files on demand (progressive disclosure).
+- SKILL.md: version 1.4.0 skill definition and router. Enforces the low-complexity-first ladder, evidence-based escalation and consistent adoption architecture responses while loading reference files on demand.
 - AI_Agent_Adoption_Strategy_Final_2.md: lightweight index that routes to thematic references and the 24 individual guide chapters.
 - chapters/: complete guide content split for selective, on-demand loading and organized into five groups:
    - Strategy and Adoption: chapters 01-04 (executive overview, adoption strategy, tools and approaches).
@@ -25,11 +56,11 @@ The project was structured to serve as both an executive and technical reference
    - Appendices: chapters 18-24 (code examples, templates, tool decision tree, OpenTelemetry, dataset curation and consolidated references).
 - section_3_2.txt: extracted plain-text section used as a lightweight source for quick copy, review and prompt experiments without markdown formatting overhead.
 - references/: thematically sliced content for on-demand loading:
-   - references/01-llm-rag-ai-agent-fundamentals.md: LLM vs RAG vs AI Agent vs Agentic AI; complexity spectrum and decision guide.
+   - references/01-llm-rag-ai-agent-fundamentals.md: existing/deterministic alternatives, LLM, RAG, AI Agent and Agentic AI; complexity spectrum and escalation decision guide.
    - references/02-reference-architecture-layers.md: Microsoft IQ context workloads, agent runtimes, Microsoft Fabric and technical specifications per layer.
    - references/03-roi-ai-vs-man-hour.md: ROI/AAI model, HITL and scope multiplier.
    - references/04-governance-guard-rails-evaluators-hitl.md: Guard Rails, Evaluators and Human-in-the-Loop.
-   - references/05-decision-framework-bxt.md: Microsoft AI Decision Framework (Intake Filter, BXT, 9 critical questions, Capability Model and technology selection by scenario).
+   - references/05-decision-framework-bxt.md: Microsoft AI Decision Framework (Intake Filter, BXT, 9 critical questions, Capability Model, mandatory complexity-escalation gate and technology selection by scenario).
    - references/06-pl-2338-2023-copilot-studio-foundry.md: analysis of PL 2338/2023 and how Microsoft Copilot Studio, Microsoft Foundry and Purview address the axes of transparency, governance, risk, audit, human oversight and data protection with official sources.
 - doc/agent-project-specifications-example.md: starter example of a project specification document to accelerate onboarding before creating or customizing doc/agent-project-specifications.md.
 - doc/agent-project-specifications.md: working specification used as primary project input in recommendation prompts.
@@ -51,11 +82,11 @@ graph TD
     CANON -. pointers .-> REF
    CANON -. chapter selection .-> CHAPTERS{{chapters/}}
 
-      REF --> R1[01-llm-rag-ai-agent-fundamentals.md<br/>LLM vs RAG vs AI Agent vs Agentic AI]
+      REF --> R1[01-llm-rag-ai-agent-fundamentals.md<br/>Deterministic - LLM - RAG - Agent - Multi-agent]
       REF --> R2[02-reference-architecture-layers.md<br/>Work IQ - Foundry IQ - Fabric IQ - Web IQ - Fabric]
       REF --> R3[03-roi-ai-vs-man-hour.md<br/>ROI / AAI - HITL - scope]
       REF --> R4[04-governance-guard-rails-evaluators-hitl.md<br/>Guard Rails - Evaluators - HITL]
-      REF --> R5[05-decision-framework-bxt.md<br/>BXT - 9 questions - Capability Model]
+      REF --> R5[05-decision-framework-bxt.md<br/>BXT - escalation gate - technology selection]
       REF --> R6[06-pl-2338-2023-copilot-studio-foundry.md<br/>PL 2338 - transparency - governance - risk - audit]
 
     SKILL --> README[README.md<br/>Repository overview]
@@ -166,13 +197,13 @@ Example prompt:
 
 > **Applicability disclaimer:** PL 2338/2023 applies only to Brazilian clients and companies. For scenarios outside Brazil, omit the PL 2338/2023 analysis from the prompt or explicitly instruct the agent to state that PL 2338/2023 is not applicable to the scenario being analyzed.
 
-> Using #SKILL.md, recommend the target architecture for a support copilot with governed data in Fabric.
+> Using #SKILL.md, recommend the simplest viable target architecture for a support copilot with governed data in Fabric. Evaluate existing Microsoft/SaaS capabilities, deterministic automation, direct LLM, RAG, single-agent and multi-agent or mixed architecture in that order. Stop at the first option that meets current requirements, document why each simpler rejected option is insufficient, and define measurable escalation triggers for deferred complexity.
 
 Example with project specifications document:
 
 > **Applicability disclaimer:** PL 2338/2023 applies only to Brazilian clients and companies. For scenarios outside Brazil, omit the PL 2338/2023 analysis from the prompt or explicitly instruct the agent to state that PL 2338/2023 is not applicable to the scenario being analyzed.
 
-> Using #SKILL.md and #doc/agent-project-specifications.md, generate an executive recommendation in full format: (1) medium executive summary (1-2 paragraphs) with at least 1 Mermaid diagram or flowchart to explain the recommended decision, (2) recommended architectural pattern (LLM/RAG/AI Agent/Agentic AI) with detailed justifications, official Microsoft links and at least 1 Mermaid diagram or flowchart to explain the choice, (3) target architecture with Microsoft IQ context workloads (Work IQ, Foundry IQ, Fabric IQ and Web IQ when applicable), an explicit agent runtime and Microsoft Fabric, with detailed explanation and 2 mandatory Mermaid diagrams (architecture and decision flowchart), (4) governance and security with guard rails, evaluators, PL 2338/2023 analysis and explanation of how the tools and services selected in the architecture address the axes of transparency, governance, risk, audit, human oversight and data protection with official sources, and at least 1 Mermaid diagram or flowchart, (5) phased deployment plan with per-phase detail (objective, scope, integrations, entry/exit criteria, target KPI and dominant risk) and at least 1 Mermaid diagram or flowchart, (6) ROI/AAI assumptions with at least 1 Mermaid diagram or flowchart to explain the financial logic, (7) success KPIs with at least 1 Mermaid diagram or flowchart, and (8) risks and mitigations with clarity, official Microsoft links and at least 1 Mermaid diagram or flowchart. The response must be delivered as a new markdown document called doc/recommendation-output.md.
+> Using #SKILL.md and #doc/agent-project-specifications.md, generate an executive recommendation in full format. First evaluate existing Microsoft/SaaS capabilities, deterministic automation, direct LLM, RAG, single-agent and multi-agent or mixed architecture in ascending complexity; stop at the first option that reliably meets current requirements. For every escalation, state the unmet requirement, supporting evidence or assumption, and incremental cost, latency, operational risk and governance burden. Identify the simplest viable baseline, rejected simpler options, deferred capabilities and measurable escalation triggers. Then provide: (1) medium executive summary (1-2 paragraphs) with at least 1 Mermaid diagram or flowchart to explain the recommended decision, (2) recommended architectural pattern with detailed justifications, official Microsoft links and at least 1 Mermaid diagram or flowchart, (3) target architecture with Microsoft IQ context workloads (Work IQ, Foundry IQ, Fabric IQ and Web IQ when applicable), an explicit agent runtime and Microsoft Fabric, with detailed explanation and 2 mandatory Mermaid diagrams (architecture and decision flowchart), (4) governance and security with guard rails, evaluators, PL 2338/2023 analysis and explanation of how the selected tools and services address transparency, governance, risk, audit, human oversight and data protection with official sources, and at least 1 Mermaid diagram or flowchart, (5) phased deployment plan that starts with the simplest viable pilot and details objective, scope, integrations, entry/exit criteria, target KPI and dominant risk per phase, with at least 1 Mermaid diagram or flowchart, (6) ROI/AAI assumptions with at least 1 Mermaid diagram or flowchart, (7) success KPIs with at least 1 Mermaid diagram or flowchart, and (8) risks and mitigations with official Microsoft links and at least 1 Mermaid diagram or flowchart. Deliver the response in a new markdown document called doc/recommendation-output.md.
 
 Tip: to use `SKILL.md` as a reusable skill in the official VS Code format, copy it (or create a link) to a folder such as `.github/skills/hubsp-ai-skill/` or `~/.copilot/skills/hubsp-ai-skill/`. In this repository, the file at the root acts as the **canonical source/router** for direct reference in prompts, while the formal skill installation should follow the lowercase folder convention.
 
@@ -191,14 +222,15 @@ Ready-to-use template:
 Recommended minimum document structure (suggested order):
 
 1. Business context and agent objective.
-2. Functional scope (what the agent does and does not do).
-3. User profiles, journeys and channels.
-4. Non-functional requirements (SLA, latency, availability, scale).
-5. Data and integrations (sources, APIs, systems, data classification).
-6. Governance and security (guard rails, compliance, audit, HITL).
-7. Success criteria and KPIs.
-8. Constraints, risks and assumptions.
-9. Wave-based roadmap (pilot, expansion, scale).
+2. Current process, existing products/SaaS capabilities and deterministic automation already available.
+3. Functional scope (what the AI solution does and does not do).
+4. User profiles, journeys and channels.
+5. Non-functional requirements (SLA, latency, availability, scale).
+6. Data, integrations, required actions and autonomy (sources, APIs, systems, data classification).
+7. Governance and security (guard rails, compliance, audit, HITL).
+8. Success criteria and KPIs.
+9. Constraints, risks and assumptions.
+10. Wave-based roadmap and measurable escalation triggers (pilot, expansion, scale).
 
 Supported file extensions (recommended practice):
 
@@ -215,13 +247,13 @@ Use this prompt in any project with a document at `doc/agent-project-specificati
 
 > **Applicability disclaimer:** PL 2338/2023 applies only to Brazilian clients and companies. For scenarios outside Brazil, omit the PL 2338/2023 analysis from the prompt or explicitly instruct the agent to state that PL 2338/2023 is not applicable to the scenario being analyzed.
 
-> Using #SKILL.md and #doc/agent-project-specifications.md, generate an executive recommendation in full format: (1) medium executive summary (1-2 paragraphs) with at least 1 Mermaid diagram or flowchart to explain the recommended decision, (2) recommended architectural pattern (LLM/RAG/AI Agent/Agentic AI) with detailed justifications, official Microsoft links and at least 1 Mermaid diagram or flowchart to explain the choice, (3) target architecture with Microsoft IQ context workloads (Work IQ, Foundry IQ, Fabric IQ and Web IQ when applicable), an explicit agent runtime and Microsoft Fabric, with detailed explanation and 2 mandatory Mermaid diagrams (architecture and decision flowchart), (4) governance and security with guard rails, evaluators, PL 2338/2023 analysis and explanation of how the tools and services selected in the architecture address the axes of transparency, governance, risk, audit, human oversight and data protection with official sources, and at least 1 Mermaid diagram or flowchart, (5) phased deployment plan with per-phase detail (objective, scope, integrations, entry/exit criteria, target KPI and dominant risk) and at least 1 Mermaid diagram or flowchart, (6) ROI/AAI assumptions with at least 1 Mermaid diagram or flowchart to explain the financial logic, (7) success KPIs with at least 1 Mermaid diagram or flowchart, and (8) risks and mitigations with clarity, official Microsoft links and at least 1 Mermaid diagram or flowchart. The response must be delivered as a new markdown document called doc/recommendation-output.md.
+> Using #SKILL.md and #doc/agent-project-specifications.md, generate an executive recommendation in full format. First evaluate existing Microsoft/SaaS capabilities, deterministic automation, direct LLM, RAG, single-agent and multi-agent or mixed architecture in ascending complexity; stop at the first option that reliably meets current requirements. For every escalation, state the unmet requirement, supporting evidence or assumption, and incremental cost, latency, operational risk and governance burden. Identify the simplest viable baseline, rejected simpler options, deferred capabilities and measurable escalation triggers. Then provide: (1) medium executive summary (1-2 paragraphs) with at least 1 Mermaid diagram or flowchart, (2) recommended architectural pattern with detailed justifications, official Microsoft links and at least 1 Mermaid diagram or flowchart, (3) target architecture with Microsoft IQ context workloads, an explicit agent runtime and Microsoft Fabric, with detailed explanation and 2 mandatory Mermaid diagrams, (4) governance and security with guard rails, evaluators and applicable regulatory analysis with official sources and at least 1 Mermaid diagram or flowchart, (5) phased deployment plan starting with the simplest viable pilot and detailing objective, scope, integrations, entry/exit criteria, target KPI and dominant risk per phase, with at least 1 Mermaid diagram or flowchart, (6) ROI/AAI assumptions with at least 1 Mermaid diagram or flowchart, (7) success KPIs with at least 1 Mermaid diagram or flowchart, and (8) risks and mitigations with official Microsoft links and at least 1 Mermaid diagram or flowchart. Deliver the response in a new markdown document called doc/recommendation-output.md.
 
 Variation for GitHub Copilot CLI:
 
 > **Applicability disclaimer:** PL 2338/2023 applies only to Brazilian clients and companies. For scenarios outside Brazil, omit the PL 2338/2023 analysis from the prompt or explicitly instruct the agent to state that PL 2338/2023 is not applicable to the scenario being analyzed.
 
-> Read SKILL.md and doc/agent-project-specifications.md and generate an executive recommendation in advanced format: medium executive summary with Mermaid diagram or flowchart; architectural pattern with detailed justifications, Microsoft sources and Mermaid diagram or flowchart; Microsoft IQ context workloads plus an explicit agent runtime and Microsoft Fabric, with a Mermaid architecture diagram and Mermaid decision flowchart; governance and security with PL 2338/2023 analysis, explanation of how the tools and services selected in the architecture address the axes of transparency, governance, risk, audit, human oversight and data protection with official sources, and Mermaid diagram or flowchart; detailed phased plan with Mermaid diagram or flowchart; ROI/AAI assumptions with Mermaid diagram or flowchart; KPIs with Mermaid diagram or flowchart; risks and mitigations with official Microsoft links and Mermaid diagram or flowchart. The response must be delivered as a new markdown document called doc/recommendation-output.md.
+> Read SKILL.md and doc/agent-project-specifications.md and generate an executive recommendation in advanced format. Evaluate existing Microsoft/SaaS capabilities, deterministic automation, direct LLM, RAG, single-agent and multi-agent or mixed architecture in that order, stopping at the first reliable option. Document the simplest viable baseline, evidence for rejecting simpler options, incremental complexity, deferred capabilities and measurable escalation triggers. Include: medium executive summary with Mermaid diagram or flowchart; architectural pattern with detailed justifications and Microsoft sources; Microsoft IQ context workloads plus an explicit agent runtime and Microsoft Fabric, with Mermaid architecture and decision diagrams; governance and security with applicable regulatory analysis and official sources; a phased plan beginning with the simplest viable pilot; ROI/AAI assumptions; KPIs; and risks and mitigations. Deliver the response in a new markdown document called doc/recommendation-output.md.
 
 ## How to use in the GitHub Copilot App
 

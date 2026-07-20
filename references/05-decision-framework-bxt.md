@@ -81,9 +81,27 @@ Given the Phase 2 grouping, apply the criteria in order to choose the technology
 | Combined need for business UX + advanced intelligence/orchestration | **Mixed solution (Copilot Studio + Microsoft Foundry)** | Best balance between delivery speed and technical depth |
 
 **Triggers for adopting a mixed solution:**
-1. The case requires fast publication to business channels and also advanced reasoning/tool calling.
-2. There are strong compliance and traceability requirements in a multi-step flow.
-3. The roadmap anticipates scaling to multiple domains with component reuse.
+1. The case requires a business experience or channel capability best served by Copilot Studio and advanced pro-code reasoning or orchestration that it cannot reliably satisfy.
+2. Both runtime responsibilities are required in the current scope, have clear owners and can be evaluated independently.
+3. A single-runtime baseline was assessed and rejected with evidence against a specific requirement.
+
+Compliance, anticipated scale and component reuse are design considerations, not sufficient reasons for a mixed solution. Apply identity, permissions, data controls, audit, evaluators and HITL to the simplest viable architecture first.
+
+#### Mandatory complexity-escalation gate
+
+Evaluate the following sequence in order: existing product/SaaS → deterministic automation → direct LLM → RAG → single agent → multi-agent or mixed architecture. Stop at the first option that reliably meets current requirements.
+
+Before selecting the next level, record:
+
+| Required evidence | Decision question |
+|---|---|
+| Unmet requirement | What current requirement cannot the simpler option satisfy? |
+| Validation | Which test, pilot result or explicit assumption supports that conclusion? |
+| Complexity delta | What additional cost, latency, failure modes and operational ownership are introduced? |
+| Governance delta | Which additional identity, evaluation, audit and HITL controls become necessary? |
+| Evolution trigger | Which measurable threshold would justify adding this complexity later if it is deferred now? |
+
+When evidence is incomplete, select the lower-complexity baseline for the pilot and make the uncertainty an explicit validation objective.
 
 **Official Microsoft sources:**
 - Microsoft Copilot Studio documentation: https://learn.microsoft.com/microsoft-copilot-studio/
@@ -91,7 +109,7 @@ Given the Phase 2 grouping, apply the criteria in order to choose the technology
 - Microsoft 365 Copilot documentation: https://learn.microsoft.com/microsoft-365-copilot/
 - Cloud Adoption Framework for AI: https://learn.microsoft.com/azure/cloud-adoption-framework/scenarios/ai/
 
-**Decision output template:** Selected technology · Rationale (Phase 2 groups) · Time-to-market · Managed vs. self-managed · Complexity · Budget · Integrations · Orchestration · Architecture pattern · Accepted trade-offs · Next steps (pilot/POC/deploy).
+**Decision output template:** Simplest viable baseline · Simpler options assessed · Unmet requirements and evidence · Selected technology · Deferred capabilities · Escalation triggers · Time-to-market · Managed vs. self-managed · Complexity · Budget · Integrations · Orchestration · Accepted trade-offs · Next steps (pilot/POC/deploy).
 
 ---
 

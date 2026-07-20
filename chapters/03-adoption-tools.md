@@ -86,7 +86,7 @@ Build 2026 consolidated the **MAI** family as a new Microsoft AI model line with
 
 ### 🔗 How They Work Together
 
-`M365 Copilot (user interface) → Copilot Studio (domain agent) → Microsoft Foundry (reasoning and orchestration) → Fabric (governed data)`
+An illustrative mixed pattern is `M365 Copilot (user interface) → Copilot Studio (domain agent) → Microsoft Foundry (advanced reasoning and orchestration) → Fabric (governed data)`. Use this full chain only when both runtimes have independently justified responsibilities.
 
 ### 🧭 When to use Copilot Studio, Foundry or a Mixed Solution
 
@@ -94,16 +94,20 @@ To avoid architectural ambiguities, adopt the following decision matrix:
 
 | Option | When to use | When to avoid | Practical decision |
 |---|---|---|---|
-| **Copilot Studio (standalone)** | Well-defined business flows, low/medium complexity, low-code product team, fast delivery in channels like Teams and web | Need for advanced reasoning, complex multi-agent, fine code/model control | Prefer for domain automations with high evolution pace and central governance |
-| **Microsoft Foundry (standalone)** | Complex cases, multi-step, code requirement, advanced prompt engineering, deep technical evaluation, extensive tool integrations | Simple business demand solvable with low-code effort | Prefer for critical technical scale cases, advanced reasoning and sophisticated integrations |
-| **Mixed solution (Copilot Studio + Foundry)** | When it is necessary to combine business/channel experience (Studio) with advanced intelligence and technical orchestration (Foundry) | Organizations without minimum identity, data and observability governance | Recommended standard for corporate target architecture: Studio at the experience edge and Foundry at the reasoning/orchestration core |
+| **Copilot Studio (standalone)** | Well-defined business flows, low/medium complexity, low-code product team, fast delivery in channels like Teams and web | A tested requirement cannot be met without advanced pro-code reasoning, orchestration or model control | Prefer as the simpler runtime for bounded domain automation when it meets requirements |
+| **Microsoft Foundry (standalone)** | A tested requirement needs pro-code control, advanced reasoning, technical evaluation or extensive tool integration | Existing products, deterministic automation or low-code implementation reliably solve the demand | Prefer only when the additional technical control is required and owned |
+| **Mixed solution (Copilot Studio + Foundry)** | Business/channel capabilities and advanced pro-code orchestration are both required now, with distinct responsibilities | Either runtime can satisfy the current scope alone, or the additional operational boundary lacks clear ownership | Conditional exception: document the requirement each runtime satisfies and why a single runtime fails |
 
 #### Objective criteria to trigger the mixed model
 
-1. **Channel and experience**: journey requires fast publishing to Teams/web with conversational business UX.
-2. **Cognitive complexity**: case requires multi-step planning, advanced tool calling or agent coordination.
-3. **Risk and compliance**: need for reinforced guard rails, auditability, traceability and data controls.
-4. **Scalability**: expected growth to multiple domains, with component reuse and central observability.
+All criteria below must be satisfied:
+
+1. **Channel and experience**: the current journey requires a capability best served by Copilot Studio.
+2. **Technical requirement**: the current scope requires advanced pro-code reasoning or orchestration that Copilot Studio cannot reliably satisfy.
+3. **Evidence**: a single-runtime baseline was tested or assessed against a specific requirement and rejected with evidence or an explicit pilot assumption.
+4. **Ownership**: both runtime boundaries have clear operational owners, observability, identity, evaluation and incident-response responsibilities.
+
+Risk, compliance and expected growth do not independently trigger a mixed model. Apply guard rails, auditability, data controls and evolvable interfaces to the simpler architecture first.
 
 #### Decision flowchart (Copilot Studio vs Foundry vs Mixed)
 
@@ -114,12 +118,14 @@ flowchart TD
     B -->|nao| D{Caso exige controle de codigo,\nengenharia de prompts avancada\nou avaliacao tecnica profunda?}
 
     C -->|nao| E[Decisao: Copilot Studio isolado]
-    C -->|sim| F[Decisao: Solucao mista\nCopilot Studio + Microsoft Foundry]
+    C -->|sim| X{Single-runtime baseline failed\na measured requirement?}
+    X -->|sim| F[Decisao: Solucao mista\nCopilot Studio + Microsoft Foundry]
+    X -->|nao| E
 
     D -->|sim| G[Decisao: Microsoft Foundry isolado]
     D -->|nao| H{Existe requisito forte de\nexperiencia de negocio +\norquestracao avancada juntos?}
 
-    H -->|sim| F
+    H -->|sim| X
     H -->|nao| E
 
     E --> I[Aplicar guard rails, evaluators,\nHITL e observabilidade]
@@ -136,7 +142,7 @@ flowchart TD
 - Microsoft Purview governance overview: https://learn.microsoft.com/purview/governance-solutions-overview
 - Microsoft Entra ID documentation: https://learn.microsoft.com/entra/identity/
 
-#### Reference pattern for the mixed solution
+#### Conditional reference pattern for the mixed solution
 
 1. **Microsoft 365 Copilot / channels** receive user intent in the work context.
 2. **Copilot Studio** handles the domain conversational layer, policies and operational routing.

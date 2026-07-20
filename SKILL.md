@@ -1,11 +1,11 @@
 ---
 name: hubsp-ai-skill
-summary: "Guides corporate AI agent adoption with Microsoft IQ context workloads, Microsoft Foundry and Fabric, including Work IQ, Foundry IQ, Fabric IQ and Web IQ, agent runtimes, architecture fundamentals, ROI, governance, security, guard rails and continuous evaluation."
-description: "Skill for guiding AI agent adoption strategy in the Microsoft ecosystem, including context architecture, agent runtime selection, governance, ROI, security and regulatory compliance."
+summary: "Guides low-complexity-first corporate AI adoption with Microsoft IQ context workloads, Microsoft Foundry and Fabric, including architecture selection, agent runtimes, ROI, governance, security, guard rails and continuous evaluation."
+description: "Use when selecting the simplest viable Microsoft AI architecture, comparing deterministic automation, LLM, RAG, single-agent and multi-agent patterns, or defining adoption strategy, context architecture, agent runtime, governance, ROI, security and regulatory compliance."
 license: MIT
 metadata:
   author: Fabio
-  version: "1.3.0"
+  version: "1.4.0"
   language: en-US
 ---
 
@@ -29,6 +29,7 @@ This skill helps structure practical recommendations for adopting AI agents in c
 - The user wants to design architecture with Work IQ, Foundry IQ and Fabric IQ, including external context via Web IQ and an explicit agent runtime when applicable.
 - The user needs to understand or compare LLM, RAG, AI Agent and Agentic AI patterns.
 - The user wants to decide the minimum level of complexity for a use case.
+- The user asks for the simplest viable architecture, a low-complexity baseline or evidence for escalating to an agentic solution.
 - The user needs to connect AI with data governance and security.
 - The user requests a phased deployment roadmap.
 - The user asks for financial justification or ROI (AI vs. person-hour, efficiency or expansion mode).
@@ -44,8 +45,10 @@ This skill helps structure practical recommendations for adopting AI agents in c
 ## Expected Inputs
 
 - business objective
+- current process and existing Microsoft/SaaS capabilities
 - impacted area(s)
 - data maturity
+- required actions, autonomy and orchestration
 - security/compliance requirements
 - timeline and priority
 
@@ -54,12 +57,21 @@ If critical information is missing, ask only for the minimum necessary before re
 ## Recommended Process
 
 1. Understand the business problem and expected outcome.
-2. Choose the architectural pattern by the lowest level of complexity that reliably solves it: LLM (text, one step), RAG (data-grounded response), single AI Agent (multi-step task, one domain) or Agentic AI multi-agent (crosses security boundaries, multiple teams or expected growth).
-2.1. When the request involves choosing a Microsoft technology/product, apply the Microsoft AI Decision Framework (references/05-decision-framework-bxt.md): Intake Filter, BXT (Business/Experience/Technology), the 9 critical questions and scenario-based selection.
+2. Evaluate solutions in this mandatory order and stop at the first option that reliably satisfies the current requirements:
+  1. Existing Microsoft product, SaaS capability or configuration.
+  2. Deterministic workflow, rules, API integration or Power Automate.
+  3. Direct LLM call for one-step generative work.
+  4. RAG for grounded responses without autonomous tool execution.
+  5. Single AI Agent for bounded multi-step reasoning or tool use in one domain.
+  6. Multi-agent or mixed architecture only for independently justified specialization or runtime requirements that a single agent cannot reliably satisfy.
+2.1. Do not escalate because a technology is strategically attractive, because future growth is possible, or because the scenario has security/compliance requirements. Address security boundaries first with isolated identities, least-privilege tools, permissions, data controls, audit and HITL.
+2.2. For every escalation, identify the requirement that the preceding option cannot satisfy, the supporting evidence or explicit assumption, and the incremental cost, latency, operational risk and governance burden. If evidence is missing, recommend the lower-complexity option and label the assumption to validate during the pilot.
+2.3. Design for evolution without pre-building future complexity. Define measurable escalation triggers such as orchestration failure rate, tool-count or domain-boundary thresholds, latency limits, ownership separation or evaluation results.
+2.4. When the request involves choosing a Microsoft technology/product, apply the Microsoft AI Decision Framework (references/05-decision-framework-bxt.md): Intake Filter, BXT (Business/Experience/Technology), the 9 critical questions and scenario-based selection.
 3. Map data sources and current governance level.
 4. Define layer separation: channels and experiences; context workloads (Work IQ, Foundry IQ, Fabric IQ and Web IQ when necessary); agent runtime (Microsoft Foundry Agent Service, Copilot Studio or Microsoft Agent Framework); and data platform (Microsoft Fabric).
 4.1. Treat the IQs as complementary context sources, not interchangeable execution layers: Work IQ supplies Microsoft 365 work context; Foundry IQ supplies permission-aware enterprise knowledge through knowledge bases and agentic retrieval; Fabric IQ supplies semantic business context; Web IQ supplies current external web context.
-4.2. When the case requires it, recommend a **mixed solution**: Copilot Studio for low-code business orchestration and channels, Microsoft Foundry Agent Service or Microsoft Agent Framework for pro-code reasoning and advanced orchestration, and the appropriate IQ workloads for grounding.
+4.2. Recommend a **mixed solution** only when the case simultaneously requires a business experience/channel capability best served by Copilot Studio and advanced pro-code reasoning or orchestration that Copilot Studio cannot reliably satisfy. Compliance, anticipated scale or channel preference alone is not sufficient. Document why a single runtime is inadequate.
 5. Define cross-cutting controls: Guard Rails and Evaluators.
 5.1. When the request involves regulation, compliance or adherence to legal requirements, map the regulatory axes to Microsoft's technical and governance capabilities, without asserting automatic legal compliance.
 6. Validate financial viability with the ROI model (AAI = human cost / AI cost per task), including HITL, amortized setup and scope multiplier; evaluate over a 12-18 month horizon.
@@ -71,6 +83,9 @@ If critical information is missing, ask only for the minimum necessary before re
 - Explain the "why" behind each recommendation.
 - Prefer executive language with objective technical details.
 - Always make trade-offs explicit (cost, risk, speed, complexity).
+- Always name the simplest viable baseline, the rejected simpler options and the evidence-based reason for each rejection.
+- Separate capabilities required now from deferred capabilities, and define measurable triggers for adding the deferred complexity.
+- Prefer a deterministic or single-agent pilot when uncertainty remains; do not present multi-agent as the default target state.
 - Avoid generic responses; adapt to the provided context.
 - Include actionable next steps.
 
@@ -86,13 +101,15 @@ If critical information is missing, ask only for the minimum necessary before re
 
 - Executive summary (medium)
   - Deliver in 1-2 paragraphs, with context, recommended decision, expected impact and main trade-offs (cost, risk, speed and complexity).
-  - Must clearly state the business problem, proposed target architecture and short-term result (pilot) vs. medium-term result (scale).
+  - Must clearly state the business problem, simplest viable baseline, proposed target architecture and short-term result (pilot) vs. medium-term result (scale).
   - Include at least 1 diagram or simple Mermaid flowchart to visually explain the recommended decision.
   - The visual must summarize the recommendation logic in executive language and be easy to read.
   - Microsoft reference: https://learn.microsoft.com/azure/cloud-adoption-framework/strategy/
 
 - Recommended architectural pattern (LLM, RAG, AI Agent or Agentic AI) with detailed justification
-  - Compare options in the context of the case and justify why the recommendation minimizes risk and maximizes value.
+  - Compare existing/SaaS, deterministic automation, LLM, RAG, single-agent and multi-agent options in that order, stopping at the first option that meets current requirements.
+  - For every rejected simpler option, state the unmet requirement and evidence or assumption. Include the incremental cost, latency, operational risk and governance burden of the selected escalation.
+  - Identify deferred capabilities and measurable triggers for evolving to a more complex pattern.
   - Explain technical criteria: grounding, orchestration needs, autonomy, data quality, latency, cost per task and HITL requirements.
   - Include justifications with official Microsoft sources to support each choice.
   - Include at least 1 Mermaid flowchart or diagram to explain the chosen architectural pattern and discarded paths.
@@ -104,6 +121,7 @@ If critical information is missing, ask only for the minimum necessary before re
     - Microsoft AI Decision Framework: https://learn.microsoft.com/azure/cloud-adoption-framework/scenarios/ai/
 
 - Recommended architecture (layers and responsibilities) with detailed explanation
+  - Distinguish the minimum viable architecture for the first wave from optional future-state components. Do not include future components in the initial implementation unless an evidence-based escalation gate requires them.
   - Describe roles and boundaries of Work IQ, Foundry IQ, Fabric IQ and Web IQ, including how they connect to governed data, the selected agent runtime and cross-cutting controls.
   - Explain responsibilities per layer (experience/channels, context sources, agent runtime/orchestration, data platform and cross-cutting controls).
   - Do not describe Foundry IQ as the agent runtime. Foundry IQ is the managed enterprise knowledge layer; Microsoft Foundry Agent Service, Copilot Studio or Microsoft Agent Framework performs orchestration and execution.
@@ -138,6 +156,7 @@ If critical information is missing, ask only for the minimum necessary before re
 
 - Phased deployment plan (detailed)
   - Describe at least 3 phases: Pilot, Expansion and Scale.
+  - Start the pilot with the simplest viable baseline and add architectural complexity only when defined exit metrics or escalation triggers justify it.
   - For each phase, specify: objective, functional scope, integrations, minimum guard rails, entry criteria, exit criteria, target KPI and dominant risk.
   - Include critical dependencies (data, integrations, executive sponsorship, change management).
   - Include at least 1 Mermaid diagram or flowchart to explain the progression between phases, dependencies and decision gates.

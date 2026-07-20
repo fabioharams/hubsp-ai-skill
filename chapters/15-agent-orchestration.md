@@ -15,10 +15,12 @@ graph TD
     A["❓ Problema requer<br/>múltiplos domínios?"]
     
     B["Não → Use agente único"]
-    C["Sim → Múltiplos especialistas?"]
+    C["Sim → Especialistas independentes<br/>são necessários agora?"]
     
     D["Não (um agente faz tudo) → Agente único"]
-    E["Sim → Multi-agent Orchestration"]
+    E["Sim → Agente único falhou<br/>um requisito mensurável?"]
+    H["Não → Manter agente único<br/>e definir gatilho de evolução"]
+    I["Sim → Multi-agent Orchestration"]
     
     A -->|Não| B
     A -->|Sim| C
@@ -27,11 +29,14 @@ graph TD
     
     B --> F["✅ Simple, fast,<br/>easy to govern"]
     D --> F
-    E --> G["✅ Powerful,<br/>domain-expert,<br/>but complex"]
+    E -->|Não| H
+    E -->|Sim| I
+    H --> F
+    I --> G["✅ Powerful,<br/>domain-expert,<br/>but complex"]
     
     style B fill:#90EE90,stroke:#228B22,color:#000,stroke-width:2px
     style D fill:#90EE90,stroke:#228B22,color:#000,stroke-width:2px
-    style E fill:#87CEEB,stroke:#4682B4,color:#000,stroke-width:2px
+    style I fill:#87CEEB,stroke:#4682B4,color:#000,stroke-width:2px
     style F fill:#FFD700,stroke:#DAA520,color:#000,stroke-width:2px
     style G fill:#FFD700,stroke:#DAA520,color:#000,stroke-width:2px
 ```

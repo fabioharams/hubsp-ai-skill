@@ -174,7 +174,7 @@ flowchart TB
 
 **Advantages (Azure Architecture Center).** Specialization (each agent focuses on a domain); scalability (add/change agents without redesigning everything); maintainability (test agent by agent); optimization (each agent uses different models and tools).
 
-**When NOT to go directly to multi-agent.** Microsoft recommends starting with multi-agent **only** when specific criteria require separation: (1) **security/compliance boundaries** (data isolation imposed by regulation); (2) **multiple teams** (domains maintained by distinct teams, with independent cycles); (3) **planned future growth** (solutions with more than 3–5 distinct functions benefit from modularity).
+**When multi-agent is justified.** Start with a single agent and escalate only when an evaluated requirement cannot be met reliably without independently owned or operated specialists. Evidence can include unacceptable orchestration failure rates, incompatible runtime requirements, independent domain release cycles, or isolation requirements that cannot be enforced safely through identities, permissions and tool boundaries in one runtime. Security/compliance requirements, multiple teams and planned growth are inputs to the assessment, not automatic multi-agent triggers.
 
 **Multi-agent orchestration patterns (Microsoft documentation).**
 
@@ -190,21 +190,26 @@ flowchart TB
 
 ### 🧭 Architectural decision guide
 
-Use the **lowest level of complexity** that reliably meets the requirement.
+Use the **lowest level of complexity** that reliably meets the current requirement. Evaluate non-agentic alternatives before generative or agentic patterns, and require evidence before every escalation.
 
 ```mermaid
 flowchart TD
-    A["❓ What is the problem?"] --> B{"Needs proprietary/<br/>up-to-date data?"}
+    A["❓ What is the problem?"] --> P{"Existing product or<br/>predictable rules solve it?"}
+    P -- Yes --> SIMPLE["⚙️ SaaS, configuration or<br/>deterministic automation"]
+    P -- No --> B{"Needs proprietary/<br/>up-to-date data?"}
     B -- No --> C{"Single-step<br/>task?"}
     C -- Yes --> LLM["🧠 Direct LLM call"]
     C -- No --> D{"Needs to act /<br/>use tools?"}
     B -- Yes --> E{"Needs to act<br/>or just respond?"}
     E -- "Just respond" --> RAG["📚 RAG"]
     E -- "Act" --> D
-    D -- "One domain,<br/>simple debugging" --> AGENT["🤖 Single AI Agent"]
-    D -- "Crosses security /<br/>multiple teams / will grow" --> MULTI["🕸️ Agentic AI (multi-agent)"]
+    D -- No --> LLM
+    D -- Yes --> F{"Independent specialists or<br/>runtimes measurably required?"}
+    F -- No --> AGENT["🤖 Single AI Agent"]
+    F -- Yes --> MULTI["🕸️ Agentic AI (multi-agent)"]
 
     style A fill:#FF6B6B,stroke:#CC5555,color:#fff,stroke-width:2px
+    style SIMPLE fill:#607D8B,stroke:#455A64,color:#fff,stroke-width:2px
     style LLM fill:#4A90E2,stroke:#2E5C8A,color:#fff,stroke-width:2px
     style RAG fill:#50C878,stroke:#3A9B5C,color:#fff,stroke-width:2px
     style AGENT fill:#7B68EE,stroke:#5A4DB0,color:#fff,stroke-width:2px
@@ -213,10 +218,13 @@ flowchart TD
 
 **Practical summary.**
 
+- **Existing product or predictable process →** SaaS, configuration or deterministic automation.
 - **Text response, one step →** LLM.
 - **Response grounded in documents →** RAG.
 - **Multi-step task, with actions, in one domain →** Single AI Agent (corporate default).
-- **Crosses security boundaries, multiple teams or expected growth →** Agentic AI (multi-agent).
+- **Independent specialists, ownership domains or runtimes are measurably required and a single agent fails the requirement →** Agentic AI (multi-agent).
+
+Security boundaries do not by themselves require multiple agents. First isolate identity, permissions, tools, data access, audit and HITL. Expected growth is a reason to define evolution triggers, not to pre-build a multi-agent architecture.
 
 ### 🔗 Mapping to Microsoft stack (including mixed solution)
 
