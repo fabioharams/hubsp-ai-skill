@@ -4,7 +4,7 @@
 
 This repository organizes a practical knowledge base to guide the corporate adoption of AI in the Microsoft ecosystem. The focus is on selecting the **simplest viable architecture first**, then combining Microsoft IQ context workloads (Work IQ, Foundry IQ, Fabric IQ and Web IQ), explicit agent runtimes, governed data, security, guard rails, evaluators and operations only where the current requirements justify them.
 
-The project was structured to serve as both an executive and technical reference: it helps business, architecture, data and security teams align on a common vision for planning, piloting and expanding AI initiatives with lower risk and greater value predictability. Skill version **1.9.0** accepts either the completed 30-question intake or any equivalent business and technical scenario document, makes low-complexity-first selection mandatory, requires evidence before escalating to agentic, multi-agent or mixed-runtime solutions, and requires a capacity and scale fit verdict before a Microsoft product, SaaS capability, license, SKU or configuration is approved for production. The skill metadata remains compatible with Claude's custom-skill upload requirements.
+The project was structured to serve as both an executive and technical reference: it helps business, architecture, data and security teams align on a common vision for planning, piloting and expanding AI initiatives with lower risk and greater value predictability. Skill version **1.10.0** accepts either the completed 30-question intake or any equivalent business and technical scenario document, makes low-complexity-first selection mandatory, requires evidence before escalating to agentic, multi-agent or mixed-runtime solutions, and requires a capacity and scale fit verdict before a Microsoft product, SaaS capability, license, SKU or configuration is approved for production. The skill metadata remains compatible with Claude's custom-skill upload requirements.
 
 ## Objective
 
@@ -86,12 +86,14 @@ Part A alone is sufficient for an initial architecture direction. Part B improve
    - Appendices: chapters 18-24 (code examples, templates, tool decision tree, OpenTelemetry, dataset curation and consolidated references).
 - references/: thematically sliced content for on-demand loading:
    - references/01-llm-rag-ai-agent-fundamentals.md: existing/deterministic alternatives, LLM, RAG, AI Agent and Agentic AI; complexity spectrum and escalation decision guide.
-   - references/02-reference-architecture-layers.md: conditional Microsoft IQ context capabilities, managed agent platforms, Agent Framework hosting boundaries, Microsoft Fabric and technical specifications per layer.
-   - references/03-roi-ai-vs-man-hour.md: ROI/AAI model, HITL and scope multiplier.
-   - references/04-governance-guard-rails-evaluators-hitl.md: Guard Rails, Evaluators and Human-in-the-Loop.
+   - references/02-reference-architecture-layers.md: conditional Microsoft IQ context capabilities, managed agent platforms, Agent Framework hosting boundaries, explicit Fabric authorization patterns and capacity-dependent technical specifications.
+   - references/03-roi-ai-vs-man-hour.md: dimensionally consistent per-task AAI, period-level ROI, HITL cost and scope/realization multipliers.
+   - references/04-governance-guard-rails-evaluators-hitl.md: guard rails, evaluators, Human-in-the-Loop, Agent ID and conditional Agent 365 coverage.
    - references/05-decision-framework-bxt.md: Microsoft AI Decision Framework (Intake Filter, BXT, 9 critical questions, Capability Model, mandatory complexity-escalation gate and technology selection by scenario).
-   - references/06-pl-2338-2023-copilot-studio-foundry.md: analysis of PL 2338/2023 and how Microsoft Copilot Studio, Microsoft Foundry and Purview address the axes of transparency, governance, risk, audit, human oversight and data protection with official sources.
+   - references/06-pl-2338-2023-copilot-studio-foundry.md: current legislative-status analysis of PL 2338/2023 and conditional mapping of Microsoft controls to transparency, governance, risk, audit, human oversight and data protection; it does not assert legal compliance.
    - references/07-capacity-and-scale-assessment.md: demand model, product-specific licensing/quota/throughput checks, fit verdict, headroom, load validation and official Microsoft capacity references.
+
+The Microsoft product, architecture, governance and regulatory sources behind references 01–06 were last rechecked on **2026-07-20**. Product lifecycle, licensing, regional availability, quotas and legal status remain point-in-time facts and must be revalidated for each production recommendation.
 - doc/agent-project-specifications-example.md: starter example of a project specification document to accelerate onboarding before creating or customizing doc/agent-project-specifications.md.
 - doc/business-architecture-questionnaire.md: business and technical discovery questionnaire that captures outcomes, current process, users, data, actions, risk, demand, economics, identity, integrations, runtime, networking, reliability, security, observability and delivery without asking stakeholders to choose a technology.
 - doc/agent-project-specifications.md: implementation-ready scenario input template used when requirements have already been formalized.
