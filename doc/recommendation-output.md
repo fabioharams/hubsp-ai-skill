@@ -135,6 +135,21 @@ Official Microsoft sources:
 - Fabric IQ: https://learn.microsoft.com/fabric/iq/overview
 - Microsoft Fabric: https://learn.microsoft.com/fabric/
 
+### 3.4 Capacity and scale fit
+
+The available project inputs do not yet quantify peak demand, concurrency, token profile, index size or tenant/subscription capacity. Therefore, the products below are **conditional recommendations**, not production sizing decisions.
+
+| Component | Required demand evidence | Capacity or limit to verify | Current verdict | Production validation gate |
+|---|---|---|---|---|
+| Microsoft 365 Copilot | Eligible and active users by wave | License eligibility, coverage, feature and region readiness | Conditional fit | Validate readiness report, license inventory and pilot usage |
+| Copilot Studio | Peak messages, generative requests and autonomous runs | Credits/messages, RPM/RPH, Power Platform, connector and downstream limits | Conditional fit | Confirm environment capacity and pass full-path peak load test |
+| Foundry Agent Service / model | Peak model RPM/TPM and p95 tokens | Agent limits, subscription-region-model TPM/RPM and regional tool support | Conditional fit | Confirm actual quota and pass representative load test with headroom |
+| Azure AI Search / Foundry IQ retrieval | Index/vector size, ingestion rate and peak queries | Tier, replicas, partitions, Search Units, vector limits and SLA topology | Conditional fit | Build representative index and test query plus indexing workload |
+| Microsoft Fabric / Fabric IQ | Workload mix, concurrent operations and peak CUs | Fabric SKU/CUs, throttling and workspace isolation | Conditional fit | Estimate SKU, measure pilot with Capacity Metrics and test peak period |
+| Dataverse, flows, connectors and APIs | Calls per interaction and burst rate | Environment, request, connector and downstream API limits | Conditional fit | Verify owner-configured limits and test retries/back-pressure end to end |
+
+The capacity gate passes only when every material component is **Fit** at measured peak plus declared headroom and the end-to-end p95 SLA is met. Official method and current sources: `references/07-capacity-and-scale-assessment.md`.
+
 ---
 
 ## 4) Governance and security (guard rails and evaluators)

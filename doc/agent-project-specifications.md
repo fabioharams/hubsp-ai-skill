@@ -50,7 +50,27 @@
 - Target availability:
 - Expected volume (day/month):
 - Peak window:
+- Peak interactions or jobs (minute/hour):
+- Peak concurrent users or jobs:
+- Model calls and tool/API calls per interaction:
+- Estimated p50/p95 input and output tokens per model call:
+- Current and projected data/index size and ingestion/change rate:
+- Required geography, data residency and regional failover:
+- Growth forecast by wave (users, traffic and data):
+- Required capacity headroom:
 - Scalability requirements:
+
+### 4.1 Microsoft product, SaaS and dependency capacity fit
+
+Complete one row for every recommended product and material downstream dependency. Use current tenant/subscription values and access-dated Microsoft sources; do not rely only on published defaults.
+
+| Component | Peak demand + headroom | License/credits/entitlement | Current quota/limit + scope | Proposed SKU/configuration | Region/feature availability | Bottleneck | Verdict (Fit/Conditional fit/Not fit) | Validation evidence | Monitor/scale trigger |
+|---|---|---|---|---|---|---|---|---|---|
+|  |  |  |  |  |  |  |  |  |  |
+
+- End-to-end load-test scenario and target:
+- Quota/capacity increase required, owner and lead time:
+- Production capacity approval criterion:
 
 ## 5. Data and integrations
 ### 5.1 Data sources
@@ -145,6 +165,13 @@
 - 7) Which guard rails and evaluators are mandatory at go-live?
 - 8) What scalability criterion is required to exit the pilot?
 - 9) What trade-off is accepted between cost, risk, speed and complexity?
+
+### 10.4 Capacity decision gate
+- Which component is the end-to-end bottleneck at peak plus headroom?
+- Is commercial entitlement sufficient independently of technical rate limits?
+- Which tenant, environment, subscription, region and model quota values have been verified?
+- Which load-test evidence proves the SLA at expected peak?
+- Which unresolved capacity item makes the production recommendation conditional?
 
 ## 11. Optional appendices
 - Current process diagram (AS-IS):

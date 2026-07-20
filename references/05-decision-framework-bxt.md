@@ -103,13 +103,30 @@ Before selecting the next level, record:
 
 When evidence is incomplete, select the lower-complexity baseline for the pilot and make the uncertainty an explicit validation objective.
 
+#### Mandatory capacity and scale gate
+
+After selecting the simplest viable product or architecture, validate whether its commercial entitlement and end-to-end technical capacity meet the workload. Use `references/07-capacity-and-scale-assessment.md` and record:
+
+| Required evidence | Decision question |
+|---|---|
+| Demand envelope | What are peak RPM/RPH, concurrency, calls and tokens per interaction, data/index size, ingestion rate, latency/SLA and growth by wave? |
+| Entitlement | Which user licenses, credits, messages, prepaid capacity or pay-as-you-go rights are required and available? |
+| Technical capacity | Which TPM/RPM, CU/SU, replica/partition, connector, API, environment and hard limits apply, and at what scope? |
+| End-to-end bottleneck | Which component has the lowest sustainable limit after headroom and retries? |
+| Regional fit | Are the required model, version, tools, features and capacity available in the required geography? |
+| Validation | Which tenant/subscription check, representative pilot and peak load test proves the fit? |
+| Verdict | Is each component **Fit**, **Conditional fit** or **Not fit**? What blocks production approval? |
+| Operations | Which signal triggers optimization, quota increase, scale up/out, workload isolation or redesign, and who owns it? |
+
+Licensing or total monthly capacity alone does not prove throughput. If peak demand, entitlement, quota or downstream capacity is unknown, the recommendation remains conditional.
+
 **Official Microsoft sources:**
 - Microsoft Copilot Studio documentation: https://learn.microsoft.com/microsoft-copilot-studio/
 - Microsoft Foundry documentation: https://learn.microsoft.com/azure/foundry/
 - Microsoft 365 Copilot documentation: https://learn.microsoft.com/microsoft-365-copilot/
 - Cloud Adoption Framework for AI: https://learn.microsoft.com/azure/cloud-adoption-framework/scenarios/ai/
 
-**Decision output template:** Simplest viable baseline · Simpler options assessed · Unmet requirements and evidence · Selected technology · Deferred capabilities · Escalation triggers · Time-to-market · Managed vs. self-managed · Complexity · Budget · Integrations · Orchestration · Accepted trade-offs · Next steps (pilot/POC/deploy).
+**Decision output template:** Simplest viable baseline · Simpler options assessed · Unmet requirements and evidence · Selected technology · Capacity and scale fit matrix · Fit verdict and open validation gates · Deferred capabilities · Escalation triggers · Time-to-market · Managed vs. self-managed · Complexity · Budget · Integrations · Orchestration · Accepted trade-offs · Next steps (pilot/POC/deploy).
 
 ---
 

@@ -5,7 +5,7 @@ description: "Use when selecting the simplest viable Microsoft AI architecture o
 license: MIT
 metadata:
   author: Fabio
-  version: "1.4.1"
+  version: "1.5.0"
   language: en-US
 ---
 
@@ -49,6 +49,8 @@ This skill helps structure practical recommendations for adopting AI agents in c
 - impacted area(s)
 - data maturity
 - required actions, autonomy and orchestration
+- user population, adoption forecast, workload volume, peak concurrency and growth horizon
+- SLA, latency, availability, data-size and geographic requirements
 - security/compliance requirements
 - timeline and priority
 
@@ -68,6 +70,8 @@ If critical information is missing, ask only for the minimum necessary before re
 2.2. For every escalation, identify the requirement that the preceding option cannot satisfy, the supporting evidence or explicit assumption, and the incremental cost, latency, operational risk and governance burden. If evidence is missing, recommend the lower-complexity option and label the assumption to validate during the pilot.
 2.3. Design for evolution without pre-building future complexity. Define measurable escalation triggers such as orchestration failure rate, tool-count or domain-boundary thresholds, latency limits, ownership separation or evaluation results.
 2.4. When the request involves choosing a Microsoft technology/product, apply the Microsoft AI Decision Framework (references/05-decision-framework-bxt.md): Intake Filter, BXT (Business/Experience/Technology), the 9 critical questions and scenario-based selection.
+2.5. Before recommending any Microsoft product, SaaS capability, license, SKU or configuration for production, perform a capacity and scale fit assessment (references/07-capacity-and-scale-assessment.md). Translate business demand into peak requests and tokens per minute, concurrent users or jobs, messages/credits, data and vector-index size, ingestion rate, Capacity Units/Search Units and availability requirements as applicable. Check current licensing entitlements, service quotas and hard limits, regional/model/tool availability, downstream connector/API limits and quota-increase lead time. The lowest limit in the end-to-end path is the effective capacity.
+2.6. Record a verdict for each selected component: **Fit**, **Conditional fit** or **Not fit**. Include the demand assumption, current limit and scope, required headroom, proposed license/SKU/configuration, load-test or pilot evidence, monitoring signal, scale action and official Microsoft source with an access date. Do not claim that capacity is validated from nominal daily or monthly volume alone. If demand or current quota is unknown, mark the recommendation conditional and define the measurement or administrative check required before production approval.
 3. Map data sources and current governance level.
 4. Define layer separation: channels and experiences; context workloads (Work IQ, Foundry IQ, Fabric IQ and Web IQ when necessary); agent runtime (Microsoft Foundry Agent Service, Copilot Studio or Microsoft Agent Framework); and data platform (Microsoft Fabric).
 4.1. Treat the IQs as complementary context sources, not interchangeable execution layers: Work IQ supplies Microsoft 365 work context; Foundry IQ supplies permission-aware enterprise knowledge through knowledge bases and agentic retrieval; Fabric IQ supplies semantic business context; Web IQ supplies current external web context.
@@ -84,6 +88,8 @@ If critical information is missing, ask only for the minimum necessary before re
 - Prefer executive language with objective technical details.
 - Always make trade-offs explicit (cost, risk, speed, complexity).
 - Always name the simplest viable baseline, the rejected simpler options and the evidence-based reason for each rejection.
+- Never recommend a production product, license, SKU or configuration without a capacity verdict and an explicit peak-demand assumption.
+- Separate commercial entitlement from technical throughput: licenses, credits or prepaid capacity do not by themselves guarantee sufficient rate limits, concurrency or downstream capacity.
 - Separate capabilities required now from deferred capabilities, and define measurable triggers for adding the deferred complexity.
 - Prefer a deterministic or single-agent pilot when uncertainty remains; do not present multi-agent as the default target state.
 - Avoid generic responses; adapt to the provided context.
@@ -124,6 +130,9 @@ If critical information is missing, ask only for the minimum necessary before re
   - Distinguish the minimum viable architecture for the first wave from optional future-state components. Do not include future components in the initial implementation unless an evidence-based escalation gate requires them.
   - Describe roles and boundaries of Work IQ, Foundry IQ, Fabric IQ and Web IQ, including how they connect to governed data, the selected agent runtime and cross-cutting controls.
   - Explain responsibilities per layer (experience/channels, context sources, agent runtime/orchestration, data platform and cross-cutting controls).
+  - Include a **capacity and scale fit matrix** for every recommended Microsoft product, SaaS capability and material downstream dependency. At minimum show: demand metric and peak assumption; current entitlement/quota/limit and scope; required headroom; selected license/SKU/configuration; region availability; bottleneck; Fit/Conditional fit/Not fit verdict; validation method; monitoring and scale trigger; official source and access date.
+  - For SaaS, distinguish user/license eligibility, metered consumption and rate provisioning. For Foundry models, assess TPM/RPM, quota scope, deployment type and regional capacity. For Copilot Studio, assess credits/messages separately from RPM/RPH and downstream Power Platform/connectors. For Fabric, estimate and measure CUs by workload and concurrency. For Azure AI Search, assess index/vector storage, replicas, partitions, Search Units, query/indexing throughput and SLA topology.
+  - Show the capacity calculation or state why it cannot yet be completed. Treat missing production demand, tenant entitlement or subscription quota as a conditional recommendation with a pre-production validation gate.
   - Do not describe Foundry IQ as the agent runtime. Foundry IQ is the managed enterprise knowledge layer; Microsoft Foundry Agent Service, Copilot Studio or Microsoft Agent Framework performs orchestration and execution.
   - Required to include:
     - 1 Mermaid architecture diagram (layers and main flows).
@@ -198,5 +207,6 @@ Load only the reference file needed for the question (progressive disclosure):
 - references/04-governance-guard-rails-evaluators-hitl.md — Guard Rails, Evaluators and Human-in-the-Loop.
 - references/05-decision-framework-bxt.md — Microsoft AI Decision Framework: Intake Filter, BXT, 9 critical questions, Capability Model and technology selection by scenario.
 - references/06-pl-2338-2023-copilot-studio-foundry.md — analysis of PL 2338/2023, focusing on transparency, governance, risk, audit, human oversight and data protection with official sources.
+- references/07-capacity-and-scale-assessment.md — demand model, product-specific capacity checks, fit verdict, headroom, pilot/load validation and official Microsoft capacity references.
 
 For topics not covered by these curated references, read only the lightweight index in AI_Agent_Adoption_Strategy_Final_2.md, select the relevant file from `chapters/`, and load that chapter only. Do not load all chapter files by default.

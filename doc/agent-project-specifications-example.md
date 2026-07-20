@@ -69,7 +69,28 @@
 - **Target availability:** initial recommendation of 99.5% in the pilot and evolution to 99.9% in expanded production.
 - **Expected volume (day/month):** to be validated in the discovery and per-app assessment.
 - **Peak window:** commercial peaks, network service hours and campaign/product periods; details to be validated in discovery.
+- **Peak interactions or jobs (minute/hour):** not measured; capture from channel and workflow telemetry during discovery and pilot.
+- **Peak concurrent users or jobs:** not measured; establish p50/p95 concurrency by journey and wave.
+- **Model calls and tool/API calls per interaction:** measure separately for triage, retrieval, actions and handoff.
+- **Estimated p50/p95 input and output tokens per model call:** capture from pilot telemetry before model quota sizing.
+- **Current and projected data/index size and ingestion/change rate:** inventory documents, vectors, Dataverse records and refresh frequency before search/Fabric sizing.
+- **Required geography, data residency and regional failover:** confirm with security, compliance and platform architecture.
+- **Growth forecast by wave (users, traffic and data):** baseline, expansion and scale forecasts pending business ownership.
+- **Required capacity headroom:** to be agreed from workload criticality and burst profile; not yet validated.
 - **Scalability requirements:** expansion in waves, progressive inclusion of channels, products and hubs, maintaining the single case, observability and governance.
+
+### 4.1 Microsoft product, SaaS and dependency capacity fit
+
+| Component | Peak demand + headroom | Entitlement / quota / limit | Proposed configuration | Bottleneck | Verdict | Required validation |
+|---|---|---|---|---|---|---|
+| Microsoft 365 Copilot | User population and adoption pending | License eligibility and coverage pending | Phased user assignment | License/readiness coverage | Conditional fit | Readiness report, license inventory and usage baseline |
+| Copilot Studio | Peak messages, generative RPM/RPH and credits pending | Tenant/environment capacity and limits pending | Production environment; billing model pending | Lowest of Copilot Studio, Power Platform, connector and API limits | Conditional fit | Confirm credits and current quotas; full-path peak load test |
+| Foundry Agent Service / model deployment | Peak model RPM/TPM pending | Subscription-region-model quota pending | Model, deployment type and region pending | TPM/RPM or regional tool availability | Conditional fit | Token profile, quota check, compatibility matrix and load test |
+| Azure AI Search / Foundry IQ retrieval | Index/vector size and peak queries pending | Tier limits and available Search Units pending | Tier, replicas and partitions pending | Storage, indexing or query throughput | Conditional fit | Build representative index; test query/index load and SLA topology |
+| Microsoft Fabric / Fabric IQ dependency | Workload mix, concurrency and CUs pending | Fabric entitlement and capacity pending | SKU and workspace allocation pending | Peak CU utilization/throttling | Conditional fit | SKU estimate, pilot capacity and Capacity Metrics evidence |
+| Dataverse, flows, connectors and downstream APIs | Calls per interaction and peak pending | Environment, connector and API limits pending | Retry/back-pressure policy pending | Lowest downstream rate limit | Conditional fit | Owner-confirmed limits and end-to-end load test |
+
+**Production gate:** all material rows must become **Fit** with verified tenant/subscription values and measured peak-plus-headroom evidence. The current architecture recommendation is conditional until this gate passes.
 
 ## 5. Data and integrations
 

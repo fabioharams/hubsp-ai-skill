@@ -4,13 +4,14 @@
 
 This repository organizes a practical knowledge base to guide the corporate adoption of AI in the Microsoft ecosystem. The focus is on selecting the **simplest viable architecture first**, then combining Microsoft IQ context workloads (Work IQ, Foundry IQ, Fabric IQ and Web IQ), explicit agent runtimes, governed data, security, guard rails, evaluators and operations only where the current requirements justify them.
 
-The project was structured to serve as both an executive and technical reference: it helps business, architecture, data and security teams align on a common vision for planning, piloting and expanding AI initiatives with lower risk and greater value predictability. Skill version **1.4.1** makes low-complexity-first selection mandatory, requires evidence before escalating to agentic, multi-agent or mixed-runtime solutions, and keeps the skill metadata compatible with Claude's custom-skill upload requirements.
+The project was structured to serve as both an executive and technical reference: it helps business, architecture, data and security teams align on a common vision for planning, piloting and expanding AI initiatives with lower risk and greater value predictability. Skill version **1.5.0** makes low-complexity-first selection mandatory, requires evidence before escalating to agentic, multi-agent or mixed-runtime solutions, and requires a capacity and scale fit verdict before a Microsoft product, SaaS capability, license, SKU or configuration is approved for production. The skill metadata remains compatible with Claude's custom-skill upload requirements.
 
 ## Objective
 
 - Define a reference architecture for AI agents in a corporate context.
 - Evaluate existing products, deterministic automation, LLM, RAG, single-agent and multi-agent options in ascending complexity.
 - Stop at the first option that reliably satisfies current requirements and require evidence before every escalation.
+- Validate product licensing, quotas, throughput, concurrency, data/index size, regional availability, downstream limits and scale headroom against peak requirements.
 - Standardize recommendations focused on governance, compliance and observability.
 - Support a wave-based roadmap (pilot, expansion and scale) with clear criteria.
 - Make trade-offs explicit across cost, risk, speed and complexity.
@@ -44,9 +45,15 @@ For every escalation, the recommendation must identify:
 
 When evidence is incomplete, the skill recommends the lower-complexity pilot and turns the uncertainty into a validation objective. Security, compliance, multiple teams or expected growth do not automatically justify multi-agent or mixed architecture. Apply identity, least privilege, isolated tools, data controls, audit, evaluators and HITL to the simpler baseline first.
 
+## Capacity and scale decision policy
+
+Every production recommendation must include a component-level capacity and scale fit matrix. It separates commercial entitlement (licenses, credits, messages or prepaid capacity) from technical throughput (RPM/RPH, TPM, concurrency, CUs, Search Units, replicas/partitions and downstream limits). The lowest sustainable limit in the complete runtime path is treated as the effective capacity.
+
+Each selected component receives a **Fit**, **Conditional fit** or **Not fit** verdict. Unknown peak demand, tenant entitlement, subscription quota, region support or downstream capacity produces a conditional recommendation and a named pre-production validation gate. Daily or monthly volume alone is insufficient; the assessment uses peak demand, p50/p95 work per interaction, explicit headroom and representative end-to-end load testing.
+
 ## What you will find in this repository
 
-- SKILL.md: version 1.4.1 skill definition and router. Enforces the low-complexity-first ladder, evidence-based escalation and consistent adoption architecture responses while loading reference files on demand.
+- SKILL.md: version 1.5.0 skill definition and router. Enforces the low-complexity-first ladder, evidence-based escalation, capacity and scale validation, and consistent adoption architecture responses while loading reference files on demand.
 - AI_Agent_Adoption_Strategy_Final_2.md: lightweight index that routes to thematic references and the 24 individual guide chapters.
 - chapters/: complete guide content split for selective, on-demand loading and organized into five groups:
    - Strategy and Adoption: chapters 01-04 (executive overview, adoption strategy, tools and approaches).
@@ -61,6 +68,7 @@ When evidence is incomplete, the skill recommends the lower-complexity pilot and
    - references/04-governance-guard-rails-evaluators-hitl.md: Guard Rails, Evaluators and Human-in-the-Loop.
    - references/05-decision-framework-bxt.md: Microsoft AI Decision Framework (Intake Filter, BXT, 9 critical questions, Capability Model, mandatory complexity-escalation gate and technology selection by scenario).
    - references/06-pl-2338-2023-copilot-studio-foundry.md: analysis of PL 2338/2023 and how Microsoft Copilot Studio, Microsoft Foundry and Purview address the axes of transparency, governance, risk, audit, human oversight and data protection with official sources.
+   - references/07-capacity-and-scale-assessment.md: demand model, product-specific licensing/quota/throughput checks, fit verdict, headroom, load validation and official Microsoft capacity references.
 - doc/agent-project-specifications-example.md: starter example of a project specification document to accelerate onboarding before creating or customizing doc/agent-project-specifications.md.
 - doc/agent-project-specifications.md: working specification used as primary project input in recommendation prompts.
 - doc/recommendation-output.md: generated output artifact where the executive recommendation is persisted in markdown format.
