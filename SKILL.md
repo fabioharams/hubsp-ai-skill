@@ -1,11 +1,11 @@
 ---
 name: hubsp-ai-skill
 summary: "Guides low-complexity-first corporate AI adoption with Microsoft IQ context workloads, Microsoft Foundry and Fabric, including architecture selection, agent runtimes, ROI, governance, security, guard rails and continuous evaluation."
-description: "Use when selecting the simplest viable Microsoft AI architecture, comparing deterministic automation, LLM, RAG, single-agent and multi-agent patterns, or defining adoption strategy, context architecture, agent runtime, governance, ROI, security and regulatory compliance."
+description: "Use when selecting the simplest viable Microsoft AI architecture or defining agent adoption, runtime, governed data, security, ROI and evidence-based escalation from automation to multi-agent."
 license: MIT
 metadata:
   author: Fabio
-  version: "1.4.0"
+  version: "1.4.1"
   language: en-US
 ---
 

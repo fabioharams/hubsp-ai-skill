@@ -4,7 +4,7 @@
 
 This repository organizes a practical knowledge base to guide the corporate adoption of AI in the Microsoft ecosystem. The focus is on selecting the **simplest viable architecture first**, then combining Microsoft IQ context workloads (Work IQ, Foundry IQ, Fabric IQ and Web IQ), explicit agent runtimes, governed data, security, guard rails, evaluators and operations only where the current requirements justify them.
 
-The project was structured to serve as both an executive and technical reference: it helps business, architecture, data and security teams align on a common vision for planning, piloting and expanding AI initiatives with lower risk and greater value predictability. Skill version **1.4.0** makes low-complexity-first selection mandatory and requires evidence before escalating to agentic, multi-agent or mixed-runtime solutions.
+The project was structured to serve as both an executive and technical reference: it helps business, architecture, data and security teams align on a common vision for planning, piloting and expanding AI initiatives with lower risk and greater value predictability. Skill version **1.4.1** makes low-complexity-first selection mandatory, requires evidence before escalating to agentic, multi-agent or mixed-runtime solutions, and keeps the skill metadata compatible with Claude's custom-skill upload requirements.
 
 ## Objective
 
@@ -46,7 +46,7 @@ When evidence is incomplete, the skill recommends the lower-complexity pilot and
 
 ## What you will find in this repository
 
-- SKILL.md: version 1.4.0 skill definition and router. Enforces the low-complexity-first ladder, evidence-based escalation and consistent adoption architecture responses while loading reference files on demand.
+- SKILL.md: version 1.4.1 skill definition and router. Enforces the low-complexity-first ladder, evidence-based escalation and consistent adoption architecture responses while loading reference files on demand.
 - AI_Agent_Adoption_Strategy_Final_2.md: lightweight index that routes to thematic references and the 24 individual guide chapters.
 - chapters/: complete guide content split for selective, on-demand loading and organized into five groups:
    - Strategy and Adoption: chapters 01-04 (executive overview, adoption strategy, tools and approaches).
@@ -206,6 +206,71 @@ Example with project specifications document:
 > Using #SKILL.md and #doc/agent-project-specifications.md, generate an executive recommendation in full format. First evaluate existing Microsoft/SaaS capabilities, deterministic automation, direct LLM, RAG, single-agent and multi-agent or mixed architecture in ascending complexity; stop at the first option that reliably meets current requirements. For every escalation, state the unmet requirement, supporting evidence or assumption, and incremental cost, latency, operational risk and governance burden. Identify the simplest viable baseline, rejected simpler options, deferred capabilities and measurable escalation triggers. Then provide: (1) medium executive summary (1-2 paragraphs) with at least 1 Mermaid diagram or flowchart to explain the recommended decision, (2) recommended architectural pattern with detailed justifications, official Microsoft links and at least 1 Mermaid diagram or flowchart, (3) target architecture with Microsoft IQ context workloads (Work IQ, Foundry IQ, Fabric IQ and Web IQ when applicable), an explicit agent runtime and Microsoft Fabric, with detailed explanation and 2 mandatory Mermaid diagrams (architecture and decision flowchart), (4) governance and security with guard rails, evaluators, PL 2338/2023 analysis and explanation of how the selected tools and services address transparency, governance, risk, audit, human oversight and data protection with official sources, and at least 1 Mermaid diagram or flowchart, (5) phased deployment plan that starts with the simplest viable pilot and details objective, scope, integrations, entry/exit criteria, target KPI and dominant risk per phase, with at least 1 Mermaid diagram or flowchart, (6) ROI/AAI assumptions with at least 1 Mermaid diagram or flowchart, (7) success KPIs with at least 1 Mermaid diagram or flowchart, and (8) risks and mitigations with official Microsoft links and at least 1 Mermaid diagram or flowchart. Deliver the response in a new markdown document called doc/recommendation-output.md.
 
 Tip: to use `SKILL.md` as a reusable skill in the official VS Code format, copy it (or create a link) to a folder such as `.github/skills/hubsp-ai-skill/` or `~/.copilot/skills/hubsp-ai-skill/`. In this repository, the file at the root acts as the **canonical source/router** for direct reference in prompts, while the formal skill installation should follow the lowercase folder convention.
+
+## How to use in Claude Desktop
+
+Claude custom skills use progressive disclosure and are uploaded as a ZIP package. Skills are available on Free, Pro, Max, Team and Enterprise plans, but **Code execution and file creation** must be enabled.
+
+1. From the parent directory of this repository, create a ZIP whose root is the `hubsp-ai-skill/` folder:
+
+   ```bash
+   cd ..
+   zip -r hubsp-ai-skill.zip hubsp-ai-skill \
+     -x "hubsp-ai-skill/.git/*"
+   ```
+
+2. In Claude Desktop, enable the required capability:
+   - Free, Pro or Max: open **Settings > Capabilities** and enable **Code execution and file creation**.
+   - Team or Enterprise: an owner must enable **Code execution and file creation** and **Skills** under **Organization settings > Skills**.
+3. Open **Customize > Skills**.
+4. Select **+ > Create skill > Upload a skill** and upload `hubsp-ai-skill.zip`.
+5. Confirm that the skill appears in the list and toggle it on.
+6. Start a new chat and use a natural-language request or explicitly name the skill during initial testing:
+
+   > Use the hubsp-ai-skill to recommend the simplest viable architecture for this project. Evaluate existing products, deterministic automation, direct LLM, RAG, single-agent and multi-agent or mixed architecture in order, and require evidence before escalation.
+
+7. For project-specific recommendations, attach `doc/agent-project-specifications.md` to the conversation. Claude loads the skill instructions dynamically and uses the attached document as case context.
+8. After changing this repository, rebuild the ZIP and replace the uploaded skill so Claude uses the latest version.
+
+Review the ZIP contents before uploading, especially if scripts or external dependencies are added later. Custom skills can execute code, so do not include credentials or secrets.
+
+Official Anthropic references:
+
+- [Use skills in Claude](https://support.claude.com/en/articles/12512180-use-skills-in-claude)
+- [How to create custom skills](https://support.claude.com/en/articles/12512198-how-to-create-custom-skills)
+- [What are skills?](https://support.claude.com/en/articles/12512176-what-are-skills)
+
+## How to use in Microsoft Scout
+
+> **Preview notice:** Microsoft Scout is a Frontier preview desktop application. Availability, prerequisites and behavior can change before general availability.
+
+Current prerequisites include Windows 11 or macOS 12+, a Microsoft 365 work or school account, Microsoft 365 Copilot access, a GitHub Copilot Business or Enterprise license, local installation permission and administrator enablement for the Frontier preview.
+
+1. Join the [Microsoft Frontier preview program](https://adoption.microsoft.com/copilot/frontier-program/) and confirm that your administrator has enabled Microsoft Scout access.
+2. [Download Microsoft Scout](https://aka.ms/msscout), install it and sign in to both Microsoft 365 and GitHub when prompted.
+3. Set this repository, or the project directory containing the completed specifications document, as the Scout workspace.
+4. From this repository root, install the complete skill in Scout's global skills directory so its references and chapters remain available:
+
+   ```bash
+   mkdir -p ~/.copilot/skills/hubsp-ai-skill
+   rsync -a --exclude '.git' ./ ~/.copilot/skills/hubsp-ai-skill/
+   ```
+
+5. Start a new conversation. Scout discovers custom skills at the beginning of future conversations; loaded skills appear in the conversation context.
+6. Ask Scout to apply the skill:
+
+   > Use hubsp-ai-skill and doc/agent-project-specifications.md to recommend the simplest viable target architecture. Stop at the first option that meets current requirements, document evidence for rejecting simpler alternatives, and define measurable escalation triggers.
+
+7. Keep **Auto-approve** disabled while validating the skill. Review requests to run shell commands, write files, use the browser or act on Microsoft 365 data before approving them.
+8. To update the installed skill after repository changes, rerun the `rsync` command and begin a new conversation.
+
+Scout operates within the configured workspace and your existing permissions. Custom skills are not validated by Microsoft, so review generated recommendations and all sensitive actions before approval. Microsoft 365 data processed through GitHub Copilot can be subject to different protection and data-processing terms than data processed entirely within Microsoft 365.
+
+Official Microsoft references:
+
+- [Get started with Microsoft Scout](https://learn.microsoft.com/microsoft-scout/get-started)
+- [Use Microsoft Scout](https://learn.microsoft.com/microsoft-scout/use-microsoft-scout)
+- [Microsoft Scout common questions](https://learn.microsoft.com/microsoft-scout/faq)
 
 ## Note on project documents (`doc` folder)
 
