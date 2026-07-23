@@ -1,0 +1,752 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>hubsp-ai-skill | Business and Technical Overview</title>
+  <script>
+    (() => {
+      const param = new URLSearchParams(window.location.search).get("scoutTheme");
+      const theme =
+        param || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      document.documentElement.setAttribute("data-theme", theme);
+    })();
+  </script>
+  <style>
+    :root {
+      color-scheme: light;
+      --cp-bg: #f7f4ef;
+      --cp-bg-elevated: #fcfbf8;
+      --cp-surface: #ffffff;
+      --cp-surface-soft: #f5f5f5;
+      --cp-border: #dedede;
+      --cp-border-strong: #919191;
+      --cp-text: #242424;
+      --cp-text-muted: #5c5c5c;
+      --cp-text-soft: #6f6f6f;
+      --cp-accent: #b11f4b;
+      --cp-accent-hover: #9a1a41;
+      --cp-accent-soft: rgba(177, 31, 75, 0.08);
+      --cp-accent-fg: #ffffff;
+      --cp-success: #16a34a;
+      --cp-danger: #dc2626;
+      --cp-warning: #f59e0b;
+      --cp-link: #0078d4;
+      --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.12);
+      --cp-overlay: rgba(255, 255, 255, 0.8);
+      --cp-panel: rgba(255, 255, 255, 0.86);
+      --cp-panel-strong: rgba(255, 255, 255, 0.96);
+      --cp-sheen: rgba(255, 255, 255, 0.55);
+      --cp-highlight: rgba(177, 31, 75, 0.12);
+    }
+    html[data-theme="dark"] {
+      color-scheme: dark;
+      --cp-bg: #3d3b3a;
+      --cp-bg-elevated: #343231;
+      --cp-surface: #292929;
+      --cp-surface-soft: #2e2e2e;
+      --cp-border: #474747;
+      --cp-border-strong: #5f5f5f;
+      --cp-text: #dedede;
+      --cp-text-muted: #919191;
+      --cp-text-soft: #b0b0b0;
+      --cp-accent: #fd8ea1;
+      --cp-accent-hover: #fb7b91;
+      --cp-accent-soft: rgba(253, 142, 161, 0.14);
+      --cp-accent-fg: #1a1a1a;
+      --cp-success: #4ade80;
+      --cp-danger: #f87171;
+      --cp-warning: #fbbf24;
+      --cp-link: #4da6ff;
+      --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.32);
+      --cp-overlay: rgba(41, 41, 41, 0.88);
+      --cp-panel: rgba(41, 41, 41, 0.72);
+      --cp-panel-strong: rgba(41, 41, 41, 0.96);
+      --cp-sheen: rgba(255, 255, 255, 0.04);
+      --cp-highlight: rgba(253, 142, 161, 0.12);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+    body {
+      background: var(--cp-bg);
+      color: var(--cp-text);
+      font-family: "Segoe UI", Aptos, Calibri, -apple-system, BlinkMacSystemFont, sans-serif;
+      letter-spacing: 0;
+    }
+    button { font: inherit; }
+    button:focus-visible, [tabindex]:focus-visible { outline: 3px solid var(--cp-accent); outline-offset: 3px; }
+    .deck { position: relative; width: 100%; height: 100%; }
+    .deck::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(90deg, transparent 0 49.8%, var(--cp-accent-soft) 49.8% 50.2%, transparent 50.2%),
+        linear-gradient(0deg, transparent 0 49.8%, var(--cp-accent-soft) 49.8% 50.2%, transparent 50.2%);
+      background-size: 160px 160px;
+      opacity: 0.34;
+    }
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 20px;
+      padding: 44px 64px 72px;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateX(28px);
+      transition: opacity 240ms ease, transform 320ms ease, visibility 0s linear 320ms;
+      overflow: auto;
+      scrollbar-width: thin;
+    }
+    .slide.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(0);
+      transition-delay: 0s;
+    }
+    .slide.exit-left { transform: translateX(-28px); }
+    .slide-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 32px; }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+      color: var(--cp-accent);
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    .eyebrow::before { content: ""; width: 20px; height: 3px; background: var(--cp-accent); }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { max-width: 850px; margin-bottom: 20px; font-family: Georgia, "Times New Roman", serif; font-size: 4.25rem; line-height: 1.02; font-weight: 600; }
+    h2 { margin-bottom: 0; font-family: Georgia, "Times New Roman", serif; font-size: 2.5rem; line-height: 1.08; font-weight: 600; }
+    h3 { margin-bottom: 8px; font-size: 1rem; line-height: 1.2; }
+    p { color: var(--cp-text-muted); font-size: 1rem; line-height: 1.5; }
+    .lede { max-width: 830px; font-size: 1.32rem; line-height: 1.5; color: var(--cp-text-soft); }
+    .mono { font-family: Consolas, "Courier New", Courier, monospace; }
+    .accent { color: var(--cp-accent); }
+    .muted { color: var(--cp-text-muted); }
+    .slide-number { color: var(--cp-text-muted); font: 0.78rem Consolas, "Courier New", Courier, monospace; white-space: nowrap; }
+    .slide-body { min-height: 0; align-self: center; width: 100%; }
+    .slide-footer { display: flex; justify-content: space-between; gap: 24px; color: var(--cp-text-muted); font-size: 0.76rem; }
+    .slide-footer strong { color: var(--cp-text); }
+
+    .hero-grid { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.65fr); gap: 64px; align-items: center; }
+    .hero-mark {
+      position: relative;
+      min-height: 430px;
+      display: grid;
+      place-items: center;
+      border-left: 1px solid var(--cp-border);
+    }
+    .orbit { position: relative; width: 330px; height: 330px; border: 1px solid var(--cp-border-strong); border-radius: 50%; }
+    .orbit::before, .orbit::after { content: ""; position: absolute; border: 1px solid var(--cp-border); border-radius: 50%; }
+    .orbit::before { inset: 42px; }
+    .orbit::after { inset: 94px; background: var(--cp-accent); border-color: var(--cp-accent); }
+    .orbit-label { position: absolute; padding: 6px 9px; background: var(--cp-bg); color: var(--cp-text); font: 0.76rem Consolas, "Courier New", Courier, monospace; }
+    .orbit-label.one { top: -12px; left: 105px; }
+    .orbit-label.two { right: -30px; top: 148px; }
+    .orbit-label.three { bottom: 10px; left: 0; }
+    .orbit-core { position: absolute; inset: 0; display: grid; place-items: center; z-index: 1; color: var(--cp-accent-fg); font-weight: 800; font-size: 1.2rem; }
+    .pill-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 28px; }
+    .pill { padding: 7px 10px; border: 1px solid var(--cp-border); border-radius: 999px; background: var(--cp-bg-elevated); color: var(--cp-text-muted); font-size: 0.78rem; }
+
+    .two-col { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px; align-items: stretch; }
+    .three-col { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+    .four-col { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+    .panel { padding: 22px; border: 1px solid var(--cp-border); border-radius: 16px; background: var(--cp-surface); }
+    .panel.soft { background: var(--cp-bg-elevated); }
+    .panel.emphasis { border-color: var(--cp-accent); background: var(--cp-accent-soft); }
+    .panel p:last-child { margin-bottom: 0; }
+    .panel-kicker { color: var(--cp-accent); font: 0.74rem Consolas, "Courier New", Courier, monospace; text-transform: uppercase; }
+    .big-number { display: block; margin-bottom: 6px; color: var(--cp-accent); font-family: Georgia, "Times New Roman", serif; font-size: 3.2rem; line-height: 1; }
+    .list { display: grid; gap: 14px; margin: 0; padding: 0; list-style: none; }
+    .list li { display: grid; grid-template-columns: 26px 1fr; gap: 10px; color: var(--cp-text-muted); line-height: 1.4; }
+    .list .index { color: var(--cp-accent); font: 0.78rem Consolas, "Courier New", Courier, monospace; padding-top: 3px; }
+
+    .ladder { display: grid; grid-template-columns: repeat(6, minmax(120px, 1fr)); gap: 10px; align-items: end; }
+    .step { position: relative; min-height: 115px; padding: 16px 12px; border: 1px solid var(--cp-border); background: var(--cp-surface); }
+    .step:nth-child(2) { min-height: 140px; }
+    .step:nth-child(3) { min-height: 165px; }
+    .step:nth-child(4) { min-height: 190px; }
+    .step:nth-child(5) { min-height: 215px; }
+    .step:nth-child(6) { min-height: 240px; border-color: var(--cp-accent); }
+    .step::after { content: "→"; position: absolute; right: -13px; top: 18px; z-index: 2; color: var(--cp-accent); font-weight: 800; }
+    .step:last-child::after { display: none; }
+    .step b { display: block; margin-bottom: 9px; font-size: 0.9rem; }
+    .step span { color: var(--cp-text-muted); font-size: 0.76rem; line-height: 1.35; }
+    .stop-line { margin-top: 22px; padding: 13px 18px; border-left: 5px solid var(--cp-success); background: var(--cp-surface); color: var(--cp-text); }
+
+    .flow { display: grid; grid-template-columns: repeat(4, 1fr); align-items: center; gap: 38px; }
+    .flow-node { position: relative; min-height: 160px; padding: 20px; border: 1px solid var(--cp-border); background: var(--cp-surface); }
+    .flow-node::after { content: "→"; position: absolute; right: -29px; top: 60px; color: var(--cp-accent); font-size: 1.8rem; }
+    .flow-node:last-child::after { display: none; }
+    .flow-node b { display: block; margin: 10px 0 8px; }
+    .flow-icon { width: 42px; height: 42px; display: grid; place-items: center; border-radius: 50%; background: var(--cp-accent); color: var(--cp-accent-fg); font-weight: 800; }
+
+    .repo-map { display: grid; grid-template-columns: 1fr 1.2fr 1.2fr 1fr; gap: 18px; align-items: center; }
+    .repo-column { display: grid; gap: 14px; }
+    .file-box { position: relative; padding: 16px; border: 1px solid var(--cp-border); background: var(--cp-surface); min-height: 76px; }
+    .file-box.primary { border: 2px solid var(--cp-accent); }
+    .file-box.folder { background: var(--cp-accent-soft); }
+    .file-box code { display: block; color: var(--cp-text); font: 0.78rem Consolas, "Courier New", Courier, monospace; overflow-wrap: anywhere; }
+    .file-box span { display: block; margin-top: 7px; color: var(--cp-text-muted); font-size: 0.73rem; line-height: 1.3; }
+    .map-arrow { color: var(--cp-accent); text-align: center; font-size: 1.4rem; }
+
+    .question-split { display: grid; grid-template-columns: 1fr 90px 1fr; gap: 20px; align-items: stretch; }
+    .question-side { padding: 26px; border: 1px solid var(--cp-border); background: var(--cp-surface); }
+    .question-side h3 { font-size: 1.3rem; }
+    .question-side ol { margin: 18px 0 0; padding-left: 20px; color: var(--cp-text-muted); line-height: 1.55; }
+    .question-bridge { display: grid; place-items: center; color: var(--cp-accent); font-weight: 800; }
+    .question-bridge span { writing-mode: vertical-rl; text-orientation: mixed; font-size: 0.72rem; text-transform: uppercase; }
+
+    .ref-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+    .ref { min-height: 128px; padding: 16px; border-top: 4px solid var(--cp-accent); background: var(--cp-surface); }
+    .ref code { color: var(--cp-accent); font-size: 0.74rem; }
+    .ref b { display: block; margin: 10px 0 6px; font-size: 0.92rem; }
+    .ref span { color: var(--cp-text-muted); font-size: 0.74rem; line-height: 1.35; }
+
+    .chapter-bands { display: grid; grid-template-columns: repeat(5, 1fr); min-height: 330px; border: 1px solid var(--cp-border); }
+    .chapter-band { padding: 22px 16px; border-right: 1px solid var(--cp-border); background: var(--cp-surface); }
+    .chapter-band:last-child { border-right: 0; }
+    .chapter-band:nth-child(even) { background: var(--cp-bg-elevated); }
+    .chapter-range { display: block; margin-bottom: 18px; color: var(--cp-accent); font: 1rem Consolas, "Courier New", Courier, monospace; }
+    .chapter-band ul { margin: 0; padding: 0; list-style: none; color: var(--cp-text-muted); font-size: 0.76rem; line-height: 1.7; }
+
+    .layer-stack { display: grid; gap: 8px; max-width: 920px; margin: 0 auto; }
+    .layer { display: grid; grid-template-columns: 180px 1fr; min-height: 64px; border: 1px solid var(--cp-border); background: var(--cp-surface); }
+    .layer-name { display: grid; place-items: center; padding: 12px; background: var(--cp-accent-soft); color: var(--cp-accent); font-weight: 700; text-align: center; }
+    .layer-detail { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding: 12px 18px; color: var(--cp-text-muted); }
+    .layer-detail span { padding: 5px 8px; border: 1px solid var(--cp-border); background: var(--cp-bg-elevated); font-size: 0.76rem; }
+
+    .triangle-layout { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 50px; align-items: center; }
+    .triangle { position: relative; width: 420px; height: 360px; margin: auto; }
+    .triangle-ring { position: absolute; border: 1px solid var(--cp-border-strong); transform: rotate(45deg); background: var(--cp-surface); }
+    .triangle-ring.one { width: 240px; height: 240px; left: 90px; top: 60px; }
+    .triangle-ring.two { width: 170px; height: 170px; left: 125px; top: 95px; background: var(--cp-accent-soft); }
+    .triangle-core { position: absolute; inset: 0; display: grid; place-items: center; z-index: 2; text-align: center; font-weight: 800; }
+    .triangle-label { position: absolute; z-index: 3; padding: 7px 10px; background: var(--cp-bg); color: var(--cp-text); font-size: 0.78rem; }
+    .triangle-label.top { top: 8px; left: 150px; }
+    .triangle-label.left { left: 0; bottom: 42px; }
+    .triangle-label.right { right: 0; bottom: 42px; }
+
+    .output-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px 28px; counter-reset: output; }
+    .output-item { position: relative; min-height: 78px; padding: 16px 16px 16px 56px; border-bottom: 1px solid var(--cp-border); }
+    .output-item::before { counter-increment: output; content: counter(output, decimal-leading-zero); position: absolute; left: 0; color: var(--cp-accent); font: 1.1rem Consolas, "Courier New", Courier, monospace; }
+    .output-item b { display: block; margin-bottom: 4px; }
+    .output-item span { color: var(--cp-text-muted); font-size: 0.76rem; line-height: 1.3; }
+
+    .usage-tabs { display: grid; grid-template-columns: 220px 1fr; gap: 28px; }
+    .usage-menu { display: grid; gap: 8px; align-content: start; }
+    .usage-button { width: 100%; padding: 13px 14px; border: 1px solid var(--cp-border); border-radius: 0.625rem; background: var(--cp-surface); color: var(--cp-text); text-align: left; cursor: pointer; }
+    .usage-button[aria-selected="true"] { border-color: var(--cp-accent); background: var(--cp-accent-soft); color: var(--cp-accent); font-weight: 700; }
+    .usage-content { min-height: 310px; padding: 28px; border: 1px solid var(--cp-border); background: var(--cp-surface); }
+    .usage-panel { display: none; }
+    .usage-panel.active { display: block; animation: reveal 220ms ease; }
+    .prompt-box { margin-top: 20px; padding: 16px; border-left: 5px solid var(--cp-accent); background: var(--cp-bg-elevated); color: var(--cp-text); font: 0.82rem/1.5 Consolas, "Courier New", Courier, monospace; }
+
+    .scoreboard { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--cp-border); border-bottom: 1px solid var(--cp-border); }
+    .score { padding: 26px 18px; border-right: 1px solid var(--cp-border); }
+    .score:last-child { border-right: 0; }
+    .score b { display: block; margin-bottom: 8px; color: var(--cp-accent); font-size: 1.1rem; }
+    .score span { color: var(--cp-text-muted); font-size: 0.78rem; line-height: 1.4; }
+
+    .controls {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 20;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 16px;
+      padding: 10px 20px;
+      background: var(--cp-panel-strong);
+      border-top: 1px solid var(--cp-border);
+    }
+    .progress-track { height: 4px; background: var(--cp-border); overflow: hidden; }
+    .progress-bar { width: 7.14%; height: 100%; background: var(--cp-accent); transition: width 240ms ease; }
+    .nav-group { display: flex; gap: 8px; justify-content: center; }
+    .icon-button {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--cp-border);
+      border-radius: 0.625rem;
+      background: var(--cp-surface);
+      color: var(--cp-text);
+      cursor: pointer;
+    }
+    .icon-button:hover { border-color: var(--cp-accent); color: var(--cp-accent); }
+    .icon-button:disabled { opacity: 0.35; cursor: default; }
+    .icon-button svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .counter { justify-self: end; color: var(--cp-text-muted); font: 0.76rem Consolas, "Courier New", Courier, monospace; }
+    .slide-picker { position: relative; }
+    .picker-panel {
+      position: fixed;
+      left: 50%;
+      bottom: 64px;
+      transform: translateX(-50%);
+      z-index: 30;
+      width: min(700px, calc(100% - 32px));
+      max-height: 62vh;
+      overflow: auto;
+      padding: 12px;
+      border: 1px solid var(--cp-border);
+      border-radius: 16px;
+      background: var(--cp-panel-strong);
+      box-shadow: var(--cp-shadow);
+    }
+    .picker-panel[hidden] { display: none; }
+    .picker-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
+    .picker-item { padding: 10px; border: 1px solid transparent; border-radius: 0.625rem; background: transparent; color: var(--cp-text); text-align: left; cursor: pointer; }
+    .picker-item:hover, .picker-item.current { border-color: var(--cp-accent); background: var(--cp-accent-soft); }
+    .picker-item small { display: block; color: var(--cp-text-muted); margin-top: 3px; }
+    .notes {
+      position: fixed;
+      inset: 0 0 59px auto;
+      z-index: 25;
+      width: min(420px, 90vw);
+      padding: 28px;
+      border-left: 1px solid var(--cp-border);
+      background: var(--cp-panel-strong);
+      transform: translateX(100%);
+      transition: transform 220ms ease;
+      overflow: auto;
+    }
+    .notes.open { transform: translateX(0); }
+    .notes h3 { margin-bottom: 16px; font-family: Georgia, "Times New Roman", serif; font-size: 1.6rem; }
+    .notes p { font-size: 0.9rem; }
+    .audience-badge { display: inline-flex; gap: 8px; align-items: center; padding: 6px 9px; border: 1px solid var(--cp-border); border-radius: 999px; font-size: 0.72rem; color: var(--cp-text-muted); }
+    .audience-badge::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--cp-accent); }
+    @keyframes reveal { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+    @media (max-width: 1000px) {
+      .slide { padding: 34px 34px 70px; }
+      h1 { font-size: 3.3rem; }
+      h2 { font-size: 2rem; }
+      .hero-grid, .triangle-layout { grid-template-columns: 1fr; gap: 24px; }
+      .hero-mark { min-height: 250px; border-left: 0; border-top: 1px solid var(--cp-border); }
+      .orbit { width: 220px; height: 220px; }
+      .orbit::before { inset: 30px; }
+      .orbit::after { inset: 65px; }
+      .orbit-label.two { right: -45px; top: 100px; }
+      .orbit-label.three { bottom: -5px; }
+      .four-col, .ref-grid { grid-template-columns: repeat(2, 1fr); }
+      .ladder { grid-template-columns: repeat(3, 1fr); align-items: stretch; }
+      .step, .step:nth-child(n) { min-height: 140px; }
+      .step:nth-child(3)::after { display: none; }
+      .repo-map { grid-template-columns: 1fr 1fr; }
+      .map-arrow { display: none; }
+      .chapter-bands { grid-template-columns: 1fr 1fr; }
+      .chapter-band { border-bottom: 1px solid var(--cp-border); }
+    }
+    @media (max-width: 700px) {
+      .slide { padding: 24px 20px 72px; gap: 14px; }
+      .slide-header { gap: 14px; }
+      h1 { font-size: 2.45rem; }
+      h2 { font-size: 1.65rem; }
+      .lede { font-size: 1.05rem; }
+      .two-col, .three-col, .four-col, .flow, .repo-map, .question-split, .ref-grid, .output-list, .scoreboard, .usage-tabs { grid-template-columns: 1fr; }
+      .hero-grid { grid-template-columns: 1fr; }
+      .hero-mark { display: none; }
+      .flow { gap: 12px; }
+      .flow-node { min-height: auto; }
+      .flow-node::after { display: none; }
+      .question-bridge { display: none; }
+      .ladder { grid-template-columns: 1fr 1fr; }
+      .step:nth-child(n)::after { display: none; }
+      .chapter-bands { grid-template-columns: 1fr; }
+      .chapter-band { border-right: 0; }
+      .layer { grid-template-columns: 1fr; }
+      .triangle { width: 300px; height: 270px; }
+      .triangle-ring.one { width: 180px; height: 180px; left: 60px; top: 45px; }
+      .triangle-ring.two { width: 120px; height: 120px; left: 90px; top: 75px; }
+      .triangle-label.top { left: 90px; }
+      .score { border-right: 0; border-bottom: 1px solid var(--cp-border); }
+      .controls { grid-template-columns: 1fr auto; }
+      .counter { display: none; }
+      .picker-grid { grid-template-columns: 1fr; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+    }
+    @media print {
+      html, body { overflow: visible; height: auto; }
+      .deck::before, .controls, .notes { display: none; }
+      .slide { position: relative; min-height: 100vh; opacity: 1; visibility: visible; transform: none; page-break-after: always; }
+    }
+  </style>
+</head>
+<body>
+  <main class="deck" aria-label="hubsp-ai-skill presentation">
+    <section class="slide active" data-title="A decision system for AI adoption" data-audience="Business + Technical" data-notes="Open by framing the repository as a decision system, not a catalogue of AI products. The central promise is disciplined selection: start with the business need, choose the least complex solution that works, and add complexity only when evidence requires it.">
+      <header class="slide-header">
+        <div><div class="eyebrow">Repository overview · v1.10.0</div></div>
+        <span class="slide-number">01 / 14</span>
+      </header>
+      <div class="slide-body hero-grid">
+        <div>
+          <h1>AI adoption with an <span class="accent">evidence gate</span></h1>
+          <p class="lede">hubsp-ai-skill turns business intent into a governed Microsoft target architecture, selecting the simplest viable pattern before introducing agents.</p>
+          <div class="pill-row">
+            <span class="pill">Business envisioning</span><span class="pill">Architecture selection</span><span class="pill">Governed data</span><span class="pill">Capacity fit</span><span class="pill">ROI / AAI</span>
+          </div>
+        </div>
+        <div class="hero-mark" aria-label="Business, evidence and architecture orbit">
+          <div class="orbit">
+            <span class="orbit-label one">BUSINESS</span><span class="orbit-label two">EVIDENCE</span><span class="orbit-label three">ARCHITECTURE</span><span class="orbit-core">DECIDE</span>
+          </div>
+        </div>
+      </div>
+      <footer class="slide-footer"><span>For business leaders, architects, data, security and delivery teams</span><strong>Decision first. Technology second.</strong></footer>
+    </section>
+
+    <section class="slide" data-title="Why this repository exists" data-audience="Business" data-notes="Stress the shared problem: AI programmes often move from an interesting demo to a product choice before proving the business outcome, data readiness or operating model. This repository creates one language for business and technical teams.">
+      <header class="slide-header"><div><div class="eyebrow">The problem</div><h2>AI initiatives fail between idea and operation</h2></div><span class="slide-number">02 / 14</span></header>
+      <div class="slide-body two-col">
+        <div class="panel soft">
+          <span class="panel-kicker">Without a decision discipline</span>
+          <ul class="list">
+            <li><span class="index">01</span><span>Teams start with a preferred product instead of a measurable outcome.</span></li>
+            <li><span class="index">02</span><span>Agentic complexity is added before rules, workflow or RAG are tested.</span></li>
+            <li><span class="index">03</span><span>Licences are mistaken for throughput, capacity or production readiness.</span></li>
+            <li><span class="index">04</span><span>Security, data and operations arrive after the architecture is already fixed.</span></li>
+          </ul>
+        </div>
+        <div class="panel emphasis">
+          <span class="panel-kicker">What the skill changes</span>
+          <span class="big-number">1</span>
+          <h3>One evidence chain</h3>
+          <p>Business outcome → current process → unmet requirement → selected pattern → component justification → capacity verdict → pilot gate.</p>
+          <div class="pill-row"><span class="pill">Lower initial cost</span><span class="pill">Faster learning</span><span class="pill">Explicit risk</span><span class="pill">Controlled complexity</span></div>
+        </div>
+      </div>
+      <footer class="slide-footer"><span>Trade-off made explicit</span><strong>Speed and simplicity now; optional complexity after proof.</strong></footer>
+    </section>
+
+    <section class="slide" data-title="What the skill actually does" data-audience="Business + Technical" data-notes="Explain that SKILL.md is the canonical router and policy. It normalises inputs, applies the decision ladder, loads only the knowledge needed, and imposes a consistent recommendation format.">
+      <header class="slide-header"><div><div class="eyebrow">The skill</div><h2>A reusable architecture decision workflow</h2></div><span class="slide-number">03 / 14</span></header>
+      <div class="slide-body flow">
+        <div class="flow-node"><span class="flow-icon">1</span><b>Normalise</b><p>Map any scenario document to the 30-question business and technical intake.</p></div>
+        <div class="flow-node"><span class="flow-icon">2</span><b>Evaluate</b><p>Test architecture options from lowest to highest complexity.</p></div>
+        <div class="flow-node"><span class="flow-icon">3</span><b>Validate</b><p>Check governance, security, capacity, economics and evidence gaps.</p></div>
+        <div class="flow-node"><span class="flow-icon">4</span><b>Recommend</b><p>Produce a target architecture, wave-based roadmap, KPIs and risks.</p></div>
+      </div>
+      <footer class="slide-footer"><span>Canonical router: <span class="mono">SKILL.md</span></span><strong>Progressive disclosure keeps context focused.</strong></footer>
+    </section>
+
+    <section class="slide" data-title="The low-complexity-first ladder" data-audience="Business + Technical" data-notes="Walk left to right. Every move up requires an unmet requirement and evidence. Security or future scale alone are not valid reasons to jump to multi-agent. The baseline stops at the first level that reliably meets today's needs.">
+      <header class="slide-header"><div><div class="eyebrow">Mandatory decision policy</div><h2>Climb only when the previous step cannot work</h2></div><span class="slide-number">04 / 14</span></header>
+      <div class="slide-body">
+        <div class="ladder">
+          <div class="step"><b>Existing product / SaaS</b><span>Configuration or licensed capability already satisfies the journey.</span></div>
+          <div class="step"><b>Deterministic automation</b><span>Stable rules, APIs, workflow or Power Automate.</span></div>
+          <div class="step"><b>Direct LLM</b><span>One-step generation without proprietary grounding.</span></div>
+          <div class="step"><b>RAG</b><span>Changing authoritative knowledge and citations.</span></div>
+          <div class="step"><b>Single AI Agent</b><span>Bounded multi-step tool use inside one domain.</span></div>
+          <div class="step"><b>Multi-agent / mixed</b><span>Independent domains or runtime requirements are proven.</span></div>
+        </div>
+        <div class="stop-line"><strong>Stop rule:</strong> select the first option that reliably satisfies current requirements. Turn missing evidence into a pilot test, not speculative architecture.</div>
+      </div>
+      <footer class="slide-footer"><span>Every escalation records cost, latency, failure modes and ownership</span><strong>Complexity is earned by evidence.</strong></footer>
+    </section>
+
+    <section class="slide" data-title="From discovery to decision" data-audience="Business + Technical" data-notes="The questionnaire can be completed in stages. Part A is sufficient for initial direction. Part B strengthens production readiness. Unknown is a valid answer when paired with an owner; material unknowns become validation gates.">
+      <header class="slide-header"><div><div class="eyebrow">End-to-end flow</div><h2>One scenario document enters; one traceable recommendation exits</h2></div><span class="slide-number">05 / 14</span></header>
+      <div class="slide-body flow">
+        <div class="flow-node"><span class="flow-icon">A</span><b>Business intake</b><p>Outcome, value, personas, process, adoption, risk and pilot.</p></div>
+        <div class="flow-node"><span class="flow-icon">B</span><b>Technical validation</b><p>Identity, data, integration, hosting, capacity and operations.</p></div>
+        <div class="flow-node"><span class="flow-icon">C</span><b>Skill + evidence</b><p>Decision ladder, curated references and explicit assumptions.</p></div>
+        <div class="flow-node"><span class="flow-icon">D</span><b>Recommendation</b><p>Decision, architecture, controls, roadmap, ROI, KPIs and risks.</p></div>
+      </div>
+      <footer class="slide-footer"><span><strong>Unknown</strong> is acceptable when a validation owner is named</span><strong>No invented facts.</strong></footer>
+    </section>
+
+    <section class="slide" data-title="Repository anatomy" data-audience="Technical" data-notes="This is the main project map. SKILL.md is the entry point. The index and references provide focused knowledge. Chapters provide depth. Documents support discovery and delivery. Copilot instructions keep responses consistent inside the workspace.">
+      <header class="slide-header"><div><div class="eyebrow">Project structure</div><h2>A router, focused evidence, deep guidance and working artifacts</h2></div><span class="slide-number">06 / 14</span></header>
+      <div class="slide-body repo-map">
+        <div class="repo-column">
+          <div class="file-box primary"><code>SKILL.md</code><span>Canonical policy, routing logic and output contract</span></div>
+          <div class="file-box"><code>.github/copilot-instructions.md</code><span>Workspace response conventions</span></div>
+        </div>
+        <div class="repo-column">
+          <div class="map-arrow">→</div>
+          <div class="file-box"><code>AI_Agent_Adoption_Strategy_Final_2.md</code><span>Lightweight topic index</span></div>
+          <div class="file-box folder"><code>references/</code><span>Seven curated decision references plus Fabric sub-references</span></div>
+        </div>
+        <div class="repo-column">
+          <div class="map-arrow">→</div>
+          <div class="file-box folder"><code>chapters/</code><span>24 chapters of detailed strategy, architecture and implementation guidance</span></div>
+          <div class="file-box"><code>README.md</code><span>Navigation, installation and usage guide</span></div>
+        </div>
+        <div class="repo-column">
+          <div class="map-arrow">→</div>
+          <div class="file-box folder"><code>doc/</code><span>Questionnaire, project specification, example and recommendation output</span></div>
+        </div>
+      </div>
+      <footer class="slide-footer"><span>The router loads only what the question requires</span><strong>Broad knowledge without broad context loading.</strong></footer>
+    </section>
+
+    <section class="slide" data-title="The 30-question intake" data-audience="Business + Technical" data-notes="Part A is deliberately accessible and can run as a workshop. Part B is collaborative: architecture, platform, security, data and application owners contribute. Both now contain didactic explanations and examples.">
+      <header class="slide-header"><div><div class="eyebrow">Discovery artifact</div><h2>Thirty questions connect value to production reality</h2></div><span class="slide-number">07 / 14</span></header>
+      <div class="slide-body question-split">
+        <div class="question-side">
+          <span class="big-number">15</span><h3>Part A · Core Business Intake</h3>
+          <ol><li>Problem, objective and strategic fit</li><li>Measures, value and adoption</li><li>Process, judgement and experience</li><li>Data, actions and business risk</li><li>BXT feasibility, pilot and ownership</li></ol>
+        </div>
+        <div class="question-bridge"><span>shared evidence</span></div>
+        <div class="question-side">
+          <span class="big-number">15</span><h3>Part B · Technical Validation</h3>
+          <ol><li>Scope, reuse, identity and access</li><li>Data readiness, grounding and integrations</li><li>AI tests, memory, hosting and network</li><li>Capacity, reliability and guard rails</li><li>Evaluators, operations and delivery lifecycle</li></ol>
+        </div>
+      </div>
+      <footer class="slide-footer"><span>Each question includes “What this means” and a practical example</span><strong>Part A can start the recommendation alone.</strong></footer>
+    </section>
+
+    <section class="slide" data-title="Curated decision references" data-audience="Technical" data-notes="The references are decision slices, not a reading list. The skill chooses the smallest relevant file. The 02 reference has three optional Fabric sub-references for data-platform detail.">
+      <header class="slide-header"><div><div class="eyebrow">references/</div><h2>Focused evidence for the decisions that change architecture</h2></div><span class="slide-number">08 / 14</span></header>
+      <div class="slide-body ref-grid">
+        <div class="ref"><code>01</code><b>Architecture fundamentals</b><span>Automation → LLM → RAG → agent → multi-agent.</span></div>
+        <div class="ref"><code>02 + 02a/b/c</code><b>Architecture layers + Fabric</b><span>IQ context, runtimes, OneLake, Medallion and data products.</span></div>
+        <div class="ref"><code>03</code><b>ROI / AAI</b><span>Human cost, AI cost, HITL, scope and realization.</span></div>
+        <div class="ref"><code>04</code><b>Governance</b><span>Guard rails, evaluators, HITL and agent identity.</span></div>
+        <div class="ref"><code>05</code><b>Decision Framework</b><span>Intake Filter, BXT, critical questions and selection.</span></div>
+        <div class="ref"><code>06</code><b>PL 2338/2023</b><span>Conditional regulatory analysis without asserting compliance.</span></div>
+        <div class="ref"><code>07</code><b>Capacity and scale</b><span>Demand, quotas, headroom, bottlenecks and fit verdicts.</span></div>
+        <div class="ref"><code>RULE</code><b>Progressive disclosure</b><span>Load one reference first; add depth only when the request crosses boundaries.</span></div>
+      </div>
+      <footer class="slide-footer"><span>Official product facts must be revalidated for production</span><strong>Evidence stays adjacent to the claim.</strong></footer>
+    </section>
+
+    <section class="slide" data-title="The 24-chapter knowledge base" data-audience="Business + Technical" data-notes="The chapter collection supplies long-form depth. The lightweight index groups it into five domains so an agent or reader can navigate directly to the right material.">
+      <header class="slide-header"><div><div class="eyebrow">chapters/</div><h2>Deep guidance, organised into five navigable domains</h2></div><span class="slide-number">09 / 14</span></header>
+      <div class="slide-body chapter-bands">
+        <div class="chapter-band"><span class="chapter-range">01–04</span><h3>Strategy & adoption</h3><ul><li>Executive overview</li><li>Adoption strategy</li><li>Tools</li><li>Approaches</li></ul></div>
+        <div class="chapter-band"><span class="chapter-range">05–08</span><h3>Data & consumption</h3><ul><li>Fabric consumption</li><li>Agent access</li><li>Examples</li><li>Strategic insight</li></ul></div>
+        <div class="chapter-band"><span class="chapter-range">09–14</span><h3>Architecture & operating model</h3><ul><li>Integration</li><li>Operating model</li><li>Architecture alignment</li><li>Instructions & skills</li></ul></div>
+        <div class="chapter-band"><span class="chapter-range">15–17</span><h3>Advanced agent capability</h3><ul><li>Orchestration</li><li>Memory</li><li>Operational implementation</li></ul></div>
+        <div class="chapter-band"><span class="chapter-range">18–24</span><h3>Implementation appendices</h3><ul><li>Code & templates</li><li>Decision tree</li><li>OpenTelemetry</li><li>Dataset curation</li><li>References</li></ul></div>
+      </div>
+      <footer class="slide-footer"><span>The index prevents the entire knowledge base being loaded by default</span><strong>Depth is available on demand.</strong></footer>
+    </section>
+
+    <section class="slide" data-title="Microsoft architecture language" data-audience="Technical" data-notes="This distinction is a key quality guard. IQ capabilities provide context. Managed platforms run agents. Agent Framework is a development framework and needs a host unless used as a hosted agent. Fabric is the governed data platform.">
+      <header class="slide-header"><div><div class="eyebrow">Target architecture vocabulary</div><h2>Context, runtime and data are different responsibilities</h2></div><span class="slide-number">10 / 14</span></header>
+      <div class="slide-body layer-stack">
+        <div class="layer"><div class="layer-name">Experience</div><div class="layer-detail"><span>Microsoft 365 Copilot</span><span>Teams</span><span>Web / app</span><span>API</span></div></div>
+        <div class="layer"><div class="layer-name">Context capabilities</div><div class="layer-detail"><span>Work IQ</span><span>Foundry IQ</span><span>Fabric IQ</span><span>Web IQ when needed</span></div></div>
+        <div class="layer"><div class="layer-name">Managed agent platform</div><div class="layer-detail"><span>Microsoft Foundry Agent Service</span><span>Copilot Studio</span></div></div>
+        <div class="layer"><div class="layer-name">Development + hosting</div><div class="layer-detail"><span>Microsoft Agent Framework</span><span>Explicit runtime / hosting choice</span></div></div>
+        <div class="layer"><div class="layer-name">Governed data</div><div class="layer-detail"><span>Microsoft Fabric</span><span>OneLake</span><span>Purview</span><span>Entra</span></div></div>
+        <div class="layer"><div class="layer-name">Cross-cutting controls</div><div class="layer-detail"><span>Guard rails</span><span>Evaluators</span><span>HITL</span><span>Observability</span></div></div>
+      </div>
+      <footer class="slide-footer"><span>Foundry IQ is an enterprise knowledge layer</span><strong>It is not the orchestration runtime.</strong></footer>
+    </section>
+
+    <section class="slide" data-title="Three production gates" data-audience="Business + Technical" data-notes="Architecture pattern selection is necessary but insufficient. Production approval also requires governance, financial and capacity evidence. The lowest capacity in the complete path is the effective capacity.">
+      <header class="slide-header"><div><div class="eyebrow">Production readiness</div><h2>Architecture is approved through three independent gates</h2></div><span class="slide-number">11 / 14</span></header>
+      <div class="slide-body triangle-layout">
+        <div class="triangle" aria-label="Governance, capacity and economics gates">
+          <div class="triangle-ring one"></div><div class="triangle-ring two"></div><div class="triangle-core">PRODUCTION<br>FIT</div>
+          <span class="triangle-label top">GOVERNANCE</span><span class="triangle-label left">CAPACITY</span><span class="triangle-label right">ECONOMICS</span>
+        </div>
+        <div>
+          <ul class="list">
+            <li><span class="index">G</span><span><strong>Governance:</strong> identity, least privilege, governed data, guard rails, evaluators, audit and HITL.</span></li>
+            <li><span class="index">C</span><span><strong>Capacity:</strong> peak demand, entitlement, quota, throughput, headroom, regional availability and downstream bottlenecks.</span></li>
+            <li><span class="index">E</span><span><strong>Economics:</strong> loaded person-hour cost, AI cost per task, HITL, setup amortisation, scope multiplier and realization factor.</span></li>
+          </ul>
+          <div class="stop-line"><strong>Verdict:</strong> every selected component is marked Fit, Conditional fit or Not fit.</div>
+        </div>
+      </div>
+      <footer class="slide-footer"><span>Commercial entitlement does not guarantee technical throughput</span><strong>The lowest limit is the real limit.</strong></footer>
+    </section>
+
+    <section class="slide" data-title="The recommendation contract" data-audience="Business + Technical" data-notes="The output is intentionally comprehensive and executive-first. It tells the decision, explains the architecture, and provides the evidence and controls needed to act. Diagrams and component-level traceability are mandatory.">
+      <header class="slide-header"><div><div class="eyebrow">recommendation-output.md</div><h2>A consistent eight-part decision package</h2></div><span class="slide-number">12 / 14</span></header>
+      <div class="slide-body output-list">
+        <div class="output-item"><b>Executive summary</b><span>Decision, impact, trade-offs and pilot outcome.</span></div>
+        <div class="output-item"><b>Architectural pattern</b><span>Rejected simpler options and evidence for escalation.</span></div>
+        <div class="output-item"><b>Target architecture</b><span>Layers, responsibilities, diagrams and component traceability.</span></div>
+        <div class="output-item"><b>Governance & security</b><span>Risk-linked controls, guard rails, evaluators and HITL.</span></div>
+        <div class="output-item"><b>Wave-based roadmap</b><span>Pilot, expansion and scale with entry and exit gates.</span></div>
+        <div class="output-item"><b>Financial justification</b><span>ROI / AAI assumptions, sensitivity and value horizon.</span></div>
+        <div class="output-item"><b>Success KPIs</b><span>Efficiency, quality, risk, adoption and measurement windows.</span></div>
+        <div class="output-item"><b>Risks & mitigations</b><span>Impact, probability, signals, controls and response owners.</span></div>
+      </div>
+      <footer class="slide-footer"><span>Official sources sit beside the claims they support</span><strong>Decision-oriented, traceable and actionable.</strong></footer>
+    </section>
+
+    <section class="slide" data-title="How teams use the repository" data-audience="Business + Technical" data-notes="Use the tabs during the presentation to show the channel relevant to the audience. The same compact prompt works across clients because the policy and output contract live in SKILL.md, not in the user prompt.">
+      <header class="slide-header"><div><div class="eyebrow">Working modes</div><h2>One skill, multiple collaboration channels</h2></div><span class="slide-number">13 / 14</span></header>
+      <div class="slide-body usage-tabs">
+        <div class="usage-menu" role="tablist" aria-label="Usage channels">
+          <button class="usage-button" role="tab" aria-selected="true" data-tab="vscode">VS Code / Copilot</button>
+          <button class="usage-button" role="tab" aria-selected="false" data-tab="claude">Claude Desktop</button>
+          <button class="usage-button" role="tab" aria-selected="false" data-tab="scout">Microsoft Scout</button>
+          <button class="usage-button" role="tab" aria-selected="false" data-tab="workflow">Team workshop</button>
+        </div>
+        <div class="usage-content">
+          <div class="usage-panel active" id="vscode"><h3>VS Code / GitHub Copilot</h3><p>Open the repository, use Agent mode, attach <span class="mono">SKILL.md</span> and one scenario document. Workspace instructions apply the executive output conventions automatically.</p><div class="prompt-box">Apply hubsp-ai-skill to the attached scenario document. Recommend the simplest viable Microsoft architecture and save the complete recommendation to doc/recommendation-output.md. Treat missing decision-critical information as explicit assumptions or validation gates; do not invent facts.</div></div>
+          <div class="usage-panel" id="claude"><h3>Claude Desktop</h3><p>Package the repository as a custom skill ZIP. Progressive disclosure allows Claude to load the router first and supporting files only when needed.</p><div class="prompt-box">Upload the skill → attach one scenario document → use the universal compact prompt → review the generated recommendation.</div></div>
+          <div class="usage-panel" id="scout"><h3>Microsoft Scout</h3><p>Install the repository in the global skills directory, start a new conversation and keep auto-approve disabled while validating tool and data access.</p><div class="prompt-box">Workspace + installed skill + scenario document → governed recommendation with explicit approval boundaries.</div></div>
+          <div class="usage-panel" id="workflow"><h3>Collaborative workshop</h3><p>Business participants complete Part A. Technical owners complete Part B during or after the workshop. The skill converts unknowns into named validation gates.</p><div class="prompt-box">Envision → prioritise → validate → recommend → convert approved direction into agent-project-specifications.md.</div></div>
+        </div>
+      </div>
+      <footer class="slide-footer"><span>The scenario may be a questionnaire, proposal, discovery note or specification</span><strong>Useful facts are reused, not re-entered.</strong></footer>
+    </section>
+
+    <section class="slide" data-title="What good looks like" data-audience="Business + Technical" data-notes="Close on outcomes rather than repository mechanics. The skill is successful when it improves decision quality and makes uncertainty visible, not when it recommends the most advanced architecture.">
+      <header class="slide-header"><div><div class="eyebrow">Outcome</div><h2>Better AI decisions, before expensive commitments</h2></div><span class="slide-number">14 / 14</span></header>
+      <div class="slide-body">
+        <div class="scoreboard">
+          <div class="score"><b>Value</b><span>Every pilot starts with measurable business results and an evidence owner.</span></div>
+          <div class="score"><b>Speed</b><span>The team begins with the smallest useful scope and focused knowledge.</span></div>
+          <div class="score"><b>Risk</b><span>Unknowns, guard rails, approvals and operational ownership remain visible.</span></div>
+          <div class="score"><b>Complexity</b><span>Agents, multiple runtimes and future components require measurable triggers.</span></div>
+        </div>
+        <div class="two-col" style="margin-top: 36px;">
+          <div><span class="panel-kicker">Start here</span><h3 style="font-size: 1.5rem; margin-top: 8px;">Complete Part A</h3><p>Define the use case, expected value, users, process, risk and smallest useful pilot.</p></div>
+          <div><span class="panel-kicker">Then prove</span><h3 style="font-size: 1.5rem; margin-top: 8px;">Complete Part B</h3><p>Validate identity, data, integrations, AI quality, hosting, capacity and operations.</p></div>
+        </div>
+      </div>
+      <footer class="slide-footer"><span class="mono">hubsp-ai-skill</span><strong>The best architecture is the least complex one that the evidence supports.</strong></footer>
+    </section>
+  </main>
+
+  <aside class="notes" id="notes" aria-label="Speaker notes" aria-hidden="true"><div class="audience-badge" id="noteAudience">Business + Technical</div><h3 id="noteTitle">Speaker notes</h3><p id="noteText"></p></aside>
+
+  <nav class="controls" aria-label="Presentation controls">
+    <div class="progress-track" aria-label="Presentation progress"><div class="progress-bar" id="progressBar"></div></div>
+    <div class="nav-group">
+      <button class="icon-button" id="prevButton" aria-label="Previous slide" title="Previous slide (Left arrow)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button>
+      <div class="slide-picker">
+        <button class="icon-button" id="pickerButton" aria-label="Open slide list" title="Slide list"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg></button>
+      </div>
+      <button class="icon-button" id="notesButton" aria-label="Toggle speaker notes" title="Speaker notes (N)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h6"/></svg></button>
+      <button class="icon-button" id="fullscreenButton" aria-label="Toggle fullscreen" title="Fullscreen (F)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M8 21H5a2 2 0 0 1-2-2v-3M16 21h3a2 2 0 0 0 2-2v-3"/></svg></button>
+      <button class="icon-button" id="nextButton" aria-label="Next slide" title="Next slide (Right arrow)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></button>
+    </div>
+    <div class="counter" id="counter">01 / 14</div>
+  </nav>
+
+  <div class="picker-panel" id="pickerPanel" hidden><div class="picker-grid" id="pickerGrid"></div></div>
+
+  <script>
+    const slides = [...document.querySelectorAll('.slide')];
+    const prevButton = document.getElementById('prevButton');
+    const nextButton = document.getElementById('nextButton');
+    const pickerButton = document.getElementById('pickerButton');
+    const pickerPanel = document.getElementById('pickerPanel');
+    const pickerGrid = document.getElementById('pickerGrid');
+    const notesButton = document.getElementById('notesButton');
+    const notes = document.getElementById('notes');
+    const fullscreenButton = document.getElementById('fullscreenButton');
+    const progressBar = document.getElementById('progressBar');
+    const counter = document.getElementById('counter');
+    let current = Math.max(0, Math.min(slides.length - 1, Number(location.hash.slice(1)) - 1 || 0));
+    let touchStartX = 0;
+
+    slides.forEach((slide, index) => {
+      const item = document.createElement('button');
+      item.className = 'picker-item';
+      item.innerHTML = `<strong>${String(index + 1).padStart(2, '0')} · ${slide.dataset.title}</strong><small>${slide.dataset.audience}</small>`;
+      item.addEventListener('click', () => { showSlide(index); togglePicker(false); });
+      pickerGrid.appendChild(item);
+    });
+
+    function showSlide(index) {
+      const next = Math.max(0, Math.min(slides.length - 1, index));
+      slides.forEach((slide, slideIndex) => {
+        slide.classList.toggle('active', slideIndex === next);
+        slide.classList.toggle('exit-left', slideIndex < next);
+        slide.setAttribute('aria-hidden', slideIndex === next ? 'false' : 'true');
+      });
+      current = next;
+      location.hash = String(current + 1);
+      const display = `${String(current + 1).padStart(2, '0')} / ${String(slides.length).padStart(2, '0')}`;
+      counter.textContent = display;
+      progressBar.style.width = `${((current + 1) / slides.length) * 100}%`;
+      prevButton.disabled = current === 0;
+      nextButton.disabled = current === slides.length - 1;
+      [...pickerGrid.children].forEach((item, itemIndex) => item.classList.toggle('current', itemIndex === current));
+      updateNotes();
+      document.title = `${slides[current].dataset.title} | hubsp-ai-skill`;
+    }
+
+    function updateNotes() {
+      const slide = slides[current];
+      document.getElementById('noteTitle').textContent = slide.dataset.title;
+      document.getElementById('noteText').textContent = slide.dataset.notes;
+      document.getElementById('noteAudience').textContent = slide.dataset.audience;
+    }
+
+    function togglePicker(force) {
+      const shouldOpen = typeof force === 'boolean' ? force : pickerPanel.hidden;
+      pickerPanel.hidden = !shouldOpen;
+      pickerButton.setAttribute('aria-expanded', String(shouldOpen));
+    }
+
+    function toggleNotes() {
+      const open = notes.classList.toggle('open');
+      notes.setAttribute('aria-hidden', String(!open));
+      notesButton.setAttribute('aria-pressed', String(open));
+    }
+
+    async function toggleFullscreen() {
+      if (!document.fullscreenElement) await document.documentElement.requestFullscreen?.();
+      else await document.exitFullscreen?.();
+    }
+
+    prevButton.addEventListener('click', () => showSlide(current - 1));
+    nextButton.addEventListener('click', () => showSlide(current + 1));
+    pickerButton.addEventListener('click', () => togglePicker());
+    notesButton.addEventListener('click', toggleNotes);
+    fullscreenButton.addEventListener('click', toggleFullscreen);
+
+    document.addEventListener('keydown', event => {
+      if (event.target.matches('button')) return;
+      if (['ArrowRight', 'PageDown', ' '].includes(event.key)) { event.preventDefault(); showSlide(current + 1); }
+      if (['ArrowLeft', 'PageUp'].includes(event.key)) { event.preventDefault(); showSlide(current - 1); }
+      if (event.key === 'Home') showSlide(0);
+      if (event.key === 'End') showSlide(slides.length - 1);
+      if (event.key.toLowerCase() === 'n') toggleNotes();
+      if (event.key.toLowerCase() === 'f') toggleFullscreen();
+      if (event.key === 'Escape') togglePicker(false);
+    });
+
+    document.addEventListener('click', event => {
+      if (!pickerPanel.hidden && !pickerPanel.contains(event.target) && !pickerButton.contains(event.target)) togglePicker(false);
+    });
+
+    document.addEventListener('touchstart', event => { touchStartX = event.changedTouches[0].screenX; }, { passive: true });
+    document.addEventListener('touchend', event => {
+      const distance = event.changedTouches[0].screenX - touchStartX;
+      if (Math.abs(distance) > 70) showSlide(current + (distance < 0 ? 1 : -1));
+    }, { passive: true });
+
+    document.querySelectorAll('.usage-button').forEach(button => {
+      button.addEventListener('click', () => {
+        document.querySelectorAll('.usage-button').forEach(item => item.setAttribute('aria-selected', 'false'));
+        document.querySelectorAll('.usage-panel').forEach(panel => panel.classList.remove('active'));
+        button.setAttribute('aria-selected', 'true');
+        document.getElementById(button.dataset.tab).classList.add('active');
+      });
+    });
+
+    window.addEventListener('hashchange', () => {
+      const requested = Number(location.hash.slice(1)) - 1;
+      if (Number.isInteger(requested) && requested !== current) showSlide(requested);
+    });
+
+    showSlide(current);
+  </script>
+</body>
+</html>
