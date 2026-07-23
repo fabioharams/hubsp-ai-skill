@@ -54,6 +54,8 @@ The contextual intelligence workload for Microsoft 365. It captures how work hap
 
 **Example:** An executive types "summarize this meeting" in Word — Copilot (Work IQ) fetches the transcript from OneDrive, summarizes it and inserts it into the document.
 
+**Technical sources (accessed 2026-07-23):** [Work IQ overview](https://learn.microsoft.com/microsoft-365/copilot/extensibility/work-iq/) and [Microsoft IQ overview for agents (preview)](https://learn.microsoft.com/microsoft-copilot-studio/agents-experience/use-microsoft-iq).
+
 ---
 
 #### 📚 **Foundry IQ (Enterprise Knowledge)**
@@ -65,6 +67,8 @@ The managed, permission-aware enterprise knowledge workload. It is backed by Azu
 
 **Example:** An agent asks a shared knowledge base for the policies and authoritative documents relevant to a margin investigation. Foundry IQ plans retrieval, enforces supported source permissions and returns grounded evidence with citations.
 
+**Technical source (accessed 2026-07-23):** [What is Foundry IQ?](https://learn.microsoft.com/azure/foundry/agents/concepts/what-is-foundry-iq).
+
 ---
 
 #### 🤖 **Agent Platform, Framework and Hosting**
@@ -75,6 +79,8 @@ The execution layer is separate from the IQ context workloads. **Microsoft Found
 - Trace, evaluate, version and operate agents
 
 **Example:** A Foundry agent receives "analyze why the margin dropped," retrieves policies through Foundry IQ, obtains governed metrics through Fabric IQ/Fabric, optionally adds external evidence through Web IQ, and composes a controlled response.
+
+**Technical sources (accessed 2026-07-23):** [Microsoft Foundry Agent Service overview](https://learn.microsoft.com/azure/foundry/agents/overview) and [Hosting Agent Framework applications](https://learn.microsoft.com/agent-framework/hosting/).
 
 ---
 
@@ -88,6 +94,8 @@ The **external grounding** layer of Microsoft IQ for up-to-date public web conte
 
 **Example:** When investigating a margin variation, the agent combines internal metrics (Fabric) with external market signals (Web IQ), maintaining a separate evidence trail for internal data and public sources.
 
+**Technical source (accessed 2026-07-23):** [Web IQ](https://aka.ms/WebIQNew). Treat availability and feature status as a production validation gate.
+
 ---
 
 #### 📊 **Fabric IQ (Data Intelligence)**
@@ -99,6 +107,8 @@ The **semantics and context** layer that enriches data with corporate meaning wh
 - Enable natural analysis: users ask in natural language, semantic models translate to SQL
 
 **Example:** Fabric IQ defines that "Margin = (Revenue - COGS) / Revenue". When an agent is queried about margin, it does not need to know the formula — it consumes the already-calculated metric.
+
+**Technical source (accessed 2026-07-23):** [What is Fabric IQ?](https://learn.microsoft.com/fabric/iq/overview).
 
 ---
 
@@ -112,6 +122,8 @@ An optional unified analytics platform for scenarios that require analytical con
 
 **Example:** Raw data (Bronze) → transformations (Silver) → Data Products ready for agents (Gold) → SQL Analytics Endpoint → Agents query in real time with row-level security.
 
+**Technical sources (accessed 2026-07-23):** [Microsoft Fabric documentation](https://learn.microsoft.com/fabric/) and [What is the SQL analytics endpoint for a lakehouse?](https://learn.microsoft.com/fabric/data-engineering/lakehouse-sql-analytics-endpoint).
+
 ---
 
 #### 🛡️ **Guard Rails (Cross-cutting)**
@@ -124,6 +136,8 @@ The **control and security** layer that permeates all agent operations. Its role
 
 **Example:** Entra identity, resource authorization and source permissions deny an unauthorized request. A deterministic guard rail can additionally block a disallowed tool or action, and the audit path records the decision.
 
+**Technical sources (accessed 2026-07-23):** [Prompt Shields concepts](https://learn.microsoft.com/azure/ai-services/content-safety/concepts/jailbreak-detection), [Azure AI Content Safety overview](https://learn.microsoft.com/azure/ai-services/content-safety/overview) and [Microsoft Entra identity documentation](https://learn.microsoft.com/entra/identity/).
+
 ---
 
 #### ✅ **Evaluators (Cross-cutting)**
@@ -135,6 +149,8 @@ The **continuous measurement** layer that validates whether agents are operating
 - Integrate compliance: Purview logs of access to sensitive data become quality metrics
 
 **Example:** Evaluators measure whether margin responses use the correct evidence and meet release thresholds. Runtime blocking occurs only when the architecture deliberately implements a deterministic policy or evaluated-response gate; evaluators do not replace source authorization.
+
+**Technical sources (accessed 2026-07-23):** [Risk and safety evaluators](https://learn.microsoft.com/azure/foundry/concepts/evaluation-evaluators/risk-safety-evaluators) and [Foundry observability and evaluation](https://learn.microsoft.com/azure/foundry/concepts/observability).
 
 ---
 

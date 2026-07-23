@@ -31,6 +31,14 @@
 - Governed data and authoritative sources:
 - Cross-cutting controls:
 
+### Component Technical Justification
+
+Every component in the architecture diagram must have exactly one corresponding row. Place the supporting link next to the technical claim; the final source list is supplementary.
+
+| Layer / component | Scope (current/deferred) | Requirement satisfied | Technical responsibility and boundary | Selection rationale and simpler alternative | Integration / data flow | Identity, security and operations | Limitation / dependency | Evidence status | Official source, URL and access date |
+|---|---|---|---|---|---|---|---|---|---|
+| | | | | | | | | Documented capability / scenario assumption / design decision / measured evidence | |
+
 ```mermaid
 flowchart LR
     A[Business requirement] --> B[Simplest viable capability]
@@ -82,4 +90,4 @@ Map the waves to the applicable Microsoft AI or agent-adoption lifecycle. Govern
 
 ## Official Sources
 
-- Source, claim supported and access date:
+- Supplementary source, claim supported and access date:

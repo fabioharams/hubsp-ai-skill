@@ -12,6 +12,7 @@ The project was structured to serve as both an executive and technical reference
 - Evaluate existing products, deterministic automation, LLM, RAG, single-agent and multi-agent options in ascending complexity.
 - Stop at the first option that reliably satisfies current requirements and require evidence before every escalation.
 - Validate product licensing, quotas, throughput, concurrency, data/index size, regional availability, downstream limits and scale headroom against peak requirements.
+- Require component-level technical justification and traceable official links for every element in the target architecture, with documented capabilities separated from assumptions, design decisions and measured evidence.
 - Standardize recommendations focused on governance, compliance and observability.
 - Support a wave-based roadmap (pilot, expansion and scale) with clear criteria.
 - Make trade-offs explicit across cost, risk, speed and complexity.
