@@ -1,7 +1,6 @@
 ---
 name: hubsp-ai-skill
-summary: "Guides low-complexity-first corporate AI adoption with Microsoft IQ context workloads, Microsoft Foundry and Fabric, including architecture selection, agent runtimes, ROI, governance, security, guard rails and continuous evaluation."
-description: "Use when selecting the simplest viable Microsoft AI architecture or defining agent adoption, runtime, governed data, security, ROI and evidence-based escalation from automation to multi-agent."
+description: "Guides low-complexity-first corporate AI adoption across the Microsoft ecosystem (Microsoft IQ context workloads, Microsoft Foundry and Fabric), covering architecture selection, agent runtimes, ROI, governance, security, guard rails and continuous evaluation. Use when selecting the simplest viable Microsoft AI architecture or defining agent adoption, runtime, governed data, security, ROI and evidence-based escalation from automation to multi-agent."
 license: MIT
 metadata:
   author: Fabio
@@ -196,7 +195,10 @@ Treat the attached document as the case context and normalize it against `doc/bu
 Load only the reference file needed for the question (progressive disclosure):
 
 - references/01-llm-rag-ai-agent-fundamentals.md — LLM vs RAG vs AI Agent vs Agentic AI; complexity spectrum and decision guide.
-- references/02-reference-architecture-layers.md — Microsoft IQ context workloads (Work IQ, Foundry IQ, Fabric IQ and Web IQ), agent runtimes and Microsoft Fabric; technical specifications per layer.
+- references/02-reference-architecture-layers.md — Microsoft IQ context workloads (Work IQ, Foundry IQ, Fabric IQ and Web IQ), agent runtimes and the layer overview. Load the Fabric data-platform sub-references only when the data platform is in scope:
+  - references/02a-fabric-onelake-delta-shortcuts.md — OneLake, Delta Lake, Shortcuts and the SQL analytics endpoint.
+  - references/02b-fabric-medallion-architecture.md — Medallion (Bronze/Silver/Gold) data organization.
+  - references/02c-fabric-data-products-governance.md — Data Products, Purview + Entra governance integration and the raw-data-to-insight summary.
 - references/03-roi-ai-vs-man-hour.md — ROI/AAI model, HITL, scope multiplier.
 - references/04-governance-guard-rails-evaluators-hitl.md — Guard Rails, Evaluators and Human-in-the-Loop.
 - references/05-decision-framework-bxt.md — Microsoft AI Decision Framework: Intake Filter, BXT, 9 critical questions, Capability Model and technology selection by scenario.
