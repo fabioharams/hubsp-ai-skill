@@ -377,3 +377,11 @@ Prerequisites: GitHub Copilot app with repository access and an active GitHub Co
 2. Start a chat in Agent mode.
 3. Attach `SKILL.md` and one completed questionnaire or equivalent scenario document.
 4. Use the universal compact prompt. The skill loads only the relevant files from `references/` or `chapters/` when additional depth is required.
+
+## Knowledge base roadmap with Obsidian
+
+In the next releases, this project will use [Obsidian](https://obsidian.md/) to manage the knowledge base layer that supports these skills. Obsidian is a knowledge-management application that organizes notes as local Markdown files inside a folder called a **vault**. Because the content remains in standard `.md` files, it can continue to be versioned with Git, reviewed in VS Code and loaded by AI tools without requiring a proprietary storage format.
+
+Obsidian connects notes through internal links, tags and metadata. These relationships can be explored through backlinks and a visual graph, making it easier to navigate related architecture guidance, references, chapters and reusable skill instructions. In practical terms, contributors edit the same repository content while Obsidian provides an additional interface for discovering relationships, maintaining structure and identifying knowledge gaps.
+
+The planned integration will make Obsidian the authoring and knowledge-management layer, not a runtime dependency for using the skills. The existing Markdown files and progressive-disclosure model will remain the portable source of knowledge consumed by GitHub Copilot, Claude and other supported clients. Adoption details, vault conventions and migration guidance will be documented as this capability is introduced in future releases.
