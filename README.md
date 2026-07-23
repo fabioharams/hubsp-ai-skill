@@ -216,7 +216,10 @@ flowchart TD
 
 ## How to use in Visual Studio Code
 
-Prerequisites: VS Code, the GitHub Copilot Chat extension and an active GitHub Copilot subscription.
+Prerequisites:
+
+- VS Code, the GitHub Copilot Chat extension and an active GitHub Copilot subscription.
+- The [Microsoft Learn MCP Server](https://learn.microsoft.com/training/support/mcp-get-started) configured in VS Code. This skill requires the server to retrieve current, authoritative Microsoft documentation and validate product capabilities, limits and recommendations.
 
 1. Clone and open the repository:
 
