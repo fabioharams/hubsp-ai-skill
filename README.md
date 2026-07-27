@@ -214,6 +214,59 @@ flowchart TD
 - Governance, security and compliance teams.
 - Squads starting or scaling AI agents.
 
+## Universal compact prompt
+
+Attach `SKILL.md` and one scenario input document. The scenario document can be a completed copy of `doc/business-architecture-questionnaire.md` or any proposal, discovery note, requirements document, workshop summary or technical specification containing the available business and technical facts. It does not need to use the questionnaire's headings or order.
+
+Use the same prompt for every supported client:
+
+> Apply hubsp-ai-skill to the attached scenario document. Recommend the simplest viable Microsoft architecture and save the complete recommendation to `doc/recommendation-output.md`. Treat missing decision-critical information as explicit assumptions or validation gates; do not invent facts.
+
+The skill supplies the architecture ladder, evidence-based escalation, target output structure, diagrams, capacity fit, governance, applicable regulation, ROI/AAI, roadmap, KPIs, risks and official-source requirements. Keeping those rules in `SKILL.md` avoids prompt duplication and produces consistent results across clients.
+
+
+
+### Exemplo adicional de prompt: análise ilustrada da PL 2338/2023
+
+Use este exemplo quando o cenário envolver uma organização brasileira, uma operação realizada no Brasil ou uma população impactada no Brasil, e quando o entregável precisar explicar visualmente a solução proposta.
+Anexe o arquivo `SKILL.md`, o documento do cenário e `references/06-pl-2338-2023-copilot-studio-foundry.md`.
+
+> Aplique o hubsp-ai-skill ao cenário anexado e analise a aplicabilidade e as implicações arquiteturais do PL 2338/2023. Recomende a arquitetura Microsoft mais simples viável e salve a análise completa em `doc/recommendation-output.md`. No documento:
+>
+> 1. Revalide a situação legislativa atual utilizando fontes oficiais brasileiras e informe a data da verificação. Não descreva o projeto de lei como lei em vigor, a menos que uma fonte oficial confirme isso.
+> 2. Separe a interpretação jurídica, as capacidades documentadas da Microsoft, as premissas do cenário, as decisões de arquitetura e as evidências que ainda requerem validação. Não afirme que um produto da Microsoft garante automaticamente conformidade legal.
+> 3. Compare produto/SaaS existente, automação determinística, LLM direto, RAG, Agente de IA único e arquitetura multiagente ou híbrida, nessa ordem. Pare na primeira opção que atenda de forma confiável aos requisitos do cenário.
+> 4. Inclua um diagrama Mermaid legível da arquitetura-alvo mostrando usuários, canais, o runtime selecionado, dados governados, integrações, identidade, guard rails, avaliadores, monitoramento, auditoria e HITL (Human-in-the-Loop). Mostre separadamente os componentes adiados para além do escopo do piloto.
+> 5. Inclua fluxogramas Mermaid para o fluxo de solicitação e decisão, o fluxo de controle e aprovação, e o roadmap por ondas (waves). Marque explicitamente os caminhos de bloqueio, escalonamento, revisão humana e incidentes.
+> 6. Mapeie os eixos relevantes do PL 2338/2023, incluindo transparência, avaliação de risco, supervisão humana, não discriminação, rastreabilidade, auditabilidade, proteção de dados e responsabilização, para controles de arquitetura, responsáveis, evidências, limitações e lacunas de implementação.
+> 7. Forneça matrizes de justificativa técnica dos componentes e aderência de capacidade (capacity fit), ondas de implementação, KPIs, riscos e mitigações, além de um gate de validação jurídica antes da entrada em produção.
+> 8. Cite a fonte jurídica oficial e a fonte oficial da Microsoft ao lado de cada afirmação material, incluindo título da fonte, URL e data de acesso. Trate informações críticas para decisão que estejam ausentes como premissas explícitas ou gates de validação; não invente fatos.
+
+
+Why the prompt is structured this way:
+
+| Prompt element | Purpose |
+| --- | --- |
+| Scenario and PL 2338/2023 applicability | Prevents a generic regulatory summary and ties the analysis to the affected organization, people, decisions, data and risk level. |
+| Legislative-status revalidation | PL 2338/2023 is still subject to legislative change; the output must present a dated, point-in-time assessment. |
+| Evidence separation | Distinguishes legal interpretation from product documentation, design choices, assumptions and measured results. |
+| Low-complexity-first comparison | Prevents regulation from being used as an unsupported reason to adopt agents, multiple runtimes or a larger Microsoft product stack. |
+| Target-architecture diagram | Shows component boundaries and how the selected runtime connects to governed data and cross-cutting controls. |
+| Decision and control flowcharts | Make normal, blocked, escalated, HITL and incident paths understandable to executive, legal, security and engineering reviewers. |
+| Regulatory control mapping | Converts broad legal axes into implementable controls, named owners, required evidence and visible gaps. |
+| Legal-review gate | Makes clear that technical controls support compliance work but do not replace counsel or the organization's accountability. |
+| Sources beside claims | Enables reviewers to verify legal status, product capability and design dependencies without relying only on a final bibliography. |
+
+The resulting document should use diagrams to clarify decisions, not to decorate the output. Every architecture component must have a matching technical-justification row, and every regulatory control shown in a flowchart must identify an owner, evidence source and failure or escalation path.
+
+Questionnaire-based architecture flow:
+
+1. Any individual or team can start by completing the 15 questions in Part A of `doc/business-architecture-questionnaire.md`. When technical participants are available, use the 15 questions in Part B to strengthen feasibility and production-readiness inputs. Respondents may answer **Unknown** and name a validation owner instead of guessing.
+2. Attach the completed questionnaire with `SKILL.md`, or attach another document containing equivalent business and technical facts.
+3. Convert the approved recommendation and unresolved technical items into `doc/agent-project-specifications.md` before implementation planning.
+
+Tip: to use `SKILL.md` as a reusable skill in the official VS Code format, copy it (or create a link) to a folder such as `.github/skills/hubsp-ai-skill/` or `~/.copilot/skills/hubsp-ai-skill/`. In this repository, the file at the root acts as the **canonical source/router** for direct reference in prompts, while the formal skill installation should follow the lowercase folder convention.
+
 ## How to use in Visual Studio Code
 
 Prerequisites:
@@ -237,24 +290,6 @@ Prerequisites:
 5. Recommended flow: start with `SKILL.md` and let the agent load one file from `references/` or `chapters/` on demand, based on the topic of the question. Do not attach the complete `chapters/` folder.
 
 For topics beyond the seven curated references, open `AI_Agent_Adoption_Strategy_Final_2.md`, choose the relevant chapter group and load only the chapter or chapters required by the request. This progressive-disclosure approach keeps the context focused and avoids loading the full knowledge base.
-
-## Universal compact prompt
-
-Attach `SKILL.md` and one scenario input document. The scenario document can be a completed copy of `doc/business-architecture-questionnaire.md` or any proposal, discovery note, requirements document, workshop summary or technical specification containing the available business and technical facts. It does not need to use the questionnaire's headings or order.
-
-Use the same prompt for every supported client:
-
-> Apply hubsp-ai-skill to the attached scenario document. Recommend the simplest viable Microsoft architecture and save the complete recommendation to `doc/recommendation-output.md`. Treat missing decision-critical information as explicit assumptions or validation gates; do not invent facts.
-
-The skill supplies the architecture ladder, evidence-based escalation, target output structure, diagrams, capacity fit, governance, applicable regulation, ROI/AAI, roadmap, KPIs, risks and official-source requirements. Keeping those rules in `SKILL.md` avoids prompt duplication and produces consistent results across clients.
-
-Questionnaire-based architecture flow:
-
-1. Any individual or team can start by completing the 15 questions in Part A of `doc/business-architecture-questionnaire.md`. When technical participants are available, use the 15 questions in Part B to strengthen feasibility and production-readiness inputs. Respondents may answer **Unknown** and name a validation owner instead of guessing.
-2. Attach the completed questionnaire with `SKILL.md`, or attach another document containing equivalent business and technical facts.
-3. Convert the approved recommendation and unresolved technical items into `doc/agent-project-specifications.md` before implementation planning.
-
-Tip: to use `SKILL.md` as a reusable skill in the official VS Code format, copy it (or create a link) to a folder such as `.github/skills/hubsp-ai-skill/` or `~/.copilot/skills/hubsp-ai-skill/`. In this repository, the file at the root acts as the **canonical source/router** for direct reference in prompts, while the formal skill installation should follow the lowercase folder convention.
 
 ## How to use in Claude Desktop
 
@@ -321,6 +356,15 @@ Official Microsoft references:
 - [Use Microsoft Scout](https://learn.microsoft.com/microsoft-scout/use-microsoft-scout)
 - [Microsoft Scout common questions](https://learn.microsoft.com/microsoft-scout/faq)
 
+## How to use in the GitHub Copilot App
+
+Prerequisites: GitHub Copilot app with repository access and an active GitHub Copilot subscription.
+
+1. Open this repository in the app as a workspace/project.
+2. Start a chat in Agent mode.
+3. Attach `SKILL.md` and one completed questionnaire or equivalent scenario document.
+4. Use the universal compact prompt. The skill loads only the relevant files from `references/` or `chapters/` when additional depth is required.
+
 ## Note on project documents (`doc` folder)
 
 To standardize skill usage across any channel, provide one scenario input document containing the available business and technical facts. Use a completed `doc/business-architecture-questionnaire.md`, or reuse an existing proposal, discovery note, requirements document, workshop summary or technical specification. Do not rewrite a useful document only to match the questionnaire structure.
@@ -368,15 +412,6 @@ After attaching `SKILL.md` and one scenario input document, use:
 Variation for GitHub Copilot CLI:
 
 > Read `SKILL.md` and the supplied scenario document. Apply hubsp-ai-skill, recommend the simplest viable Microsoft architecture, and save the complete recommendation to `doc/recommendation-output.md`. Treat missing decision-critical information as explicit assumptions or validation gates; do not invent facts.
-
-## How to use in the GitHub Copilot App
-
-Prerequisites: GitHub Copilot app with repository access and an active GitHub Copilot subscription.
-
-1. Open this repository in the app as a workspace/project.
-2. Start a chat in Agent mode.
-3. Attach `SKILL.md` and one completed questionnaire or equivalent scenario document.
-4. Use the universal compact prompt. The skill loads only the relevant files from `references/` or `chapters/` when additional depth is required.
 
 ## Knowledge base roadmap with Obsidian
 
