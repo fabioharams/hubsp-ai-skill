@@ -83,7 +83,7 @@ Part A alone is sufficient for an initial architecture direction. Part B improve
 
 ### Tip
 
-To facilitate completion, conduct the questionnaire as an interview recorded in a Microsoft Teams session. With participant consent and the appropriate access permissions, use Work IQ to extract the relevant business and technical answers from the meeting transcript and populate the questionnaire. A facilitator should review the completed questionnaire with participants to confirm the extracted answers, assumptions, unknowns and validation owners before using it as architecture input.
+To facilitate completion, conduct the questionnaire as an interview recorded in a Microsoft Teams session. With participant consent and the appropriate access permissions, use Microsoft Copilot + Work IQ to extract the relevant business and technical answers from the meeting transcript and populate the questionnaire. A facilitator should review the completed questionnaire with participants to confirm the extracted answers, assumptions, unknowns and validation owners before using it as architecture input.
 
 ## What you will find in this repository
 
