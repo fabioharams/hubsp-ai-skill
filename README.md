@@ -6,6 +6,12 @@ This repository organizes a practical knowledge base to guide the corporate adop
 
 The project was structured to serve as both an executive and technical reference: it helps business, architecture, data and security teams align on a common vision for planning, piloting and expanding AI initiatives with lower risk and greater value predictability. Skill version **1.10.0** accepts either the completed 30-question intake or any equivalent business and technical scenario document, makes low-complexity-first selection mandatory, requires evidence before escalating to agentic, multi-agent or mixed-runtime solutions, and requires a capacity and scale fit verdict before a Microsoft product, SaaS capability, license, SKU or configuration is approved for production. The skill metadata (`name` and `description`) remains compatible with Claude's custom-skill upload requirements.
 
+## Disclaimer
+
+This is an independent community project. It is not an official Microsoft repository and is not endorsed, maintained or supported by Microsoft.
+
+All outputs and recommendations produced by this skill must be reviewed and validated through a Human-in-the-Loop (HITL) process by qualified stakeholders before they are used for business, architecture, security, compliance or production decisions.
+
 ## Objective
 
 - Define a reference architecture for AI agents in a corporate context.
