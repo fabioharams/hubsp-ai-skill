@@ -81,6 +81,10 @@ The questionnaire supports several working modes:
 
 Part A alone is sufficient for an initial architecture direction. Part B improves product, integration, security, capacity and production-readiness decisions. Enter **Unknown** instead of guessing; an unknown answer does not prevent initial analysis, but material unknowns remain explicit validation gates.
 
+### Tip
+
+To facilitate completion, conduct the questionnaire as an interview recorded in a Microsoft Teams session. With participant consent and the appropriate access permissions, use Work IQ to extract the relevant business and technical answers from the meeting transcript and populate the questionnaire. A facilitator should review the completed questionnaire with participants to confirm the extracted answers, assumptions, unknowns and validation owners before using it as architecture input.
+
 ## What you will find in this repository
 
 - SKILL.md: version 1.10.0 skill definition and router. Normalizes a completed questionnaire or equivalent scenario document, enforces the low-complexity-first ladder, evidence-based escalation, capacity and scale validation, and consistent adoption architecture responses while loading reference files on demand.
