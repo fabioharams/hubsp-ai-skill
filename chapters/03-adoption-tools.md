@@ -52,18 +52,17 @@ Map the three main tools to the adoption framework and short/medium-term scenari
 
 ### 🧠 Available models in Microsoft Foundry
 
-Build 2026 consolidated the **MAI** family as a new Microsoft AI model line within the Foundry ecosystem. The consistent reading for this guide is to treat MAI as a **model portfolio** rather than a new architectural layer: models power the reasoning runtime, while **Work IQ, Foundry IQ and Fabric IQ remain complementary context workloads**.
+Microsoft Build 2026 introduced seven MAI models on **June 2, 2026**. The portfolio continued to change through August and September. Treat MAI as a **model portfolio** rather than a new architectural layer: models power the reasoning runtime, while **Work IQ, Foundry IQ and Fabric IQ remain complementary context workloads**.
 
-**Executive reading of the MAI family as of July 20, 2026**
+**Executive reading of the MAI family as of September 9, 2026**
 
 | Model / family | Main use | Documented availability | Architecture fit |
-| --- | --- | --- | --- | --- |
-| MAI-Thinking-1 | Reasoning, mathematics and software-engineering tasks | Private preview in Microsoft Foundry at announcement | Reasoning option subject to catalog, region, quota, quality and support validation |
-| MAI-Code-1-Flash | Agentic coding and efficient inference | Channel-specific rollout; verify current Foundry catalog availability | Coding workflows subject to channel and service validation |
-| MAI-Image-2.5 / MAI-Image-2.5-Flash | Image generation and editing | Preview in Microsoft Foundry | Multimodal experiences under approved preview controls |
-| MAI-Transcribe-1.5 | Multilingual transcription and domain phrase lists | Public preview through the LLM Speech API; no SLA | Speech input under approved preview controls |
-| MAI-Voice-2 | Expressive multilingual speech generation | Public preview; voice prompting also requires gated access | Voice experience under consent and preview controls |
-| MAI-Voice-2-Flash | Low-latency voice synthesis | Announced as coming soon; verify current availability before selection | Deferred until catalog and production terms are confirmed |
+| --- | --- | --- | --- |
+| MAI-Thinking-1 | Reasoning, mathematics and software-engineering tasks | Public preview in Microsoft Foundry; Global Standard model version `2026-06-01` | Reasoning option under approved preview controls; PTU is not supported |
+| MAI-Code-1.1-Flash | Agentic coding and efficient inference | In production in GitHub Copilot as of **August 11, 2026**; not documented as a generally selectable Foundry catalog model | Coding workflows tied to the GitHub Copilot channel unless a current catalog entry proves otherwise |
+| MAI-Image-2.6 / MAI-Image-2.6-Flash | Image generation and editing | Public preview in Microsoft Foundry; model version `2026-07-31`, announced **September 4, 2026** | Multimodal experiences under approved preview controls; 2.5 variants also remain preview |
+| MAI-Transcribe-2 | Multilingual transcription, diarization and timestamps | Public preview through Azure Speech / Microsoft Foundry; announced **September 3, 2026**; no SLA | Speech input under approved preview controls; MAI-Transcribe-1 was deprecated August 20, 2026 |
+| MAI-Voice-2 / MAI-Voice-2-Flash | Expressive and low-latency multilingual speech generation | Public preview through Azure Speech; instant voice cloning requires gated access | Voice experiences under consent, regional and preview controls |
 
 **Executive guideline for production**
 - Prioritize MAI use by **capability and use case**, not by announcement novelty.
@@ -73,6 +72,8 @@ Build 2026 consolidated the **MAI** family as a new Microsoft AI model line with
 **Official reference sources**
 - [Microsoft AI: Building a hill-climbing machine: Launching seven new MAI models](https://microsoft.ai/news/building-a-hillclimbing-machine-launching-seven-new-mai-models/)
 - [Foundry Models from partners and community — Microsoft](https://learn.microsoft.com/azure/foundry/foundry-models/concepts/models-from-partners#microsoft)
+- [Deploy and use MAI-Thinking-1 in Microsoft Foundry](https://learn.microsoft.com/azure/foundry/foundry-models/how-to/use-foundry-models-mai-thinking)
+- [MAI-Code-1.1-Flash: Better, faster, at a quarter of the cost](https://microsoft.ai/news/mai-code-1-1-flash-br-better-faster-at-a-quarter-of-the-cost/)
 - [Deploy and use MAI image models in Microsoft Foundry](https://learn.microsoft.com/azure/foundry/foundry-models/how-to/use-foundry-models-mai-image)
 - [MAI-Transcribe in the LLM Speech API](https://learn.microsoft.com/azure/ai-services/speech-service/mai-transcribe)
 - [What is MAI-Voice?](https://learn.microsoft.com/azure/ai-services/speech-service/mai-voices)

@@ -46,24 +46,29 @@ flowchart TD
 
 ### 📣 Context update — Foundry and Foundry IQ
 
-- **Foundry platform:** Microsoft Learn describes Microsoft Foundry as a unified Azure PaaS with production-grade infrastructure. Portal experiences and individual capabilities retain their own lifecycle status; do not infer blanket GA from the platform description.
-- **Foundry IQ mixed lifecycle:** some capabilities are GA through the Azure AI Search `2026-04-01` API, but that stable API provides a narrower extractive retrieval contract. Preview APIs are still required for capabilities such as advanced query planning, answer synthesis or multi-turn behavior, and portal-based agentic retrieval access remains preview.
-- **MAI as model portfolio:** Build 2026 launched the MAI family as a new Microsoft AI model line, covering reasoning, coding, image, transcription and voice; the architectural consistency here is to treat them as model catalogue options, with preview governance where applicable.
+- **Foundry platform:** the new Microsoft Foundry portal is GA for defined core scenarios. Core agents, models, tools, toolboxes, evaluations and quota are GA, while monitoring, agent guard rails, memory and parts of Operate remain preview. Do not infer blanket GA from the platform milestone.
+- **Foundry Agent Service:** core and hosted agents are GA. The initial hosted-agent preview backend reached end of support on **August 20, 2026** and requires redeployment to the current hosting model.
+- **Foundry IQ mixed lifecycle:** Azure AI Search API `2026-04-01` is GA but provides a narrower retrieval contract. The current `2026-08-01-preview` API is required for answer synthesis, non-minimal reasoning and multi-turn messages; portal access remains preview.
+- **MAI as model portfolio:** the June 2 Build portfolio has already evolved. As of September 9, MAI-Code-1.1-Flash is in GitHub Copilot production, MAI-Image-2.6 variants and MAI-Transcribe-2 are public preview, and MAI-Voice-2-Flash is available in public preview rather than merely announced.
+- **Workflow retirement:** Foundry Workflows remains preview and is scheduled for retirement on **December 1, 2026**. Use Microsoft Agent Framework for new workflow orchestration.
 - **Critical distinction for target architecture:** the Foundry and Azure portals still expose agentic retrieval capabilities with components in preview; therefore, production decisions must explicitly separate GA dependencies from preview dependencies.
 - **Executive implication:** use GA APIs in production where their contract meets the requirement. Treat preview dependencies as exception-based pilots; governance controls do not change preview support or SLA status.
 
 ### 🧪 Context update — Microsoft Build 2026 (ASSERT and ACS)
 
-- **ASSERT (open-source evaluation):** Microsoft Responsible AI introduced ASSERT as an MIT-licensed framework for converting natural-language behavior requirements into executable evaluations and repeatable regression tests. Teams can integrate it into CI/CD, but it is not a managed continuous-monitoring service.
-- **Agent Control Specification (ACS):** Microsoft introduced ACS as an emerging open specification and reference implementation for portable runtime governance. Its implementation is public preview and requires adapter, conformance, fail-closed and version-compatibility validation before production reliance.
+- **ASSERT (open-source evaluation):** Microsoft Responsible AI released ASSERT on **June 2, 2026** as an MIT-licensed framework for converting natural-language behavior requirements into executable evaluations and repeatable regression tests. It uses tagged open-source releases rather than a commercial GA/preview lifecycle. Teams can integrate it into CI/CD, but it is not a managed continuous-monitoring service.
+- **Agent Control Specification (ACS):** Microsoft introduced ACS on **June 2, 2026** as an open specification and reference implementation for portable runtime governance. The Agent Governance Toolkit still labels its releases **public preview** as of September 9, 2026 and warns that breaking changes can occur before GA.
 - **Direct architectural value:** ASSERT reinforces the evaluators layer (continuous measurement and validation) and ACS reinforces guard rails (runtime enforcement), increasing auditability and operational consistency.
 - **Recommended use in this guide:** treat ASSERT as a policy-driven evaluation mechanism in the continuous improvement cycle and ACS as the technical contract for controls in the agent runtime.
 - **Acronym note:** in this document, **ACS** stands for **Agent Control Specification**. Not to be confused with **Azure ACS (Access Control Services)**, a legacy technology already retired in the SharePoint Online context.
 
 **Sources:**
 - [What is Microsoft Foundry?](https://learn.microsoft.com/azure/foundry/what-is-foundry)
+- [Microsoft Foundry portal general availability overview](https://learn.microsoft.com/azure/foundry/concepts/general-availability)
 - [What is Foundry IQ?](https://learn.microsoft.com/azure/foundry/agents/concepts/what-is-foundry-iq)
 - [Agentic retrieval overview](https://learn.microsoft.com/azure/search/agentic-retrieval-overview)
+- [Migrate agentic retrieval code to the latest version](https://learn.microsoft.com/azure/search/agentic-retrieval-how-to-migrate)
+- [Migrate hosted agents to the latest version](https://learn.microsoft.com/azure/foundry/agents/how-to/migrate-hosted-agent-preview)
 - [ASSERT announcement](https://commandline.microsoft.com/assert-written-intent-executable-evals/) and [official repository](https://github.com/responsibleai/ASSERT)
 - [Agent Control Specification announcement](https://commandline.microsoft.com/agent-control-specification-runtime-governance/) and [official toolkit](https://github.com/microsoft/agent-governance-toolkit)
 

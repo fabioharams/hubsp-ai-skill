@@ -100,7 +100,7 @@ static string GetTopProductByMargin(string quarter, string region)
 
 ### A.3 Node.js — Channel integration (outside the MAF core)
 
-> Executive note: **Microsoft Agent Framework** supports Python and .NET, with Go in public preview as of July 20, 2026. This Node.js example uses a channel-specific SDK and integrates with governed corporate services or separately hosted agents.
+> Executive note (checked **2026-09-09**): **Microsoft Agent Framework** has released Python core packages (`1.0.0` on April 2, 2026), supports .NET, and provides Go in public preview. Go still lacks several framework capabilities, the Foundry managed-agent integration and Foundry hosted-agent support. Some Python and .NET integration packages also remain prerelease, so validate the exact package rather than inferring support from the core framework. This Node.js example uses a channel-specific SDK and integrates with governed corporate services or separately hosted agents.
 
 ```javascript
 const { ConversationBot } = require("@microsoft/teams-ai");

@@ -199,6 +199,7 @@ Treat the attached document as the case context and normalize it against `doc/bu
 
 Load only the reference file needed for the question (progressive disclosure):
 
+- `PRODUCT_LIFECYCLE_AUDIT.md` — point-in-time product, feature, model, API and framework lifecycle register, including release and retirement dates. Use it as the starting snapshot for a product-status question, then revalidate material production claims against the linked current official source.
 - references/01-llm-rag-ai-agent-fundamentals.md — LLM vs RAG vs AI Agent vs Agentic AI; complexity spectrum and decision guide.
 - references/02-reference-architecture-layers.md — Microsoft IQ context workloads (Work IQ, Foundry IQ, Fabric IQ and Web IQ), agent runtimes and the layer overview. Load the Fabric data-platform sub-references only when the data platform is in scope:
   - references/02a-fabric-onelake-delta-shortcuts.md — OneLake, Delta Lake, Shortcuts and the SQL analytics endpoint.

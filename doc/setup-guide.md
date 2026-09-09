@@ -61,7 +61,7 @@ Official Anthropic references:
 
 ## How to use in Microsoft Scout
 
-> **Preview notice:** Microsoft Scout is a Frontier preview desktop application. Availability, prerequisites and behavior can change before general availability.
+> **Preview notice (checked 2026-09-09):** Microsoft Scout was introduced on **June 2, 2026** and remains a Frontier preview desktop application. Availability, prerequisites and behavior can change, and Microsoft states that preview features might not reach general availability.
 
 Current prerequisites include Windows 11 or macOS 12+, a Microsoft 365 work or school account, Microsoft 365 Copilot access, a GitHub Copilot Business or Enterprise license, local installation permission and administrator enablement for the Frontier preview.
 
@@ -87,6 +87,7 @@ Scout operates within the configured workspace and your existing permissions. Cu
 
 Official Microsoft references:
 
+- [Microsoft Scout overview](https://learn.microsoft.com/microsoft-scout/overview)
 - [Get started with Microsoft Scout](https://learn.microsoft.com/microsoft-scout/get-started)
 - [Use Microsoft Scout](https://learn.microsoft.com/microsoft-scout/use-microsoft-scout)
 - [Microsoft Scout common questions](https://learn.microsoft.com/microsoft-scout/faq)

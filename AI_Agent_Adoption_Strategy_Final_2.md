@@ -6,6 +6,7 @@ This file is the lightweight index for the guide. Load only the chapter or thema
 
 Use these curated references first when the request matches a core decision topic:
 
+- [Product and technology lifecycle audit](PRODUCT_LIFECYCLE_AUDIT.md) - point-in-time GA, preview, mixed-lifecycle, release and retirement status checked on 2026-09-09.
 - [AI architecture fundamentals](references/01-llm-rag-ai-agent-fundamentals.md) - LLM, RAG, single AI Agent and Agentic AI.
 - [Reference architecture](references/02-reference-architecture-layers.md) - Microsoft IQ context workloads, agent runtimes and Microsoft Fabric.
 - [ROI and AAI](references/03-roi-ai-vs-man-hour.md) - financial model, HITL and scope multiplier.

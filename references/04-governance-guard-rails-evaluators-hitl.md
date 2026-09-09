@@ -193,7 +193,7 @@ According to Microsoft's official documentation, **Microsoft Entra Agent ID** is
 
 In practice, each agent gains its own corporate identity, with authentication, authorization, governance and auditing, instead of relying on shared credentials.
 
-> Availability note (July 2026): the **Microsoft Entra Agent ID platform is generally available**. Individual capabilities under Conditional Access, Identity Protection, identity governance and network controls can have different availability states. Verify each required capability before approving a production design.
+> Availability note (checked 2026-09-09): the **Microsoft Entra Agent ID platform reached general availability in April 2026**. Lifecycle is still feature-scoped: Microsoft's broader Agent ID overview continues to carry a preview label, and some blueprint, identity-creation, Conditional Access, Identity Protection, governance and network capabilities have separate status and licensing. Verify every required surface before approving a production design.
 
 ### 🧱 Key concepts (based on Microsoft Learn)
 
@@ -442,11 +442,12 @@ flowchart LR
 
 ### 📦 Required components (and how they connect)
 
-At least one user needs a qualifying Agent 365 license to enable Agent 365. Microsoft positions Microsoft 365 E5 as the preferred prerequisite; Microsoft 365 E7 includes Agent 365 and Microsoft Entra Suite. The following components determine the effective governance and security coverage:
+At least one user needs a qualifying Agent 365 license to enable Agent 365. For new purchases effective **June 1, 2026**, Microsoft requires one of the documented prerequisite foundations, such as Microsoft 365 E5/A5/Business Premium or the qualifying Defender and Purview suite combinations. Microsoft 365 E7 includes Microsoft 365 E5, Agent 365, Microsoft 365 Copilot and Microsoft Entra Suite. Confirm current Product Terms because prerequisites and included capabilities differ by purchase path. The following components determine the effective governance and security coverage:
 
 1. **Agent 365 base licensing**
 1.1. Agent 365 is licensed per user.
 1.2. As of **July 1, 2026**, Agent 365-eligible licensing is required for the covered security capabilities for Copilot Studio and Microsoft Foundry agents that were previously provided through Defender products.
+1.3. New Agent 365 purchases from **June 1, 2026** also require a qualifying prerequisite license or suite; "E5 preferred" alone is no longer a complete purchasing rule.
 
 2. **Microsoft Entra Agent ID (agent identity)**
 2.1. Agent ID is the distinct identity foundation and is available to Microsoft Entra customers; it is not merely an Agent 365 subfeature.
@@ -789,7 +790,7 @@ flowchart TD
 ### 📌 Insight
 > "HITL is not an agent weakness — it is intelligent governance. The goal is to eliminate HITL where it is safe, not where it is convenient."
 
-> **Source status:** Microsoft governance, Agent ID, Agent 365, Purview and Foundry sources in this reference were rechecked on **2026-07-20**. Agent 365 is generally available for the Commercial segment, while effective coverage and individual Entra, Purview and Defender capabilities remain licensing-, agent-type- and configuration-dependent.
+> **Source status:** Microsoft governance, Agent ID, Agent 365 and Foundry lifecycle sources in this reference were rechecked on **2026-09-09**. Agent 365 is generally available for the Commercial segment; the Agent ID platform foundation is GA, but effective coverage and individual Entra, Purview, Defender and Foundry capabilities remain lifecycle-, licensing-, agent-type- and configuration-dependent.
 
 ---
 

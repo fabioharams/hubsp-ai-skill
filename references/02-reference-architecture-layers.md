@@ -54,7 +54,9 @@ The contextual intelligence workload for Microsoft 365. It captures how work hap
 
 **Example:** An executive types "summarize this meeting" in Word — Copilot (Work IQ) fetches the transcript from OneDrive, summarizes it and inserts it into the document.
 
-**Technical sources (accessed 2026-07-23):** [Work IQ overview](https://learn.microsoft.com/microsoft-365/copilot/extensibility/work-iq/) and [Microsoft IQ overview for agents (preview)](https://learn.microsoft.com/microsoft-copilot-studio/agents-experience/use-microsoft-iq).
+**Lifecycle status (checked 2026-09-09):** The Work IQ API reached general availability on **June 16, 2026**. Work IQ in Microsoft Copilot Studio remains a **preview** integration and is not a production substitute for the GA API contract. Validate the exact surface, billing model, permissions and regional availability rather than assigning one lifecycle status to Work IQ as a whole.
+
+**Technical sources (accessed 2026-09-09):** [Work IQ overview](https://learn.microsoft.com/microsoft-365/copilot/extensibility/work-iq/), [Work IQ API and consumptive pricing update](https://learn.microsoft.com/partner-center/announcements/2026-june#work-iq-api-and-consumptive-pricing-update) and [Work IQ in Copilot Studio (preview)](https://learn.microsoft.com/microsoft-copilot-studio/add-work-iq).
 
 ---
 
@@ -67,7 +69,9 @@ The managed, permission-aware enterprise knowledge workload. It is backed by Azu
 
 **Example:** An agent asks a shared knowledge base for the policies and authoritative documents relevant to a margin investigation. Foundry IQ plans retrieval, enforces supported source permissions and returns grounded evidence with citations.
 
-**Technical source (accessed 2026-07-23):** [What is Foundry IQ?](https://learn.microsoft.com/azure/foundry/agents/concepts/what-is-foundry-iq).
+**Lifecycle status (checked 2026-09-09):** Foundry IQ is **partially GA**. Azure AI Search REST API `2026-04-01` provides a stable but narrower retrieval contract. The current `2026-08-01-preview` API is still required for capabilities such as answer synthesis, non-minimal reasoning effort and multi-turn messages. Microsoft Foundry and Azure portal access to agentic retrieval remains preview.
+
+**Technical sources (accessed 2026-09-09):** [What is Foundry IQ?](https://learn.microsoft.com/azure/foundry/agents/concepts/what-is-foundry-iq) and [Migrate agentic retrieval code to the latest version](https://learn.microsoft.com/azure/search/agentic-retrieval-how-to-migrate).
 
 ---
 
@@ -80,12 +84,14 @@ The execution layer is separate from the IQ context workloads. **Microsoft Found
 
 **Example:** A Foundry agent receives "analyze why the margin dropped," retrieves policies through Foundry IQ, obtains governed metrics through Fabric IQ/Fabric, optionally adds external evidence through Web IQ, and composes a controlled response.
 
-**Technical sources (accessed 2026-07-23):** [Microsoft Foundry Agent Service overview](https://learn.microsoft.com/azure/foundry/agents/overview) and [Hosting Agent Framework applications](https://learn.microsoft.com/agent-framework/hosting/).
+**Lifecycle status (checked 2026-09-09):** Microsoft Foundry core agents and Foundry hosted agents are GA. Individual tools, integrations and observability capabilities retain their own status. Foundry Workflows remains preview and is scheduled for retirement on **December 1, 2026**; use Microsoft Agent Framework for new workflow orchestration. Agent Framework package status also varies: Python core is released, Go is public preview and some hosting integrations remain prerelease.
+
+**Technical sources (accessed 2026-09-09):** [Microsoft Foundry Agent Service overview](https://learn.microsoft.com/azure/foundry/agents/overview), [Microsoft Foundry portal GA overview](https://learn.microsoft.com/azure/foundry/concepts/general-availability), [Agent Framework overview](https://learn.microsoft.com/agent-framework/overview/) and [Foundry hosted agents](https://learn.microsoft.com/agent-framework/hosting/foundry-hosted-agent).
 
 ---
 
 #### 🌐 **Web IQ (Web Context Layer)**
-The **external grounding** layer of Microsoft IQ for up-to-date public web context. Access is currently limited and should be treated as a conditional dependency with an availability check and fallback. Its role is to:
+The **external grounding** layer of Microsoft IQ for up-to-date public web context. Microsoft announced Web IQ on **June 2, 2026**, but the launch source does not assign a formal GA label and still directs customers to express interest. Treat access as controlled and the capability as a conditional dependency with an availability check and fallback. Its role is to:
 - Bring web evidence (pages, news, images and videos) into agentic flows
 - Operate with a focus on grounding quality, low latency and token efficiency
 - Deliver denser passages/evidence to improve multi-step reasoning precision
@@ -94,7 +100,7 @@ The **external grounding** layer of Microsoft IQ for up-to-date public web conte
 
 **Example:** When investigating a margin variation, the agent combines internal metrics (Fabric) with external market signals (Web IQ), maintaining a separate evidence trail for internal data and public sources.
 
-**Technical source (accessed 2026-07-23):** [Web IQ](https://aka.ms/WebIQNew). Treat availability and feature status as a production validation gate.
+**Technical source (accessed 2026-09-09):** [Announcing Microsoft Web IQ](https://blogs.bing.com/search/June-2026/Announcing-Microsoft-Web-IQ). Treat availability, commercial terms, regional support and feature status as production validation gates.
 
 ---
 
@@ -108,7 +114,9 @@ The **semantics and context** layer that enriches data with corporate meaning wh
 
 **Example:** Fabric IQ defines that "Margin = (Revenue - COGS) / Revenue". When an agent is queried about margin, it does not need to know the formula — it consumes the already-calculated metric.
 
-**Technical source (accessed 2026-07-23):** [What is Fabric IQ?](https://learn.microsoft.com/fabric/iq/overview).
+**Lifecycle status (checked 2026-09-09):** The Fabric **IQ workload remains preview** and contains items with different lifecycle states. Plan reached GA in **July 2026** and Operations agent reached GA in **June 2026**. Ontology and Graph remain preview; Power BI semantic models and some data-agent integrations are GA. Validate the exact item and region.
+
+**Technical sources (accessed 2026-09-09):** [What is Fabric IQ?](https://learn.microsoft.com/fabric/iq/overview) and [What's new in Microsoft Fabric](https://learn.microsoft.com/fabric/fundamentals/whats-new).
 
 ---
 
@@ -226,10 +234,10 @@ flowchart TD
 ### 📰 Recent Microsoft IQ updates (2025-2026)
 
 - **Microsoft IQ** is now explicitly described as the corporate intelligence layer with **Work IQ, Foundry IQ, Fabric IQ and Web IQ**.
-- **Work IQ** exposes work intelligence through chat, context, tools and workspaces; availability can differ by integration.
-- **Foundry IQ** consolidates knowledge bases and agentic retrieval with citations and supported source permissions; capability status varies between GA and preview.
-- **Fabric IQ** includes an IQ workload and items whose status varies; ontology, Plan and Graph capabilities require current preview and regional checks.
-- **Web IQ** expands external grounding for agents but remains a limited-access dependency that requires an availability check and fallback.
+- **Work IQ API** reached GA on June 16, 2026; Work IQ in Copilot Studio remains preview.
+- **Foundry IQ** has a narrower GA contract in REST API `2026-04-01`; advanced behavior and portal access remain preview through newer preview APIs, currently `2026-08-01-preview`.
+- **Fabric IQ** remains a preview workload with mixed item status. Plan is GA; Ontology and Graph remain preview.
+- **Web IQ** launched on June 2, 2026, without a formal GA label in the launch source and still requires an access check and fallback.
 
 ---
 
