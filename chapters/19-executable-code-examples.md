@@ -4,6 +4,8 @@
 
 > This example constructs an Agent Framework application that calls a model through Foundry. Agent Framework does not supply managed hosting; the application remains responsible for hosting, scaling, identity, state and operations unless it is separately deployed as a Foundry hosted agent.
 
+Lifecycle checked **2026-11-17**: .NET/Python core is GA; integrations can remain prerelease. Agent Framework Python 1.25 requires **Python 3.11+**. The `gpt-5.4-mini` fallback is an illustrative deployment name, not an automatically provisioned model; use an existing approved deployment. See [package requirements](https://learn.microsoft.com/agent-framework/support/upgrade/python-2026-significant-changes) and the [model lifecycle schedule](https://learn.microsoft.com/azure/foundry/openai/concepts/model-retirement-schedule).
+
 ```python
 # agent_framework_foundry_example.py
 import asyncio
@@ -28,7 +30,7 @@ async def main() -> None:
     try:
         client = FoundryChatClient(
             project_endpoint=os.environ["FOUNDRY_PROJECT_ENDPOINT"],
-            model=os.getenv("FOUNDRY_MODEL", "gpt-4.1-mini"),
+            model=os.getenv("FOUNDRY_MODEL", "gpt-5.4-mini"),
             credential=credential,
         )
 
@@ -100,45 +102,25 @@ static string GetTopProductByMargin(string quarter, string region)
 
 ### A.3 Node.js — Channel integration (outside the MAF core)
 
-> Executive note (checked **2026-09-09**): **Microsoft Agent Framework** has released Python core packages (`1.0.0` on April 2, 2026), supports .NET, and provides Go in public preview. Go still lacks several framework capabilities, the Foundry managed-agent integration and Foundry hosted-agent support. Some Python and .NET integration packages also remain prerelease, so validate the exact package rather than inferring support from the core framework. This Node.js example uses a channel-specific SDK and integrates with governed corporate services or separately hosted agents.
+> Lifecycle checked **2026-11-17**: Agent Framework .NET/Python core is GA; Go remains public preview. Go can invoke existing server-side Foundry agents but lacks the documented hosted-deployment helpers. Hosting adapters remain prerelease. See [Agent Framework](https://learn.microsoft.com/agent-framework/overview/) and [hosting support](https://learn.microsoft.com/agent-framework/hosting/foundry-hosted-agent).
+
+Use the current **Teams SDK**, which has stable released tracks. The old Teams AI Library example used an unsupported SDK; see [Microsoft's migration guidance](https://learn.microsoft.com/microsoftteams/platform/legacy-tools-sdks). Save this JavaScript module as `teams-channel.mjs` in a configured Teams SDK project with authentication and channel registration. It only acknowledges a message; connect the approved agent endpoint before enabling business actions. The [official runtime example](https://learn.microsoft.com/microsoftteams/platform/agents-in-teams/port-slack-bolt-javascript-app#initialize-the-runtime) uses `App` from `@microsoft/teams.apps`.
 
 ```javascript
-const { ConversationBot } = require("@microsoft/teams-ai");
+import { App } from "@microsoft/teams.apps";
 
-const config = {
-    // Exemplo simplificado: carregue credenciais/config do ambiente.
-};
+const app = new App();
 
-const AGENT_INSTRUCTIONS = `
-You are a Sales Analysis Agent.
-
-SCOPE:
-- Answer questions about sales pipeline, segments, forecasts
-- Provide data-driven recommendations
-- Escalate sensitive requests
-
-BOUNDARIES:
-- Cannot approve discounts
-- Cannot access PII (RLS enforced)
-- Can see aggregated segments and regions
-
-TONE:
-- Professional, concise, data-focused
-- Always cite source
-- Transparency: "Confidence: High/Medium/Low"
-`;
-
-const bot = new ConversationBot({
-  adapterConfig: config,
-    requestHandler: async (context) => {
-    const userMessage = context.activity.text;
-    console.log(`User: ${userMessage}`);
-        // In production, delegate to a governed agent endpoint.
-        await context.sendActivity("Processing your request with policy controls...");
-  }
+app.on("message", async ({ send }) => {
+    await send("Request received. This channel sample does not execute business actions.");
 });
 
-module.exports = bot;
+app.start().catch((error) => {
+    console.error("Teams application startup failed:", error);
+    process.exitCode = 1;
+});
+
+export default app;
 ```
 
 ---

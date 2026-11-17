@@ -39,6 +39,14 @@ Every component in the architecture diagram must have exactly one corresponding 
 |---|---|---|---|---|---|---|---|---|---|
 | | | | | | | | | Documented capability / scenario assumption / design decision / measured evidence | |
 
+### Lifecycle and Support
+
+Verify each selected capability against current official Microsoft evidence. Keep platform, feature, model, API and SDK status separate. Record conflicting or missing evidence as Unconfirmed, with a validation owner.
+
+| Component / capability / version | Lifecycle status | Retirement or migration deadline | Supported fallback / validation owner | Official Microsoft source and checked date |
+|---|---|---|---|---|
+| | GA / preview / prerelease / deprecated / retiring / unconfirmed / versioned open source | | | |
+
 ```mermaid
 flowchart LR
     A[Business requirement] --> B[Simplest viable capability]

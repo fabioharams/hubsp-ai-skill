@@ -29,7 +29,7 @@ When applicable:
 - **Work IQ** supplies Microsoft 365 work context.
 - **Foundry IQ** supplies permission-aware enterprise knowledge and citations.
 - **Fabric IQ** supplies governed business semantics and analytical context.
-- **Web IQ** supplies current external web context when limited access and production terms fit the scenario.
+- **Web IQ** supplies current external web context when the selected endpoint's lifecycle, access and production terms fit the scenario.
 - **Microsoft Foundry Agent Service or Copilot Studio** provides the selected managed agent platform.
 - **Microsoft Agent Framework** provides development abstractions and requires an explicit hosting choice unless deployed as a Foundry hosted agent.
 - **Microsoft Fabric** provides governed analytical consolidation and semantic reuse when those capabilities are required.

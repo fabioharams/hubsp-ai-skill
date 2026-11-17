@@ -1,5 +1,20 @@
 ## 🔗 20. Consolidated References
 
+### Product lifecycle evidence
+
+The [lifecycle register](../PRODUCT_LIFECYCLE_AUDIT.md) records GA, preview, prerelease and retirement findings checked on **2026-11-17**, with official Microsoft evidence beside each claim. Important feature-level sources include:
+
+- [Foundry GA feature matrix](https://learn.microsoft.com/azure/foundry/concepts/general-availability)
+- [Work IQ in Copilot Studio: GA and preview workloads](https://learn.microsoft.com/microsoft-copilot-studio/add-work-iq)
+- [Web IQ endpoint lifecycle](https://learn.microsoft.com/web-iq/resources/pricing)
+- [Fabric IQ MCP: GA scope](https://learn.microsoft.com/fabric/iq/connectors/fabric-iq-mcp)
+- [Legacy Foundry/Fabric integration retirement](https://learn.microsoft.com/fabric/data-science/data-agent-foundry) and [preview replacement](https://learn.microsoft.com/fabric/data-science/data-agent-foundry-fabric-iq)
+- [Purview Data Governance retirement](https://learn.microsoft.com/purview/data-governance-overview)
+- [Azure Cache for Redis retirement](https://learn.microsoft.com/azure/azure-cache-for-redis/retirement-faq)
+- [Legacy Teams SDK migration](https://learn.microsoft.com/microsoftteams/platform/legacy-tools-sdks)
+- [Versioned model lifecycle and retirement](https://learn.microsoft.com/azure/foundry/openai/concepts/model-retirement-schedule)
+- [ACS prerelease runtime](https://github.com/responsibleai/agent-control-spec) and [Agent Governance Toolkit classification correction](https://github.com/microsoft/agent-governance-toolkit/blob/main/CHANGELOG.md)
+
 ### 📘 Microsoft Sources Used
 
 #### Adoption, strategy and maturity
@@ -44,7 +59,7 @@
 - [Built-in evaluators in Microsoft Foundry](https://learn.microsoft.com/azure/foundry/concepts/built-in-evaluators)
 - [Run cloud evaluations with the Microsoft Foundry SDK](https://learn.microsoft.com/azure/foundry/how-to/develop/cloud-evaluation)
 - [Evaluate a generative AI app](https://learn.microsoft.com/azure/foundry/how-to/evaluate-generative-ai-app)
-- [Set up continuous evaluation (Microsoft Foundry - new portal)](https://learn.microsoft.com/azure/foundry/observability/how-to/how-to-monitor-agents-dashboard#set-up-continuous-evaluation)
+- [Set up continuous evaluation (new Foundry portal; monitoring and recurring evaluation remain preview)](https://learn.microsoft.com/azure/foundry/observability/how-to/how-to-monitor-agents-dashboard#set-up-continuous-evaluation)
 - [Continuous evaluation for agents (Foundry classic, preview)](https://learn.microsoft.com/azure/foundry-classic/how-to/continuous-evaluation-agents)
 
 #### AI architecture fundamentals (LLM, RAG, AI Agent, Agentic AI)
@@ -64,4 +79,4 @@
 
 ### 🌐 Other Sources (Non-Microsoft)
 
-To date, no external sources outside Microsoft's domains have been used as documentary references in this material.
+Lifecycle verification uses only official Microsoft sources, including Microsoft-maintained repositories hosted on GitHub. Other repository material contains non-Microsoft vendor setup links and primary legal sources; those were not used to establish Microsoft product lifecycle status.

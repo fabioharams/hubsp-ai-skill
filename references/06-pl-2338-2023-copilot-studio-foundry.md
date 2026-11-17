@@ -1,5 +1,7 @@
 # PL 2338/2023 and the adherence of Microsoft Copilot Studio and Microsoft Foundry
 
+> Microsoft technology lifecycle update (**2026-11-17**): the control mapping below is conditional on the exact feature and license. [Foundry monitoring and agent guard rails remain preview](https://learn.microsoft.com/azure/foundry/concepts/general-availability). [Purview Data Governance is retiring](https://learn.microsoft.com/purview/data-governance-overview), with support ending November 12, 2027; Purview Data Security and Compliance continue. This lifecycle check does not update the legal-status review dated below.
+
 ## Executive overview
 
 **PL 2338/2023** (Brazil's AI bill) establishes a framework based on rights, risk classification, transparency, human oversight, governance, traceability and accountability for artificial intelligence systems. A reading of the official sources indicates that **Microsoft Copilot Studio** and **Microsoft Foundry** provide the technical and governance building blocks needed to meet a large part of these requirements, especially when combined with **Microsoft Purview**, **Microsoft Entra**, **Microsoft Sentinel**, **Azure Monitor**, **Defender for Cloud** and **Azure AI Content Safety**.

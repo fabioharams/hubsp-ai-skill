@@ -2,6 +2,8 @@
 
 > Part of the layered reference architecture. See `references/02-reference-architecture-layers.md` for the layer overview. Continues `references/02b-fabric-medallion-architecture.md`. Load this file only when data products, Purview/Entra governance integration or the end-to-end data-to-insight summary are in scope.
 
+> Lifecycle update, checked **2026-11-17**: [Purview Data Governance](https://learn.microsoft.com/purview/data-governance-overview), including Unified Catalog and Data Map, is retiring. New accounts are blocked and support ends **November 12, 2027**. Use [OneLake catalog](https://learn.microsoft.com/fabric/governance/onelake-catalog-overview) for supported discovery/governance in the Fabric scenario below. Purview Data Security and Compliance offerings continue; validate each AI integration separately.
+
 #### 📊 **Data Products: Data Packages for Reuse**
 
 **What it is:**
@@ -13,7 +15,7 @@ A **Data Product** is a curated set of Gold tables with clear semantics, documen
 - 🔐 **Secure:** Sensitivity labels classify data; explicitly configured OneLake, item, SQL, RLS/CLS and sharing controls enforce access
 - ⚙️ **Operationalized:** Refresh pipelines help keep data fresh, with an update SLA
 - 📈 **Versioned:** Schema changes are controlled, compatibility maintained
-- 📣 **Discoverable:** The catalog (Data Catalog in Purview) indexes and describes it
+- 📣 **Discoverable:** OneLake catalog exposes supported Fabric item metadata and governance context
 
 **Data Product example:**
 
@@ -38,7 +40,7 @@ graph TD
     F1["📌 Freshness SLA:<br/>Updated nightly 2 AM UTC<br/>&lt; 1 hour after source refresh<br/><br/>🔄 Versioning:<br/>Schema changes controlled<br/>Compatibility maintained"]
     
     G["🔍 DISCOVERY<br/>─────────────────"]
-    G1["📚 Data Catalog<br/>(Purview)<br/>Indexed and discoverable<br/>Lineage visible"]
+    G1["OneLake catalog<br/>Fabric discovery<br/>Metadata and governance<br/>Supported lineage"]
     
     A --> B
     A --> E
@@ -85,7 +87,7 @@ graph TD
 | **Documentation** | Business rules, formulas, glossary | Clear semantics |
 | **SLA** | Updated 2 AM UTC, < 1h lag | Reliability |
 | **Versioning** | Schema changes with compatibility | Controlled evolution |
-| **Catalog** | Purview indexes and describes | Discovery |
+| **Catalog** | OneLake catalog exposes supported Fabric metadata | Discovery and governance |
 
 **Usage by an Agent:**
 ```python
@@ -522,7 +524,8 @@ flowchart TD
 - [**Microsoft Entra Authentication in Fabric**](https://learn.microsoft.com/fabric/data-warehouse/entra-id-authentication) - Zero Trust authentication for SQL Analytics Endpoint
 - [**Sensitivity Labels in Fabric**](https://learn.microsoft.com/fabric/governance/protected-sensitivity-labels) - Data classification with automatic protection
 - [**Row-Level Security in Fabric**](https://learn.microsoft.com/fabric/security/service-admin-row-level-security) - Data filtering by user/agent context
-- [**Data Governance with Purview**](https://learn.microsoft.com/azure/cloud-adoption-framework/data/governance-security-baselines-purview-data-estate-unify-data-platform) - Classification, governance and compliance
+- [**OneLake catalog**](https://learn.microsoft.com/fabric/governance/onelake-catalog-overview) - Fabric discovery and governance
+- [**Purview Data Governance retirement**](https://learn.microsoft.com/purview/data-governance-overview) - Existing-customer transition and support deadline
 - [**Audit Logging in Purview**](https://learn.microsoft.com/purview/audit-solutions-overview) - Tracking and regulatory compliance
 - ⏹️ **Conditional Access:** Approvals for sensitive data
 

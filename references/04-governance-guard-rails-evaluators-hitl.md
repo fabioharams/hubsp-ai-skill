@@ -43,11 +43,13 @@ Apply controls in the platform or hosted application selected by the low-complex
 
 **Rule of thumb:** before any sensitive retrieval or action, enforce identity, least-privilege source authorization and deterministic application/runtime policy. Apply output guard rails before delivery. Use evaluators separately to test and measure whether the complete path behaves as intended; evaluators do not authorize data access.
 
+**Lifecycle check (2026-11-17):** Content Safety core and the Prompt Shields API are GA. Foundry agent guard rails remain preview. The separate Content Safety/Azure OpenAI **Groundedness detection API** is preview and retires **April 30, 2027**; this does not retire groundedness evaluators or customer-owned validation. See [Content Safety release notes](https://learn.microsoft.com/azure/ai-services/content-safety/whats-new) and the [Foundry feature matrix](https://learn.microsoft.com/azure/foundry/concepts/general-availability).
+
 **Official Microsoft sources:**
 - Microsoft Copilot Studio security and governance: https://learn.microsoft.com/microsoft-copilot-studio/security-and-governance
 - Microsoft Foundry responsible AI: https://learn.microsoft.com/azure/foundry/responsible-use-of-ai-overview
 - Azure AI Content Safety: https://learn.microsoft.com/azure/ai-services/content-safety/
-- Microsoft Purview governance overview: https://learn.microsoft.com/purview/governance-solutions-overview
+- Microsoft Purview Data Security and Compliance: https://learn.microsoft.com/purview/
 
 ### 🏗️ Guard Rail Layers
 
@@ -193,7 +195,7 @@ According to Microsoft's official documentation, **Microsoft Entra Agent ID** is
 
 In practice, each agent gains its own corporate identity, with authentication, authorization, governance and auditing, instead of relying on shared credentials.
 
-> Availability note (checked 2026-09-09): the **Microsoft Entra Agent ID platform reached general availability in April 2026**. Lifecycle is still feature-scoped: Microsoft's broader Agent ID overview continues to carry a preview label, and some blueprint, identity-creation, Conditional Access, Identity Protection, governance and network capabilities have separate status and licensing. Verify every required surface before approving a production design.
+> Availability note (checked 2026-11-17): current [Agent ID release notes](https://learn.microsoft.com/entra/agent-id/whats-new-agent-id) confirm GA for the product, following platform GA in April 2026. Local authentication, blueprint instance modes, CIMD and admin-center creation wizards retain preview labels. An older identity-professional overview still labels Agent ID preview; use current capability-specific guidance and record unresolved conflicts. Security coverage also depends on licensing and the identity flow.
 
 ### 🧱 Key concepts (based on Microsoft Learn)
 
@@ -269,13 +271,11 @@ Ensure that AI agents use data with security and compliance, with consistent cla
 
 ### 🔎 What is Microsoft Purview?
 
-According to Microsoft's official documentation, **Microsoft Purview** is a unified platform for **data security, data governance and compliance**. In the context of agents, this means three main capabilities:
+**Microsoft Purview** provides data security and compliance controls, including classification, sensitivity labels, DLP, Audit, eDiscovery and retention. Apply only the controls supported for the selected agent and data path.
 
-1. **Discover and map data** across the estate (Data Map + Unified Catalog).
-2. **Classify and label** data with **Sensitivity Labels** (Information Protection).
-3. **Monitor and prove compliance** with auditing, DLP and risk controls (Audit, DLP and compliance solutions).
+**Retirement update (checked 2026-11-17):** Purview **Data Governance**, including Unified Catalog, Data Map and governance Workflows, is retiring. New accounts are blocked; existing capabilities remain in maintenance mode through **November 12, 2027**. Plan existing-customer transitions and evaluate OneLake catalog when Fabric governance is required. Purview **Data Security and Compliance** offerings continue. Sources: [current retirement notice](https://learn.microsoft.com/purview/data-governance-overview) and [Microsoft's November 12 announcement](https://learn.microsoft.com/partner-center/announcements/2026-november#update-on-the-microsoft-data-governance-strategy).
 
-In practical terms: Purview is not just a catalog; it becomes the governance plane that guides how sensitive data may or may not circulate between Copilot, agents, Fabric and corporate apps.
+**Feature boundary:** Purview coverage of Fabric data-agent AI interactions remains **preview**. The [supported-capability matrix](https://learn.microsoft.com/purview/ai-copilot-fabric) must be checked before promising DLP, labeling or audit coverage for prompts and responses.
 
 ### 🏷️ Data Classification with Sensitivity Labels
 
@@ -314,7 +314,7 @@ Purview defines and distributes metadata and policies; authorization enforcement
 ```mermaid
 flowchart TD
     A[Agent requests data] --> B[Entra ID authenticates the agent's identity]
-    B --> C[Resource queries metadata and label\nPurview Data Map / Information Protection]
+    B --> C[Resource checks classification and policy\nInformation Protection + resource controls]
     C --> D{Sensitivity level?}
 
     D -->|Public/Internal| E[Allow with basic controls]
@@ -331,7 +331,7 @@ flowchart TD
 
 ### 📊 What improves with Purview in agent scenarios
 
-- **Visibility**: inventory of data and classifications at scale (Data Map/Catalog).
+- **Visibility**: supported classification and AI-interaction signals; catalog discovery has a separate platform and lifecycle.
 - **Consistency**: the same label taxonomy for structured and unstructured data.
 - **Protection**: labels can trigger controls such as encryption, access restriction and DLP.
 - **Observability**: auditing of actions for investigation and compliance.
@@ -358,7 +358,7 @@ With Purview, the organization can demonstrate controls for frameworks like LGPD
 ### 🔗 Relationship with the other framework components
 
 - **Entra Agent ID (8.1):** defines who the agent is; Purview defines the data's sensitivity and the expected controls.
-- **Fabric (data layer):** provides the governed data; Purview adds discovery, classification, lineage and risk/compliance context.
+- **Fabric (data layer):** OneLake catalog provides Fabric discovery and governance; supported Purview controls add classification, protection and compliance evidence.
 - **Guard Rails:** use classification and policies as a signal to allow, limit or block operations.
 - **Evaluators:** incorporate compliance and data security metrics into the agents' operational score.
 
@@ -369,6 +369,9 @@ With Purview, the organization can demonstrate controls for frameworks like LGPD
 - https://learn.microsoft.com/purview/dlp-learn-about-dlp
 - https://learn.microsoft.com/purview/audit-solutions-overview
 - https://learn.microsoft.com/fabric/governance/microsoft-purview-fabric
+- https://learn.microsoft.com/purview/data-governance-overview (retirement scope)
+- https://learn.microsoft.com/fabric/governance/onelake-catalog-overview
+- https://learn.microsoft.com/purview/ai-copilot-fabric (AI-interaction coverage)
 
 ### 📣 Insight
 > "Without classification, AI operates in the dark. With Purview, every piece of data has context, every access has a rule and every action leaves a trail."
@@ -389,7 +392,7 @@ Observe, govern and protect supported, discovered or onboarded agents through a 
 
 ### 🏗️ How it works in practice
 
-Agent 365 operates on five core capabilities, described in Microsoft's documentation:
+Use these operating capabilities when planning Agent 365 adoption; validate coverage by agent type and integration:
 
 1. **Registry**: central inventory of agents (including shadow/unmanaged agents when detected).
 2. **Access control**: applies access governance via Entra (Agent ID, Conditional Access and identity governance).
@@ -422,11 +425,14 @@ flowchart LR
     D --> E[Visibility and action in Agent 365]
 ```
 
-### 🏗️ Three Pillars
+### 🏗️ Product Pillars
 
-1. **Observability**: knowing which agents exist, who uses them, status, risk and ownership.
-2. **Governance**: applying consistent lifecycle and access policies.
-3. **Security**: reducing the risk of oversharing, tool abuse and identity compromise.
+The current [Agent 365 overview](https://learn.microsoft.com/microsoft-agent-365/overview) defines four pillars:
+
+1. **Management**: agent inventory, ownership and operational visibility.
+2. **Governance**: lifecycle, access and tool policies.
+3. **Security**: supported Entra, Purview and Defender protections.
+4. **Business value**: usage, cost and investment signals.
 
 ### 🚀 Usage Scenario
 
@@ -584,8 +590,8 @@ flowchart TD
 1. A test dataset in CSV or JSONL, or a target (model/agent) to evaluate.
 2. An Azure OpenAI connection with a GPT deployment for AI-assisted quality evaluations.
 3. The **Foundry User** role on the Foundry project.
-4. For continuous monitoring in production: integration with Azure Monitor/Application Insights.
-5. For production, prioritize the continuous evaluation flow in the new Microsoft Foundry portal; when using classic/documentation, consider the preview resource limitations.
+4. For production telemetry, configure a supported Azure Monitor/Application Insights collection and alerting path.
+5. Foundry monitoring, recurring evaluations and alerts remain **preview**, including the new portal experience. For GA-only production, retain approved batch evaluation gates and an independent telemetry path. Enable preview monitoring only in an approved pilot; verify each evaluator and SDK separately.
 
 ### 📌 Example
 
@@ -605,6 +611,8 @@ flowchart TD
 - https://learn.microsoft.com/azure/foundry/observability/how-to/how-to-monitor-agents-dashboard
 - https://learn.microsoft.com/azure/foundry/observability/how-to/how-to-monitor-agents-dashboard#set-up-continuous-evaluation
 - https://learn.microsoft.com/azure/foundry-classic/how-to/continuous-evaluation-agents (preview/classic)
+- https://learn.microsoft.com/azure/foundry/concepts/general-availability (feature-level lifecycle)
+- https://learn.microsoft.com/azure/azure-monitor/app/app-insights-overview
 
 ### 📣 Insight
 > "Without evaluators, you bet on AI — you don't operate AI"
@@ -790,7 +798,7 @@ flowchart TD
 ### 📌 Insight
 > "HITL is not an agent weakness — it is intelligent governance. The goal is to eliminate HITL where it is safe, not where it is convenient."
 
-> **Source status:** Microsoft governance, Agent ID, Agent 365 and Foundry lifecycle sources in this reference were rechecked on **2026-09-09**. Agent 365 is generally available for the Commercial segment; the Agent ID platform foundation is GA, but effective coverage and individual Entra, Purview, Defender and Foundry capabilities remain lifecycle-, licensing-, agent-type- and configuration-dependent.
+> **Lifecycle check: 2026-11-17.** Agent 365 and Agent ID have GA scope, with feature-level exceptions. Purview Data Governance is retiring; Data Security and Compliance continue. Foundry managed monitoring remains preview. Effective controls depend on the exact feature, license, agent type and configuration; see the [lifecycle register](../PRODUCT_LIFECYCLE_AUDIT.md).
 
 ---
 

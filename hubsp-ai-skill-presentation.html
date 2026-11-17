@@ -541,13 +541,13 @@
       <header class="slide-header"><div><div class="eyebrow">Target architecture vocabulary</div><h2>Context, runtime and data are different responsibilities</h2></div><span class="slide-number">10 / 14</span></header>
       <div class="slide-body layer-stack">
         <div class="layer"><div class="layer-name">Experience</div><div class="layer-detail"><span>Microsoft 365 Copilot</span><span>Teams</span><span>Web / app</span><span>API</span></div></div>
-        <div class="layer"><div class="layer-name">Context capabilities</div><div class="layer-detail"><span>Work IQ</span><span>Foundry IQ</span><span>Fabric IQ</span><span>Web IQ when needed</span></div></div>
+        <div class="layer"><div class="layer-name">Context capabilities</div><div class="layer-detail"><span>Work IQ: GA core</span><span>Foundry IQ: partial GA</span><span>Fabric IQ: preview workload</span><span>Web IQ: named endpoints GA</span></div></div>
         <div class="layer"><div class="layer-name">Managed agent platform</div><div class="layer-detail"><span>Microsoft Foundry Agent Service</span><span>Copilot Studio</span></div></div>
         <div class="layer"><div class="layer-name">Development + hosting</div><div class="layer-detail"><span>Microsoft Agent Framework</span><span>Explicit runtime / hosting choice</span></div></div>
         <div class="layer"><div class="layer-name">Governed data</div><div class="layer-detail"><span>Microsoft Fabric</span><span>OneLake</span><span>Purview</span><span>Entra</span></div></div>
         <div class="layer"><div class="layer-name">Cross-cutting controls</div><div class="layer-detail"><span>Guard rails</span><span>Evaluators</span><span>HITL</span><span>Observability</span></div></div>
       </div>
-      <footer class="slide-footer"><span>Foundry IQ is an enterprise knowledge layer</span><strong>It is not the orchestration runtime.</strong></footer>
+      <footer class="slide-footer"><span>Feature-level exceptions: <a href="PRODUCT_LIFECYCLE_AUDIT.md">lifecycle audit, 2026-11-17</a></span><strong>Context and orchestration have separate roles.</strong></footer>
     </section>
 
     <section class="slide" data-title="Three production gates" data-audience="Business + Technical" data-notes="Architecture pattern selection is necessary but insufficient. Production approval also requires governance, financial and capacity evidence. The lowest capacity in the complete path is the effective capacity.">
@@ -559,7 +559,7 @@
         </div>
         <div>
           <ul class="list">
-            <li><span class="index">G</span><span><strong>Governance:</strong> identity, least privilege, governed data, guard rails, evaluators, audit and HITL.</span></li>
+            <li><span class="index">G</span><span><strong>Governance:</strong> identity, least privilege, governed data, guard rails, evaluators, audit, HITL, feature lifecycle and retirement deadlines.</span></li>
             <li><span class="index">C</span><span><strong>Capacity:</strong> peak demand, entitlement, quota, throughput, headroom, regional availability and downstream bottlenecks.</span></li>
             <li><span class="index">E</span><span><strong>Economics:</strong> loaded person-hour cost, AI cost per task, HITL, setup amortisation, scope multiplier and realization factor.</span></li>
           </ul>
@@ -596,7 +596,7 @@
         <div class="usage-content">
           <div class="usage-panel active" id="vscode"><h3>VS Code / GitHub Copilot</h3><p>Open the repository, use Agent mode, attach <span class="mono">SKILL.md</span> and one scenario document. Workspace instructions apply the executive output conventions automatically.</p><div class="prompt-box">Apply hubsp-ai-skill to the attached scenario document. Recommend the simplest viable Microsoft architecture and save the complete recommendation to doc/recommendation-output.md. Treat missing decision-critical information as explicit assumptions or validation gates; do not invent facts.</div></div>
           <div class="usage-panel" id="claude"><h3>Claude Desktop</h3><p>Package the repository as a custom skill ZIP. Progressive disclosure allows Claude to load the router first and supporting files only when needed.</p><div class="prompt-box">Upload the skill → attach one scenario document → use the universal compact prompt → review the generated recommendation.</div></div>
-          <div class="usage-panel" id="scout"><h3>Microsoft Scout</h3><p>Install the repository in the global skills directory, start a new conversation and keep auto-approve disabled while validating tool and data access.</p><div class="prompt-box">Workspace + installed skill + scenario document → governed recommendation with explicit approval boundaries.</div></div>
+          <div class="usage-panel" id="scout"><h3>Microsoft Scout (Frontier preview)</h3><p>Confirm preview enrollment and admin access. Install the skill, start a new conversation and keep auto-approve disabled while validating tool and data access.</p><div class="prompt-box">Workspace + installed skill + scenario document → governed recommendation with explicit approval boundaries.</div></div>
           <div class="usage-panel" id="workflow"><h3>Collaborative workshop</h3><p>Business participants complete Part A. Technical owners complete Part B during or after the workshop. The skill converts unknowns into named validation gates.</p><div class="prompt-box">Envision → prioritise → validate → recommend → convert approved direction into agent-project-specifications.md.</div></div>
         </div>
       </div>

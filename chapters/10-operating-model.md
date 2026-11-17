@@ -67,7 +67,7 @@ flowchart TD
 - **Work IQ**: contextual intelligence from Microsoft 365 work signals.
 - **Foundry IQ**: managed, permission-aware enterprise knowledge and agentic retrieval.
 - **Fabric IQ/Fabric**: semantic context and governed data.
-- **Web IQ**: limited-access external context for complementary grounding when availability and terms fit.
+- **Web IQ**: external grounding through approved GA endpoints; Commerce remains private preview.
 - **Managed agent platform or hosted application**: orchestration, reasoning, tool use, state and execution. Microsoft Agent Framework requires explicit hosting unless deployed as a Foundry hosted agent.
 - **Guard Rails**: identity, access and data risk protection.
 - **Evaluators**: objective measurement for continuous evolution.
@@ -76,9 +76,11 @@ flowchart TD
 
 To preserve reliability and compliance at scale:
 
-1. **Critical production:** prioritize only Foundry/Foundry IQ features classified as GA.
-2. **Controlled innovation:** use preview features only with formal exception, reinforced telemetry and defined rollback.
-3. **Continuous governance:** periodically review feature status (GA/preview) before promoting new agents to production.
+1. **Critical production:** verify supported GA service capabilities and reviewed released dependencies across the complete path, including models, APIs, SDKs and integrations.
+2. **Controlled innovation:** keep preview or unconfirmed dependencies in approved pilots with telemetry, exit criteria and a supported fallback.
+3. **Continuous governance:** review lifecycle evidence and retirement deadlines before releases. Foundry monitoring remains preview; use supported Azure Monitor/Application Insights telemetry for a GA-only baseline.
+
+Lifecycle checked **2026-11-17** against the [Foundry GA matrix](https://learn.microsoft.com/azure/foundry/concepts/general-availability) and [Web IQ endpoint status](https://learn.microsoft.com/web-iq/resources/pricing). See the [repository lifecycle register](../PRODUCT_LIFECYCLE_AUDIT.md) for all selected dependencies and source conflicts.
 
 ---
 

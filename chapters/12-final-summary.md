@@ -26,7 +26,7 @@ Work IQ, Foundry IQ, Fabric IQ and Web IQ provide context. Microsoft Foundry Age
 5. **Apply guard rails, evaluators and HITL according to risk**
 Guard rails enforce operational boundaries. Evaluators measure quality, safety and drift. HITL preserves human accountability for consequential decisions and actions.
 
-Released on **June 2, 2026**, the **Agent Control Specification (ACS)** defines a portable contract for where and how runtime policies can be evaluated and enforced. Its Agent Governance Toolkit implementation remains public preview as of **September 9, 2026** and must be validated before production reliance.
+The [Agent Control Specification runtime](https://github.com/responsibleai/agent-control-spec) computes policy decisions that its host must enforce; current packages are prerelease. The separate [Agent Governance Toolkit](https://github.com/microsoft/agent-governance-toolkit/blob/main/CHANGELOG.md) uses open-source release versioning and has removed the commercial public-preview label. Pin and test both dependencies before relying on them.
 
 6. **Validate capacity and economics before production**
 Record a **Fit**, **Conditional fit** or **Not fit** verdict for each product and material dependency. Include peak demand, entitlement, quota, headroom, load evidence, monitoring and scale triggers.

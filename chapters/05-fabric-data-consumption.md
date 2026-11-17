@@ -1,6 +1,6 @@
 ## 5. Data Consumption Strategies for AI Agents
 
-> Lifecycle-sensitive capabilities reviewed against official Microsoft documentation on **2026-09-09**. Core architecture guidance remains feature-scoped: a GA platform can still contain preview workloads, items, connectors or integrations.
+> Lifecycle-sensitive capabilities checked against official Microsoft sources on **2026-11-17**. A GA platform can contain preview workloads, integrations and SDKs. See the [lifecycle register](../PRODUCT_LIFECYCLE_AUDIT.md) for evidence and retirement deadlines.
 
 ### Executive decision
 
@@ -23,15 +23,17 @@ Official architecture source: [Data architecture for AI agents](https://learn.mi
 
 | Strategy | Select when | Typical Microsoft capability | Freshness and behavior | Important constraints |
 |---|---|---|---|---|
-| **Work context retrieval** | The answer depends on the signed-in user's emails, meetings, chats, files, people or collaboration context | Work IQ API, Microsoft Graph, Microsoft 365 Copilot | Current Microsoft 365 context, permission-trimmed to the user | Work IQ API is GA as of June 16, 2026; the Copilot Studio integration remains preview. Preserve user identity, labels and the Microsoft 365 trust boundary |
+| **Work context retrieval** | The answer depends on the signed-in user's emails, meetings, chats, files, people or collaboration context | Work IQ API, Microsoft Graph, Microsoft 365 Copilot | Current Microsoft 365 context, permission-trimmed to the user | Work IQ API and the Copilot Studio Microsoft Copilot-harness integration are GA; Business apps workloads remain preview. Preserve user identity and validate selected workloads and write permissions |
 | **External content in Microsoft 365** | Third-party knowledge must appear in Microsoft 365 search, Copilot or agents | Microsoft 365 Copilot connectors | Synced connectors index content in Microsoft Graph; federated connectors retrieve from the source at query time | Federated connectors reached GA on June 2, 2026, but connector-specific availability, ACL mapping, sync behavior and source limits still require validation |
-| **Managed enterprise knowledge retrieval** | Agents need grounded answers over structured or unstructured enterprise content with citations | Foundry IQ knowledge bases and agentic retrieval | Multi-source keyword, vector or hybrid retrieval; indexed sources refresh on an indexer schedule | Foundry IQ is partially GA: stable API `2026-04-01` is narrower, while advanced behavior and portal access remain preview. Source ACL/Purview support and Azure AI Search capacity vary |
+| **Managed enterprise knowledge retrieval** | Agents need grounded answers over structured or unstructured enterprise content with citations | Foundry IQ knowledge bases and agentic retrieval | Keyword, vector or hybrid evidence retrieval; indexed sources refresh on a schedule | Partial GA: `2026-04-01` supports extractive retrieval. LLM planning, answer synthesis, non-minimal reasoning, multi-turn messages, some permission ingestion and portal access remain preview |
 | **Custom RAG/search** | Built-in knowledge retrieval cannot meet ranking, schema, lifecycle, network or regulatory requirements | Azure AI Search or OneLake indexers with custom application logic | Application-controlled indexing and query pipeline | Higher engineering, evaluation, index security and operations burden; require evidence before selecting it over Foundry IQ |
-| **Semantic business context** | Agents must use consistent business terms, KPIs, entities and relationships | Fabric IQ semantic models, ontology and Graph | Governed semantic context over OneLake analytical, operational and real-time data | The IQ workload remains preview. Plan is GA; Ontology and Graph remain preview. Verify the selected item, region, capacity and production support |
-| **Conversational analytics** | Users or an orchestrating agent need natural-language, read-only answers over Fabric data | Fabric data agent | Generates and executes SQL, DAX, KQL or Microsoft Graph queries using the requesting user's permissions | Data-agent features and integrations graduate independently; data-source routing and Copilot Studio integration reached GA in August 2026. Validate source count, region, identity and response-size limits |
+| **Semantic business context** | Agents must use consistent business terms, KPIs, entities and relationships | Fabric IQ semantic models, ontology and Graph | Governed semantic context over OneLake analytical, operational and real-time data | IQ workload, Ontology and Graph remain preview. Semantic models and the read-only Power BI-focused Fabric IQ MCP server are GA; assess each integration separately |
+| **Conversational analytics** | Users or an orchestrating agent need natural-language, read-only answers over Fabric data | Fabric data agent | Generates and executes SQL, DAX, KQL or Microsoft Graph queries using the requesting user's permissions | Core data agent is GA; advanced DAX, ontology-related answers and several Purview controls remain preview. Copilot Studio integration is GA; the Foundry OneLake Catalog integration remains preview |
 | **Deterministic query tool** | The required query is predictable and a controlled contract is safer than open-ended retrieval | SQL analytics endpoint, semantic-model/DAX query, KQL endpoint or governed API/function | Live query against the serving layer | The application owns query allow-listing, parameter validation, connection limits, result shaping and identity propagation |
 | **Live operational access or action** | The agent needs current system-of-record data or must create/update records | Built-in connector, API tool or MCP server | Real-time read or transaction at tool-call time | Separate read from write tools; require authentication, least privilege, policy, audit, idempotency and human approval for high-impact actions |
-| **Streaming monitoring and response** | The workload must watch events continuously, detect conditions and initiate governed action | Fabric Eventstream, Eventhouse, Fabric IQ ontology, operations agent and Activator | Continuous event processing over live and historical data | Operations agent reached GA in June 2026, while Ontology remains preview. Use agent-triggered action only where rules are insufficient and validate degraded behavior |
+| **Streaming monitoring and response** | The workload must watch events continuously, detect conditions and initiate governed action | Fabric Eventstream, Eventhouse, optional Fabric IQ ontology, operations agent and Activator | Stream processing with scheduled agent monitoring over live and historical data | Operations agent core is GA; Ontology and [workspace OAP support](https://learn.microsoft.com/fabric/security/workspace-outbound-access-protection-operations-agent) remain preview. Use reasoning only where rules are insufficient and test blocked actions and degraded behavior |
+
+**Keep the Fabric interfaces separate:** the [GA Fabric IQ MCP server](https://learn.microsoft.com/fabric/iq/connectors/fabric-iq-mcp) exposes read-only Power BI report and semantic-model tools, not data agents or ontologies. Foundry calls published data agents through the [preview Fabric IQ (OneLake Catalog) integration](https://learn.microsoft.com/fabric/data-science/data-agent-foundry-fabric-iq). The [legacy Microsoft Fabric tool](https://learn.microsoft.com/fabric/data-science/data-agent-foundry) became unsupported on **November 6, 2026**.
 
 ### Reference architecture
 
@@ -238,12 +240,13 @@ flowchart LR
 
 ### Official Microsoft sources
 
-Lifecycle sources accessed **2026-09-09**; unchanged architecture sources retain their original publication history:
+Lifecycle sources accessed **2026-11-17**; unchanged architecture sources retain their original publication history:
 
 - [Data architecture for AI agents](https://learn.microsoft.com/azure/cloud-adoption-framework/ai-agents/data-architecture-plan)
 - [Work IQ overview](https://learn.microsoft.com/microsoft-365/copilot/extensibility/work-iq)
 - [Work IQ API overview](https://learn.microsoft.com/microsoft-365/copilot/extensibility/work-iq/api-overview)
 - [Work IQ API GA and consumptive pricing](https://learn.microsoft.com/partner-center/announcements/2026-june#work-iq-api-and-consumptive-pricing-update)
+- [Work IQ in Copilot Studio: GA and preview workloads](https://learn.microsoft.com/microsoft-copilot-studio/add-work-iq)
 - [Microsoft 365 Copilot connectors overview](https://learn.microsoft.com/microsoft-365/copilot/connectors/overview)
 - [What is Foundry IQ?](https://learn.microsoft.com/azure/foundry/agents/concepts/what-is-foundry-iq)
 - [Migrate agentic retrieval code to the latest version](https://learn.microsoft.com/azure/search/agentic-retrieval-how-to-migrate)

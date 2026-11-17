@@ -44,25 +44,29 @@ Map the three main tools to the adoption framework and short/medium-term scenari
 
 **✅ Capabilities**
 - versioned agents, conversations, Responses API, tool calls and governed multi-step execution
-- support for multiple models: GPT-4o, Claude, Mistral, Phi
+- support for versioned GPT, Claude, Mistral and Phi deployments; lifecycle and hosting status vary by offer
 - integration with Fabric OneLake, Purview, Entra ID and external APIs
 
 **⚙️ Usage scenario**
 `Engineer → Microsoft Foundry → Complex agent → Fabric + APIs → Automated decision`
 
-### 🧠 Available models in Microsoft Foundry
+### 🧠 Models and delivery surfaces
 
-Microsoft Build 2026 introduced seven MAI models on **June 2, 2026**. The portfolio continued to change through August and September. Treat MAI as a **model portfolio** rather than a new architectural layer: models power the reasoning runtime, while **Work IQ, Foundry IQ and Fabric IQ remain complementary context workloads**.
+Microsoft introduced the Build 2026 MAI portfolio on **June 2, 2026**. Models power reasoning and multimodal tasks; Work IQ, Foundry IQ and Fabric IQ supply context. Availability in GitHub Copilot, MAI Playground, Azure Speech and Foundry must be assessed separately.
 
-**Executive reading of the MAI family as of September 9, 2026**
+**Lifecycle of the cited MAI models, checked November 17, 2026**
 
 | Model / family | Main use | Documented availability | Architecture fit |
 | --- | --- | --- | --- |
 | MAI-Thinking-1 | Reasoning, mathematics and software-engineering tasks | Public preview in Microsoft Foundry; Global Standard model version `2026-06-01` | Reasoning option under approved preview controls; PTU is not supported |
-| MAI-Code-1.1-Flash | Agentic coding and efficient inference | In production in GitHub Copilot as of **August 11, 2026**; not documented as a generally selectable Foundry catalog model | Coding workflows tied to the GitHub Copilot channel unless a current catalog entry proves otherwise |
-| MAI-Image-2.6 / MAI-Image-2.6-Flash | Image generation and editing | Public preview in Microsoft Foundry; model version `2026-07-31`, announced **September 4, 2026** | Multimodal experiences under approved preview controls; 2.5 variants also remain preview |
-| MAI-Transcribe-2 | Multilingual transcription, diarization and timestamps | Public preview through Azure Speech / Microsoft Foundry; announced **September 3, 2026**; no SLA | Speech input under approved preview controls; MAI-Transcribe-1 was deprecated August 20, 2026 |
-| MAI-Voice-2 / MAI-Voice-2-Flash | Expressive and low-latency multilingual speech generation | Public preview through Azure Speech; instant voice cloning requires gated access | Voice experiences under consent, regional and preview controls |
+| MAI-Code-1.1-Flash | Agentic coding | In production in GitHub Copilot; the [October 7 update](https://microsoft.ai/news/mai-code-1-1-flash-br-better-faster-at-a-quarter-of-the-cost/) adds local downloads and announces experimental on-device Copilot access | Neither cloud production use nor local downloads establish Foundry API GA |
+| MAI-Image-2.6 / MAI-Image-2.6-Flash | Image generation and editing | Public preview in Foundry, model version `2026-07-31` | Approved preview pilots; validate the exact catalog offer |
+| MAI Image 2.7 | Image editing | [Preview launch on October 27, 2026](https://microsoft.ai/news/mai-image-2-7-debut/), including MAI Playground access | Foundry API GA is not established by the launch announcement |
+| MAI-Transcribe-2 / 1.5 | Batch transcription | [Current Azure Speech guide](https://learn.microsoft.com/azure/ai-services/speech-service/mai-transcribe) documents availability without an explicit GA statement | Status unconfirmed for production selection; obtain current offer/SLA confirmation instead of inferring GA or asserting a blanket no-SLA condition |
+| MAI-Transcribe-2-Streaming | Real-time transcription | [Public preview in Azure Speech](https://learn.microsoft.com/azure/ai-services/speech-service/mai-transcribe-2-streaming); no SLA | Separate preview dependency from batch transcription |
+| MAI-Voice-2.1 / MAI-Voice-2.1-Flash | Expressive and low-latency speech | Public preview in Azure Speech; instant voice cloning remains gated | Current documented variants; apply consent, region and preview controls |
+
+The [retirement schedule](https://learn.microsoft.com/azure/foundry/openai/concepts/model-retirement-schedule) lists **October 1, 2026** for MAI-Image-2.5 variants, although the image how-to still lists them as preview. Exclude these offers from new designs pending confirmation. MAI-Transcribe-1 was deprecated August 20 and has a September 15 retirement date. The same schedule marks `gpt-4.1-mini` deprecated and `gpt-5.4-mini` GA; examples use the latter as an illustrative deployment name.
 
 **Executive guideline for production**
 - Prioritize MAI use by **capability and use case**, not by announcement novelty.
@@ -77,16 +81,17 @@ Microsoft Build 2026 introduced seven MAI models on **June 2, 2026**. The portfo
 - [Deploy and use MAI image models in Microsoft Foundry](https://learn.microsoft.com/azure/foundry/foundry-models/how-to/use-foundry-models-mai-image)
 - [MAI-Transcribe in the LLM Speech API](https://learn.microsoft.com/azure/ai-services/speech-service/mai-transcribe)
 - [What is MAI-Voice?](https://learn.microsoft.com/azure/ai-services/speech-service/mai-voices)
+- [Versioned model retirement schedule](https://learn.microsoft.com/azure/foundry/openai/concepts/model-retirement-schedule)
 
 ### 🔌 Integration protocols in Microsoft Foundry
 
-**MCP (Model Context Protocol):** open-source protocol by Anthropic to connect agents to external tools — Microsoft Foundry supports remote MCP servers with Entra ID authentication
+**MCP (Model Context Protocol):** an open protocol for tools and data. Foundry supports remote MCP servers with supported authentication methods. [Long-running MCP tasks remain preview](https://learn.microsoft.com/azure/foundry/agents/how-to/tools/model-context-protocol#long-running-operations-preview).
 
-**A2A (Agent-to-Agent):** protocol for communication between agents from different runtimes (Foundry, Copilot Studio, external platforms) — foundation for multi-agent systems in the medium term
+**A2A (Agent-to-Agent):** an open protocol for cross-runtime agent communication. The [Foundry `a2a` tool with A2A 1.0 is GA](https://learn.microsoft.com/azure/foundry/agents/how-to/tools/agent-to-agent); `a2a_preview` with 0.3 remains preview. Check authentication, SDK and Copilot Studio integration status separately.
 
 **Responses API and provider APIs:** Foundry Agent Service uses the Responses API for agent conversations and tool orchestration. Claude deployments use the Anthropic Messages API at the provider-specific `/anthropic/v1/messages` endpoint through the Anthropic SDK, with supported Entra ID or API-key authentication. Do not treat the Anthropic Messages API as the Responses API.
 
-**Current SDK and API:** use `azure-ai-projects` 2.x for Foundry project and agent-definition operations, and the project-bound OpenAI client for conversations and Responses API calls. A current project endpoint follows `https://<resource>.ai.azure.com/api/projects/<project>`; provider-specific endpoints such as Anthropic are not the general project endpoint.
+**Current SDK and API:** use Python `azure-ai-projects` 2.x for project and agent-definition operations, and the project-bound OpenAI client for conversations and Responses API calls. Copy the project endpoint from Foundry, for example `https://<resource>.services.ai.azure.com/api/projects/<project>`. [Hosted-agent migration](https://learn.microsoft.com/azure/foundry/agents/how-to/migrate-hosted-agent-preview) requires 2.3.0 or later. Package and service lifecycle are separate; some .NET SDKs and hosting adapters remain prerelease.
 
 ### 🔗 How They Work Together
 
@@ -143,7 +148,7 @@ flowchart TD
 - Microsoft Foundry documentation: https://learn.microsoft.com/azure/foundry/
 - Microsoft 365 Copilot documentation: https://learn.microsoft.com/microsoft-365-copilot/
 - Microsoft Fabric documentation: https://learn.microsoft.com/fabric/
-- Microsoft Purview governance overview: https://learn.microsoft.com/purview/governance-solutions-overview
+- Microsoft Purview Data Security and Compliance: https://learn.microsoft.com/purview/
 - Microsoft Entra ID documentation: https://learn.microsoft.com/entra/identity/
 
 #### Conditional reference pattern for the mixed solution
@@ -159,7 +164,7 @@ flowchart TD
 - Microsoft Foundry documentation: https://learn.microsoft.com/azure/foundry/
 - Microsoft 365 Copilot documentation: https://learn.microsoft.com/microsoft-365-copilot/
 - Microsoft Fabric documentation: https://learn.microsoft.com/fabric/
-- Microsoft Purview governance overview: https://learn.microsoft.com/purview/governance-solutions-overview
+- Microsoft Purview Data Security and Compliance: https://learn.microsoft.com/purview/
 - Microsoft Entra ID documentation: https://learn.microsoft.com/entra/identity/
 
 ### 🚀 Conditional Product Selection

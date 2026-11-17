@@ -4,6 +4,8 @@
 
 **Agent memory** is the ability of an agent to persist, retrieve and use information from previous interactions for context, learning and personalization. Without memory, each invocation is isolated; with memory, the agent builds history and contextualization over time.
 
+**Lifecycle boundary (checked 2026-11-17):** memory is an architectural capability, not one product lifecycle. [Foundry managed memory remains preview](https://learn.microsoft.com/azure/foundry/concepts/general-availability). A custom session store on a supported database has a separate service, SDK and operational contract. Fabric Ontology and Graph also remain preview; GA semantic models or Cosmos DB Gremlin do not confer GA on them.
+
 **Human analogy:**
 - Short-term memory = current conversation (conversation context)
 - Long-term memory = accumulated knowledge (knowledge base, retrieval)
@@ -155,7 +157,7 @@ flowchart TD
 **Characteristics:**
 - Scope: Corporate, permanent
 - Storage: Semantic layer (Fabric Data Models, SQL Analytics Endpoint)
-- Governance: Purview lineage, RLS
+- Governance: supported Fabric/catalog lineage, source authorization and configured Purview data-protection controls
 - Cost: Low (queries only)
 
 **Ideal use:** Recommendations, analysis, business insights.
@@ -886,7 +888,7 @@ The database choice directly impacts latency, cost, governance and search capabi
 
 | Memory Type | Access Pattern | Recommended Engine | Alternatives |
 |----------------|-----------------|-------------------|-------------|
-| **Conversation / Session** | Key-based read/write (user+session), mandatory TTL | Redis (Azure Cache for Redis) | Cosmos DB (NoSQL), DynamoDB |
+| **Conversation / Session** | Key-based read/write (user+session), mandatory TTL | Azure Managed Redis | Cosmos DB (NoSQL), other Redis deployments |
 | **Long-Term Knowledge Base** | Semantic search (vector) + full-text | Azure AI Search | pgvector (Postgres), Qdrant, Weaviate |
 | **Episodic / Task History** | Analytical query (aggregation, trend, date filter) | Microsoft Fabric (Parquet + SQL Analytics) | Postgres, Synapse Analytics |
 | **Semantic / Graph** | Traversal de relacionamentos, grafos | Azure Cosmos DB (Gremlin / NoSQL) | Neo4j, Amazon Neptune |
@@ -897,9 +899,13 @@ The database choice directly impacts latency, cost, governance and search capabi
 
 #### **Detalhamento por Engine**
 
-##### **🔴 Redis — Azure Cache for Redis**
+##### **Redis: Azure Managed Redis**
 
 **Ideal for:** Conversation Memory, preference cache, session deduplication.
+
+Azure Managed Redis is [GA](https://learn.microsoft.com/azure/redis/whats-new), with SKU- and feature-specific exceptions. Prefer it for new Azure Redis designs. [Azure Cache for Redis is retiring](https://learn.microsoft.com/azure/azure-cache-for-redis/retirement-faq): Enterprise/Enterprise Flash on **March 31, 2027**, and Basic/Standard/Premium on **September 30, 2028**.
+
+Choose a client that matches the clustering policy. The fragment below assumes a supported **nonclustered** configuration; Azure Managed Redis is clustered by default and normally requires a cluster-aware client. Validate TLS, identity, persistence and regional/SKU support before deployment.
 
 | Atributo | Valor |
 |----------|-------|
@@ -1116,7 +1122,7 @@ Need relationship graph?                → Cosmos DB Gremlin or Neo4j
 
 | Layer | Primary Engine | Why |
 |--------|-----------------|---------|
-| **Conversation (session)** | Redis | Latency < 1ms, native TTL, low cost |
+| **Conversation (session)** | Azure Managed Redis | Native TTL and cache access; measure latency and cost for the selected SKU |
 | **Long-Term KB** | Azure AI Search | Vector search + RLS via filter |
 | **Episodic** | Microsoft Fabric | Analytical scale, native RLS, cost per GB |
 | **Semantic (graph)** | Cosmos DB Gremlin | Relationship traversal in JSON/graph |
@@ -1132,6 +1138,10 @@ Need relationship graph?                → Cosmos DB Gremlin or Neo4j
 - [Fabric Medallion Architecture patterns](https://learn.microsoft.com/fabric/onelake/onelake-medallion-lakehouse-architecture)
 - [Purview Data Classification for agent data](https://learn.microsoft.com/purview/data-classification-overview)
 - [Row-Level Security in Fabric](https://learn.microsoft.com/fabric/data-warehouse/row-level-security)
+- [Azure Managed Redis lifecycle](https://learn.microsoft.com/azure/redis/whats-new)
+- [Azure Cache for Redis retirement](https://learn.microsoft.com/azure/azure-cache-for-redis/retirement-faq)
+- [Foundry feature-level lifecycle](https://learn.microsoft.com/azure/foundry/concepts/general-availability)
+- [OneLake catalog and governance](https://learn.microsoft.com/fabric/governance/onelake-catalog-overview)
 
 ---
 

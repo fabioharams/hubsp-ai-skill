@@ -2,6 +2,8 @@
 
 This guide covers how to set up and use the hubsp-ai-skill across different platforms and tools. Select the platform that matches your environment and workflow.
 
+Microsoft product lifecycle claims were checked on **2026-11-17**; see the [lifecycle register](../PRODUCT_LIFECYCLE_AUDIT.md). Third-party client setup and plan entitlements are outside that verification.
+
 ## How to use in Visual Studio Code
 
 Prerequisites:
@@ -61,7 +63,7 @@ Official Anthropic references:
 
 ## How to use in Microsoft Scout
 
-> **Preview notice (checked 2026-09-09):** Microsoft Scout was introduced on **June 2, 2026** and remains a Frontier preview desktop application. Availability, prerequisites and behavior can change, and Microsoft states that preview features might not reach general availability.
+> **Preview notice (checked 2026-11-17):** the [current Microsoft Scout overview](https://learn.microsoft.com/microsoft-scout/overview) still identifies the desktop application as **Frontier preview**. Availability and behavior can change; preview features might not reach GA.
 
 Current prerequisites include Windows 11 or macOS 12+, a Microsoft 365 work or school account, Microsoft 365 Copilot access, a GitHub Copilot Business or Enterprise license, local installation permission and administrator enablement for the Frontier preview.
 
